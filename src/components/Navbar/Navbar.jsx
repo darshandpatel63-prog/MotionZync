@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import AnimatexLogo from '../Logo/Logo.jsx'
 import './Navbar.css'
 
 const navLinks = [
@@ -20,7 +21,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="navbar-logo" onClick={closeMenu}>
-          <span className="logo-icon">✦</span>
+          <AnimatexLogo size={36} className="logo-svg" />
           <span className="logo-text">AnimateX</span>
         </Link>
 
@@ -53,4 +54,5 @@ function Navbar() {
 }
 
 export default Navbar
+
 
