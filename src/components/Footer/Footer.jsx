@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import AnimatexLogo from '../Logo/Logo.jsx'
 import './Footer.css'
 
 function Footer() {
@@ -6,7 +7,10 @@ function Footer() {
     <footer className="footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <span className="footer-logo">✦ AnimateX</span>
+          <div className="footer-logo-wrap">
+            <AnimatexLogo size={28} />
+            <span className="footer-logo-text">AnimateX</span>
+          </div>
           <p className="footer-tagline">Live animation playground for everyone</p>
         </div>
 
@@ -24,3 +28,4 @@ function Footer() {
 }
 
 export default Footer
+
