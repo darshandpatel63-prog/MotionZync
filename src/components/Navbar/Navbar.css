@@ -27,12 +27,13 @@
   text-decoration: none;
 }
 
-.logo-icon {
-  font-size: 1.4rem;
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.logo-svg {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover .logo-svg {
+  transform: scale(1.08) rotate(-3deg);
 }
 
 .logo-text {
@@ -117,4 +118,3 @@
     padding: 0.75rem 1rem;
   }
 }
-
