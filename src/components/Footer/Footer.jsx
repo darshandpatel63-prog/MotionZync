@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom'
 import AnimatexLogo from '../Logo/Logo.jsx'
 import './Footer.css'
