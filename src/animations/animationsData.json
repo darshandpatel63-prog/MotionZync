@@ -124,5 +124,14 @@
     "previewBg": "#0a0a0f",
     "cssCode": ".orb {\n  width: 100px;\n  height: 100px;\n  border-radius: 50%;\n  background: radial-gradient(circle, #ff007f, #7928ca);\n  box-shadow: 0 0 20px #ff007f, 0 0 60px #7928ca;\n  animation: pulseOrb 2s infinite alternate ease-in-out;\n}\n@keyframes pulseOrb {\n  0% { transform: scale(0.8); box-shadow: 0 0 20px #ff007f, 0 0 40px #7928ca; }\n  100% { transform: scale(1.2); box-shadow: 0 0 40px #ff007f, 0 0 100px #7928ca; }\n}\n",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;';\nconst orb = document.createElement('div');\norb.className = 'orb';\nc.appendChild(orb);\n"
+  },
+  {
+    "id": "cyberpunk-spinner",
+    "title": "Cyberpunk Spinner",
+    "description": "પ્રો લેવલનું ડ્યુઅલ રિંગ રોટેટિંગ સાયબર એનિમેશન.",
+    "category": "Front",
+    "previewBg": "#111111",
+    "cssCode": ".cyber-loader {\n  width: 80px;\n  height: 80px;\n  border: 5px solid transparent;\n  border-top: 5px solid #00ffcc;\n  border-right: 5px solid #00ffcc;\n  border-radius: 50%;\n  animation: spinCyber 1s linear infinite;\n  position: relative;\n}\n.cyber-loader::before {\n  content: '';\n  position: absolute;\n  top: 10px; left: 10px; right: 10px; bottom: 10px;\n  border: 5px solid transparent;\n  border-bottom: 5px solid #ff00ff;\n  border-left: 5px solid #ff00ff;\n  border-radius: 50%;\n  animation: spinCyberReverse 2s linear infinite;\n}\n@keyframes spinCyber { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }\n@keyframes spinCyberReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }\n",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;';\nconst loader = document.createElement('div');\nloader.className = 'cyber-loader';\nc.appendChild(loader);\n"
   }
 ]
