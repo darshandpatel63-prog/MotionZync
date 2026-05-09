@@ -1,0 +1,304 @@
+/* ── Login Screen ── */
+.admin-login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,58,237,0.15), transparent);
+}
+
+.admin-login-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.admin-login-logo { font-size: 2.5rem; margin-bottom: 1rem; }
+
+.admin-login-card h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.admin-login-card p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 1.75rem;
+}
+
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.admin-login-btn { width: 100%; padding: 0.75rem; font-size: 1rem; }
+
+/* ── Page Layout ── */
+.admin-page { min-height: 100vh; padding-bottom: 4rem; }
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.admin-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.logout-btn { font-size: 0.82rem; padding: 0.4rem 1rem; }
+
+.admin-body { padding-top: 2rem; }
+
+/* ── Status Banner ── */
+.status-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.2rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-banner.ok {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+.status-banner.err {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.status-banner button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0 0.25rem;
+  opacity: 0.7;
+}
+
+/* ── Top grid: form + preview ── */
+.admin-top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .admin-top-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Form ── */
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.section-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.admin-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.admin-input {
+  width: 100%;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.admin-input:focus { border-color: var(--accent-primary); }
+
+.admin-select { cursor: pointer; }
+
+.admin-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.color-pick-row { display: flex; align-items: center; gap: 0.5rem; }
+
+.admin-color-pick {
+  width: 40px;
+  height: 38px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
+.admin-id-preview {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.admin-id-preview code {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: var(--accent-secondary);
+  font-family: var(--font-code);
+}
+
+.admin-err-msg {
+  color: #ef4444;
+  font-size: 0.78rem;
+}
+
+/* ── Preview ── */
+.admin-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+}
+
+.admin-preview-wrap > *:last-child { flex: 1; }
+
+/* ── Code Editor ── */
+.admin-editor-wrap {
+  margin-bottom: 1.5rem;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-editor-wrap > *:last-child { flex: 1; min-height: 300px; }
+
+/* ── Save Row ── */
+.admin-save-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-save-btn {
+  font-size: 1rem;
+  padding: 0.75rem 2rem;
+  min-width: 180px;
+}
+
+.admin-save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.admin-save-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── Saved List ── */
+.admin-list-section { margin-top: 1rem; }
+
+.admin-anim-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.admin-anim-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  transition: border-color 0.2s;
+}
+
+.admin-anim-item:hover { border-color: var(--accent-primary); }
+
+.anim-item-info { display: flex; align-items: center; gap: 0.75rem; }
+
+.anim-item-title { font-size: 0.9rem; font-weight: 600; }
+
+.anim-item-cat {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.anim-item-cat.background {
+  background: rgba(124, 58, 237, 0.15);
+  color: var(--accent-glow);
+  border: 1px solid rgba(124,58,237,0.3);
+}
+
+.anim-item-cat.front {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent-secondary);
+  border: 1px solid rgba(6,182,212,0.3);
+}
+
+.anim-item-actions { display: flex; gap: 0.5rem; }
+
+.item-btn {
+  font-size: 0.78rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-btn {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+}
+
+.delete-btn:hover { background: rgba(239, 68, 68, 0.2); }
+.delete-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+                                   
