@@ -52,5 +52,14 @@
     "previewBg": "#0a0a0f",
     "cssCode": "\n.blob {\n  width: 160px;\n  height: 160px;\n  background: linear-gradient(135deg, #7c3aed, #06b6d4);\n  animation: morph 6s ease-in-out infinite;\n  filter: blur(1px);\n}\n@keyframes morph {\n  0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }\n  25%  { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }\n  50%  { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }\n  75%  { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }\n}",
     "jsCode": "\nconst container = document.getElementById('container');\ncontainer.style.cssText = 'display:flex;align-items:center;justify-content:center;';\nconst blob = document.createElement('div');\nblob.className = 'blob';\ncontainer.appendChild(blob);"
+  },
+  {
+    "id": "fire-particles",
+    "title": "Fire Particles",
+    "description": "Fire Particles",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": "body { background: #000; overflow: hidden; }\n.spark {\n  position: absolute;\n  border-radius: 50%;\n  pointer-events: none;\n  mix-blend-mode: screen;\n}",
+    "jsCode": "const el = document.getElementById('container');\nel.style.cssText = 'position:relative;width:100%;height:100%;overflow:hidden;background:#000;';\n\nconst sparks = [];\nfunction getSize() {\n  return { W: el.clientWidth || 350, H: el.clientHeight || 400 };\n}\n\nfunction createSpark() {\n  const {W, H} = getSize();\n  const s = document.createElement('div');\n  s.className = 'spark';\n  const size = Math.random() * 14 + 4;\n  const x = W / 2 + (Math.random() - 0.5) * 80;\n  const data = {\n    el: s, x, y: H * 0.8,\n    vx: (Math.random() - 0.5) * 3,\n    vy: -(Math.random() * 5 + 2),\n    life: 1, decay: Math.random() * 0.018 + 0.012,\n    size, hue: Math.random() * 40\n  };\n  s.style.cssText = `position:absolute;border-radius:50%;mix-blend-mode:screen;width:${size}px;height:${size}px;left:${x}px;top:${H*0.8}px;`;\n  el.appendChild(s);\n  sparks.push(data);\n}\n\nfunction animate() {\n  const {H} = getSize();\n  for (let i = sparks.length - 1; i >= 0; i--) {\n    const s = sparks[i];\n    s.life -= s.decay;\n    s.x += s.vx; s.y += s.vy;\n    s.vy -= 0.06; s.vx *= 0.99;\n    if (s.life <= 0) { s.el.remove(); sparks.splice(i,1); continue; }\n    s.el.style.cssText = `position:absolute;border-radius:50%;mix-blend-mode:screen;\n      width:${s.size}px;height:${s.size}px;\n      left:${s.x}px;top:${s.y}px;\n      background:hsl(${s.hue},100%,${50+s.life*30}%);\n      opacity:${s.life};transform:scale(${s.life});\n      box-shadow:0 0 ${s.size*2}px hsl(${s.hue},100%,60%);`;\n  }\n  if (Math.random() < 0.7) createSpark();\n  requestAnimationFrame(animate);\n}\nanimate();"
   }
 ]
