@@ -178,5 +178,14 @@
     "previewBg": "#050505",
     "cssCode": "\n.ripple-wave {\n  position: absolute;\n  border-radius: 50%;\n  transform: translate(-50%, -50%) scale(0);\n  animation: expandWave 1s ease-out forwards;\n  pointer-events: none;\n  mix-blend-mode: screen;\n}\n\n@keyframes expandWave {\n  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }\n  100% { transform: translate(-50%, -50%) scale(5); opacity: 0; }\n}\n",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:#000000;overflow:hidden;cursor:crosshair;';\n\n// સ્ક્રીન પર ગમે ત્યાં ટચ કરવાથી રિપલ બનશે\nc.addEventListener('pointerdown', (e) => {\n  const rect = c.getBoundingClientRect();\n  const x = e.clientX - rect.left;\n  const y = e.clientY - rect.top;\n  \n  const ripple = document.createElement('div');\n  ripple.className = 'ripple-wave';\n  ripple.style.left = `${x}px`;\n  ripple.style.top = `${y}px`;\n  ripple.style.width = '100px';\n  ripple.style.height = '100px';\n  \n  // દરેક ટચ માટે અલગ અલગ નિયોન કલર્સ\n  const colors = [\n    'rgba(0, 255, 204, 0.8)', \n    'rgba(255, 0, 128, 0.8)', \n    'rgba(155, 0, 255, 0.8)',\n    'rgba(255, 255, 0, 0.8)',\n    'rgba(0, 150, 255, 0.8)'\n  ];\n  const randomColor = colors[Math.floor(Math.random() * colors.length)];\n  \n  ripple.style.background = `radial-gradient(circle, ${randomColor} 0%, transparent 70%)`;\n  ripple.style.boxShadow = `0 0 30px ${randomColor}`;\n  \n  c.appendChild(ripple);\n  \n  // એનિમેશન પૂરું થયા પછી DOM માંથી દૂર કરવા\n  setTimeout(() => {\n    ripple.remove();\n  }, 1000);\n});\n"
+  },
+  {
+    "id": "sleek-linear-loader",
+    "title": "Sleek Linear Loader",
+    "description": "An elegant, ultra-smooth gradient progress bar that enhances the loading experience for any website, from personal portfolios to enterprise applications.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": ".loader-container {\n  width: 100%; height: 6px;\n  background: #eee; border-radius: 10px;\n  overflow: hidden;\n}\n.loader-bar {\n  height: 100%; width: 30%;\n  background: linear-gradient(90deg, #6c63ff, #ff6584);\n  animation: slide 1.5s infinite ease-in-out;\n  border-radius: 10px;\n}\n@keyframes slide {\n  0% { transform: translateX(-100%); }\n  100% { transform: translateX(400%); }\n}\n",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'padding: 50px; display:flex; align-items:center; justify-content:center;';\nconst container = document.createElement('div');\ncontainer.className = 'loader-container';\nconst bar = document.createElement('div');\nbar.className = 'loader-bar';\ncontainer.appendChild(bar);\nc.appendChild(container);\n"
   }
 ]
