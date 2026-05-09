@@ -1,0 +1,56 @@
+[
+  {
+    "id": "bg-particles",
+    "title": "Floating Particles",
+    "description": "Dark background par sona particles fade in fade out thay chhe.",
+    "category": "Background",
+    "previewBg": "#0a0a0f",
+    "cssCode": "\n.particle {\n  position: absolute;\n  border-radius: 50%;\n  animation: float linear infinite;\n  opacity: 0;\n}\n@keyframes float {\n  0%   { transform: translateY(100vh) scale(0); opacity: 0; }\n  10%  { opacity: 1; }\n  90%  { opacity: 1; }\n  100% { transform: translateY(-10vh) scale(1); opacity: 0; }\n}",
+    "jsCode": "\nconst container = document.getElementById('container');\nconst colors = ['#7c3aed', '#06b6d4', '#a855f7', '#10b981', '#f59e0b'];\n\nfor (let i = 0; i < 40; i++) {\n  const p = document.createElement('div');\n  p.className = 'particle';\n  const size = Math.random() * 6 + 2;\n  p.style.cssText = `\n    width: ${size}px;\n    height: ${size}px;\n    left: ${Math.random() * 100}%;\n    background: ${colors[Math.floor(Math.random() * colors.length)]};\n    animation-duration: ${Math.random() * 8 + 4}s;\n    animation-delay: ${Math.random() * 6}s;\n    box-shadow: 0 0 ${size * 2}px currentColor;\n  `;\n  container.appendChild(p);\n}"
+  },
+  {
+    "id": "bg-aurora",
+    "title": "Aurora Waves",
+    "description": "Northern lights jevi slow gradient waves.",
+    "category": "Background",
+    "previewBg": "#050510",
+    "cssCode": "\nbody { background: #050510; }\n.aurora {\n  position: absolute;\n  inset: 0;\n  background: \n    radial-gradient(ellipse 80% 50% at 20% 50%, rgba(124,58,237,0.4), transparent),\n    radial-gradient(ellipse 60% 40% at 80% 30%, rgba(6,182,212,0.35), transparent),\n    radial-gradient(ellipse 70% 60% at 50% 80%, rgba(16,185,129,0.3), transparent);\n  animation: aurora 8s ease-in-out infinite alternate;\n  filter: blur(40px);\n}\n@keyframes aurora {\n  0%   { transform: scale(1) rotate(0deg); opacity: 0.7; }\n  50%  { transform: scale(1.1) rotate(2deg); opacity: 1; }\n  100% { transform: scale(0.95) rotate(-2deg); opacity: 0.8; }\n}",
+    "jsCode": "\nconst container = document.getElementById('container');\nconst div = document.createElement('div');\ndiv.className = 'aurora';\ncontainer.appendChild(div);"
+  },
+  {
+    "id": "bg-matrix",
+    "title": "Matrix Rain",
+    "description": "Classic matrix style falling characters.",
+    "category": "Background",
+    "previewBg": "#000000",
+    "cssCode": "\ncanvas { display: block; }",
+    "jsCode": "\nconst container = document.getElementById('container');\nconst canvas = document.createElement('canvas');\nconst ctx = canvas.getContext('2d');\ncanvas.width = container.offsetWidth || 400;\ncanvas.height = container.offsetHeight || 400;\ncontainer.appendChild(canvas);\n\nconst cols = Math.floor(canvas.width / 16);\nconst drops = Array(cols).fill(1);\nconst chars = 'アイウエオカキクケコ0123456789ABCDEF';\n\nfunction draw() {\n  ctx.fillStyle = 'rgba(0,0,0,0.05)';\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = '#00ff41';\n  ctx.font = '14px monospace';\n  drops.forEach((y, i) => {\n    const char = chars[Math.floor(Math.random() * chars.length)];\n    ctx.fillText(char, i * 16, y * 16);\n    if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;\n    drops[i]++;\n  });\n}\nsetInterval(draw, 40);"
+  },
+  {
+    "id": "front-neon-pulse",
+    "title": "Neon Glow Pulse",
+    "description": "Purple neon glow thatu box.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": "\n.neon-box {\n  width: 100px;\n  height: 100px;\n  border: 2px solid #a855f7;\n  border-radius: 12px;\n  animation: neonPulse 2s ease-in-out infinite;\n}\n@keyframes neonPulse {\n  0%, 100% {\n    box-shadow:\n      0 0 5px #a855f7,\n      0 0 20px #a855f7,\n      0 0 40px #7c3aed;\n  }\n  50% {\n    box-shadow:\n      0 0 10px #a855f7,\n      0 0 40px #a855f7,\n      0 0 80px #7c3aed,\n      0 0 120px #7c3aed;\n  }\n}",
+    "jsCode": "\nconst container = document.getElementById('container');\ncontainer.style.cssText = 'display:flex;align-items:center;justify-content:center;';\nconst box = document.createElement('div');\nbox.className = 'neon-box';\ncontainer.appendChild(box);"
+  },
+  {
+    "id": "front-typewriter",
+    "title": "Typewriter Effect",
+    "description": "Text typewriter jemi type thay.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": "\n.typewriter {\n  font-family: monospace;\n  font-size: 1.6rem;\n  color: #06b6d4;\n  border-right: 2px solid #06b6d4;\n  white-space: nowrap;\n  overflow: hidden;\n  animation:\n    typing 3s steps(20) infinite alternate,\n    blink 0.7s step-end infinite;\n}\n@keyframes typing {\n  from { width: 0; }\n  to   { width: 100%; }\n}\n@keyframes blink {\n  50% { border-color: transparent; }\n}",
+    "jsCode": "\nconst container = document.getElementById('container');\ncontainer.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:2rem;';\nconst el = document.createElement('div');\nel.className = 'typewriter';\nel.textContent = 'Hello, AnimateX! ✦';\ncontainer.appendChild(el);"
+  },
+  {
+    "id": "front-morphing-blob",
+    "title": "Morphing Blob",
+    "description": "Shape badlatu animated blob.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": "\n.blob {\n  width: 160px;\n  height: 160px;\n  background: linear-gradient(135deg, #7c3aed, #06b6d4);\n  animation: morph 6s ease-in-out infinite;\n  filter: blur(1px);\n}\n@keyframes morph {\n  0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }\n  25%  { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }\n  50%  { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }\n  75%  { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }\n}",
+    "jsCode": "\nconst container = document.getElementById('container');\ncontainer.style.cssText = 'display:flex;align-items:center;justify-content:center;';\nconst blob = document.createElement('div');\nblob.className = 'blob';\ncontainer.appendChild(blob);"
+  }
+]
