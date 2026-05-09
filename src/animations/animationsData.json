@@ -133,5 +133,14 @@
     "previewBg": "#111111",
     "cssCode": ".cyber-loader {\n  width: 80px;\n  height: 80px;\n  border: 5px solid transparent;\n  border-top: 5px solid #00ffcc;\n  border-right: 5px solid #00ffcc;\n  border-radius: 50%;\n  animation: spinCyber 1s linear infinite;\n  position: relative;\n}\n.cyber-loader::before {\n  content: '';\n  position: absolute;\n  top: 10px; left: 10px; right: 10px; bottom: 10px;\n  border: 5px solid transparent;\n  border-bottom: 5px solid #ff00ff;\n  border-left: 5px solid #ff00ff;\n  border-radius: 50%;\n  animation: spinCyberReverse 2s linear infinite;\n}\n@keyframes spinCyber { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }\n@keyframes spinCyberReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }\n",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;';\nconst loader = document.createElement('div');\nloader.className = 'cyber-loader';\nc.appendChild(loader);\n"
+  },
+  {
+    "id": "interactive-3d-glass-card",
+    "title": "Interactive 3D Glass Card",
+    "description": "Interactive 3D Glass Card",
+    "category": "Front",
+    "previewBg": "#1a1a2e",
+    "cssCode": ".glass-card {\n  width: 160px;\n  height: 220px;\n  background: rgba(255, 255, 255, 0.05);\n  backdrop-filter: blur(15px);\n  border-radius: 20px;\n  border: 1px solid rgba(255, 255, 255, 0.2);\n  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);\n  transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: rgba(255,255,255,0.5);\n  font-family: sans-serif;\n  font-weight: bold;\n}\n\n/* ટચ કે હોવર કરવા પર થતો ફેરફાર */\n.glass-card:hover, .glass-card:active {\n  transform: translateY(-15px) rotateX(15deg) rotateY(15deg) scale(1.05);\n  box-shadow: 0 20px 40px rgba(0, 255, 204, 0.5);\n  background: rgba(0, 255, 204, 0.15);\n  color: #00ffcc;\n  border: 1px solid rgba(0, 255, 204, 0.5);\n}\n",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;perspective:1000px;';\nconst card = document.createElement('div');\ncard.className = 'glass-card';\ncard.innerText = 'TOUCH ME';\nc.appendChild(card);\n"
   }
 ]
