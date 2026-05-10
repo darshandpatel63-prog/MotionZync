@@ -502,5 +502,14 @@
     "previewBg": "#2b1d3d",
     "cssCode": ".badge-btn {\n  width: 100px; height: 100px;\n  background: radial-gradient(circle, #ffdf00, #daa520);\n  border: 4px solid #fff; border-radius: 50%;\n  box-shadow: 0 10px 20px rgba(218, 165, 32, 0.5);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 40px; cursor: pointer;\n  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);\n}\n.badge-btn.unlocked {\n  animation: bounceUnlock 0.6s ease forwards;\n  box-shadow: 0 0 40px #ffdf00, inset 0 0 20px #fff;\n}\n@keyframes bounceUnlock {\n  0% { transform: scale(1); }\n  50% { transform: scale(1.3) rotate(15deg); }\n  100% { transform: scale(1.1) rotate(0deg); }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst badge = document.createElement('div');\nbadge.className = 'badge-btn';\nbadge.innerText = '🏆';\nc.appendChild(badge);\n\nbadge.addEventListener('pointerdown', () => {\n  badge.classList.remove('unlocked');\n  void badge.offsetWidth; // રિસેટ એનિમેશન \n  badge.classList.add('unlocked');\n});"
+  },
+  {
+    "id": "cinematic-spotlight-sweep",
+    "title": "Cinematic Spotlight Sweep",
+    "description": "Ultra Max Premium Pro Super sweeping cinematic spotlight background. Best suited for: Event Booking Sites, Movie Streaming Apps, Nightclub Pages, and Music Festival Galleries.",
+    "category": "Background",
+    "previewBg": "#00000",
+    "cssCode": ".spotlight {\n  position: absolute; top: -50px;\n  width: 150px; height: 400px;\n  background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, transparent 80%);\n  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);\n  animation: sweepSpotlight 4s infinite alternate ease-in-out;\n  transform-origin: top center; opacity: 0.6; mix-blend-mode: overlay;\n}\n.spot-1 { left: 20%; animation-delay: 0s; }\n.spot-2 { right: 20%; background: linear-gradient(to bottom, rgba(0, 210, 255, 0.4) 0%, transparent 80%); animation-delay: -2s; }\n\n@keyframes sweepSpotlight {\n  0% { transform: rotate(-30deg); }\n  100% { transform: rotate(30deg); }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nconst spot1 = document.createElement('div');\nspot1.className = 'spotlight spot-1';\nconst spot2 = document.createElement('div');\nspot2.className = 'spotlight spot-2';\n\nc.appendChild(spot1);\nc.appendChild(spot2);"
   }
 ]
