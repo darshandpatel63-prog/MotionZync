@@ -529,5 +529,14 @@
     "previewBg": "#0a0b10",
     "cssCode": ".chart-container {\n  display: flex; align-items: flex-end; gap: 15px;\n  width: 200px; height: 150px;\n  border-bottom: 2px solid #333; border-left: 2px solid #333;\n  padding: 10px; box-sizing: border-box;\n}\n.chart-bar {\n  width: 40px; background: linear-gradient(to top, #00b09b, #96c93d);\n  border-radius: 5px 5px 0 0;\n  box-shadow: 0 0 15px rgba(0, 176, 155, 0.5);\n  animation: growBar 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;\n  transform-origin: bottom; transform: scaleY(0);\n}\n@keyframes growBar {\n  100% { transform: scaleY(1); }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\n\nconst chart = document.createElement('div');\nchart.className = 'chart-container';\n\nconst heights = ['40%', '65%', '95%'];\nheights.forEach((h, i) => {\n  const bar = document.createElement('div');\n  bar.className = 'chart-bar';\n  bar.style.height = h;\n  bar.style.animationDelay = `${i * 0.3}s`;\n  chart.appendChild(bar);\n});\n\nc.appendChild(chart);"
+  },
+  {
+    "id": "secure-biometric-scanner",
+    "title": "Secure Biometric Scanner",
+    "description": "Ultra Max Premium Pro Super security scanning animation with a dynamic neon laser sweep. Best suited for: Mobile Banking Logins, Secure Vaults, Financial KYC Pages, and Insurance Apps.",
+    "category": "Front",
+    "previewBg": "#050505",
+    "cssCode": ".scanner-box {\n  width: 100px; height: 100px;\n  border: 3px solid rgba(0, 210, 255, 0.3);\n  border-radius: 20px; position: relative; overflow: hidden;\n  display: flex; align-items: center; justify-content: center;\n  box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.1);\n}\n.fingerprint {\n  font-size: 50px; color: rgba(0, 210, 255, 0.4);\n}\n.laser-line {\n  position: absolute; top: 0; left: 0;\n  width: 100%; height: 3px;\n  background: #00d2ff; box-shadow: 0 0 15px 5px rgba(0, 210, 255, 0.5);\n  animation: scanLaser 2s infinite ease-in-out alternate;\n}\n@keyframes scanLaser {\n  0% { top: 0; }\n  100% { top: 97px; }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\n\nconst box = document.createElement('div');\nbox.className = 'scanner-box';\n\nconst fp = document.createElement('div');\nfp.className = 'fingerprint';\nfp.innerText = '🔐';\n\nconst laser = document.createElement('div');\nlaser.className = 'laser-line';\n\nbox.appendChild(fp);\nbox.appendChild(laser);\nc.appendChild(box);"
   }
 ]
