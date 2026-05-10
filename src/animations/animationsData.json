@@ -448,5 +448,14 @@
     "previewBg": "#1a1014",
     "cssCode": ".beauty-blob {\n  width: 180px; height: 180px;\n  background: linear-gradient(135deg, #ff9a9e, #fecfef);\n  box-shadow: 0 15px 35px rgba(255, 154, 158, 0.4);\n  animation: softMorph 6s infinite ease-in-out alternate;\n  display: flex; align-items: center; justify-content: center;\n}\n@keyframes softMorph {\n  0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }\n  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst blob = document.createElement('div');\nblob.className = 'beauty-blob';\nc.appendChild(blob);"
+  },
+  {
+    "id": "elegant-booking-button",
+    "title": "Elegant Booking Button",
+    "description": "Ultra Max Premium Pro Super interactive booking button with a sweeping gold shimmer effect for salon appointments.",
+    "category": "Front",
+    "previewBg": "#0a0a0a",
+    "cssCode": ".booking-btn {\n  position: relative; overflow: hidden;\n  padding: 15px 35px; font-size: 16px; font-weight: bold;\n  color: #d4af37; background: transparent;\n  border: 2px solid #d4af37; border-radius: 30px;\n  cursor: pointer; transition: color 0.4s ease;\n  font-family: sans-serif; letter-spacing: 1px;\n}\n.booking-btn::before {\n  content: \"\"; position: absolute;\n  top: 0; left: -100%; width: 100%; height: 100%;\n  background: #d4af37; z-index: -1;\n  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);\n}\n.booking-btn:hover, .booking-btn:active {\n  color: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);\n}\n.booking-btn:hover::before, .booking-btn:active::before {\n  transform: translateX(100%);\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst btn = document.createElement('button');\nbtn.className = 'booking-btn';\nbtn.innerText = 'BOOK APPOINTMENT';\nc.appendChild(btn);"
   }
 ]
