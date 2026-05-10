@@ -376,5 +376,14 @@
     "previewBg": "#030014",
     "cssCode": ".blob {\n  position: absolute;\n  width: 250px; height: 250px;\n  border-radius: 50%;\n  filter: blur(40px);\n  opacity: 0.6;\n  animation: floatBlob 8s infinite alternate ease-in-out;\n  pointer-events: none;\n}\n.blob-1 { background: #7928ca; top: -50px; left: -50px; }\n.blob-2 { background: #ff0080; bottom: -50px; right: -50px; animation-delay: -4s; }\n\n@keyframes floatBlob {\n  0% { transform: translate(0, 0) scale(1); }\n  100% { transform: translate(80px, 80px) scale(1.2); }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nconst blob1 = document.createElement('div');\nblob1.className = 'blob blob-1';\nconst blob2 = document.createElement('div');\nblob2.className = 'blob blob-2';\n\nc.appendChild(blob1);\nc.appendChild(blob2);"
+  },
+  {
+    "id": "morphing-cart-button",
+    "title": "Morphing Cart Button",
+    "description": "Ultra Max Premium Pro Super interactive add to cart button that morphs into a loading spinner and seamlessly transitions into a success state.",
+    "category": "Front",
+    "previewBg": "#0a0a14",
+    "cssCode": ".cart-btn {\n  width: 180px; height: 50px;\n  background: #6c63ff; color: #fff;\n  border: none; border-radius: 25px;\n  font-size: 16px; font-weight: bold; cursor: pointer;\n  transition: all 0.4s ease;\n  display: flex; align-items: center; justify-content: center;\n  overflow: hidden; box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);\n}\n.cart-btn.loading {\n  width: 50px; background: transparent;\n  border: 4px solid rgba(108, 99, 255, 0.3);\n  border-top-color: #6c63ff; color: transparent;\n  animation: spinCart 1s linear infinite; pointer-events: none;\n}\n.cart-btn.success {\n  width: 180px; background: #00cc66; color: #fff;\n  border: none; animation: none;\n  box-shadow: 0 4px 15px rgba(0, 204, 102, 0.4); pointer-events: none;\n}\n@keyframes spinCart { 100% { transform: rotate(360deg); } }",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\n\nconst btn = document.createElement('button');\nbtn.className = 'cart-btn';\nbtn.innerText = 'ADD TO CART';\nc.appendChild(btn);\n\nbtn.addEventListener('pointerdown', () => {\n  btn.classList.add('loading');\n  btn.innerText = '';\n  \n  setTimeout(() => {\n    btn.classList.remove('loading');\n    btn.classList.add('success');\n    btn.innerText = 'SUCCESS ✓';\n    \n    setTimeout(() => {\n      btn.classList.remove('success');\n      btn.innerText = 'ADD TO CART';\n    }, 2000);\n  }, 1500);\n});"
   }
 ]
