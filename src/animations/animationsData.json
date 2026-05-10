@@ -457,5 +457,14 @@
     "previewBg": "#0a0a0a",
     "cssCode": ".booking-btn {\n  position: relative; overflow: hidden;\n  padding: 15px 35px; font-size: 16px; font-weight: bold;\n  color: #d4af37; background: transparent;\n  border: 2px solid #d4af37; border-radius: 30px;\n  cursor: pointer; transition: color 0.4s ease;\n  font-family: sans-serif; letter-spacing: 1px;\n}\n.booking-btn::before {\n  content: \"\"; position: absolute;\n  top: 0; left: -100%; width: 100%; height: 100%;\n  background: #d4af37; z-index: -1;\n  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);\n}\n.booking-btn:hover, .booking-btn:active {\n  color: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);\n}\n.booking-btn:hover::before, .booking-btn:active::before {\n  transform: translateX(100%);\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst btn = document.createElement('button');\nbtn.className = 'booking-btn';\nbtn.innerText = 'BOOK APPOINTMENT';\nc.appendChild(btn);"
+  },
+  {
+    "id": "floating-petals-aura",
+    "title": "Floating Petals Aura",
+    "description": "Ultra Max Premium Pro Super deep background animation featuring gently falling rose petals for a relaxing parlor vibe.",
+    "category": "Background",
+    "previewBg": "#1a0505",
+    "cssCode": ".petal {\n  position: absolute; width: 15px; height: 15px;\n  background: #ff4d6d;\n  border-radius: 50% 0 50% 50%;\n  opacity: 0.7; box-shadow: 0 0 10px rgba(255, 77, 109, 0.5);\n  animation: fallPetal linear infinite;\n}\n@keyframes fallPetal {\n  0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }\n  20% { opacity: 0.7; }\n  80% { opacity: 0.7; }\n  100% { transform: translateY(300px) rotate(360deg); opacity: 0; }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nfor(let i=0; i<15; i++) {\n  const petal = document.createElement('div');\n  petal.className = 'petal';\n  petal.style.left = `${Math.random() * 100}%`;\n  petal.style.animationDuration = `${3 + Math.random() * 4}s`;\n  petal.style.animationDelay = `${Math.random() * 5}s`;\n  c.appendChild(petal);\n}"
   }
 ]
