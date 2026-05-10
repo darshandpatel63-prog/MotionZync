@@ -322,5 +322,14 @@
     "previewBg": "#0a0a0f",
     "cssCode": ".neon-text { \n  font-size: 28px; font-weight: bold; \n  color: transparent; \n  -webkit-text-stroke: 1px #00ffcc; \n  text-shadow: 0 0 0px rgba(0,255,204,0); \n  animation: textReveal 2s infinite alternate; \n  font-family: sans-serif; letter-spacing: 4px; \n}\n@keyframes textReveal { \n  0% { text-shadow: 0 0 0px rgba(0,255,204,0); color: transparent; } \n  100% { text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc; color: #fff; } \n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst textEl = document.createElement('div');\ntextEl.className = 'neon-text';\ntextEl.innerText = 'PREMIUM';\nc.appendChild(textEl);"
+  },
+  {
+    "id": "cyber-glow-hover-button",
+    "title": "Cyber Glow Hover Button",
+    "description": "Ultra Max Premium Pro Super interactive button with a dynamic glowing hover effect for dark themes.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": ".cyber-btn { \n  padding: 12px 25px; font-size: 14px; font-weight: bold; \n  color: #fff; background: transparent; \n  border: 2px solid #ff00ff; border-radius: 8px; \n  cursor: pointer; transition: all 0.3s ease; \n  text-transform: uppercase; letter-spacing: 2px; \n}\n.cyber-btn:hover, .cyber-btn:active { \n  background: #ff00ff; \n  box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff; \n  transform: scale(1.1); color: #000; \n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst btn = document.createElement('button');\nbtn.className = 'cyber-btn';\nbtn.innerText = 'HOVER ME';\nc.appendChild(btn);"
   }
 ]
