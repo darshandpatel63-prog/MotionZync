@@ -547,5 +547,14 @@
     "previewBg": "#0a0812",
     "cssCode": ".crypto-coin {\n  position: absolute; width: 40px; height: 40px;\n  background: radial-gradient(circle, #ffd700, #b8860b);\n  border: 2px solid #fffacd; border-radius: 50%;\n  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(0,0,0,0.5);\n  display: flex; align-items: center; justify-content: center;\n  color: #fff; font-weight: bold; font-family: sans-serif;\n  animation: floatCoin 6s infinite linear, spinY 3s infinite linear;\n}\n@keyframes floatCoin {\n  0% { transform: translateY(0); opacity: 0; }\n  50% { opacity: 1; }\n  100% { transform: translateY(-150px); opacity: 0; }\n}\n@keyframes spinY { 100% { transform: rotateY(360deg); } }",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;perspective:800px;';\n\nconst symbols = ['₿', 'Ξ', '$', '₹'];\n\nfor(let i=0; i<8; i++) {\n  const coin = document.createElement('div');\n  coin.className = 'crypto-coin';\n  coin.innerText = symbols[Math.floor(Math.random() * symbols.length)];\n  coin.style.left = `${Math.random() * 90}%`;\n  coin.style.top = `${50 + Math.random() * 50}%`;\n  coin.style.animationDelay = `${Math.random() * 5}s`;\n  c.appendChild(coin);\n}"
+  },
+  {
+    "id": "financial-market-data-rain",
+    "title": "Financial Market Data Rain",
+    "description": "Ultra Max Premium Pro Super deep background with falling digital numbers representing live market data. Best suited for: Forex Trading Sites, Financial Analytics Tools, Hedge Fund Portfolios, and Crypto News Blogs.",
+    "category": "Background",
+    "previewBg": "#000000",
+    "cssCode": ".matrix-num {\n  position: absolute; top: -20px;\n  font-family: monospace; font-size: 14px; font-weight: bold;\n  animation: rainDrop linear infinite;\n}\n.profit { color: #00ff00; text-shadow: 0 0 5px #00ff00; }\n.loss { color: #ff0044; text-shadow: 0 0 5px #ff0044; }\n\n@keyframes rainDrop {\n  to { transform: translateY(120vh); }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nsetInterval(() => {\n  const drop = document.createElement('div');\n  const isProfit = Math.random() > 0.5;\n  drop.className = `matrix-num ${isProfit ? 'profit' : 'loss'}`;\n  \n  // રેન્ડમ આંકડાઓ બનાવ્યા (દા.ત. +2.4% કે -1.2%)\n  const val = (Math.random() * 5).toFixed(2);\n  drop.innerText = isProfit ? `+${val}%` : `-${val}%`;\n  \n  drop.style.left = `${Math.random() * 100}%`;\n  drop.style.animationDuration = `${2 + Math.random() * 3}s`;\n  \n  c.appendChild(drop);\n  setTimeout(() => drop.remove(), 5000); // એનિમેશન પૂરું થતાં ડિલીટ\n}, 300);"
   }
 ]
