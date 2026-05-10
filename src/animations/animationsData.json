@@ -493,5 +493,14 @@
     "previewBg": "#1a1a24",
     "cssCode": ".luxury-card {\n  width: 200px; height: 260px;\n  background: rgba(255, 255, 255, 0.05);\n  backdrop-filter: blur(15px);\n  border: 1px solid rgba(255, 255, 255, 0.2);\n  border-radius: 15px; position: relative; overflow: hidden;\n  box-shadow: 0 15px 35px rgba(0,0,0,0.5);\n  display: flex; align-items: flex-end; padding: 20px;\n  color: #fff; font-family: sans-serif; font-weight: bold;\n  transition: transform 0.4s ease; cursor: pointer;\n}\n.luxury-card::before {\n  content: \"\"; position: absolute; top: 0; left: -100%;\n  width: 50%; height: 100%;\n  background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);\n  transform: skewX(-25deg); transition: left 0.6s ease;\n}\n.luxury-card:hover, .luxury-card:active { transform: translateY(-10px); }\n.luxury-card:hover::before, .luxury-card:active::before { left: 200%; }",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst card = document.createElement('div');\ncard.className = 'luxury-card';\ncard.innerText = 'VILLA 404';\nc.appendChild(card);"
+  },
+  {
+    "id": "achievement-unlock-badge",
+    "title": "Achievement Unlock Badge",
+    "description": "Ultra Max Premium Pro Super bouncing achievement badge with glowing effect. Best suited for: E-learning Platforms, EdTech Apps, Gamified Fitness Trackers, and Quiz Websites.",
+    "category": "Front",
+    "previewBg": "#2b1d3d",
+    "cssCode": ".badge-btn {\n  width: 100px; height: 100px;\n  background: radial-gradient(circle, #ffdf00, #daa520);\n  border: 4px solid #fff; border-radius: 50%;\n  box-shadow: 0 10px 20px rgba(218, 165, 32, 0.5);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 40px; cursor: pointer;\n  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);\n}\n.badge-btn.unlocked {\n  animation: bounceUnlock 0.6s ease forwards;\n  box-shadow: 0 0 40px #ffdf00, inset 0 0 20px #fff;\n}\n@keyframes bounceUnlock {\n  0% { transform: scale(1); }\n  50% { transform: scale(1.3) rotate(15deg); }\n  100% { transform: scale(1.1) rotate(0deg); }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst badge = document.createElement('div');\nbadge.className = 'badge-btn';\nbadge.innerText = '🏆';\nc.appendChild(badge);\n\nbadge.addEventListener('pointerdown', () => {\n  badge.classList.remove('unlocked');\n  void badge.offsetWidth; // રિસેટ એનિમેશન \n  badge.classList.add('unlocked');\n});"
   }
 ]
