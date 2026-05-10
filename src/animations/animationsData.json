@@ -430,5 +430,14 @@
     "previewBg": "#1a0f00",
     "cssCode": ".mandala-loader {\n  width: 100px; height: 100px;\n  border: 4px dashed #d4af37;\n  border-radius: 50%;\n  position: relative;\n  animation: spinMandala 6s linear infinite;\n  display: flex; align-items: center; justify-content: center;\n}\n.mandala-loader::before {\n  content: \"\"; position: absolute;\n  width: 70px; height: 70px;\n  border: 3px dotted #ffaa00; border-radius: 50%;\n  animation: spinMandalaReverse 4s linear infinite;\n}\n.mandala-loader::after {\n  content: \"\"; position: absolute;\n  width: 40px; height: 40px;\n  border: 2px solid #ffcc66; border-radius: 50%;\n}\n@keyframes spinMandala { 100% { transform: rotate(360deg); } }\n@keyframes spinMandalaReverse { 100% { transform: rotate(-360deg); } }",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst loader = document.createElement('div');\nloader.className = 'mandala-loader';\nc.appendChild(loader);"
+  },
+  {
+    "id": "glamour-sparkle-trail",
+    "title": "Glamour Sparkle Trail",
+    "description": "Ultra Max Premium Pro Super interactive background featuring a luxurious trail of fading golden sparkles following user touch.",
+    "category": "Background",
+    "previewBg": "#0a0505",
+    "cssCode": ".sparkle {\n  position: absolute; width: 8px; height: 8px;\n  background: radial-gradient(circle, #fff 10%, #d4af37 60%, transparent 100%);\n  border-radius: 50%; pointer-events: none;\n  box-shadow: 0 0 10px #d4af37;\n  animation: sparkleFade 1s forwards ease-out;\n  transform: translate(-50%, -50%);\n}\n@keyframes sparkleFade {\n  0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }\n  100% { transform: translate(-50%, -50%) scale(0) rotate(180deg); opacity: 0; }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;touch-action:none;';\n\nc.addEventListener('pointermove', (e) => {\n  const rect = c.getBoundingClientRect();\n  const spark = document.createElement('div');\n  spark.className = 'sparkle';\n  spark.style.left = `${e.clientX - rect.left}px`;\n  spark.style.top = `${e.clientY - rect.top}px`;\n  c.appendChild(spark);\n  setTimeout(() => spark.remove(), 1000);\n});"
   }
 ]
