@@ -36,3 +36,4 @@ function AnimationCard({ animation }) {
 }
 
 export default AnimationCard
+
