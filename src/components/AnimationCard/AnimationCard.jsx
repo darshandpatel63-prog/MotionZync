@@ -35,18 +35,6 @@ function AnimationCard({ animation }) {
     </div>
   )
 }
-function buildPreviewHTML(css, js) {
-  return (
-    '<!DOCTYPE html><html><head><style>' +
-    '*{margin:0;padding:0;box-sizing:border-box;}' +
-    'body{width:100%;height:100vh;overflow:hidden;background:#0a0a0f;}' +
-    '#container{width:100%;height:100%;position:relative;}' +
-    (css || '') +
-    '</style></head><body><div id="container"></div>' +
-    '<script>try{' + (js || '') + '}catch(e){}</script>' +
-    '</body></html>'
-  )
-}
 
 export default AnimationCard
 
