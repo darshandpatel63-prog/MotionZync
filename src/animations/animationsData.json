@@ -5,8 +5,8 @@
     "description": "Dark background par sona particles fade in fade out thay chhe.",
     "category": "Background",
     "previewBg": "#0a0a0f",
-    "cssCode": "\n.particle {\n  position: absolute;\n  border-radius: 50%;\n  animation: float linear infinite;\n  opacity: 0;\n}\n@keyframes float {\n  0%   { transform: translateY(100vh) scale(0); opacity: 0; }\n  10%  { opacity: 1; }\n  90%  { opacity: 1; }\n  100% { transform: translateY(-10vh) scale(1); opacity: 0; }\n}",
-    "jsCode": "\nconst container = document.getElementById('container');\nconst colors = ['#7c3aed', '#06b6d4', '#a855f7', '#10b981', '#f59e0b'];\n\nfor (let i = 0; i < 40; i++) {\n  const p = document.createElement('div');\n  p.className = 'particle';\n  const size = Math.random() * 6 + 2;\n  p.style.cssText = `\n    width: ${size}px;\n    height: ${size}px;\n    left: ${Math.random() * 100}%;\n    background: ${colors[Math.floor(Math.random() * colors.length)]};\n    animation-duration: ${Math.random() * 8 + 4}s;\n    animation-delay: ${Math.random() * 6}s;\n    box-shadow: 0 0 ${size * 2}px currentColor;\n  `;\n  container.appendChild(p);\n}"
+    "cssCode": ".particle{position:absolute;border-radius:50%;animation:float linear infinite;opacity:0;}@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-10vh) scale(1);opacity:0;}}",
+    "jsCode": "const container=document.getElementById('container');const colors=['#7c3aed','#06b6d4','#a855f7','#10b981','#f59e0b'];for(let i=0;i<40;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*6+2;p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*8+4}s;animation-delay:${Math.random()*6}s;box-shadow:0 0 ${size*2}px currentColor;`;container.appendChild(p);}"
   },
   {
     "id": "bg-aurora",
@@ -14,8 +14,8 @@
     "description": "Northern lights jevi slow gradient waves.",
     "category": "Background",
     "previewBg": "#050510",
-    "cssCode": "\nbody { background: #050510; }\n.aurora {\n  position: absolute;\n  inset: 0;\n  background: \n    radial-gradient(ellipse 80% 50% at 20% 50%, rgba(124,58,237,0.4), transparent),\n    radial-gradient(ellipse 60% 40% at 80% 30%, rgba(6,182,212,0.35), transparent),\n    radial-gradient(ellipse 70% 60% at 50% 80%, rgba(16,185,129,0.3), transparent);\n  animation: aurora 8s ease-in-out infinite alternate;\n  filter: blur(40px);\n}\n@keyframes aurora {\n  0%   { transform: scale(1) rotate(0deg); opacity: 0.7; }\n  50%  { transform: scale(1.1) rotate(2deg); opacity: 1; }\n  100% { transform: scale(0.95) rotate(-2deg); opacity: 0.8; }\n}",
-    "jsCode": "\nconst container = document.getElementById('container');\nconst div = document.createElement('div');\ndiv.className = 'aurora';\ncontainer.appendChild(div);"
+    "cssCode": ".aurora{position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 50%,rgba(124,58,237,0.4),transparent),radial-gradient(ellipse 60% 40% at 80% 30%,rgba(6,182,212,0.35),transparent),radial-gradient(ellipse 70% 60% at 50% 80%,rgba(16,185,129,0.3),transparent);animation:aurora 8s ease-in-out infinite alternate;filter:blur(40px);}@keyframes aurora{0%{transform:scale(1) rotate(0deg);opacity:0.7;}50%{transform:scale(1.1) rotate(2deg);opacity:1;}100%{transform:scale(0.95) rotate(-2deg);opacity:0.8;}}",
+    "jsCode": "const container=document.getElementById('container');const div=document.createElement('div');div.className='aurora';container.appendChild(div);"
   },
   {
     "id": "bg-matrix",
@@ -23,9 +23,110 @@
     "description": "Classic matrix style falling characters.",
     "category": "Background",
     "previewBg": "#000000",
-    "cssCode": "\ncanvas { display: block; }",
-    "jsCode": "\nconst container = document.getElementById('container');\nconst canvas = document.createElement('canvas');\nconst ctx = canvas.getContext('2d');\ncanvas.width = container.offsetWidth || 400;\ncanvas.height = container.offsetHeight || 400;\ncontainer.appendChild(canvas);\n\nconst cols = Math.floor(canvas.width / 16);\nconst drops = Array(cols).fill(1);\nconst chars = 'アイウエオカキクケコ0123456789ABCDEF';\n\nfunction draw() {\n  ctx.fillStyle = 'rgba(0,0,0,0.05)';\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = '#00ff41';\n  ctx.font = '14px monospace';\n  drops.forEach((y, i) => {\n    const char = chars[Math.floor(Math.random() * chars.length)];\n    ctx.fillText(char, i * 16, y * 16);\n    if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;\n    drops[i]++;\n  });\n}\nsetInterval(draw, 40);"
+    "cssCode": "canvas{display:block;}",
+    "jsCode": "const container=document.getElementById('container');const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');canvas.width=container.offsetWidth||400;canvas.height=container.offsetHeight||500;container.appendChild(canvas);const cols=Math.floor(canvas.width/16);const drops=Array(cols).fill(1);const chars='アイウエオ0123456789ABCDEF';function draw(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#00ff41';ctx.font='14px monospace';drops.forEach((y,i)=>{const char=chars[Math.floor(Math.random()*chars.length)];ctx.fillText(char,i*16,y*16);if(y*16>canvas.height&&Math.random()>0.975)drops[i]=0;drops[i]++;});}setInterval(draw,40);"
   },
+  {
+    "id": "bg-constellation",
+    "title": "Constellation Network",
+    "description": "Dots slowly move and connect with lines — like a living star map.",
+    "category": "Background",
+    "previewBg": "#050510",
+    "cssCode": "html,body,#container{margin:0;width:100%;height:100%;overflow:hidden;}canvas{display:block;}",
+    "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=el.offsetWidth||400;c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height;const dots=Array.from({length:80},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*2+1}));function draw(){ctx.fillStyle='rgba(5,5,16,0.2)';ctx.fillRect(0,0,W,H);dots.forEach(d=>{d.x+=d.vx;d.y+=d.vy;if(d.x<0||d.x>W)d.vx*=-1;if(d.y<0||d.y>H)d.vy*=-1;ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fillStyle='#a78bfa';ctx.shadowColor='#7c3aed';ctx.shadowBlur=8;ctx.fill();});for(let i=0;i<dots.length;i++){for(let j=i+1;j<dots.length;j++){const dx=dots[i].x-dots[j].x,dy=dots[i].y-dots[j].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<100){ctx.beginPath();ctx.moveTo(dots[i].x,dots[i].y);ctx.lineTo(dots[j].x,dots[j].y);ctx.strokeStyle=`rgba(167,139,250,${1-dist/100})`;ctx.lineWidth=0.6;ctx.stroke();}}}requestAnimationFrame(draw);}draw();"
+  },
+  {
+    "id": "bg-vortex",
+    "title": "Particle Vortex",
+    "description": "Hundreds of particles spiral into a glowing center — mesmerizing black hole effect.",
+    "category": "Background",
+    "previewBg": "#000000",
+    "cssCode": "canvas{display:block;}",
+    "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=el.offsetWidth||400;c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height,CX=W/2,CY=H/2;const particles=Array.from({length:300},()=>{const angle=Math.random()*Math.PI*2,radius=Math.random()*Math.min(W,H)*0.45+20;return{angle,radius,speed:(0.008+Math.random()*0.015)*(Math.random()<0.5?1:-1),size:Math.random()*2+0.5,hue:260+Math.random()*60,alpha:Math.random()*0.8+0.2};});function draw(){ctx.fillStyle='rgba(0,0,0,0.06)';ctx.fillRect(0,0,W,H);const grd=ctx.createRadialGradient(CX,CY,0,CX,CY,40);grd.addColorStop(0,'rgba(168,85,247,0.8)');grd.addColorStop(0.4,'rgba(124,58,237,0.3)');grd.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(CX,CY,40,0,Math.PI*2);ctx.fillStyle=grd;ctx.fill();particles.forEach(p=>{p.angle+=p.speed;p.radius-=0.08;if(p.radius<5){p.radius=Math.random()*Math.min(W,H)*0.45+20;p.angle=Math.random()*Math.PI*2;}const x=CX+Math.cos(p.angle)*p.radius,y=CY+Math.sin(p.angle)*p.radius*0.5;ctx.beginPath();ctx.arc(x,y,p.size,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue},90%,70%,${p.alpha})`;ctx.shadowColor=`hsl(${p.hue},90%,60%)`;ctx.shadowBlur=6;ctx.fill();});requestAnimationFrame(draw);}draw();"
+  },
+  {
+    "id": "bg-synthwave",
+    "title": "Synthwave Retro Grid",
+    "description": "80s retro perspective grid with neon glow — moves toward you forever.",
+    "category": "Background",
+    "previewBg": "#050008",
+    "cssCode": "canvas{display:block;}",
+    "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=el.offsetWidth||400;c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height;let offset=0;function drawGrid(){ctx.fillStyle='#050008';ctx.fillRect(0,0,W,H);const grd=ctx.createLinearGradient(0,H*0.45,0,H*0.6);grd.addColorStop(0,'rgba(236,72,153,0.6)');grd.addColorStop(1,'transparent');ctx.fillStyle=grd;ctx.fillRect(0,H*0.45,W,H*0.15);const horizon=H*0.5,vp={x:W/2,y:horizon},cols=12,step=W/cols;ctx.lineWidth=1;for(let i=0;i<=cols;i++){const x=i*step,alpha=1-Math.abs(i-cols/2)/(cols/2)*0.6;ctx.beginPath();ctx.moveTo(x,H);ctx.lineTo(vp.x,horizon);ctx.strokeStyle=`rgba(167,139,250,${alpha*0.8})`;ctx.shadowColor='#a78bfa';ctx.shadowBlur=4;ctx.stroke();}const rows=10;for(let i=0;i<rows;i++){const t=(i/rows+offset)%1,ease=t*t,y=horizon+(H-horizon)*ease,alpha=ease*0.9+0.1;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.strokeStyle=`rgba(167,139,250,${alpha})`;ctx.shadowColor='#a78bfa';ctx.shadowBlur=3;ctx.stroke();}const sunGrd=ctx.createRadialGradient(W/2,horizon,0,W/2,horizon,60);sunGrd.addColorStop(0,'rgba(251,191,36,0.9)');sunGrd.addColorStop(0.4,'rgba(236,72,153,0.7)');sunGrd.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(W/2,horizon,60,0,Math.PI*2);ctx.fillStyle=sunGrd;ctx.fill();offset=(offset+0.004)%1;requestAnimationFrame(drawGrid);}drawGrid();"
+  },
+  {
+    "id": "bg-liquid-color",
+    "title": "Liquid Color Wash",
+    "description": "Smooth flowing liquid gradient colors — like oil on water. YouTube shorts jeva.",
+    "category": "Background",
+    "previewBg": "#000010",
+    "cssCode": "canvas{display:block;}",
+    "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=el.offsetWidth||400;c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height;let t=0;const blobs=[{x:W*0.3,y:H*0.3,r:W*0.5,hue:260,speed:0.4},{x:W*0.7,y:H*0.6,r:W*0.45,hue:190,speed:0.3},{x:W*0.5,y:H*0.8,r:W*0.4,hue:310,speed:0.5},{x:W*0.2,y:H*0.7,r:W*0.38,hue:150,speed:0.35}];function draw(){ctx.fillStyle='rgba(0,0,16,0.08)';ctx.fillRect(0,0,W,H);blobs.forEach((b,i)=>{b.x=W*(0.2+0.6*Math.abs(Math.sin(t*b.speed*0.01+i*1.2)));b.y=H*(0.2+0.6*Math.abs(Math.cos(t*b.speed*0.008+i*0.9)));const grd=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);grd.addColorStop(0,`hsla(${b.hue+t*0.2},100%,60%,0.35)`);grd.addColorStop(0.5,`hsla(${b.hue+60+t*0.1},90%,50%,0.15)`);grd.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fillStyle=grd;ctx.fill();});t++;requestAnimationFrame(draw);}draw();"
+  },
+  {
+    "id": "bg-bubble-float",
+    "title": "Floating Bubbles",
+    "description": "Colorful translucent bubbles float up with rainbow shimmer — premium feel.",
+    "category": "Background",
+    "previewBg": "#020010",
+    "cssCode": "canvas{display:block;}",
+    "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=el.offsetWidth||400;c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height;const bubbles=Array.from({length:25},()=>({x:Math.random()*W,y:H+Math.random()*H,r:Math.random()*40+10,speed:Math.random()*0.8+0.3,hue:Math.random()*360,drift:Math.random()*2-1,opacity:Math.random()*0.4+0.1}));function draw(){ctx.fillStyle='rgba(2,0,16,0.15)';ctx.fillRect(0,0,W,H);bubbles.forEach(b=>{b.y-=b.speed;b.x+=Math.sin(b.y*0.02)*b.drift;if(b.y+b.r<0){b.y=H+b.r;b.x=Math.random()*W;}ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);const grd=ctx.createRadialGradient(b.x-b.r*0.3,b.y-b.r*0.3,b.r*0.1,b.x,b.y,b.r);grd.addColorStop(0,`hsla(${b.hue},100%,90%,${b.opacity*1.5})`);grd.addColorStop(0.4,`hsla(${b.hue+60},80%,60%,${b.opacity})`);grd.addColorStop(1,`hsla(${b.hue+120},70%,40%,0)`);ctx.fillStyle=grd;ctx.fill();ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.strokeStyle=`hsla(${b.hue},100%,80%,${b.opacity*0.8})`;ctx.lineWidth=1;ctx.stroke();});requestAnimationFrame(draw);}draw();"
+  },
+  {
+    "id": "bg-galaxy-spiral",
+    "title": "Galaxy Spiral",
+    "description": "Rotating spiral of glowing stars like a real galaxy.",
+    "category": "Background",
+    "previewBg": "#000005",
+    "cssCode": "canvas{display:block;}",
+    "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=el.offsetWidth||400;c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height;const stars=Array.from({length:200},(_,i)=>({angle:(i/200)*Math.PI*12,radius:(i/200)*Math.min(W,H)*0.45,size:Math.random()*2.5+0.5,hue:220+i*0.8,speed:0.002+Math.random()*0.001}));function draw(){ctx.fillStyle='rgba(0,0,5,0.04)';ctx.fillRect(0,0,W,H);stars.forEach(s=>{s.angle+=s.speed;const x=W/2+Math.cos(s.angle)*s.radius,y=H/2+Math.sin(s.angle)*s.radius;ctx.beginPath();ctx.arc(x,y,s.size,0,Math.PI*2);ctx.fillStyle=`hsl(${s.hue},100%,70%)`;ctx.shadowColor=`hsl(${s.hue},100%,60%)`;ctx.shadowBlur=8;ctx.fill();});requestAnimationFrame(draw);}draw();"
+  },
+  {
+    "id": "front-neon-pulse",
+    "title": "Neon Glow Pulse",
+    "description": "Purple neon glow thatu box.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": ".neon-box{width:100px;height:100px;border:2px solid #a855f7;border-radius:12px;animation:neonPulse 2s ease-in-out infinite;}@keyframes neonPulse{0%,100%{box-shadow:0 0 5px #a855f7,0 0 20px #a855f7,0 0 40px #7c3aed;}50%{box-shadow:0 0 10px #a855f7,0 0 40px #a855f7,0 0 80px #7c3aed,0 0 120px #7c3aed;}}",
+    "jsCode": "const container=document.getElementById('container');container.style.cssText='display:flex;align-items:center;justify-content:center;';const box=document.createElement('div');box.className='neon-box';container.appendChild(box);"
+  },
+  {
+    "id": "front-dna-helix",
+    "title": "DNA Double Helix",
+    "description": "Rotating 3D-like DNA strand — pure canvas magic.",
+    "category": "Front",
+    "previewBg": "#05050f",
+    "cssCode": "canvas{display:block;}",
+    "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=Math.min(el.offsetWidth||400,400);c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height;let t=0;function draw(){ctx.fillStyle='rgba(5,5,15,0.15)';ctx.fillRect(0,0,W,H);const cx=W/2,nodes=28,spacing=H/nodes;for(let i=0;i<nodes;i++){const y=i*spacing-(t%spacing),phase=(i/nodes)*Math.PI*4+t*0.04,amp=W*0.28,x1=cx+Math.cos(phase)*amp,x2=cx+Math.cos(phase+Math.PI)*amp,z1=Math.sin(phase),z2=Math.sin(phase+Math.PI),r1=5+z1*3,r2=5+z2*3;if(i%2===0){ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);ctx.strokeStyle='rgba(6,182,212,0.35)';ctx.lineWidth=1.5;ctx.stroke();}ctx.beginPath();ctx.arc(x1,y,Math.max(r1,1),0,Math.PI*2);ctx.fillStyle=`rgba(167,139,250,${0.4+z1*0.5})`;ctx.shadowColor='#a78bfa';ctx.shadowBlur=r1*3;ctx.fill();ctx.beginPath();ctx.arc(x2,y,Math.max(r2,1),0,Math.PI*2);ctx.fillStyle=`rgba(6,182,212,${0.4+z2*0.5})`;ctx.shadowColor='#06b6d4';ctx.shadowBlur=r2*3;ctx.fill();}t+=1.2;requestAnimationFrame(draw);}draw();"
+  },
+  {
+    "id": "front-morphing-blob",
+    "title": "Morphing Blob",
+    "description": "Shape badlatu animated blob.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": ".blob{width:160px;height:160px;background:linear-gradient(135deg,#7c3aed,#06b6d4);animation:morph 6s ease-in-out infinite;filter:blur(1px);}@keyframes morph{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%;}25%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%;}50%{border-radius:50% 60% 30% 60%/30% 60% 70% 40%;}75%{border-radius:70% 30% 50% 50%/30% 30% 70% 70%;}}",
+    "jsCode": "const container=document.getElementById('container');container.style.cssText='display:flex;align-items:center;justify-content:center;';const blob=document.createElement('div');blob.className='blob';container.appendChild(blob);"
+  },
+  {
+    "id": "front-holo-card",
+    "title": "Holographic Card",
+    "description": "Shiny holographic card with glitch effect — premium feel.",
+    "category": "Front",
+    "previewBg": "#050510",
+    "cssCode": ".holo-card{width:200px;height:280px;border-radius:20px;position:relative;overflow:hidden;animation:cardFloat 4s ease-in-out infinite;border:1px solid rgba(255,255,255,0.15);}.holo-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a1a3e,#2d1b69,#0f4c75,#1a2a4a);background-size:400% 400%;animation:holoShift 6s ease infinite;}.holo-sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,0.12) 50%,transparent 70%);background-size:200% 200%;animation:sheenMove 3s ease-in-out infinite;}.holo-rainbow{position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(6,182,212,0.3),rgba(16,185,129,0.2),rgba(251,191,36,0.2));background-size:300% 300%;animation:rainbowShift 4s ease infinite;mix-blend-mode:screen;}.holo-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:1.5rem;}.holo-icon{font-size:2.5rem;filter:drop-shadow(0 0 12px rgba(168,85,247,0.8));}.holo-title{font-family:monospace;font-size:1rem;font-weight:800;color:white;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 20px rgba(168,85,247,0.9);animation:glitch 5s infinite;}.holo-line{width:80%;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,0.8),transparent);}@keyframes cardFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}@keyframes holoShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}@keyframes sheenMove{0%{background-position:-100% -100%;}100%{background-position:200% 200%;}}@keyframes rainbowShift{0%,100%{background-position:0% 0%;}50%{background-position:100% 100%;}}@keyframes glitch{0%,90%,100%{text-shadow:0 0 20px rgba(168,85,247,0.9);}92%{transform:translate(-2px,0);text-shadow:2px 0 #06b6d4,-2px 0 #ec4899;}94%{transform:translate(2px,0);}96%{transform:none;}}",
+    "jsCode": "const el=document.getElementById('container');el.innerHTML='<div class=\"holo-card\"><div class=\"holo-bg\"></div><div class=\"holo-rainbow\"></div><div class=\"holo-sheen\"></div><div class=\"holo-content\"><div class=\"holo-icon\">◈</div><div class=\"holo-line\"></div><div class=\"holo-title\">AnimateX</div><div class=\"holo-line\"></div></div></div>';"
+  },
+  {
+    "id": "front-lightning",
+    "title": "Electric Lightning",
+    "description": "Realistic branching lightning bolt with glow effect.",
+    "category": "Front",
+    "previewBg": "#020208",
+    "cssCode": "canvas{display:block;}",
+    "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=el.offsetWidth||400;c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height;function lightning(x1,y1,x2,y2,d,depth){if(d<2||depth<=0){ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);return;}const mx=(x1+x2)/2+(Math.random()-0.5)*d,my=(y1+y2)/2+(Math.random()-0.5)*d;lightning(x1,y1,mx,my,d/2,depth-1);lightning(mx,my,x2,y2,d/2,depth-1);if(Math.random()<0.3){const bx=mx+(Math.random()-0.5)*d*2,by=my+Math.random()*d*2;lightning(mx,my,bx,by,d/3,depth-2);}}function flash(){ctx.fillStyle='rgba(2,2,8,0.85)';ctx.fillRect(0,0,W,H);const sx=W*0.3+Math.random()*W*0.4,ex=W*0.2+Math.random()*W*0.6;ctx.beginPath();ctx.lineWidth=8;ctx.strokeStyle='rgba(167,139,250,0.15)';lightning(sx,0,ex,H,120,7);ctx.stroke();ctx.beginPath();ctx.lineWidth=3;ctx.strokeStyle='rgba(196,181,253,0.5)';ctx.shadowColor='#a78bfa';ctx.shadowBlur=15;lightning(sx,0,ex,H,120,7);ctx.stroke();ctx.beginPath();ctx.lineWidth=1;ctx.strokeStyle='rgba(255,255,255,0.95)';ctx.shadowColor='#ffffff';ctx.shadowBlur=8;lightning(sx,0,ex,H,120,7);ctx.stroke();ctx.shadowBlur=0;}function loop(){flash();setTimeout(loop,Math.random()<0.4?80+Math.random()*120:600+Math.random()*1200);}loop();"
+  }
+]
+
   {
     "id": "front-neon-pulse",
     "title": "Neon Glow Pulse",
