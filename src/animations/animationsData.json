@@ -313,5 +313,14 @@
     "previewBg": "#0a0a0f",
     "cssCode": ".glow-particle { \n  position: absolute; \n  width: 8px; height: 8px; \n  background: #ff007f; \n  border-radius: 50%; \n  box-shadow: 0 0 15px #ff007f, 0 0 30px #ff007f; \n  animation: floatUp 4s infinite linear; \n}\n@keyframes floatUp { \n  0% { transform: translateY(0) scale(1); opacity: 0; } \n  50% { opacity: 1; } \n  100% { transform: translateY(-150px) scale(0); opacity: 0; } \n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;overflow:hidden;background:transparent;';\nfor(let i=0; i<20; i++) {\n  const p = document.createElement('div');\n  p.className = 'glow-particle';\n  p.style.left = Math.random() * 100 + '%';\n  p.style.top = Math.random() * 100 + '%';\n  p.style.animationDelay = (Math.random() * 3) + 's';\n  c.appendChild(p);\n}"
+  },
+  {
+    "id": "auto-reveal-neon-text",
+    "title": "Auto Reveal Neon Text",
+    "description": "Ultra Max Premium Pro Super neon text that automatically reveals itself with a smooth glowing animation.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": ".neon-text { \n  font-size: 28px; font-weight: bold; \n  color: transparent; \n  -webkit-text-stroke: 1px #00ffcc; \n  text-shadow: 0 0 0px rgba(0,255,204,0); \n  animation: textReveal 2s infinite alternate; \n  font-family: sans-serif; letter-spacing: 4px; \n}\n@keyframes textReveal { \n  0% { text-shadow: 0 0 0px rgba(0,255,204,0); color: transparent; } \n  100% { text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc; color: #fff; } \n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst textEl = document.createElement('div');\ntextEl.className = 'neon-text';\ntextEl.innerText = 'PREMIUM';\nc.appendChild(textEl);"
   }
 ]
