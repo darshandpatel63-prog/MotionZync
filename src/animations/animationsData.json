@@ -538,5 +538,14 @@
     "previewBg": "#050505",
     "cssCode": ".scanner-box {\n  width: 100px; height: 100px;\n  border: 3px solid rgba(0, 210, 255, 0.3);\n  border-radius: 20px; position: relative; overflow: hidden;\n  display: flex; align-items: center; justify-content: center;\n  box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.1);\n}\n.fingerprint {\n  font-size: 50px; color: rgba(0, 210, 255, 0.4);\n}\n.laser-line {\n  position: absolute; top: 0; left: 0;\n  width: 100%; height: 3px;\n  background: #00d2ff; box-shadow: 0 0 15px 5px rgba(0, 210, 255, 0.5);\n  animation: scanLaser 2s infinite ease-in-out alternate;\n}\n@keyframes scanLaser {\n  0% { top: 0; }\n  100% { top: 97px; }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\n\nconst box = document.createElement('div');\nbox.className = 'scanner-box';\n\nconst fp = document.createElement('div');\nfp.className = 'fingerprint';\nfp.innerText = '🔐';\n\nconst laser = document.createElement('div');\nlaser.className = 'laser-line';\n\nbox.appendChild(fp);\nbox.appendChild(laser);\nc.appendChild(box);"
+  },
+  {
+    "id": "floating-crypto-coins",
+    "title": "Floating Crypto Coins",
+    "description": "Ultra Max Premium Pro Super background animation featuring slowly rotating, glowing digital coins. Best suited for: Cryptocurrency Exchanges, Web3 DApps, Blockchain Startups, and NFT Marketplaces.",
+    "category": "Background",
+    "previewBg": "#0a0812",
+    "cssCode": ".crypto-coin {\n  position: absolute; width: 40px; height: 40px;\n  background: radial-gradient(circle, #ffd700, #b8860b);\n  border: 2px solid #fffacd; border-radius: 50%;\n  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(0,0,0,0.5);\n  display: flex; align-items: center; justify-content: center;\n  color: #fff; font-weight: bold; font-family: sans-serif;\n  animation: floatCoin 6s infinite linear, spinY 3s infinite linear;\n}\n@keyframes floatCoin {\n  0% { transform: translateY(0); opacity: 0; }\n  50% { opacity: 1; }\n  100% { transform: translateY(-150px); opacity: 0; }\n}\n@keyframes spinY { 100% { transform: rotateY(360deg); } }",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;perspective:800px;';\n\nconst symbols = ['₿', 'Ξ', '$', '₹'];\n\nfor(let i=0; i<8; i++) {\n  const coin = document.createElement('div');\n  coin.className = 'crypto-coin';\n  coin.innerText = symbols[Math.floor(Math.random() * symbols.length)];\n  coin.style.left = `${Math.random() * 90}%`;\n  coin.style.top = `${50 + Math.random() * 50}%`;\n  coin.style.animationDelay = `${Math.random() * 5}s`;\n  c.appendChild(coin);\n}"
   }
 ]
