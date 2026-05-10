@@ -125,7 +125,6 @@
     "cssCode": "canvas{display:block;}",
     "jsCode": "const el=document.getElementById('container');const c=document.createElement('canvas');const ctx=c.getContext('2d');c.width=el.offsetWidth||400;c.height=el.offsetHeight||500;el.appendChild(c);const W=c.width,H=c.height;function lightning(x1,y1,x2,y2,d,depth){if(d<2||depth<=0){ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);return;}const mx=(x1+x2)/2+(Math.random()-0.5)*d,my=(y1+y2)/2+(Math.random()-0.5)*d;lightning(x1,y1,mx,my,d/2,depth-1);lightning(mx,my,x2,y2,d/2,depth-1);if(Math.random()<0.3){const bx=mx+(Math.random()-0.5)*d*2,by=my+Math.random()*d*2;lightning(mx,my,bx,by,d/3,depth-2);}}function flash(){ctx.fillStyle='rgba(2,2,8,0.85)';ctx.fillRect(0,0,W,H);const sx=W*0.3+Math.random()*W*0.4,ex=W*0.2+Math.random()*W*0.6;ctx.beginPath();ctx.lineWidth=8;ctx.strokeStyle='rgba(167,139,250,0.15)';lightning(sx,0,ex,H,120,7);ctx.stroke();ctx.beginPath();ctx.lineWidth=3;ctx.strokeStyle='rgba(196,181,253,0.5)';ctx.shadowColor='#a78bfa';ctx.shadowBlur=15;lightning(sx,0,ex,H,120,7);ctx.stroke();ctx.beginPath();ctx.lineWidth=1;ctx.strokeStyle='rgba(255,255,255,0.95)';ctx.shadowColor='#ffffff';ctx.shadowBlur=8;lightning(sx,0,ex,H,120,7);ctx.stroke();ctx.shadowBlur=0;}function loop(){flash();setTimeout(loop,Math.random()<0.4?80+Math.random()*120:600+Math.random()*1200);}loop();"
   }
-]
 
   {
     "id": "front-neon-pulse",
