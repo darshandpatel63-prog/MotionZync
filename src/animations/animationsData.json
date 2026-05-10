@@ -394,5 +394,14 @@
     "previewBg": "#121212",
     "cssCode": ".product-card {\n  width: 160px; height: 220px;\n  background: linear-gradient(135deg, #2a2a35, #15151e);\n  border: 2px solid #333; border-radius: 15px;\n  box-shadow: 0 10px 30px rgba(0,0,0,0.8);\n  display: flex; align-items: center; justify-content: center;\n  color: #888; font-family: sans-serif; font-weight: bold;\n  transform-style: preserve-3d; cursor: grab;\n}\n.product-card:active { cursor: grabbing; }",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;perspective:800px;';\n\nconst card = document.createElement('div');\ncard.className = 'product-card';\ncard.innerText = 'SWIPE ME';\nc.appendChild(card);\n\nlet isDragging = false;\nlet startX, startY, rotX = 0, rotY = 0;\n\ncard.addEventListener('pointerdown', (e) => {\n  isDragging = true;\n  startX = e.clientX; startY = e.clientY;\n  card.style.transition = 'none';\n});\n\ndocument.addEventListener('pointermove', (e) => {\n  if (!isDragging) return;\n  const deltaX = e.clientX - startX;\n  const deltaY = e.clientY - startY;\n  rotY += deltaX * 0.5; rotX -= deltaY * 0.5;\n  card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;\n  startX = e.clientX; startY = e.clientY;\n});\n\ndocument.addEventListener('pointerup', () => {\n  if(isDragging) {\n    isDragging = false;\n    card.style.transition = 'transform 0.5s ease';\n    card.style.transform = `rotateX(0deg) rotateY(0deg)`;\n    rotX = 0; rotY = 0;\n  }\n});"
+  },
+  {
+    "id": "neon-offer-badge",
+    "title": "Neon Offer Badge",
+    "description": "Ultra Max Premium Pro Super glowing pulse animation for discount tags to capture user attention instantly and increase sales.",
+    "category": "Front",
+    "previewBg": "#0a0a0f",
+    "cssCode": ".offer-badge {\n  padding: 10px 20px;\n  background: #ff0055; color: #fff;\n  font-family: sans-serif; font-weight: 900; font-size: 18px;\n  border-radius: 8px; letter-spacing: 1px;\n  box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7);\n  animation: pulseBadge 1.5s infinite cubic-bezier(0.66, 0, 0, 1);\n}\n@keyframes pulseBadge {\n  to { box-shadow: 0 0 0 20px rgba(255, 0, 85, 0); transform: scale(1.05); }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst badge = document.createElement('div');\nbadge.className = 'offer-badge';\nbadge.innerText = '50% OFF';\nc.appendChild(badge);"
   }
 ]
