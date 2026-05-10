@@ -367,5 +367,14 @@
     "previewBg": "#000000",
     "cssCode": ".trail-dot {\n  position: absolute;\n  width: 12px; height: 12px;\n  background: #00ffcc;\n  border-radius: 50%;\n  box-shadow: 0 0 15px #00ffcc;\n  pointer-events: none;\n  animation: fadeTrail 0.8s forwards ease-out;\n  transform: translate(-50%, -50%);\n}\n@keyframes fadeTrail {\n  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }\n  100% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;touch-action:none;';\n\nconst createDot = (x, y) => {\n  const dot = document.createElement('div');\n  dot.className = 'trail-dot';\n  dot.style.left = `${x}px`;\n  dot.style.top = `${y}px`;\n  c.appendChild(dot);\n  setTimeout(() => dot.remove(), 800);\n};\n\nc.addEventListener('pointermove', (e) => {\n  const rect = c.getBoundingClientRect();\n  createDot(e.clientX - rect.left, e.clientY - rect.top);\n});"
+  },
+  {
+    "id": "ambient-liquid-aura",
+    "title": "Ambient Liquid Aura",
+    "description": "Ultra Max Premium Pro Super deep background animation utilizing CSS blur filters to simulate a high-performance, continuously flowing liquid gradient.",
+    "category": "Background",
+    "previewBg": "#030014",
+    "cssCode": ".blob {\n  position: absolute;\n  width: 250px; height: 250px;\n  border-radius: 50%;\n  filter: blur(40px);\n  opacity: 0.6;\n  animation: floatBlob 8s infinite alternate ease-in-out;\n  pointer-events: none;\n}\n.blob-1 { background: #7928ca; top: -50px; left: -50px; }\n.blob-2 { background: #ff0080; bottom: -50px; right: -50px; animation-delay: -4s; }\n\n@keyframes floatBlob {\n  0% { transform: translate(0, 0) scale(1); }\n  100% { transform: translate(80px, 80px) scale(1.2); }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nconst blob1 = document.createElement('div');\nblob1.className = 'blob blob-1';\nconst blob2 = document.createElement('div');\nblob2.className = 'blob blob-2';\n\nc.appendChild(blob1);\nc.appendChild(blob2);"
   }
 ]
