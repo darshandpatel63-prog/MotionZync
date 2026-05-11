@@ -1,16 +1,15 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
-import Navbar from './components/Navbar/Navbar.jsx'
-import Footer from './components/Footer/Footer.jsx'
-import Home from './pages/Home/Home.jsx'
-import Gallery from './pages/Gallery/Gallery.jsx'
+import Navbar  from './components/Navbar/Navbar.jsx'
+import Footer  from './components/Footer/Footer.jsx'
+import Home       from './pages/Home/Home.jsx'
+import Gallery    from './pages/Gallery/Gallery.jsx'
 import Playground from './pages/Playground/Playground.jsx'
-import About from './pages/About/About.jsx'
-import Admin from './pages/Admin/Admin.jsx'
+import About      from './pages/About/About.jsx'
+import Admin      from './pages/Admin/Admin.jsx'
 
-function App() {
-  const location = useLocation()
-  const isAdmin = location.pathname === '/admin'
-
+export default function App() {
+  const { pathname } = useLocation()
+  const isAdmin = pathname === '/admin'
   return (
     <div className="app-wrapper">
       {!isAdmin && <Navbar />}
@@ -27,6 +26,4 @@ function App() {
     </div>
   )
 }
-
-export default App
 
