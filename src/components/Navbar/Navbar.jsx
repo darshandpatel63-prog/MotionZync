@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import AnimatexLogo from '../Logo/Logo.jsx'
+import MotionZyncLogo from '../Logo/Logo.jsx'
+import AuthButton    from '../AuthButton/AuthButton.jsx'
+import { useAuth }   from '../../context/AuthContext.jsx'
 import './Navbar.css'
 
 const navLinks = [
@@ -10,75 +12,56 @@ const navLinks = [
   { path: '/about',      label: 'About' },
 ]
 
-// Secret: Logo par 7 vaar tap karo = Admin panel khulshe
-const SECRET_TAPS = 7
-
-function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false)
+export default function Navbar() {
+  const [open, setOpen] = useState(false)
   const location  = useLocation()
   const navigate  = useNavigate()
-
-  const tapCount  = useRef(0)
-  const tapTimer  = useRef(null)
-
-  const closeMenu = () => setMenuOpen(false)
+  const { isAdmin } = useAuth()
+  const taps = useRef(0), timer = useRef(null)
 
   function handleLogoTap() {
-    tapCount.current += 1
-    clearTimeout(tapTimer.current)
-
-    if (tapCount.current >= SECRET_TAPS) {
-      tapCount.current = 0
-      navigate('/admin')
-      closeMenu()
-      return
-    }
-
-    // 2 second andar next tap na aave to reset
-    tapTimer.current = setTimeout(() => {
-      tapCount.current = 0
-    }, 2000)
+    taps.current++
+    clearTimeout(timer.current)
+    if (taps.current >= 7) { taps.current = 0; navigate('/admin'); setOpen(false); return }
+    timer.current = setTimeout(() => { taps.current = 0 }, 2000)
   }
 
   return (
     <nav className="navbar">
       <div className="navbar-inner">
-        <Link
-          to="/"
-          className="navbar-logo"
-          onClick={(e) => {
-            handleLogoTap()
-            // Normal home navigation pan thay (jyare taps puray nahi hoi)
-          }}
-        >
-          <AnimatexLogo size={36} className="logo-svg" />
-          <span className="logo-text">AnimateX</span>
+        <Link to="/" className="navbar-logo" onClick={handleLogoTap}>
+          <MotionZyncLogo size={36} className="logo-svg"/>
+          <span className="logo-text">MotionZync</span>
         </Link>
 
-        <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
-          {navLinks.map(link => (
-            <li key={link.path}>
-              <Link
-                to={link.path}
-                className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-                onClick={closeMenu}
-              >
-                {link.label}
+        <ul className={`navbar-links ${open ? 'open' : ''}`}>
+          {navLinks.map(l => (
+            <li key={l.path}>
+              <Link to={l.path}
+                className={`nav-link ${location.pathname === l.path ? 'active' : ''}`}
+                onClick={() => setOpen(false)}>
+                {l.label}
               </Link>
             </li>
           ))}
+          {/* Admin link - sirf admin user ne dikhshe */}
+          {isAdmin && (
+            <li>
+              <Link to="/admin" className="nav-link admin-nav-link" onClick={() => setOpen(false)}>
+                ⚙️ Admin
+              </Link>
+            </li>
+          )}
         </ul>
 
-        <button
-          className={`menu-toggle ${menuOpen ? 'open' : ''}`}
-          onClick={() => setMenuOpen(p => !p)}
-          aria-label="Toggle menu"
-        >
-          <span /><span /><span />
-        </button>
+        <div className="navbar-right">
+          <AuthButton />
+          <button className={`menu-toggle ${open ? 'open' : ''}`}
+            onClick={() => setOpen(p => !p)} aria-label="Toggle menu">
+            <span/><span/><span/>
+          </button>
+        </div>
       </div>
     </nav>
   )
 }
-
-export default Navbar
