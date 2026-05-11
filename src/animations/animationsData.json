@@ -574,5 +574,14 @@
     "previewBg": "#12100e",
     "cssCode": ".steam-container {\n  display: flex; gap: 10px; justify-content: center; align-items: flex-end;\n  width: 100px; height: 100px; border-bottom: 4px solid #ff9900;\n  padding-bottom: 10px; border-radius: 10px;\n}\n.steam {\n  width: 8px; background: rgba(255, 255, 255, 0.6);\n  border-radius: 10px; filter: blur(2px);\n  animation: riseSteam 2s infinite ease-in; opacity: 0;\n}\n.steam:nth-child(1) { animation-delay: 0s; height: 40px; }\n.steam:nth-child(2) { animation-delay: 0.5s; height: 60px; }\n.steam:nth-child(3) { animation-delay: 1s; height: 50px; }\n\n@keyframes riseSteam {\n  0% { transform: translateY(0) scaleX(1); opacity: 0; }\n  50% { opacity: 1; transform: translateY(-30px) scaleX(1.5); }\n  100% { transform: translateY(-60px) scaleX(2); opacity: 0; }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst steamBox = document.createElement('div');\nsteamBox.className = 'steam-container';\n\nfor(let i=0; i<3; i++) {\n  const s = document.createElement('div');\n  s.className = 'steam';\n  steamBox.appendChild(s);\n}\nc.appendChild(steamBox);"
+  },
+  {
+    "id": "parallax-floating-clouds",
+    "title": "Parallax Floating Clouds",
+    "description": "Ultra Max Premium Pro Super deep background with slowly drifting 3D clouds. Best suited for: Travel Agencies, Flight Booking Platforms, Tourism Blogs, and Weather Forecasting Apps.",
+    "category": "Background",
+    "previewBg": "#4facfe",
+    "cssCode": ".cloud {\n  position: absolute; background: #ffffff;\n  border-radius: 50px; opacity: 0.8;\n  box-shadow: 0 10px 20px rgba(0,0,0,0.1);\n  animation: floatCloud linear infinite;\n}\n.cloud::before, .cloud::after {\n  content: \"\"; position: absolute; background: #ffffff; border-radius: 50%;\n}\n.cloud::before { width: 50px; height: 50px; top: -25px; left: 15px; }\n.cloud::after { width: 70px; height: 70px; top: -35px; right: 20px; }\n\n@keyframes floatCloud {\n  0% { transform: translateX(-150px); }\n  100% { transform: translateX(110vw); }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nconst speeds = [15, 25, 35];\nconst tops = ['20%', '50%', '10%'];\n\nfor(let i=0; i<3; i++) {\n  const cloud = document.createElement('div');\n  cloud.className = 'cloud';\n  cloud.style.width = '120px';\n  cloud.style.height = '40px';\n  cloud.style.top = tops[i];\n  cloud.style.animationDuration = `${speeds[i]}s`;\n  cloud.style.animationDelay = `${i * -5}s`;\n  c.appendChild(cloud);\n}"
   }
 ]
