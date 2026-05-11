@@ -1,38 +1,25 @@
 import './About.css'
-
-function About() {
+export default function About() {
   return (
     <div className="about-page page-section">
       <div className="container about-inner">
-        <h1 className="about-title">About AnimateX</h1>
-        <p className="about-desc">
-          AnimateX ek live animation platform chhe jyan tame beautiful CSS aur JavaScript
-          animations explore kari shako chho — chahe tame beginner ho ya expert.
-        </p>
-
+        <h1 className="about-title">About MotionZync</h1>
+        <p className="about-desc">MotionZync ek live animation platform chhe jyan tame beautiful CSS aur JavaScript animations explore kari shako chho — beginner ho ya expert.</p>
         <div className="about-cards">
-          <div className="about-card">
-            <span>🎯</span>
-            <h3>Mission</h3>
-            <p>Animations ne accessible banavo — koi complex setup nahi, sirf code karo ne juo.</p>
-          </div>
-          <div className="about-card">
-            <span>🔒</span>
-            <h3>Security</h3>
-            <p>
-              Tamara code ne sandboxed iframe ma run kariye chhe. App na koi resources ne access
-              nathi — fully isolated execution.
-            </p>
-          </div>
-          <div className="about-card">
-            <span>🚀</span>
-            <h3>Tech Stack</h3>
-            <p>React + Vite, React Router, Vercel deployment, Environment variables for secrets.</p>
-          </div>
+          {cards.map(c => (
+            <div className="about-card" key={c.title}>
+              <span>{c.icon}</span><h3>{c.title}</h3><p>{c.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   )
 }
+const cards = [
+  { icon:'🎯', title:'Mission', desc:'Animations ne accessible banavo — koi complex setup nahi.' },
+  { icon:'🔥', title:'Firestore', desc:'Animations Firestore ma store thay — real-time updates, unlimited scale.' },
+  { icon:'🔒', title:'Security', desc:'User code sandboxed iframe ma run thay. Fully isolated execution.' },
+  { icon:'🚀', title:'Tech Stack', desc:'React + Vite + Firebase Firestore + Auth, Vercel deployment.' },
+]
 
-export default About
