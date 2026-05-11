@@ -1,90 +1,57 @@
 import { useState } from 'react'
 import './CodeEditor.css'
 
-/**
- * CodeEditor Component
- * Props:
- *   cssCode: string
- *   jsCode: string
- *   onCssChange: fn(newCss)
- *   onJsChange: fn(newJs)
- */
-function CodeEditor({ cssCode, jsCode, onCssChange, onJsChange }) {
-  const [activeTab, setActiveTab] = useState('css')
+export default function CodeEditor({ cssCode, jsCode, onCssChange, onJsChange, showCopyButtons = false }) {
+  const [tab, setTab]        = useState('css')
+  const [copied, setCopied]  = useState('')
+
+  async function copy(text, which) {
+    await navigator.clipboard.writeText(text)
+    setCopied(which)
+    setTimeout(() => setCopied(''), 2000)
+  }
+
+  function handleTab(e) {
+    if (e.key !== 'Tab') return
+    e.preventDefault()
+    const el = e.target, s = el.selectionStart, end = el.selectionEnd
+    const before = el.value.substring(0, s)
+    const after  = el.value.substring(end)
+    el.value = before + '  ' + after
+    el.selectionStart = el.selectionEnd = s + 2
+    el.dispatchEvent(new Event('input', { bubbles: true }))
+  }
 
   return (
     <div className="code-editor">
       <div className="editor-tabs">
-        <button
-          className={`editor-tab ${activeTab === 'css' ? 'active' : ''}`}
-          onClick={() => setActiveTab('css')}
-        >
-          🎨 CSS
-        </button>
-        <button
-          className={`editor-tab ${activeTab === 'js' ? 'active' : ''}`}
-          onClick={() => setActiveTab('js')}
-        >
-          ⚡ JavaScript
-        </button>
-        <span className="editor-hint">Tab key = 2 spaces</span>
+        <button className={`editor-tab ${tab === 'css' ? 'active' : ''}`} onClick={() => setTab('css')}>🎨 CSS</button>
+        <button className={`editor-tab ${tab === 'js' ? 'active' : ''}`} onClick={() => setTab('js')}>⚡ JavaScript</button>
+        {showCopyButtons && (
+          <div className="copy-btns">
+            <button className="copy-btn" onClick={() => copy(cssCode, 'css')}>
+              {copied === 'css' ? '✅ Copied!' : '📋 CSS'}
+            </button>
+            <button className="copy-btn" onClick={() => copy(jsCode, 'js')}>
+              {copied === 'js' ? '✅ Copied!' : '📋 JS'}
+            </button>
+          </div>
+        )}
+        <span className="editor-hint">Tab = 2 spaces</span>
       </div>
-
       <div className="editor-area">
-        {activeTab === 'css' ? (
-          <textarea
-            className="code-textarea"
-            value={cssCode}
+        {tab === 'css' ? (
+          <textarea className="code-textarea" value={cssCode}
             onChange={e => onCssChange(e.target.value)}
-            placeholder="/* CSS animation yahan likho... */
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-}
-.box {
-  width: 100px;
-  height: 100px;
-  background: #7c3aed;
-  animation: pulse 2s infinite;
-}"
-            spellCheck={false}
-            autoCorrect="off"
-            autoCapitalize="off"
-            onKeyDown={handleTabKey}
-          />
+            placeholder="/* CSS yahan likho... */"
+            spellCheck={false} onKeyDown={handleTab}/>
         ) : (
-          <textarea
-            className="code-textarea"
-            value={jsCode}
+          <textarea className="code-textarea" value={jsCode}
             onChange={e => onJsChange(e.target.value)}
-            placeholder="// JavaScript animation yahan likho...
-const container = document.getElementById('container');
-const box = document.createElement('div');
-box.className = 'box';
-container.appendChild(box);"
-            spellCheck={false}
-            autoCorrect="off"
-            autoCapitalize="off"
-            onKeyDown={handleTabKey}
-          />
+            placeholder="// JavaScript yahan likho..."
+            spellCheck={false} onKeyDown={handleTab}/>
         )}
       </div>
     </div>
   )
 }
-
-function handleTabKey(e) {
-  if (e.key === 'Tab') {
-    e.preventDefault()
-    const el = e.target
-    const start = el.selectionStart
-    const end = el.selectionEnd
-    el.value = el.value.substring(0, start) + '  ' + el.value.substring(end)
-    el.selectionStart = el.selectionEnd = start + 2
-    // React onChange trigger
-    const nativeInputEvent = new Event('input', { bubbles: true })
-    el.dispatchEvent(nativeInputEvent)
-  }
-}
-
-export default CodeEditor
