@@ -556,5 +556,14 @@
     "previewBg": "#000000",
     "cssCode": ".matrix-num {\n  position: absolute; top: -20px;\n  font-family: monospace; font-size: 14px; font-weight: bold;\n  animation: rainDrop linear infinite;\n}\n.profit { color: #00ff00; text-shadow: 0 0 5px #00ff00; }\n.loss { color: #ff0044; text-shadow: 0 0 5px #ff0044; }\n\n@keyframes rainDrop {\n  to { transform: translateY(120vh); }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nsetInterval(() => {\n  const drop = document.createElement('div');\n  const isProfit = Math.random() > 0.5;\n  drop.className = `matrix-num ${isProfit ? 'profit' : 'loss'}`;\n  \n  // રેન્ડમ આંકડાઓ બનાવ્યા (દા.ત. +2.4% કે -1.2%)\n  const val = (Math.random() * 5).toFixed(2);\n  drop.innerText = isProfit ? `+${val}%` : `-${val}%`;\n  \n  drop.style.left = `${Math.random() * 100}%`;\n  drop.style.animationDuration = `${2 + Math.random() * 3}s`;\n  \n  c.appendChild(drop);\n  setTimeout(() => drop.remove(), 5000); // એનિમેશન પૂરું થતાં ડિલીટ\n}, 300);"
+  },
+  {
+    "id": "glowing-health-pulse",
+    "title": "Glowing Health Pulse",
+    "description": "Ultra Max Premium Pro Super glowing heartbeat pulse animation. Best suited for: Ayurveda Clinics, Medical Apps, Fitness Trackers, Hospital Portals, and Health Monitoring Dashboards.",
+    "category": "Front",
+    "previewBg": "#1a0505",
+    "cssCode": ".health-pulse {\n  width: 80px; height: 80px;\n  background: radial-gradient(circle, #ff0055, #b3003b);\n  border-radius: 50%;\n  box-shadow: 0 0 20px #ff0055, 0 0 60px #ff0055;\n  animation: heartbeat 1.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 30px; color: white;\n}\n@keyframes heartbeat {\n  0% { transform: scale(0.95); box-shadow: 0 0 20px #ff0055; }\n  5% { transform: scale(1.1); box-shadow: 0 0 40px #ff0055; }\n  39% { transform: scale(0.85); box-shadow: 0 0 10px #ff0055; }\n  45% { transform: scale(1); box-shadow: 0 0 30px #ff0055; }\n  60% { transform: scale(0.95); box-shadow: 0 0 20px #ff0055; }\n  100% { transform: scale(0.95); box-shadow: 0 0 20px #ff0055; }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst pulse = document.createElement('div');\npulse.className = 'health-pulse';\npulse.innerText = '🌿'; // આયુર્વેદ/આરોગ્યનું પ્રતીક\nc.appendChild(pulse);"
   }
 ]
