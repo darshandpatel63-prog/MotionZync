@@ -1,78 +1,77 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import CodeEditor from '../../components/CodeEditor/CodeEditor.jsx'
+import CodeEditor  from '../../components/CodeEditor/CodeEditor.jsx'
 import LivePreview from '../../components/LivePreview/LivePreview.jsx'
-import AdSense from '../../components/AdSense/AdSense.jsx'
-import backgroundAnimations from '../../animations/backgroundAnimations.js'
-import frontAnimations from '../../animations/frontAnimations.js'
+import AdSense     from '../../components/AdSense/AdSense.jsx'
+import { getAnimationById, getAnimations } from '../../hooks/useAnimations.js'
 import './Playground.css'
 
-const allAnimations = [...backgroundAnimations, ...frontAnimations]
-
-const DEFAULT_CSS = `/* Tamaro CSS yahan likho */
-.box {
-  width: 100px;
-  height: 100px;
+const DEFAULT_CSS = `.box {
+  width: 120px; height: 120px;
   background: linear-gradient(135deg, #7c3aed, #06b6d4);
-  border-radius: 16px;
+  border-radius: 20px;
   animation: spin 2s linear infinite;
 }
-
 @keyframes spin {
-  from { transform: rotate(0deg) scale(1); }
-  50%  { transform: rotate(180deg) scale(1.2); }
-  to   { transform: rotate(360deg) scale(1); }
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }`
 
-const DEFAULT_JS = `// Tamaro JavaScript yahan likho
-const container = document.getElementById('container');
-container.style.cssText = 'display:flex;align-items:center;justify-content:center;';
-
+const DEFAULT_JS = `const c = document.getElementById('container');
+c.style.cssText = 'display:flex;align-items:center;justify-content:center;';
 const box = document.createElement('div');
 box.className = 'box';
-container.appendChild(box);`
+c.appendChild(box);`
 
-function Playground() {
+export default function Playground() {
   const [searchParams] = useSearchParams()
-  const [cssCode, setCssCode] = useState(DEFAULT_CSS)
-  const [jsCode, setJsCode] = useState(DEFAULT_JS)
-  const [copyMsg, setCopyMsg] = useState('')
-  const [selectedId, setSelectedId] = useState('')
+  const [cssCode,   setCssCode]   = useState(DEFAULT_CSS)
+  const [jsCode,    setJsCode]    = useState(DEFAULT_JS)
+  const [bgColor,   setBgColor]   = useState('#0a0a0f')
+  const [allAnims,  setAllAnims]  = useState([])
+  const [selectedId,setSelectedId]= useState('')
+  const [copyMsg,   setCopyMsg]   = useState('')
+  const [loadedTitle, setLoadedTitle] = useState('')
 
-  // Gallery thi ?id= aave to load karo
+  useEffect(() => {
+    getAnimations().then(setAllAnims)
+  }, [])
+
   useEffect(() => {
     const id = searchParams.get('id')
-    if (id) {
-      const found = allAnimations.find(a => a.id === id)
-      if (found) {
-        setCssCode(found.cssCode.trim())
-        setJsCode(found.jsCode.trim())
-        setSelectedId(id)
-      }
-    }
+    if (!id) return
+    getAnimationById(id).then(anim => {
+      if (!anim) return
+      setCssCode(anim.cssCode || '')
+      setJsCode(anim.jsCode || '')
+      setBgColor(anim.previewBg || '#0a0a0f')
+      setSelectedId(id)
+      setLoadedTitle(anim.title)
+    })
   }, [searchParams])
 
-  const handleReset = () => {
-    setCssCode(DEFAULT_CSS)
-    setJsCode(DEFAULT_JS)
-    setSelectedId('')
-  }
-
-  const handleCopyCSS = async () => {
-    await navigator.clipboard.writeText(cssCode)
-    setCopyMsg('CSS Copied!')
-    setTimeout(() => setCopyMsg(''), 2000)
-  }
-
-  const handleLoadAnimation = (e) => {
+  function handleLoad(e) {
     const id = e.target.value
     setSelectedId(id)
-    if (!id) { handleReset(); return; }
-    const found = allAnimations.find(a => a.id === id)
-    if (found) {
-      setCssCode(found.cssCode.trim())
-      setJsCode(found.jsCode.trim())
+    if (!id) { reset(); return }
+    const anim = allAnims.find(a => a.docId === id)
+    if (anim) {
+      setCssCode(anim.cssCode || '')
+      setJsCode(anim.jsCode || '')
+      setBgColor(anim.previewBg || '#0a0a0f')
+      setLoadedTitle(anim.title)
     }
+  }
+
+  function reset() {
+    setCssCode(DEFAULT_CSS); setJsCode(DEFAULT_JS)
+    setBgColor('#0a0a0f'); setSelectedId(''); setLoadedTitle('')
+  }
+
+  async function copyAll() {
+    const text = `/* CSS */\n${cssCode}\n\n/* JS */\n${jsCode}\n\n/* Preview BG: ${bgColor} */`
+    await navigator.clipboard.writeText(text)
+    setCopyMsg('✅ Copied!'); setTimeout(() => setCopyMsg(''), 2000)
   }
 
   return (
@@ -80,66 +79,41 @@ function Playground() {
       <div className="container">
         <div className="playground-header">
           <h1 className="playground-title">⚡ Live Playground</h1>
-          <p className="playground-subtitle">CSS + JavaScript lakho, real-time preview juo</p>
+          {loadedTitle && <p className="loaded-title">📌 {loadedTitle}</p>}
         </div>
 
-        {/* Toolbar */}
         <div className="playground-toolbar">
-          <select
-            className="animation-select"
-            value={selectedId}
-            onChange={handleLoadAnimation}
-          >
+          <select className="anim-select" value={selectedId} onChange={handleLoad}>
             <option value="">— Gallery thi load karo —</option>
-            <optgroup label="Background Animations">
-              {backgroundAnimations.map(a => (
-                <option key={a.id} value={a.id}>{a.title}</option>
-              ))}
-            </optgroup>
-            <optgroup label="Front Animations">
-              {frontAnimations.map(a => (
-                <option key={a.id} value={a.id}>{a.title}</option>
-              ))}
-            </optgroup>
+            {allAnims.map(a => <option key={a.docId} value={a.docId}>{a.title}</option>)}
           </select>
-
-          <div className="toolbar-actions">
-            <button className="btn-secondary" onClick={handleCopyCSS}>
-              {copyMsg || '📋 Copy CSS'}
-            </button>
-            <button className="btn-secondary" onClick={handleReset}>
-              🔄 Reset
-            </button>
+          <div className="toolbar-right">
+            {/* BG color + code mathi dikhshe */}
+            <div className="bg-display">
+              <span className="bg-display-dot" style={{ background: bgColor }}/>
+              <code className="bg-display-code">{bgColor}</code>
+            </div>
+            <button className="btn-secondary toolbar-btn" onClick={copyAll}>{copyMsg || '📋 Copy All'}</button>
+            <button className="btn-secondary toolbar-btn" onClick={reset}>🔄 Reset</button>
           </div>
         </div>
 
-        {/* AdSense top */}
-        <div className="ad-zone">
-          <AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_PLAYGROUND} />
-        </div>
+        <div className="ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_PLAYGROUND}/></div>
 
-        {/* Editor + Preview Split */}
         <div className="playground-split">
           <div className="editor-pane">
-            <CodeEditor
-              cssCode={cssCode}
-              jsCode={jsCode}
-              onCssChange={setCssCode}
-              onJsChange={setJsCode}
-            />
+            <CodeEditor cssCode={cssCode} jsCode={jsCode}
+              onCssChange={setCssCode} onJsChange={setJsCode}
+              showCopyButtons={true}/>
           </div>
           <div className="preview-pane">
-            <LivePreview cssCode={cssCode} jsCode={jsCode} />
+            <LivePreview cssCode={cssCode} jsCode={jsCode} bgColor={bgColor}/>
           </div>
         </div>
 
-        {/* AdSense bottom */}
-        <div className="ad-zone">
-          <AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_PLAYGROUND} />
-        </div>
+        <div className="ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_PLAYGROUND}/></div>
       </div>
     </div>
   )
 }
 
-export default Playground
