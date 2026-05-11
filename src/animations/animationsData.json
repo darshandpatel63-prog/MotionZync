@@ -565,5 +565,14 @@
     "previewBg": "#1a0505",
     "cssCode": ".health-pulse {\n  width: 80px; height: 80px;\n  background: radial-gradient(circle, #ff0055, #b3003b);\n  border-radius: 50%;\n  box-shadow: 0 0 20px #ff0055, 0 0 60px #ff0055;\n  animation: heartbeat 1.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1);\n  display: flex; align-items: center; justify-content: center;\n  font-size: 30px; color: white;\n}\n@keyframes heartbeat {\n  0% { transform: scale(0.95); box-shadow: 0 0 20px #ff0055; }\n  5% { transform: scale(1.1); box-shadow: 0 0 40px #ff0055; }\n  39% { transform: scale(0.85); box-shadow: 0 0 10px #ff0055; }\n  45% { transform: scale(1); box-shadow: 0 0 30px #ff0055; }\n  60% { transform: scale(0.95); box-shadow: 0 0 20px #ff0055; }\n  100% { transform: scale(0.95); box-shadow: 0 0 20px #ff0055; }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst pulse = document.createElement('div');\npulse.className = 'health-pulse';\npulse.innerText = '🌿'; // આયુર્વેદ/આરોગ્યનું પ્રતીક\nc.appendChild(pulse);"
+  },
+  {
+    "id": "steaming-hot-food-indicator",
+    "title": "Steaming Hot Food Indicator",
+    "description": "Ultra Max Premium Pro Super animated steam waves rising smoothly. Best suited for: Restaurant Menus, Food Delivery Apps, Recipe Blogs, Cafe Websites, and Culinary Portfolios.",
+    "category": "Front",
+    "previewBg": "#12100e",
+    "cssCode": ".steam-container {\n  display: flex; gap: 10px; justify-content: center; align-items: flex-end;\n  width: 100px; height: 100px; border-bottom: 4px solid #ff9900;\n  padding-bottom: 10px; border-radius: 10px;\n}\n.steam {\n  width: 8px; background: rgba(255, 255, 255, 0.6);\n  border-radius: 10px; filter: blur(2px);\n  animation: riseSteam 2s infinite ease-in; opacity: 0;\n}\n.steam:nth-child(1) { animation-delay: 0s; height: 40px; }\n.steam:nth-child(2) { animation-delay: 0.5s; height: 60px; }\n.steam:nth-child(3) { animation-delay: 1s; height: 50px; }\n\n@keyframes riseSteam {\n  0% { transform: translateY(0) scaleX(1); opacity: 0; }\n  50% { opacity: 1; transform: translateY(-30px) scaleX(1.5); }\n  100% { transform: translateY(-60px) scaleX(2); opacity: 0; }\n}",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst steamBox = document.createElement('div');\nsteamBox.className = 'steam-container';\n\nfor(let i=0; i<3; i++) {\n  const s = document.createElement('div');\n  s.className = 'steam';\n  steamBox.appendChild(s);\n}\nc.appendChild(steamBox);"
   }
 ]
