@@ -583,5 +583,14 @@
     "previewBg": "#4facfe",
     "cssCode": ".cloud {\n  position: absolute; background: #ffffff;\n  border-radius: 50px; opacity: 0.8;\n  box-shadow: 0 10px 20px rgba(0,0,0,0.1);\n  animation: floatCloud linear infinite;\n}\n.cloud::before, .cloud::after {\n  content: \"\"; position: absolute; background: #ffffff; border-radius: 50%;\n}\n.cloud::before { width: 50px; height: 50px; top: -25px; left: 15px; }\n.cloud::after { width: 70px; height: 70px; top: -35px; right: 20px; }\n\n@keyframes floatCloud {\n  0% { transform: translateX(-150px); }\n  100% { transform: translateX(110vw); }\n}",
     "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nconst speeds = [15, 25, 35];\nconst tops = ['20%', '50%', '10%'];\n\nfor(let i=0; i<3; i++) {\n  const cloud = document.createElement('div');\n  cloud.className = 'cloud';\n  cloud.style.width = '120px';\n  cloud.style.height = '40px';\n  cloud.style.top = tops[i];\n  cloud.style.animationDuration = `${speeds[i]}s`;\n  cloud.style.animationDelay = `${i * -5}s`;\n  c.appendChild(cloud);\n}"
+  },
+  {
+    "id": "cyberpunk-neon-radar",
+    "title": "Cyberpunk Neon Radar",
+    "description": "Ultra Max Premium Pro Super rotating neon radar scanning effect. Best suited for: E-Sports Tournaments, Gaming Portals, Metaverse Platforms, and Hardware Tech Sites.",
+    "category": "Background",
+    "previewBg": "#021102",
+    "cssCode": ".radar {\n  position: absolute; width: 300px; height: 300px;\n  border: 2px solid rgba(0, 255, 0, 0.3); border-radius: 50%;\n  background: repeating-radial-gradient(rgba(0, 255, 0, 0.1) 0%, transparent 10%, rgba(0, 255, 0, 0.1) 20%);\n  display: flex; align-items: center; justify-content: center;\n  box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);\n}\n.radar-sweep {\n  position: absolute; width: 150px; height: 150px;\n  background: conic-gradient(from 0deg, rgba(0, 255, 0, 0.8) 0deg, transparent 60deg);\n  border-radius: 100% 0 0 0; transform-origin: bottom right;\n  top: 0; left: 0;\n  animation: sweepRadar 2s linear infinite;\n}\n@keyframes sweepRadar { 100% { transform: rotate(360deg); } }",
+    "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;overflow:hidden;';\nconst radar = document.createElement('div');\nradar.className = 'radar';\nconst sweep = document.createElement('div');\nsweep.className = 'radar-sweep';\nradar.appendChild(sweep);\nc.appendChild(radar);"
   }
 ]
