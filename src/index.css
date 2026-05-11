@@ -1,106 +1,35 @@
-/* ===== GLOBAL RESET & VARIABLES ===== */
 :root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-card: #1a1a28;
-  --accent-primary: #7c3aed;
-  --accent-secondary: #06b6d4;
-  --accent-glow: #a855f7;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #475569;
-  --border-color: #2d2d44;
-  --success: #10b981;
-  --error: #ef4444;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
+  --bg-primary:    #0a0a0f;
+  --bg-secondary:  #12121a;
+  --bg-card:       #1a1a28;
+  --accent-primary:#7c3aed;
+  --accent-secondary:#06b6d4;
+  --accent-glow:   #a855f7;
+  --text-primary:  #f1f5f9;
+  --text-secondary:#94a3b8;
+  --text-muted:    #475569;
+  --border-color:  #2d2d44;
+  --success:       #10b981;
+  --error:         #ef4444;
+  --radius-sm:     8px;
+  --radius-md:     12px;
+  --radius-lg:     20px;
+  --font-main:     'Segoe UI', system-ui, sans-serif;
+  --font-code:     'Consolas','Monaco','Courier New',monospace;
 }
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-main);
-  line-height: 1.6;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-secondary); }
-::-webkit-scrollbar-thumb { background: var(--accent-primary); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-glow); }
-
-/* App layout */
-.app-wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.main-content {
-  flex: 1;
-  padding-top: 64px; /* navbar height */
-}
-
-/* Utility classes */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  color: white;
-  border: none;
-  padding: 0.6rem 1.4rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: opacity 0.2s, transform 0.1s;
-}
-
-.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-.btn-primary:active { transform: translateY(0); }
-
-.btn-secondary {
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  padding: 0.6rem 1.4rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: border-color 0.2s, background 0.2s;
-}
-
-.btn-secondary:hover {
-  border-color: var(--accent-primary);
-  background: rgba(124, 58, 237, 0.1);
-}
-
-/* Page section */
-.page-section {
-  padding: 3rem 1rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .page-section { padding: 2rem 1rem; }
-}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{ background:var(--bg-primary); color:var(--text-primary); font-family:var(--font-main); line-height:1.6; min-height:100vh; overflow-x:hidden; }
+::-webkit-scrollbar{ width:6px; }
+::-webkit-scrollbar-track{ background:var(--bg-secondary); }
+::-webkit-scrollbar-thumb{ background:var(--accent-primary); border-radius:3px; }
+.app-wrapper{ display:flex; flex-direction:column; min-height:100vh; }
+.main-content{ flex:1; padding-top:64px; }
+.container{ max-width:1200px; margin:0 auto; padding:0 1rem; }
+.page-section{ padding:3rem 1rem; }
+.btn-primary{ background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary)); color:white; border:none; padding:0.6rem 1.4rem; border-radius:var(--radius-sm); cursor:pointer; font-size:0.9rem; font-weight:600; transition:opacity 0.2s,transform 0.1s; }
+.btn-primary:hover{ opacity:0.9; transform:translateY(-1px); }
+.btn-primary:active{ transform:translateY(0); }
+.btn-secondary{ background:transparent; color:var(--text-primary); border:1px solid var(--border-color); padding:0.6rem 1.4rem; border-radius:var(--radius-sm); cursor:pointer; font-size:0.9rem; font-weight:500; transition:border-color 0.2s,background 0.2s; }
+.btn-secondary:hover{ border-color:var(--accent-primary); background:rgba(124,58,237,0.1); }
+@media(max-width:768px){ .page-section{ padding:2rem 1rem; } }
