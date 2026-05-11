@@ -1,0 +1,7 @@
+.auth-btn{display:flex;align-items:center;gap:0.4rem;padding:0.4rem 0.9rem;border-radius:var(--radius-sm);font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.auth-btn.login{background:var(--bg-card);border:1px solid var(--border-color);color:var(--text-primary);}
+.auth-btn.login:hover{border-color:var(--accent-primary);}
+.auth-btn.logout{background:transparent;border:1px solid var(--border-color);color:var(--text-secondary);padding:0.3rem 0.7rem;}
+.auth-btn.logout:hover{border-color:#ef4444;color:#ef4444;}
+.auth-user{display:flex;align-items:center;gap:0.5rem;}
+.auth-avatar{width:28px;height:28px;border-radius:50%;border:2px solid var(--accent-primary);}
