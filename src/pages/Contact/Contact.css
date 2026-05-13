@@ -1,0 +1,21 @@
+.contact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+@media(max-width:600px){.contact-cards{grid-template-columns:1fr;}}
+.contact-info-card{background:rgba(26,26,40,0.8);backdrop-filter:blur(10px);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:1.25rem;text-align:center;}
+.contact-info-card span{font-size:1.8rem;display:block;margin-bottom:0.5rem;}
+.contact-info-card h3{font-size:0.9rem;font-weight:700;margin-bottom:0.3rem;}
+.contact-info-card a,.contact-info-card p{font-size:0.8rem;color:var(--text-secondary);text-decoration:none;}
+.contact-info-card a:hover{color:var(--accent-glow);}
+.contact-form{background:rgba(26,26,40,0.8);backdrop-filter:blur(10px);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:2rem;margin-bottom:1.5rem;}
+.contact-form h2{font-size:1.2rem;font-weight:700;margin-bottom:1.5rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+.form-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;}
+.form-group label{font-size:0.8rem;font-weight:600;color:var(--text-secondary);}
+.form-group input,.form-group textarea{background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:0.6rem 0.85rem;font-size:0.875rem;outline:none;transition:border-color 0.2s;font-family:var(--font-main);}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--accent-primary);}
+.form-group textarea{resize:vertical;}
+.contact-submit{width:100%;padding:0.75rem;font-size:1rem;}
+.contact-success{background:rgba(26,26,40,0.8);border:1px solid rgba(16,185,129,0.3);border-radius:var(--radius-lg);padding:2rem;text-align:center;margin-bottom:1.5rem;}
+.contact-success span{font-size:2.5rem;display:block;margin-bottom:1rem;}
+.contact-success h3{font-size:1.2rem;font-weight:700;margin-bottom:0.5rem;}
+.contact-success p{color:var(--text-secondary);margin-bottom:1.5rem;}
