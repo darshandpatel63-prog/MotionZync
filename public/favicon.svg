@@ -1,14 +1,66 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
-    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/>
+    <!-- અલ્ટ્રા મેક્સ પ્રીમિયમ પ્રો: લાઈવ કલર ચેન્જિંગ ગ્રેડિયન્ટ -->
+    <linearGradient id="mzGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9D4EDD">
+        <animate attributeName="stop-color" values="#9D4EDD;#48CAE4;#9D4EDD" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" stop-color="#48CAE4">
+        <animate attributeName="stop-color" values="#48CAE4;#00F5D4;#48CAE4" dur="4s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#00F5D4">
+        <animate attributeName="stop-color" values="#00F5D4;#9D4EDD;#00F5D4" dur="4s" repeatCount="indefinite"/>
+      </stop>
     </linearGradient>
-    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#06b6d4"/>
-    </linearGradient>
+
+    <!-- 3D નિઓન ગ્લો ફિલ્ટર -->
+    <filter id="premiumGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="14" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/> <!-- હાઇ ઇન્ટેન્સિટી માટે ડબલ બ્લર -->
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <rect width="40" height="40" rx="10" fill="#0a0a0f"/>
-  <path d="M6 28 L6 12 L13 22 L20 12 L20 28" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <ellipse cx="30" cy="20" rx="7" ry="4" stroke="url(#g2)" stroke-width="1.5" fill="none"/>
-  <circle cx="37" cy="20" r="2" fill="url(#g2)"/>
+
+  <!-- ડાર્ક પ્રીમિયમ રાઉન્ડેડ બેકગ્રાઉન્ડ -->
+  <rect width="512" height="512" rx="120" fill="#05070B" />
+
+  <!-- સિંક રડાર વેવ્સ એનિમેશન (Background Pulse) -->
+  <g stroke="#9D4EDD" stroke-width="3" fill="none" opacity="0.6">
+    <circle cx="256" cy="256" r="10">
+      <animate attributeName="r" values="10; 320" dur="3.5s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.7; 0" dur="3.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="256" cy="256" r="10">
+      <animate attributeName="r" values="10; 320" dur="3.5s" begin="1.75s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.7; 0" dur="3.5s" begin="1.75s" repeatCount="indefinite" />
+    </circle>
+  </g>
+
+  <!-- MZ નો મુખ્ય પાથ (નિઓન ગ્લો લેયર) -->
+  <path d="M 100 356 L 100 156 L 200 256 L 300 156 L 412 156 L 200 356 L 412 356"
+        fill="none" stroke="url(#mzGrad)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"
+        filter="url(#premiumGlow)" opacity="0.7" />
+
+  <!-- MZ નો મુખ્ય પાથ (સોલિડ લેયર) -->
+  <path id="corePath" d="M 100 356 L 100 156 L 200 256 L 300 156 L 412 156 L 200 356 L 412 356"
+        fill="none" stroke="url(#mzGrad)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- શૂટિંગ સ્ટાર / ટ્રાવેલિંગ લાઈટ બીમ (Stroke Animation) -->
+  <path d="M 100 356 L 100 156 L 200 256 L 300 156 L 412 156 L 200 356 L 412 356"
+        fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"
+        stroke-dasharray="90 1200" filter="url(#premiumGlow)">
+     <animate attributeName="stroke-dashoffset" values="1290; -90" dur="3.5s" repeatCount="indefinite" />
+  </path>
+
+  <!-- પાથ પર ફરતો પ્રકાશનો કણ (Orbiting Particle) -->
+  <circle r="16" fill="#FFFFFF" filter="url(#premiumGlow)">
+    <animateMotion dur="3.5s" repeatCount="indefinite" path="M 100 356 L 100 156 L 200 256 L 300 156 L 412 156 L 200 356 L 412 356" />
+  </circle>
+
 </svg>
+
+
