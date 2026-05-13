@@ -3,61 +3,59 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import LivePreview from '../../components/LivePreview/LivePreview.jsx'
 import CodeEditor  from '../../components/CodeEditor/CodeEditor.jsx'
-import {
-  getAnimations, saveAnimation, deleteAnimation,
-  getCategories, saveCategory, deleteCategory, generateTags
-} from '../../hooks/useAnimations.js'
+import { getAnimations, saveAnimation, deleteAnimation, getCategories, saveCategory, deleteCategory, generateTags } from '../../hooks/useAnimations.js'
+import { getSiteContent, setSiteContent, defaultContent } from '../../hooks/useSiteContent.js'
 import './Admin.css'
+
+function GoogleIcon() {
+  return <svg width="18" height="18" viewBox="0 0 24 24" style={{flexShrink:0}}><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+}
 
 export default function Admin() {
   const { user, isAdmin, login, loading } = useAuth()
   const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState('animations')
 
-  // ── Form state ────────────────────────────────────────────────
-  const [editDocId,   setEditDocId]   = useState(null)
-  const [title,       setTitle]       = useState('')
-  const [desc,        setDesc]        = useState('')
-  const [category,    setCategory]    = useState('Background')
-  const [previewBg,   setPreviewBg]   = useState('#0a0a0f')
-  const [cssCode,     setCssCode]     = useState('')
-  const [jsCode,      setJsCode]      = useState('')
+  const [editDocId, setEditDocId] = useState(null)
+  const [title,     setTitle]     = useState('')
+  const [desc,      setDesc]      = useState('')
+  const [category,  setCategory]  = useState('Background')
+  const [previewBg, setPreviewBg] = useState('#0a0a0f')
+  const [cssCode,   setCssCode]   = useState('')
+  const [jsCode,    setJsCode]    = useState('')
 
-  // ── Data state ────────────────────────────────────────────────
-  const [animations,  setAnimations]  = useState([])
-  const [categories,  setCategories]  = useState([])
-  const [status,      setStatus]      = useState(null)
-  const [saving,      setSaving]      = useState(false)
-  const [activeTab,   setActiveTab]   = useState('animations') // 'animations' | 'categories'
+  const [animations, setAnimations] = useState([])
+  const [categories, setCategories] = useState([])
+  const [status,     setStatus]     = useState(null)
+  const [saving,     setSaving]     = useState(false)
 
-  // ── Category form ─────────────────────────────────────────────
-  const [catEdit,     setCatEdit]     = useState(null)
-  const [catName,     setCatName]     = useState('')
-  const [catOrder,    setCatOrder]    = useState(0)
+  const [catEdit,  setCatEdit]  = useState(null)
+  const [catName,  setCatName]  = useState('')
+  const [catOrder, setCatOrder] = useState(0)
 
-  useEffect(() => {
-    if (!loading && !isAdmin) return
-    loadData()
-  }, [isAdmin, loading])
+  const [settings,      setSettings]      = useState(defaultContent)
+  const [settingsSaved, setSettingsSaved] = useState(false)
+
+  useEffect(() => { if (!loading && isAdmin) loadData() }, [isAdmin, loading])
 
   async function loadData() {
     const [anims, cats] = await Promise.all([getAnimations(), getCategories()])
     setAnimations(anims); setCategories(cats)
+    const sc = await getSiteContent('main')
+    if (sc) setSettings({ ...defaultContent, ...sc })
   }
 
   function editAnim(anim) {
-    setEditDocId(anim.docId)
-    setTitle(anim.title); setDesc(anim.description || '')
-    setCategory(anim.category); setPreviewBg(anim.previewBg || '#0a0a0f')
-    setCssCode((anim.cssCode || '').trim())
-    setJsCode((anim.jsCode || '').trim())
-    setStatus(null)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setEditDocId(anim.docId); setTitle(anim.title); setDesc(anim.description||'')
+    setCategory(anim.category); setPreviewBg(anim.previewBg||'#0a0a0f')
+    setCssCode((anim.cssCode||'').trim()); setJsCode((anim.jsCode||'').trim())
+    setStatus(null); setActiveTab('animations')
+    window.scrollTo({ top:0, behavior:'smooth' })
   }
 
   function resetForm() {
-    setEditDocId(null); setTitle(''); setDesc('')
-    setCategory('Background'); setPreviewBg('#0a0a0f')
-    setCssCode(''); setJsCode(''); setStatus(null)
+    setEditDocId(null); setTitle(''); setDesc(''); setCategory('Background')
+    setPreviewBg('#0a0a0f'); setCssCode(''); setJsCode(''); setStatus(null)
   }
 
   async function handleSave() {
@@ -65,42 +63,38 @@ export default function Admin() {
     if (!cssCode.trim() && !jsCode.trim()) { setStatus({ type:'err', msg:'Code nakho!' }); return }
     setSaving(true); setStatus(null)
     try {
-      await saveAnimation({ docId: editDocId, title, description: desc, category, previewBg, cssCode, jsCode })
-      setStatus({ type:'ok', msg:`✅ "${title}" saved! Gallery ma live chhe.` })
+      await saveAnimation({ docId:editDocId, title, description:desc, category, previewBg, cssCode, jsCode })
+      setStatus({ type:'ok', msg:`✅ "${title}" saved! Turant live chhe.` })
       resetForm(); loadData()
     } catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
     finally { setSaving(false) }
   }
 
-  async function handleDelete(docId, titleName) {
-    if (!window.confirm(`"${titleName}" delete karvu chhe?`)) return
-    try {
-      await deleteAnimation(docId)
-      setStatus({ type:'ok', msg:`✅ "${titleName}" deleted!` })
-      if (editDocId === docId) resetForm()
-      loadData()
-    } catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
+  async function handleDelete(docId, t) {
+    if (!window.confirm(`"${t}" delete karvu chhe?`)) return
+    try { await deleteAnimation(docId); setStatus({ type:'ok', msg:`✅ "${t}" deleted!` }); if (editDocId===docId) resetForm(); loadData() }
+    catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
   }
 
-  // ── Category handlers ─────────────────────────────────────────
-  function editCat(cat) { setCatEdit(cat.docId); setCatName(cat.name); setCatOrder(cat.order || 0) }
-  function resetCat()   { setCatEdit(null); setCatName(''); setCatOrder(0) }
+  function editCat(c) { setCatEdit(c.docId); setCatName(c.name); setCatOrder(c.order||0) }
+  function resetCat()  { setCatEdit(null); setCatName(''); setCatOrder(0) }
 
   async function handleSaveCat() {
     if (!catName.trim()) return
-    try {
-      await saveCategory({ docId: catEdit, name: catName.trim(), order: Number(catOrder) })
-      setStatus({ type:'ok', msg:`✅ Category "${catName}" saved!` })
-      resetCat(); loadData()
-    } catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
+    try { await saveCategory({ docId:catEdit, name:catName.trim(), order:Number(catOrder) }); setStatus({ type:'ok', msg:'✅ Category saved!' }); resetCat(); loadData() }
+    catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
   }
 
   async function handleDeleteCat(docId, name) {
-    if (!window.confirm(`"${name}" category delete karvi chhe?`)) return
-    try { await deleteCategory(docId); loadData() } catch(e) { }
+    if (!window.confirm(`"${name}" delete karvi?`)) return
+    try { await deleteCategory(docId); loadData() } catch(e) {}
   }
 
-  // ── Redirect if not admin ──────────────────────────────────────
+  async function saveSettings() {
+    try { await setSiteContent('main', settings); setSettingsSaved(true); setTimeout(() => setSettingsSaved(false), 3000) }
+    catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
+  }
+
   if (loading) return <div className="admin-loading">⏳ Loading...</div>
 
   if (!user) return (
@@ -110,9 +104,7 @@ export default function Admin() {
         <h1>Admin Panel</h1>
         <p>MotionZync — Restricted Access</p>
         <p className="admin-login-hint">Sirf authorized Gmail thi access thay chhe</p>
-        <button className="btn-primary admin-google-btn" onClick={login}>
-          <GoogleIcon/> Sign in with Google
-        </button>
+        <button className="btn-primary admin-google-btn" onClick={login}><GoogleIcon/> Sign in with Google</button>
       </div>
     </div>
   )
@@ -128,14 +120,10 @@ export default function Admin() {
     </div>
   )
 
-  // ── ADMIN PANEL ────────────────────────────────────────────────
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <div className="admin-header-left">
-          <h1 className="admin-title">⚙️ Admin Panel</h1>
-          <p className="admin-subtitle">{editDocId ? `✏️ Editing animation` : 'Navi animation add karo'}</p>
-        </div>
+        <div><h1 className="admin-title">⚙️ Admin Panel</h1><p className="admin-subtitle">{editDocId?'✏️ Editing animation':'MotionZync control panel'}</p></div>
         <div className="header-actions">
           {editDocId && <button className="btn-secondary cancel-btn" onClick={resetForm}>✕ Cancel</button>}
           <img src={user.photoURL} className="admin-avatar" alt="" referrerPolicy="no-referrer"/>
@@ -143,24 +131,21 @@ export default function Admin() {
         </div>
       </div>
 
-      {/* Tab switcher */}
       <div className="admin-tabs container">
-        <button className={`admin-tab-btn ${activeTab==='animations'?'active':''}`} onClick={() => setActiveTab('animations')}>🎨 Animations</button>
-        <button className={`admin-tab-btn ${activeTab==='categories'?'active':''}`} onClick={() => setActiveTab('categories')}>🗂️ Categories</button>
+        {['animations','categories','settings'].map(t => (
+          <button key={t} className={`admin-tab-btn ${activeTab===t?'active':''}`} onClick={() => setActiveTab(t)}>
+            {t==='animations'?'🎨 Animations':t==='categories'?'🗂️ Categories':'⚙️ Settings'}
+          </button>
+        ))}
       </div>
 
       <div className="admin-body container">
-        {status && (
-          <div className={`status-banner ${status.type}`}>
-            {status.msg}<button onClick={() => setStatus(null)}>✕</button>
-          </div>
-        )}
+        {status && <div className={`status-banner ${status.type}`}>{status.msg}<button onClick={() => setStatus(null)}>✕</button></div>}
 
-        {/* ════ ANIMATIONS TAB ════ */}
-        {activeTab === 'animations' && (<>
+        {activeTab==='animations' && (<>
           <div className="admin-top-grid">
             <div className="admin-form">
-              <h2 className="section-label">{editDocId ? '✏️ Edit Animation' : '📝 Navi Animation'}</h2>
+              <h2 className="section-label">{editDocId?'✏️ Edit Animation':'📝 Navi Animation'}</h2>
               <label className="admin-label">Title *</label>
               <input className="admin-input" placeholder="e.g. Neon Orbit" value={title} onChange={e => setTitle(e.target.value)}/>
               <label className="admin-label">Description</label>
@@ -182,40 +167,32 @@ export default function Admin() {
                   </div>
                 </div>
               </div>
-              {/* Auto tags preview */}
-              <div className="tags-preview">
-                🏷️ Auto tags: {generateTags(title, desc).slice(0,6).map(t => <span key={t} className="anim-tag">#{t}</span>)}
-              </div>
+              <div className="tags-preview">🏷️ Tags: {generateTags(title,desc).slice(0,6).map(t => <span key={t} className="tag-chip">#{t}</span>)}</div>
             </div>
-
             <div className="admin-preview-wrap">
               <h2 className="section-label">👁️ Live Preview</h2>
               <LivePreview cssCode={cssCode} jsCode={jsCode} bgColor={previewBg}/>
             </div>
           </div>
-
           <div className="admin-editor-wrap">
             <h2 className="section-label">💻 Code</h2>
             <CodeEditor cssCode={cssCode} jsCode={jsCode} onCssChange={setCssCode} onJsChange={setJsCode}/>
           </div>
-
           <div className="admin-save-row">
             <button className={`btn-primary admin-save-btn ${editDocId?'edit-mode':''}`} onClick={handleSave} disabled={saving}>
-              {saving ? '⏳ Saving...' : editDocId ? '✏️ Update Animation' : '🚀 Save to Firestore'}
+              {saving?'⏳ Saving...':editDocId?'✏️ Update Animation':'🚀 Save to Firestore'}
             </button>
             <span className="admin-save-hint">Firestore ma save thay — turant live!</span>
           </div>
-
-          {/* Animations list */}
           <div className="admin-list-section">
             <h2 className="section-label">📦 All Animations ({animations.length})</h2>
             <div className="admin-anim-list">
               {animations.map(a => (
                 <div className={`admin-anim-item ${editDocId===a.docId?'editing':''}`} key={a.docId}>
                   <div className="anim-item-info">
-                    <div className="anim-item-dot" style={{background: a.previewBg||'#0a0a0f'}}/>
+                    <div className="anim-item-dot" style={{background:a.previewBg||'#0a0a0f'}}/>
                     <span className="anim-item-title">{a.title}</span>
-                    <span className={`anim-item-cat ${(a.category||'').toLowerCase().replace(/\s/g,'-')}`}>{a.category}</span>
+                    <span className="anim-item-cat">{a.category}</span>
                     {editDocId===a.docId && <span className="editing-tag">editing</span>}
                   </div>
                   <div className="anim-item-actions">
@@ -228,14 +205,13 @@ export default function Admin() {
           </div>
         </>)}
 
-        {/* ════ CATEGORIES TAB ════ */}
-        {activeTab === 'categories' && (
+        {activeTab==='categories' && (
           <div className="categories-tab">
-            <h2 className="section-label">🗂️ Categories Manage Karo</h2>
+            <h2 className="section-label">🗂️ Categories</h2>
             <div className="cat-form">
               <input className="admin-input" placeholder="Category name..." value={catName} onChange={e => setCatName(e.target.value)} style={{flex:1}}/>
               <input className="admin-input" type="number" placeholder="Order" value={catOrder} onChange={e => setCatOrder(e.target.value)} style={{width:'80px'}}/>
-              <button className="btn-primary" onClick={handleSaveCat}>{catEdit ? '✏️ Update' : '+ Add'}</button>
+              <button className="btn-primary" onClick={handleSaveCat}>{catEdit?'✏️ Update':'+ Add'}</button>
               {catEdit && <button className="btn-secondary" onClick={resetCat}>Cancel</button>}
             </div>
             <div className="cat-list">
@@ -252,19 +228,25 @@ export default function Admin() {
             </div>
           </div>
         )}
+
+        {activeTab==='settings' && (
+          <div className="settings-tab">
+            <h2 className="section-label">⚙️ Site Settings</h2>
+            <div className="settings-grid">
+              <div className="settings-group"><label className="admin-label">Home Page Title</label><input className="admin-input" value={settings.heroTitle} onChange={e => setSettings({...settings,heroTitle:e.target.value})}/></div>
+              <div className="settings-group"><label className="admin-label">Home Page Subtitle</label><textarea className="admin-input admin-textarea" value={settings.heroSubtitle} onChange={e => setSettings({...settings,heroSubtitle:e.target.value})} rows={2}/></div>
+              <div className="settings-group"><label className="admin-label">Contact Email</label><input className="admin-input" value={settings.contactEmail} onChange={e => setSettings({...settings,contactEmail:e.target.value})}/></div>
+              <div className="settings-group"><label className="admin-label">Announcement Text</label><input className="admin-input" placeholder="Empty = hide" value={settings.announcementText||''} onChange={e => setSettings({...settings,announcementText:e.target.value})}/></div>
+              <div className="settings-toggles">
+                <label className="toggle-label"><input type="checkbox" checked={settings.enableWallpaper} onChange={e => setSettings({...settings,enableWallpaper:e.target.checked})}/> Enable Wallpaper Feature</label>
+                <label className="toggle-label"><input type="checkbox" checked={settings.enableCourse} onChange={e => setSettings({...settings,enableCourse:e.target.checked})}/> Enable Course Page</label>
+                <label className="toggle-label"><input type="checkbox" checked={settings.showAnnouncement||false} onChange={e => setSettings({...settings,showAnnouncement:e.target.checked})}/> Show Announcement Bar</label>
+              </div>
+            </div>
+            <button className="btn-primary settings-save-btn" onClick={saveSettings}>{settingsSaved?'✅ Saved!':'💾 Save Settings'}</button>
+          </div>
+        )}
       </div>
     </div>
   )
 }
-
-function GoogleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" style={{flexShrink:0}}>
-      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-    </svg>
-  )
-                 }
-      
