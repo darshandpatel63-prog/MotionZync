@@ -1,0 +1,146 @@
+/* ── Base layer ── */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* All page content sits above this */
+.app-wrapper > main { position: relative; z-index: 1; }
+nav.navbar          { z-index: 1000; }
+footer.footer       { position: relative; z-index: 1; }
+
+/* ── Floating orbs (all variants) ── */
+.page-bg__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0;
+  animation: orbFloat 20s ease-in-out infinite;
+}
+
+.page-bg__orb--1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(124,58,237,0.18), transparent 70%);
+  top: -10%; left: -10%;
+  animation-delay: 0s;
+}
+.page-bg__orb--2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(6,182,212,0.14), transparent 70%);
+  top: 40%; right: -5%;
+  animation-delay: -7s;
+}
+.page-bg__orb--3 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(168,85,247,0.12), transparent 70%);
+  bottom: 10%; left: 30%;
+  animation-delay: -13s;
+}
+
+@keyframes orbFloat {
+  0%   { opacity: 0; transform: translate(0, 0) scale(1); }
+  10%  { opacity: 1; }
+  50%  { transform: translate(30px, -40px) scale(1.1); }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(0, 0) scale(1); }
+}
+
+/* ── Dots grid (home, gallery) ── */
+.page-bg__dots {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(124,58,237,0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+  animation: dotsShift 30s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes dotsShift {
+  from { background-position: 0 0; }
+  to   { background-position: 64px 64px; }
+}
+
+/* ── Perspective grid (playground) ── */
+.page-bg__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124,58,237,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: gridPulse 8s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%,100% { opacity: 0.5; }
+  50%     { opacity: 1; }
+}
+
+/* ── Code symbols (course) ── */
+.page-bg__sym {
+  position: absolute;
+  font-family: var(--font-code);
+  font-weight: 700;
+  color: var(--accent-primary);
+  opacity: 0;
+  animation: symDrift 15s ease-in-out infinite;
+  user-select: none;
+}
+
+.page-bg__sym.s1 { font-size: 5rem; top: 8%;  left: 3%;  animation-delay: 0s;   animation-duration: 18s; }
+.page-bg__sym.s2 { font-size: 3rem; top: 20%; right: 5%; animation-delay: -3s;  animation-duration: 22s; color: var(--accent-secondary); }
+.page-bg__sym.s3 { font-size: 4rem; top: 55%; left: 6%;  animation-delay: -7s;  animation-duration: 16s; }
+.page-bg__sym.s4 { font-size: 3rem; top: 70%; right: 8%; animation-delay: -11s; animation-duration: 20s; color: var(--accent-glow); }
+.page-bg__sym.s5 { font-size: 1.5rem; top: 35%; left: 40%; animation-delay: -5s; animation-duration: 25s; opacity: 0; }
+.page-bg__sym.s6 { font-size: 2rem; bottom: 15%; left: 50%; animation-delay: -9s; animation-duration: 19s; color: var(--accent-secondary); }
+
+@keyframes symDrift {
+  0%   { opacity: 0; transform: translateY(20px); }
+  15%  { opacity: 0.07; }
+  50%  { transform: translateY(-15px); }
+  85%  { opacity: 0.07; }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+
+/* ── Aurora (wallpaper page) ── */
+.page-bg__aurora {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 40% at 20% 30%, rgba(124,58,237,0.15), transparent),
+    radial-gradient(ellipse 60% 35% at 80% 60%, rgba(6,182,212,0.12), transparent),
+    radial-gradient(ellipse 50% 30% at 50% 80%, rgba(168,85,247,0.1), transparent);
+  animation: auroraShift 12s ease-in-out infinite alternate;
+  filter: blur(30px);
+}
+
+@keyframes auroraShift {
+  0%   { opacity: 0.6; transform: scale(1) rotate(0deg); }
+  50%  { opacity: 1;   transform: scale(1.05) rotate(1deg); }
+  100% { opacity: 0.7; transform: scale(0.97) rotate(-1deg); }
+}
+
+/* ── Per-variant orb color overrides ── */
+.page-bg--playground .page-bg__orb--1 {
+  background: radial-gradient(circle, rgba(6,182,212,0.15), transparent 70%);
+}
+.page-bg--course .page-bg__orb--2 {
+  background: radial-gradient(circle, rgba(16,185,129,0.12), transparent 70%);
+}
+.page-bg--wallpaper .page-bg__orb--1 {
+  background: radial-gradient(circle, rgba(168,85,247,0.2), transparent 70%);
+  animation-duration: 15s;
+}
+.page-bg--legal .page-bg__orb--1,
+.page-bg--legal .page-bg__orb--2,
+.page-bg--legal .page-bg__orb--3 { opacity: 0; animation: none; }
+.page-bg--legal .page-bg__orb--1 {
+  opacity: 0;
+  background: radial-gradient(circle, rgba(124,58,237,0.08), transparent 70%);
+  animation: orbFloat 25s ease-in-out infinite;
+  }
+
