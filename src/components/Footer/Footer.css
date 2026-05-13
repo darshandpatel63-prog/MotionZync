@@ -1,10 +1,15 @@
-.footer{background:var(--bg-secondary);border-top:1px solid var(--border-color);padding:2rem 1rem;margin-top:auto;}
-.footer-inner{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;}
-.footer-logo-wrap{display:flex;align-items:center;gap:0.5rem;justify-content:center;}
+.footer{background:var(--bg-secondary);border-top:1px solid var(--border-color);padding:3rem 1rem 1.5rem;margin-top:auto;}
+.footer-top{display:grid;grid-template-columns:1fr 2fr;gap:2rem;margin-bottom:2rem;}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr;}}
+.footer-logo-wrap{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;}
 .footer-logo-text{font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,var(--accent-primary),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.footer-tagline{color:var(--text-muted);font-size:0.85rem;margin-top:0.25rem;}
-.footer-links{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
-.footer-links a{color:var(--text-secondary);text-decoration:none;font-size:0.875rem;transition:color 0.2s;}
-.footer-links a:hover{color:var(--accent-glow);}
-.footer-copy{color:var(--text-muted);font-size:0.8rem;}
-
+.footer-tagline{color:var(--text-muted);font-size:0.83rem;line-height:1.6;max-width:220px;}
+.footer-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+@media(max-width:600px){.footer-cols{grid-template-columns:1fr 1fr;}}
+.footer-col h4{font-size:0.82rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem;}
+.footer-col a{display:block;color:var(--text-muted);text-decoration:none;font-size:0.82rem;margin-bottom:0.4rem;transition:color 0.2s;}
+.footer-col a:hover{color:var(--accent-glow);}
+.footer-bottom{border-top:1px solid var(--border-color);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;}
+.footer-bottom p{color:var(--text-muted);font-size:0.78rem;}
+.footer-bottom-links a{color:var(--text-muted);text-decoration:none;font-size:0.78rem;margin:0 0.25rem;transition:color 0.2s;}
+.footer-bottom-links a:hover{color:var(--accent-glow);}
