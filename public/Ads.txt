@@ -1,1 +1,6 @@
+
+# MotionZync - Google AdSense ads.txt
+# IMPORTANT: ca-pub-XXXXXXXXXXXXXXXX ni jagye tamaro actual Publisher ID nakho
+# Publisher ID AdSense dashboard ma top-right ma "Publisher ID" ma malshe
+
 google.com, pub-6645803127946229, DIRECT, f08c47fec0942fa0
