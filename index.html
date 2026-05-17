@@ -3,12 +3,16 @@
   <head>
     <meta charset="UTF-8"/>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <link rel="manifest" href="/manifest.json"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-title" content="MotionZync"/>
     <title>MotionZync – Live CSS & JavaScript Animation Playground</title>
-    <meta name="description" content="MotionZync is a free live animation playground. Create, explore and download CSS & JavaScript animations — background animations, button effects, particle effects, canvas animations and more."/>
-    <meta name="author" content="MotionZync"/>
+    <meta name="description" content="MotionZync is a free live animation playground. Create, explore and download CSS & JavaScript animations."/>
     <meta name="robots" content="index, follow"/>
-    <meta name="theme-color" content="#0a0a0f"/>
+    <meta name="theme-color" content="#7c3aed"/>
     <link rel="canonical" href="https://motion-zync.vercel.app/"/>
     <meta property="og:type" content="website"/>
     <meta property="og:title" content="MotionZync – Live CSS & JS Animation Playground"/>
@@ -16,14 +20,19 @@
     <meta property="og:url" content="https://motion-zync.vercel.app/"/>
     <meta property="og:site_name" content="MotionZync"/>
     <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" content="MotionZync – Live Animation Playground"/>
-    <meta name="twitter:description" content="Free CSS & JavaScript animation playground. Explore 100+ animations."/>
-    <!-- Google Search Console verification tag yahan paste karo -->
+    <!-- Google Search Console: -->
     <!-- <meta name="google-site-verification" content="XXXXXXXX"/> -->
-    <!-- AdSense - approval pachhi aa uncomment karo + publisher ID nakho -->
+    <!-- AdSense: -->
     <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"WebApplication","name":"MotionZync","url":"https://motion-zync.vercel.app","description":"Free live CSS and JavaScript animation playground","applicationCategory":"DeveloperApplication","operatingSystem":"Web Browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+    </script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {})
+        })
+      }
     </script>
   </head>
   <body>
