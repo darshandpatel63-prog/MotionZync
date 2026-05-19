@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /admin
-Sitemap: https://motionzync.vercel.app/sitemap.xml
+https://motion-zync.vercel.app/sitemap.xml
