@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import LivePreview from '../../components/LivePreview/LivePreview.jsx'
 import CodeEditor  from '../../components/CodeEditor/CodeEditor.jsx'
-import { getAnimations, saveAnimation, deleteAnimation, getCategories, saveCategory, deleteCategory, generateTags } from '../../hooks/useAnimations.js'
+import { getAnimations, saveAnimation, deleteAnimation, getCategories, saveCategory, deleteCategory, generateTags, getSubmissions, approveSubmission, rejectSubmission, deleteSubmission } from '../../hooks/useAnimations.js'
 import { getSiteContent, setSiteContent, defaultContent } from '../../hooks/useSiteContent.js'
 import './Admin.css'
 
@@ -36,6 +36,13 @@ export default function Admin() {
   const [settings,      setSettings]      = useState(defaultContent)
   const [settingsSaved, setSettingsSaved] = useState(false)
 
+  // Submissions states
+  const [submissions,  setSubmissions]  = useState([])
+  const [subFilter,    setSubFilter]    = useState('pending')
+  const [reviewingId,  setReviewingId]  = useState(null)
+  const [adminNote,    setAdminNote]    = useState('')
+  const [subPreviewId, setSubPreviewId] = useState(null)
+
   useEffect(() => { if (!loading && isAdmin) loadData() }, [isAdmin, loading])
 
   async function loadData() {
@@ -43,6 +50,10 @@ export default function Admin() {
     setAnimations(anims); setCategories(cats)
     const sc = await getSiteContent('main')
     if (sc) setSettings({ ...defaultContent, ...sc })
+    try {
+      const subs = await getSubmissions('all')
+      setSubmissions(subs)
+    } catch(e) { /* submissions collection exist nai kare initial time */ }
   }
 
   function editAnim(anim) {
@@ -95,6 +106,31 @@ export default function Admin() {
     catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
   }
 
+  // Submissions handlers
+  async function handleApprove(sub) {
+    try {
+      await approveSubmission(sub, adminNote)
+      setStatus({ type:'ok', msg:`✅ "${sub.title}" approved! Gallery ma live chhe.` })
+      setReviewingId(null); setAdminNote(''); loadData()
+    } catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
+  }
+
+  async function handleReject(sub) {
+    try {
+      await rejectSubmission(sub.docId, adminNote)
+      setStatus({ type:'ok', msg:`"${sub.title}" rejected.` })
+      setReviewingId(null); setAdminNote(''); loadData()
+    } catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
+  }
+
+  async function handleDeleteSub(sub) {
+    if (!window.confirm(`"${sub.title}" permanently delete karvu?`)) return
+    try { await deleteSubmission(sub.docId); setStatus({ type:'ok', msg:'✅ Deleted.' }); loadData() }
+    catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
+  }
+
+  const pendingCount = submissions.filter(s => s.status === 'pending').length
+
   if (loading) return <div className="admin-loading">⏳ Loading...</div>
 
   if (!user) return (
@@ -120,6 +156,14 @@ export default function Admin() {
     </div>
   )
 
+  const filteredSubs = submissions.filter(s => subFilter === 'all' ? true : s.status === subFilter)
+  const subCounts = {
+    all:      submissions.length,
+    pending:  submissions.filter(s=>s.status==='pending').length,
+    approved: submissions.filter(s=>s.status==='approved').length,
+    rejected: submissions.filter(s=>s.status==='rejected').length,
+  }
+
   return (
     <div className="admin-page">
       <div className="admin-header">
@@ -132,9 +176,12 @@ export default function Admin() {
       </div>
 
       <div className="admin-tabs container">
-        {['animations','categories','settings'].map(t => (
+        {['animations','categories','settings','submissions'].map(t => (
           <button key={t} className={`admin-tab-btn ${activeTab===t?'active':''}`} onClick={() => setActiveTab(t)}>
-            {t==='animations'?'🎨 Animations':t==='categories'?'🗂️ Categories':'⚙️ Settings'}
+            {t==='animations'?'🎨 Animations':t==='categories'?'🗂️ Categories':t==='settings'?'⚙️ Settings':'📬 Submissions'}
+            {t==='submissions' && pendingCount > 0 && (
+              <span className="sub-badge-count">{pendingCount}</span>
+            )}
           </button>
         ))}
       </div>
@@ -142,6 +189,7 @@ export default function Admin() {
       <div className="admin-body container">
         {status && <div className={`status-banner ${status.type}`}>{status.msg}<button onClick={() => setStatus(null)}>✕</button></div>}
 
+        {/* ── Animations Tab ── */}
         {activeTab==='animations' && (<>
           <div className="admin-top-grid">
             <div className="admin-form">
@@ -205,6 +253,7 @@ export default function Admin() {
           </div>
         </>)}
 
+        {/* ── Categories Tab ── */}
         {activeTab==='categories' && (
           <div className="categories-tab">
             <h2 className="section-label">🗂️ Categories</h2>
@@ -229,6 +278,7 @@ export default function Admin() {
           </div>
         )}
 
+        {/* ── Settings Tab ── */}
         {activeTab==='settings' && (
           <div className="settings-tab">
             <h2 className="section-label">⚙️ Site Settings</h2>
@@ -246,6 +296,111 @@ export default function Admin() {
             <button className="btn-primary settings-save-btn" onClick={saveSettings}>{settingsSaved?'✅ Saved!':'💾 Save Settings'}</button>
           </div>
         )}
+
+        {/* ── Submissions Tab ── */}
+        {activeTab==='submissions' && (
+          <div className="submissions-tab">
+            <h2 className="section-label">📬 User Submissions</h2>
+
+            {/* Filter buttons */}
+            <div className="sub-filter-row">
+              {['pending','approved','rejected','all'].map(f => (
+                <button
+                  key={f}
+                  className={`sub-filter-btn ${subFilter===f?'active':''}`}
+                  onClick={() => setSubFilter(f)}
+                >
+                  {f==='pending'?'⏳':f==='approved'?'✅':f==='rejected'?'❌':'📋'} {f}
+                  <span className="sub-count">{subCounts[f]}</span>
+                </button>
+              ))}
+            </div>
+
+            {filteredSubs.length === 0 && (
+              <div className="sub-empty">Koi submission nathi ({subFilter})</div>
+            )}
+
+            <div className="sub-list">
+              {filteredSubs.map(sub => (
+                <div key={sub.docId} className={`sub-item status-${sub.status}`}>
+
+                  {/* Header */}
+                  <div className="sub-item-header">
+                    <div className="sub-item-info">
+                      <div className="sub-dot" style={{background: sub.previewBg||'#0a0a0f'}}/>
+                      <div>
+                        <div className="sub-title">{sub.title}</div>
+                        <div className="sub-meta">
+                          {sub.category}
+                          {sub.submitterName  && ` • ${sub.submitterName}`}
+                          {sub.submitterEmail && ` • ${sub.submitterEmail}`}
+                          {sub.submittedAt && ` • ${new Date(sub.submittedAt?.seconds ? sub.submittedAt.seconds*1000 : sub.submittedAt).toLocaleDateString('en-IN')}`}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="sub-status-badge">{sub.status}</div>
+                  </div>
+
+                  {/* Description */}
+                  {sub.description && <p className="sub-desc">{sub.description}</p>}
+
+                  {/* Preview toggle */}
+                  <button
+                    className="btn-secondary sub-preview-btn"
+                    onClick={() => setSubPreviewId(subPreviewId===sub.docId ? null : sub.docId)}
+                  >
+                    {subPreviewId===sub.docId ? '▲ Preview Band Karo' : '👁️ Preview Juo'}
+                  </button>
+
+                  {subPreviewId===sub.docId && (
+                    <div className="sub-preview-wrap">
+                      <LivePreview cssCode={sub.cssCode} jsCode={sub.jsCode} bgColor={sub.previewBg}/>
+                    </div>
+                  )}
+
+                  {/* Admin note if exists */}
+                  {sub.adminNote && (
+                    <div className="sub-admin-note">📝 Admin note: {sub.adminNote}</div>
+                  )}
+
+                  {/* Review form for pending */}
+                  {reviewingId===sub.docId ? (
+                    <div className="sub-review-form">
+                      <textarea
+                        className="admin-input admin-textarea"
+                        placeholder="Admin note (optional — e.g. credit, reason for rejection...)"
+                        value={adminNote}
+                        onChange={e => setAdminNote(e.target.value)}
+                        rows={2}
+                      />
+                      <div className="sub-review-actions">
+                        <button className="btn-primary sub-approve-btn" onClick={() => handleApprove(sub)}>✅ Approve & Publish</button>
+                        <button className="sub-reject-btn" onClick={() => handleReject(sub)}>❌ Reject</button>
+                        <button className="btn-secondary" onClick={() => {setReviewingId(null);setAdminNote('')}}>Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    sub.status==='pending' && (
+                      <div className="sub-actions">
+                        <button className="btn-primary" onClick={() => {setReviewingId(sub.docId);setAdminNote('')}}>🔍 Review</button>
+                        <button className="item-btn delete-btn" onClick={() => handleDeleteSub(sub)}>🗑️ Delete</button>
+                      </div>
+                    )
+                  )}
+
+                  {/* Approved/Rejected par delete option */}
+                  {sub.status!=='pending' && (
+                    <div className="sub-actions" style={{marginTop:'0.5rem'}}>
+                      <button className="item-btn delete-btn" onClick={() => handleDeleteSub(sub)}>🗑️ Delete</button>
+                    </div>
+                  )}
+
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   )
