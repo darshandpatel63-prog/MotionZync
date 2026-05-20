@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import LivePreview from '../../components/LivePreview/LivePreview.jsx'
 import CodeEditor  from '../../components/CodeEditor/CodeEditor.jsx'
-import { getAnimations, saveAnimation, deleteAnimation, getCategories, saveCategory, deleteCategory, generateTags, getSubmissions, approveSubmission, rejectSubmission, deleteSubmission } from '../../hooks/useAnimations.js'
+import { getAnimations, saveAnimation, deleteAnimation, getCategories, saveCategory, deleteCategory, generateTags, getSubmissions, approveSubmission, deleteSubmission } from '../../hooks/useAnimations.js'
 import { getSiteContent, setSiteContent, defaultContent } from '../../hooks/useSiteContent.js'
 import './Admin.css'
 
@@ -36,12 +36,12 @@ export default function Admin() {
   const [settings,      setSettings]      = useState(defaultContent)
   const [settingsSaved, setSettingsSaved] = useState(false)
 
-  // Submissions states
+  // Submissions — sirf pending j store karay
   const [submissions,  setSubmissions]  = useState([])
-  const [subFilter,    setSubFilter]    = useState('pending')
   const [reviewingId,  setReviewingId]  = useState(null)
   const [adminNote,    setAdminNote]    = useState('')
   const [subPreviewId, setSubPreviewId] = useState(null)
+  const [actionLoading, setActionLoading] = useState(false)
 
   useEffect(() => { if (!loading && isAdmin) loadData() }, [isAdmin, loading])
 
@@ -51,9 +51,10 @@ export default function Admin() {
     const sc = await getSiteContent('main')
     if (sc) setSettings({ ...defaultContent, ...sc })
     try {
-      const subs = await getSubmissions('all')
+      // Sirf pending fetch kariye — approved/rejected nai
+      const subs = await getSubmissions('pending')
       setSubmissions(subs)
-    } catch(e) { /* submissions collection exist nai kare initial time */ }
+    } catch(e) {}
   }
 
   function editAnim(anim) {
@@ -106,30 +107,31 @@ export default function Admin() {
     catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
   }
 
-  // Submissions handlers
+  // ── Approve: animations ma save + submission delete ──────
   async function handleApprove(sub) {
+    setActionLoading(true)
     try {
       await approveSubmission(sub, adminNote)
+      // Submission Firestore thi delete — storage bachao
+      await deleteSubmission(sub.docId)
       setStatus({ type:'ok', msg:`✅ "${sub.title}" approved! Gallery ma live chhe.` })
-      setReviewingId(null); setAdminNote(''); loadData()
+      setReviewingId(null); setAdminNote(''); setSubPreviewId(null)
+      loadData()
     } catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
+    finally { setActionLoading(false) }
   }
 
+  // ── Reject: seedho delete — koi data nai rakho ──────────
   async function handleReject(sub) {
+    setActionLoading(true)
     try {
-      await rejectSubmission(sub.docId, adminNote)
-      setStatus({ type:'ok', msg:`"${sub.title}" rejected.` })
-      setReviewingId(null); setAdminNote(''); loadData()
+      await deleteSubmission(sub.docId)
+      setStatus({ type:'ok', msg:`"${sub.title}" reject karyu — Firestore thi delete thayu.` })
+      setReviewingId(null); setAdminNote(''); setSubPreviewId(null)
+      loadData()
     } catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
+    finally { setActionLoading(false) }
   }
-
-  async function handleDeleteSub(sub) {
-    if (!window.confirm(`"${sub.title}" permanently delete karvu?`)) return
-    try { await deleteSubmission(sub.docId); setStatus({ type:'ok', msg:'✅ Deleted.' }); loadData() }
-    catch(e) { setStatus({ type:'err', msg:`❌ ${e.message}` }) }
-  }
-
-  const pendingCount = submissions.filter(s => s.status === 'pending').length
 
   if (loading) return <div className="admin-loading">⏳ Loading...</div>
 
@@ -156,18 +158,13 @@ export default function Admin() {
     </div>
   )
 
-  const filteredSubs = submissions.filter(s => subFilter === 'all' ? true : s.status === subFilter)
-  const subCounts = {
-    all:      submissions.length,
-    pending:  submissions.filter(s=>s.status==='pending').length,
-    approved: submissions.filter(s=>s.status==='approved').length,
-    rejected: submissions.filter(s=>s.status==='rejected').length,
-  }
-
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <div><h1 className="admin-title">⚙️ Admin Panel</h1><p className="admin-subtitle">{editDocId?'✏️ Editing animation':'MotionZync control panel'}</p></div>
+        <div>
+          <h1 className="admin-title">⚙️ Admin Panel</h1>
+          <p className="admin-subtitle">{editDocId ? '✏️ Editing animation' : 'MotionZync control panel'}</p>
+        </div>
         <div className="header-actions">
           {editDocId && <button className="btn-secondary cancel-btn" onClick={resetForm}>✕ Cancel</button>}
           <img src={user.photoURL} className="admin-avatar" alt="" referrerPolicy="no-referrer"/>
@@ -178,9 +175,11 @@ export default function Admin() {
       <div className="admin-tabs container">
         {['animations','categories','settings','submissions'].map(t => (
           <button key={t} className={`admin-tab-btn ${activeTab===t?'active':''}`} onClick={() => setActiveTab(t)}>
-            {t==='animations'?'🎨 Animations':t==='categories'?'🗂️ Categories':t==='settings'?'⚙️ Settings':'📬 Submissions'}
-            {t==='submissions' && pendingCount > 0 && (
-              <span className="sub-badge-count">{pendingCount}</span>
+            {t==='animations' ? '🎨 Animations' :
+             t==='categories' ? '🗂️ Categories'  :
+             t==='settings'   ? '⚙️ Settings'    : '📬 Submissions'}
+            {t==='submissions' && submissions.length > 0 && (
+              <span className="sub-badge-count">{submissions.length}</span>
             )}
           </button>
         ))}
@@ -300,29 +299,28 @@ export default function Admin() {
         {/* ── Submissions Tab ── */}
         {activeTab==='submissions' && (
           <div className="submissions-tab">
-            <h2 className="section-label">📬 User Submissions</h2>
+            <h2 className="section-label">📬 Pending Submissions</h2>
 
-            {/* Filter buttons */}
-            <div className="sub-filter-row">
-              {['pending','approved','rejected','all'].map(f => (
-                <button
-                  key={f}
-                  className={`sub-filter-btn ${subFilter===f?'active':''}`}
-                  onClick={() => setSubFilter(f)}
-                >
-                  {f==='pending'?'⏳':f==='approved'?'✅':f==='rejected'?'❌':'📋'} {f}
-                  <span className="sub-count">{subCounts[f]}</span>
-                </button>
-              ))}
+            {/* Info bar */}
+            <div className="sub-info-bar">
+              <span>⏳ <strong>{submissions.length}</strong> pending review</span>
+              <span className="sub-info-note">
+                ✅ Approve = Gallery ma live + Firestore thi delete &nbsp;|&nbsp;
+                ❌ Reject = Seedho Firestore thi delete
+              </span>
             </div>
 
-            {filteredSubs.length === 0 && (
-              <div className="sub-empty">Koi submission nathi ({subFilter})</div>
+            {submissions.length === 0 && (
+              <div className="sub-empty">
+                <div className="sub-empty-icon">🎉</div>
+                <div>Badha submissions review thai gaya!</div>
+                <div className="sub-empty-sub">Navi submissions avshe tyaare yahan dakhshe.</div>
+              </div>
             )}
 
             <div className="sub-list">
-              {filteredSubs.map(sub => (
-                <div key={sub.docId} className={`sub-item status-${sub.status}`}>
+              {submissions.map(sub => (
+                <div key={sub.docId} className="sub-item">
 
                   {/* Header */}
                   <div className="sub-item-header">
@@ -331,17 +329,16 @@ export default function Admin() {
                       <div>
                         <div className="sub-title">{sub.title}</div>
                         <div className="sub-meta">
-                          {sub.category}
-                          {sub.submitterName  && ` • ${sub.submitterName}`}
-                          {sub.submitterEmail && ` • ${sub.submitterEmail}`}
-                          {sub.submittedAt && ` • ${new Date(sub.submittedAt?.seconds ? sub.submittedAt.seconds*1000 : sub.submittedAt).toLocaleDateString('en-IN')}`}
+                          📁 {sub.category}
+                          {sub.submitterName  && <> &nbsp;•&nbsp; 👤 {sub.submitterName}</>}
+                          {sub.submitterEmail && <> &nbsp;•&nbsp; ✉️ {sub.submitterEmail}</>}
+                          {sub.submittedAt    && <> &nbsp;•&nbsp; 🕐 {new Date(sub.submittedAt?.seconds ? sub.submittedAt.seconds*1000 : sub.submittedAt).toLocaleDateString('en-IN')}</>}
                         </div>
                       </div>
                     </div>
-                    <div className="sub-status-badge">{sub.status}</div>
+                    <span className="sub-pending-badge">⏳ Pending</span>
                   </div>
 
-                  {/* Description */}
                   {sub.description && <p className="sub-desc">{sub.description}</p>}
 
                   {/* Preview toggle */}
@@ -358,40 +355,44 @@ export default function Admin() {
                     </div>
                   )}
 
-                  {/* Admin note if exists */}
-                  {sub.adminNote && (
-                    <div className="sub-admin-note">📝 Admin note: {sub.adminNote}</div>
-                  )}
-
-                  {/* Review form for pending */}
+                  {/* Review panel */}
                   {reviewingId===sub.docId ? (
                     <div className="sub-review-form">
                       <textarea
                         className="admin-input admin-textarea"
-                        placeholder="Admin note (optional — e.g. credit, reason for rejection...)"
+                        placeholder="Admin note (optional — e.g. submitter credit, title suggestion...)"
                         value={adminNote}
                         onChange={e => setAdminNote(e.target.value)}
                         rows={2}
                       />
                       <div className="sub-review-actions">
-                        <button className="btn-primary sub-approve-btn" onClick={() => handleApprove(sub)}>✅ Approve & Publish</button>
-                        <button className="sub-reject-btn" onClick={() => handleReject(sub)}>❌ Reject</button>
-                        <button className="btn-secondary" onClick={() => {setReviewingId(null);setAdminNote('')}}>Cancel</button>
+                        <button
+                          className="btn-primary sub-approve-btn"
+                          onClick={() => handleApprove(sub)}
+                          disabled={actionLoading}
+                        >
+                          {actionLoading ? '⏳ ...' : '✅ Approve & Publish'}
+                        </button>
+                        <button
+                          className="sub-reject-btn"
+                          onClick={() => handleReject(sub)}
+                          disabled={actionLoading}
+                        >
+                          {actionLoading ? '⏳ ...' : '❌ Reject & Delete'}
+                        </button>
+                        <button className="btn-secondary" onClick={() => {setReviewingId(null);setAdminNote('')}}>
+                          Cancel
+                        </button>
                       </div>
                     </div>
                   ) : (
-                    sub.status==='pending' && (
-                      <div className="sub-actions">
-                        <button className="btn-primary" onClick={() => {setReviewingId(sub.docId);setAdminNote('')}}>🔍 Review</button>
-                        <button className="item-btn delete-btn" onClick={() => handleDeleteSub(sub)}>🗑️ Delete</button>
-                      </div>
-                    )
-                  )}
-
-                  {/* Approved/Rejected par delete option */}
-                  {sub.status!=='pending' && (
-                    <div className="sub-actions" style={{marginTop:'0.5rem'}}>
-                      <button className="item-btn delete-btn" onClick={() => handleDeleteSub(sub)}>🗑️ Delete</button>
+                    <div className="sub-actions">
+                      <button
+                        className="btn-primary sub-review-open-btn"
+                        onClick={() => {setReviewingId(sub.docId); setAdminNote(''); setSubPreviewId(sub.docId)}}
+                      >
+                        🔍 Review Karo
+                      </button>
                     </div>
                   )}
 
