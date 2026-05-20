@@ -17,7 +17,7 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const location = useLocation()
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
   const { isAdmin } = useAuth()
   const taps = useRef(0), timer = useRef(null)
 
@@ -42,12 +42,14 @@ export default function Navbar() {
           <span className="logo-text">MotionZync</span>
         </Link>
 
-        <ul className={`navbar-links ${open?'open':''}`}>
+        <ul className={`navbar-links ${open ? 'open' : ''}`}>
           {navLinks.map(l => (
             <li key={l.path}>
-              <Link to={l.path}
-                className={`nav-link ${location.pathname===l.path?'active':''}`}
-                onClick={() => setOpen(false)}>
+              <Link
+                to={l.path}
+                className={`nav-link ${location.pathname === l.path ? 'active' : ''}`}
+                onClick={() => setOpen(false)}
+              >
                 {l.label}
               </Link>
             </li>
@@ -62,9 +64,22 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar-right">
+          {/* Submit CTA Button */}
+          <Link
+            to="/submit"
+            className="navbar-submit-btn"
+            onClick={() => setOpen(false)}
+          >
+            + Submit
+          </Link>
+
           <AuthButton/>
-          <button className={`menu-toggle ${open?'open':''}`}
-            onClick={() => setOpen(p => !p)} aria-label="Toggle menu">
+
+          <button
+            className={`menu-toggle ${open ? 'open' : ''}`}
+            onClick={() => setOpen(p => !p)}
+            aria-label="Toggle menu"
+          >
             <span/><span/><span/>
           </button>
         </div>
@@ -72,4 +87,3 @@ export default function Navbar() {
     </nav>
   )
 }
-
