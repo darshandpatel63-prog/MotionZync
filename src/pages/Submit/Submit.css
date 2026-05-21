@@ -313,3 +313,21 @@
   .submit-card      { padding: 1.25rem; }
 }
 
+
+/* ── Preview pane height fix ─────────────────────────────── */
+.submit-preview-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+}
+
+/* LivePreview container ne full height do */
+.submit-preview-pane .live-preview {
+  flex: 1;
+  min-height: 380px;
+}
+
+.submit-preview-pane .preview-iframe {
+  height: 100%;
+  min-height: 340px;
+}
