@@ -605,106 +605,142 @@ function VideoScrubSection() {
   const cvRef      = useRef(null)
   const progRef    = useRef(0)
   const curRef     = useRef(0)
-  const animRef    = useRef(null)
+  const rafRef     = useRef(null)
 
-  useEffect(()=>{
+  useEffect(() => {
     const section = sectionRef.current
     const cv      = cvRef.current
-    if(!section||!cv) return
+    if (!section || !cv) return
     const ctx = cv.getContext('2d')
 
-    function resize(){
-      cv.width  = cv.offsetWidth  || window.innerWidth
-      cv.height = cv.offsetHeight || window.innerHeight
+    function resize() {
+      cv.width  = window.innerWidth
+      cv.height = window.innerHeight
     }
     resize()
-    const ro = new ResizeObserver(resize); ro.observe(cv)
+    window.addEventListener('resize', resize, { passive: true })
 
-    function drawFrame(p){
-      const W=cv.width, H=cv.height, cx=W/2, cy=H/2
-      ctx.clearRect(0,0,W,H)
-      const h1=200+p*100, h2=260+p*80
-      const grd=ctx.createLinearGradient(0,0,W,H)
-      grd.addColorStop(0,`hsl(${h1},70%,6%)`)
-      grd.addColorStop(1,`hsl(${h2},55%,10%)`)
-      ctx.fillStyle=grd; ctx.fillRect(0,0,W,H)
+    function drawFrame(p) {
+      const W = cv.width, H = cv.height, cx = W / 2, cy = H / 2
+      ctx.clearRect(0, 0, W, H)
+
+      const h1 = 200 + p * 120, h2 = 260 + p * 80
+      const grd = ctx.createLinearGradient(0, 0, W, H)
+      grd.addColorStop(0, `hsl(${h1},75%,5%)`)
+      grd.addColorStop(1, `hsl(${h2},60%,9%)`)
+      ctx.fillStyle = grd
+      ctx.fillRect(0, 0, W, H)
 
       // Grid
-      ctx.strokeStyle='rgba(150,100,255,0.05)'; ctx.lineWidth=1
-      for(let x=0;x<W;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
-      for(let y=0;y<H;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+      ctx.strokeStyle = 'rgba(150,100,255,0.04)'
+      ctx.lineWidth = 1
+      for (let x = 0; x < W; x += 55) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke() }
+      for (let y = 0; y < H; y += 55) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke() }
 
-      // Rings
-      for(let ring=0;ring<6;ring++){
-        const r=50+ring*40, angle=p*Math.PI*2*(ring%2===0?1:-0.7)+ring
-        const op=0.35-ring*0.04, hue=h1+ring*18
-        ctx.strokeStyle=`hsla(${hue},75%,60%,${op})`
-        ctx.lineWidth=2-ring*0.15
+      // Orbital rings
+      for (let i = 0; i < 7; i++) {
+        const R     = 60 + i * 55 + p * 40
+        const angle = p * Math.PI * 3 * (i % 2 === 0 ? 1 : -0.8) + i * 0.7
+        const hue   = h1 + i * 18
+        const alpha = Math.max(0, 0.45 - i * 0.045)
+        ctx.strokeStyle = `hsla(${hue},80%,65%,${alpha})`
+        ctx.lineWidth   = 2.5 - i * 0.2
         ctx.beginPath()
-        ctx.ellipse(cx,cy,r,r*(0.3+ring*0.05),angle,0,Math.PI*2)
+        ctx.ellipse(cx, cy, R, R * (0.28 + i * 0.04), angle, 0, Math.PI * 2)
         ctx.stroke()
+        const dx = Math.cos(angle) * R
+        const dy = Math.sin(angle) * R * (0.28 + i * 0.04)
         ctx.beginPath()
-        ctx.arc(cx+Math.cos(angle)*r, cy+Math.sin(angle)*r*(0.3+ring*0.05), 4-ring*0.3,0,Math.PI*2)
-        ctx.fillStyle=`hsl(${hue},85%,70%)`
-        ctx.shadowBlur=8; ctx.shadowColor=`hsl(${hue},85%,70%)`
-        ctx.fill(); ctx.shadowBlur=0
+        ctx.arc(cx + dx, cy + dy, 4.5 - i * 0.3, 0, Math.PI * 2)
+        ctx.fillStyle   = `hsl(${hue},90%,72%)`
+        ctx.shadowBlur  = 12
+        ctx.shadowColor = `hsl(${hue},90%,72%)`
+        ctx.fill(); ctx.shadowBlur = 0
       }
 
-      // Center shape
-      const sides=Math.floor(3+p*6)
+      // Center morphing polygon
+      const sides = Math.floor(3 + p * 7), R0 = 36 + p * 18
       ctx.beginPath()
-      for(let i=0;i<=sides;i++){
-        const a=(i/sides)*Math.PI*2-Math.PI/2
-        const r=28+Math.sin(p*Math.PI*3+i)*6
-        i===0?ctx.moveTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r):ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r)
+      for (let i = 0; i <= sides; i++) {
+        const a = (i / sides) * Math.PI * 2 - Math.PI / 2
+        const r = R0 + Math.sin(p * Math.PI * 4 + i) * 7
+        i === 0 ? ctx.moveTo(cx + Math.cos(a)*r, cy + Math.sin(a)*r)
+                : ctx.lineTo(cx + Math.cos(a)*r, cy + Math.sin(a)*r)
       }
       ctx.closePath()
-      ctx.fillStyle=`hsla(${h1},80%,60%,0.25)`
-      ctx.strokeStyle=`hsl(${h1},90%,72%)`
-      ctx.lineWidth=2; ctx.fill(); ctx.stroke()
+      ctx.fillStyle   = `hsla(${h1},80%,65%,0.18)`
+      ctx.strokeStyle = `hsl(${h1},90%,75%)`
+      ctx.lineWidth = 2; ctx.fill(); ctx.stroke()
+
+      // Floating particles
+      const particleCount = Math.floor(p * 60)
+      for (let i = 0; i < particleCount; i++) {
+        const px = cx + Math.cos(i * 2.4) * (80 + i * 4.5)
+        const py = cy + Math.sin(i * 1.8) * (50 + i * 3)
+        ctx.beginPath()
+        ctx.arc(px, py, 1.5 + Math.sin(i), 0, Math.PI * 2)
+        ctx.fillStyle = `hsla(${h1 + i * 6},80%,70%,${0.15 + p * 0.5})`
+        ctx.fill()
+      }
+
+      // Text — fade in at 20%, fade out at 80%
+      const ta = p < 0.2 ? p / 0.2 : p > 0.8 ? (1 - p) / 0.2 : 1
+      ctx.save(); ctx.globalAlpha = ta
+      const fs = Math.round(clamp(W * 0.045, 22, 52))
+      ctx.font = `900 ${fs}px sans-serif`
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.shadowBlur = 30; ctx.shadowColor = 'rgba(0,0,0,0.8)'
+      const tg = ctx.createLinearGradient(cx - 200, 0, cx + 200, 0)
+      tg.addColorStop(0, '#a78bfa'); tg.addColorStop(0.5, '#06b6d4'); tg.addColorStop(1, '#a78bfa')
+      ctx.fillStyle = tg
+      ctx.fillText('Animation is Motion', cx, cy - fs * 0.8)
+      ctx.shadowBlur = 0
+      ctx.font = `500 ${Math.round(fs * 0.42)}px sans-serif`
+      ctx.fillStyle = 'rgba(200,200,255,0.75)'
+      ctx.fillText('Every frame tells a story — scroll to feel it', cx, cy + fs * 0.55)
+      ctx.restore()
 
       // Progress bar
-      const bw=Math.min(400,W*0.6), bh=3, bx=(W-bw)/2, by=H-32
-      ctx.fillStyle='rgba(255,255,255,0.08)'
-      ctx.beginPath(); ctx.roundRect(bx,by,bw,bh,2); ctx.fill()
-      ctx.fillStyle=`hsl(${h1},80%,65%)`
-      ctx.beginPath(); ctx.roundRect(bx,by,bw*p,bh,2); ctx.fill()
-      ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='11px sans-serif'
-      ctx.textAlign='center'
-      ctx.fillText(`↓ scroll  ${Math.floor(p*100)}%`,W/2,H-10)
+      const bw = Math.min(480, W * 0.55), bh = 3, bx = (W - bw) / 2, by = H - 36
+      ctx.fillStyle = 'rgba(255,255,255,0.07)'
+      ctx.beginPath(); ctx.roundRect(bx, by, bw, bh, 2); ctx.fill()
+      ctx.fillStyle = `hsl(${h1},80%,65%)`
+      ctx.beginPath(); ctx.roundRect(bx, by, bw * p, bh, 2); ctx.fill()
+      ctx.fillStyle = 'rgba(255,255,255,0.3)'
+      ctx.font = '11px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText(p < 0.02 ? '↓  scroll to begin' : p > 0.97 ? '✓  complete' : `${Math.round(p * 100)}%`, W / 2, H - 14)
     }
 
-    function onScroll(){
-      const rect=section.getBoundingClientRect()
-      const total=section.offsetHeight-window.innerHeight
-      progRef.current=clamp(-rect.top/Math.max(total,1),0,1)
+    function onScroll() {
+      const rect  = section.getBoundingClientRect()
+      const total = section.offsetHeight - window.innerHeight
+      progRef.current = Math.max(0, Math.min(1, -rect.top / Math.max(total, 1)))
     }
 
-    let raf
-    function animate(){
-      curRef.current=lerp(curRef.current,progRef.current,0.07)
+    function animate() {
+      curRef.current += (progRef.current - curRef.current) * 0.06
       drawFrame(curRef.current)
-      raf=requestAnimationFrame(animate)
+      rafRef.current = requestAnimationFrame(animate)
     }
 
-    window.addEventListener('scroll',onScroll,{passive:true})
-    animate()
-    return ()=>{ cancelAnimationFrame(raf); window.removeEventListener('scroll',onScroll); ro.disconnect() }
-  },[])
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll(); animate()
+
+    return () => {
+      cancelAnimationFrame(rafRef.current)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
 
   return (
-    // height: 350vh makes enough room to scrub fully on desktop
     <section ref={sectionRef} className="scrub-section">
       <div className="scrub-sticky">
         <canvas ref={cvRef} className="scrub-canvas"/>
-        <div className="scrub-overlay">
-          <Reveal>
-            <h2 className="scrub-title">Animation is <span className="gradient-text">Motion</span></h2>
-            <p className="scrub-sub">Every frame tells a story — scroll to feel it</p>
-          </Reveal>
-        </div>
       </div>
     </section>
+  )
+}
   )
 }
 
