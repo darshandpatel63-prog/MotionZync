@@ -1,320 +1,597 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import AdSense from '../../components/AdSense/AdSense.jsx'
 import './Home.css'
 
-// ─── 1. CANVAS PARTICLE MORPHING (Hero BG) ────────────────────────────────────
-function ParticleMorphCanvas() {
-  const canvasRef = useRef(null)
+// ─── UTILITY ──────────────────────────────────────────────────────────────────
+function lerp(a,b,t){ return a+(b-a)*t }
+function ease(t){ return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2 }
+function clamp(v,mn,mx){ return Math.max(mn,Math.min(mx,v)) }
+
+// ─── REVEAL WRAPPER ───────────────────────────────────────────────────────────
+function Reveal({ children, className='', delay=0, from='bottom' }) {
+  const ref = useRef(null)
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    let animId, t = 0, W, H, particles = []
-
-    function resize() {
-      W = canvas.width  = canvas.offsetWidth
-      H = canvas.height = canvas.offsetHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    // Shapes: circle, square, triangle, star
-    function shapePoint(shape, i, total) {
-      const cx = W/2, cy = H/2
-      const R  = Math.min(W, H) * 0.28
-      let angle, x, y
-      switch(shape) {
-        case 0: // circle
-          angle = (i/total)*Math.PI*2
-          return { x: cx + Math.cos(angle)*R, y: cy + Math.sin(angle)*R }
-        case 1: // square
-          const side = 4, seg = Math.floor(i/(total/side)), frac = (i%(total/side))/(total/side)
-          const d = R*1.4
-          if (seg===0) return { x: cx-d+frac*2*d, y: cy-d }
-          if (seg===1) return { x: cx+d,          y: cy-d+frac*2*d }
-          if (seg===2) return { x: cx+d-frac*2*d, y: cy+d }
-          return           { x: cx-d,             y: cy+d-frac*2*d }
-        case 2: // triangle
-          const side3 = 3, seg3 = Math.floor(i/(total/side3)), frac3 = (i%(total/side3))/(total/side3)
-          const pts = [
-            {x:cx,     y:cy-R*1.3},
-            {x:cx+R*1.2, y:cy+R*0.8},
-            {x:cx-R*1.2, y:cy+R*0.8},
-          ]
-          const from3 = pts[seg3], to3 = pts[(seg3+1)%3]
-          return { x:from3.x+(to3.x-from3.x)*frac3, y:from3.y+(to3.y-from3.y)*frac3 }
-        default: // star
-          const k = i/total, starAngle = k*Math.PI*10, isOuter = Math.floor(k*10)%2===0
-          const sr = isOuter ? R : R*0.45
-          return { x: cx + Math.cos(starAngle-Math.PI/2)*sr, y: cy + Math.sin(starAngle-Math.PI/2)*sr }
-      }
-    }
-
-    const N = window.innerWidth < 600 ? 120 : 220
-    for (let i=0; i<N; i++) {
-      particles.push({
-        px: Math.random()*W, py: Math.random()*H,
-        color: `hsl(${Math.random()*60+240},80%,${Math.random()*30+55}%)`,
-        size: Math.random()*2+0.6, speed: 0.012+Math.random()*0.006,
-        shapeIdx: 0, progress: Math.random()
-      })
-    }
-
-    const SHAPES = 4
-    function lerp(a,b,t){ return a+(b-a)*t }
-    function ease(t){ return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2 }
-
-    function draw() {
-      ctx.clearRect(0,0,W,H)
-      t += 0.004
-      const cycleLen = 3 // seconds worth of frames roughly
-      const globalT = (t%(SHAPES)) 
-      const shapeA = Math.floor(globalT)%SHAPES
-      const shapeB = (shapeA+1)%SHAPES
-      const shapeFrac = ease(globalT%1)
-
-      for (let i=0; i<N; i++) {
-        const p = particles[i]
-        const a = shapePoint(shapeA, i, N)
-        const b = shapePoint(shapeB, i, N)
-        const tx = lerp(a.x, b.x, shapeFrac)
-        const ty = lerp(a.y, b.y, shapeFrac)
-        p.px = lerp(p.px, tx, 0.04)
-        p.py = lerp(p.py, ty, 0.04)
-
-        ctx.beginPath()
-        ctx.arc(p.px, p.py, p.size, 0, Math.PI*2)
-        ctx.fillStyle = p.color
-        ctx.globalAlpha = 0.7
-        ctx.fill()
-      }
-      ctx.globalAlpha = 1
-      animId = requestAnimationFrame(draw)
-    }
-    draw()
-    return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', resize) }
+    const el = ref.current; if (!el) return
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { el.classList.add('revealed'); io.disconnect() }
+    }, { threshold: 0.12 })
+    io.observe(el)
+    return () => io.disconnect()
   }, [])
-  return <canvas ref={canvasRef} className="particle-canvas"/>
+  return (
+    <div ref={ref} className={`reveal reveal-${from} ${className}`}
+         style={{ '--reveal-delay': `${delay}s` }}>
+      {children}
+    </div>
+  )
 }
 
-// ─── 2. KINETIC TYPOGRAPHY ─────────────────────────────────────────────────────
-function KineticTitle({ text, className='' }) {
+// ─── 1. GLITCH TITLE ──────────────────────────────────────────────────────────
+function GlitchText({ text }) {
   return (
-    <span className={`kinetic-title ${className}`} aria-label={text}>
-      {text.split('').map((ch, i) => (
-        <span
-          key={i}
-          className="kinetic-char"
-          style={{
-            animationDelay: `${i*0.055}s`,
-            '--i': i,
-          }}
-        >
-          {ch === ' ' ? '\u00A0' : ch}
+    <span className="glitch-wrap" data-text={text}>
+      {text}
+    </span>
+  )
+}
+
+// ─── 2. TYPEWRITER ───────────────────────────────────────────────────────────
+function Typewriter({ texts, speed=60, pause=1800 }) {
+  const [display, setDisplay] = useState('')
+  const [ti, setTi]           = useState(0)
+  const [deleting, setDeleting] = useState(false)
+
+  useEffect(() => {
+    const cur = texts[ti]
+    let timeout
+    if (!deleting && display === cur) {
+      timeout = setTimeout(() => setDeleting(true), pause)
+    } else if (deleting && display === '') {
+      setDeleting(false)
+      setTi(p => (p+1)%texts.length)
+    } else {
+      timeout = setTimeout(() => {
+        setDisplay(p => deleting ? p.slice(0,-1) : cur.slice(0,p.length+1))
+      }, deleting ? speed/2 : speed)
+    }
+    return () => clearTimeout(timeout)
+  }, [display, deleting, ti, texts, speed, pause])
+
+  return (
+    <span className="typewriter">
+      {display}<span className="cursor">|</span>
+    </span>
+  )
+}
+
+// ─── 3. WAVE TEXT ─────────────────────────────────────────────────────────────
+function WaveText({ text, className='' }) {
+  return (
+    <span className={`wave-text ${className}`}>
+      {text.split('').map((ch,i)=>(
+        <span key={i} className="wave-char"
+              style={{ animationDelay:`${i*0.07}s` }}>
+          {ch===' '?'\u00A0':ch}
         </span>
       ))}
     </span>
   )
 }
 
-// ─── 3. TEXT REVEAL on scroll ──────────────────────────────────────────────────
-function RevealText({ children, className='', delay=0 }) {
+// ─── 4. SCRAMBLE TEXT ────────────────────────────────────────────────────────
+function ScrambleText({ text, trigger }) {
+  const [display, setDisplay] = useState(text)
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%'
+  useEffect(() => {
+    if (!trigger) return
+    let iter = 0, id
+    id = setInterval(() => {
+      setDisplay(() =>
+        text.split('').map((ch,i) => {
+          if (i < iter) return ch
+          return chars[Math.floor(Math.random()*chars.length)]
+        }).join('')
+      )
+      if (iter >= text.length) clearInterval(id)
+      iter += 0.5
+    }, 30)
+    return () => clearInterval(id)
+  }, [trigger, text])
+  return <span className="scramble-text">{display}</span>
+}
+
+// ─── 5. PARTICLE MORPHING CANVAS (Hero BG) ───────────────────────────────────
+function ParticleMorphHero() {
+  const cvRef = useRef(null)
+  useEffect(() => {
+    const cv = cvRef.current; if (!cv) return
+    const ctx = cv.getContext('2d')
+    let animId, t=0, W, H
+
+    function resize(){
+      W = cv.width  = cv.offsetWidth
+      H = cv.height = cv.offsetHeight
+    }
+    resize()
+    const ro = new ResizeObserver(resize)
+    ro.observe(cv)
+
+    const N = window.innerWidth < 600 ? 100 : 200
+    const particles = Array.from({length:N}, (_,i) => ({
+      px: Math.random()*800, py: Math.random()*600,
+      hue: 240+Math.random()*60, size: 0.8+Math.random()*2
+    }))
+
+    function getTarget(shape, i, total){
+      const cx=W/2, cy=H/2, R=Math.min(W,H)*0.28
+      switch(shape%4){
+        case 0:{ // circle
+          const a=(i/total)*Math.PI*2
+          return {x:cx+Math.cos(a)*R, y:cy+Math.sin(a)*R}
+        }
+        case 1:{ // square
+          const s4=4, seg=Math.floor(i/(total/s4)), fr=(i%(total/s4))/(total/s4), d=R*1.35
+          if(seg===0) return {x:cx-d+fr*2*d, y:cy-d}
+          if(seg===1) return {x:cx+d,         y:cy-d+fr*2*d}
+          if(seg===2) return {x:cx+d-fr*2*d,  y:cy+d}
+          return           {x:cx-d,           y:cy+d-fr*2*d}
+        }
+        case 2:{ // triangle
+          const s3=3, seg=Math.floor(i/(total/s3)), fr=(i%(total/s3))/(total/s3)
+          const pts=[{x:cx,y:cy-R*1.3},{x:cx+R*1.2,y:cy+R*0.8},{x:cx-R*1.2,y:cy+R*0.8}]
+          const a=pts[seg], b=pts[(seg+1)%3]
+          return {x:a.x+(b.x-a.x)*fr, y:a.y+(b.y-a.y)*fr}
+        }
+        default:{ // star
+          const a=(i/total)*Math.PI*10, outer=(Math.floor(i/total*10)%2===0)
+          return {x:cx+Math.cos(a-Math.PI/2)*R*(outer?1:0.45), y:cy+Math.sin(a-Math.PI/2)*R*(outer?1:0.45)}
+        }
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H)
+      t+=0.005
+      const cyclePos=t%4
+      const shapeA=Math.floor(cyclePos), shapeB=(shapeA+1)%4
+      const frac=ease(cyclePos%1)
+
+      for(let i=0;i<N;i++){
+        const p=particles[i]
+        const a=getTarget(shapeA,i,N), b=getTarget(shapeB,i,N)
+        const tx=lerp(a.x,b.x,frac), ty=lerp(a.y,b.y,frac)
+        p.px=lerp(p.px,tx,0.045); p.py=lerp(p.py,ty,0.045)
+        ctx.beginPath()
+        ctx.arc(p.px,p.py,p.size,0,Math.PI*2)
+        ctx.fillStyle=`hsla(${p.hue+t*20},80%,65%,0.65)`
+        ctx.fill()
+      }
+      animId=requestAnimationFrame(draw)
+    }
+    draw()
+    return ()=>{ cancelAnimationFrame(animId); ro.disconnect() }
+  },[])
+  return <canvas ref={cvRef} className="particle-canvas"/>
+}
+
+// ─── 6. FLOATING ORBS ────────────────────────────────────────────────────────
+function FloatingOrbs() {
+  return (
+    <div className="orbs-wrap" aria-hidden>
+      {[0,1,2,3].map(i => <div key={i} className={`orb orb-${i}`}/>)}
+    </div>
+  )
+}
+
+// ─── 7. SPOTLIGHT CURSOR ─────────────────────────────────────────────────────
+function Spotlight() {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current; if (!el) return
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { el.classList.add('revealed'); io.disconnect() }
-    }, { threshold: 0.15 })
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
-  return (
-    <div ref={ref} className={`reveal-text ${className}`} style={{ '--delay': `${delay}s` }}>
-      {children}
-    </div>
-  )
+    const move = e => {
+      el.style.setProperty('--mx', e.clientX+'px')
+      el.style.setProperty('--my', e.clientY+'px')
+    }
+    window.addEventListener('mousemove', move, {passive:true})
+    return () => window.removeEventListener('mousemove', move)
+  },[])
+  return <div ref={ref} className="spotlight" aria-hidden/>
 }
 
-// ─── 4. SCROLLYTELLING ────────────────────────────────────────────────────────
-const storySteps = [
-  {
-    icon: '🎨',
-    title: 'Choose an Animation',
-    desc:  '100+ ready-made CSS & JS animations — backgrounds, particles, buttons, text effects. Browse and find your vibe.',
-    visual: 'gallery',
-  },
-  {
-    icon: '⚡',
-    title: 'Customize It Live',
-    desc:  'Change colors, sizes, speed — everything updates in real time. No reload. No re-compile.',
-    visual: 'code',
-  },
-  {
-    icon: '📋',
-    title: 'Copy the Code',
-    desc:  'One click — CSS and JS code copied to clipboard. Paste it anywhere: React, Vue, plain HTML.',
-    visual: 'copy',
-  },
-  {
-    icon: '🚀',
-    title: 'Ship It',
-    desc:  'Your website now has stunning animations that users remember. Built in minutes, not days.',
-    visual: 'launch',
-  },
+// ─── 8. SCROLLYTELLING (FIXED with scroll math) ──────────────────────────────
+const STORY = [
+  { icon:'🎨', title:'Choose an Animation',
+    desc:'100+ ready-made CSS & JS animations — backgrounds, particles, buttons, text effects. Browse and find your vibe.',
+    visual:'gallery' },
+  { icon:'⚡', title:'Customize Live',
+    desc:'Change colors, sizes, speed, text — everything updates in real time inside the preview panel.',
+    visual:'code' },
+  { icon:'📋', title:'Copy the Code',
+    desc:'One click — CSS and JS copied to clipboard. Paste anywhere: React, Vue, plain HTML.',
+    visual:'copy' },
+  { icon:'🚀', title:'Ship It',
+    desc:'Your site now has stunning animations. Built in minutes, not days.',
+    visual:'launch' },
 ]
 
-function StoryVisual({ type }) {
-  const canvasRef = useRef(null)
-  useEffect(() => {
-    const canvas = canvasRef.current; if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    const W = canvas.width = canvas.offsetWidth || 300
-    const H = canvas.height = canvas.offsetHeight || 220
-    let animId, t=0
+function StoryCanvas({ type, active }) {
+  const cvRef = useRef(null)
+  const animRef = useRef(null)
+  const tRef = useRef(0)
 
-    const draws = {
-      gallery: () => {
-        ctx.clearRect(0,0,W,H)
-        for (let i=0;i<6;i++) {
-          const x=(i%3)*(W/3)+16, y=Math.floor(i/2)*(H/2)+14
-          const hue=240+i*25
-          ctx.fillStyle=`hsla(${hue},70%,60%,0.18)`
-          ctx.strokeStyle=`hsla(${hue},80%,65%,0.5)`
-          ctx.lineWidth=1.5
-          const r=10
-          ctx.beginPath()
-          ctx.roundRect(x,y,W/3-32,H/2-28,r)
-          ctx.fill(); ctx.stroke()
-          // animated dot
-          ctx.beginPath()
-          ctx.arc(x+20, y+16, 5+Math.sin(t*2+i)*3, 0, Math.PI*2)
-          ctx.fillStyle=`hsl(${hue},80%,70%)`
-          ctx.fill()
-        }
-      },
-      code: () => {
-        ctx.clearRect(0,0,W,H)
-        ctx.fillStyle='rgba(10,10,20,0.8)'
-        ctx.fillRect(0,0,W,H)
-        const lines=['  .element {','    color: #7c3aed;','    transform: scale(',`      ${(1+Math.sin(t)*0.3).toFixed(2)}`,`    );`,'  }']
-        lines.forEach((l,i)=>{
-          const prog = Math.min(1,(t*0.4-i*0.15))
-          if(prog<=0) return
-          const chars = Math.floor(l.length*prog)
-          ctx.font=`${W<300?11:13}px monospace`
-          ctx.fillStyle=i===0||i===5?'#06b6d4':i===3?'#f59e0b':'#a78bfa'
-          ctx.fillText(l.slice(0,chars), 24, 38+i*28)
-        })
-      },
-      copy: () => {
-        ctx.clearRect(0,0,W,H)
-        const cx=W/2, cy=H/2
-        const pulse = 0.5+Math.sin(t*3)*0.5
-        // code block
-        ctx.fillStyle='rgba(124,58,237,0.1)'
-        ctx.strokeStyle='rgba(124,58,237,0.4)'
-        ctx.lineWidth=1
-        ctx.beginPath(); ctx.roundRect(cx-90,cy-50,180,100,8); ctx.fill(); ctx.stroke()
-        // copy icon
-        ctx.fillStyle=`rgba(124,58,237,${0.6+pulse*0.4})`
-        ctx.beginPath(); ctx.roundRect(cx-16,cy-16,28,28,4); ctx.fill()
-        ctx.fillStyle='#fff'
-        ctx.font='bold 16px sans-serif'
-        ctx.textAlign='center'; ctx.textBaseline='middle'
-        ctx.fillText('⎘',cx,cy)
-        // particles on copy
-        for(let i=0;i<8;i++){
-          const a=(i/8)*Math.PI*2+(t*2), r=30+pulse*15
-          ctx.beginPath()
-          ctx.arc(cx+Math.cos(a)*r, cy+Math.sin(a)*r, 2+pulse*2,0,Math.PI*2)
-          ctx.fillStyle=`hsla(${260+i*10},80%,75%,${pulse})`
-          ctx.fill()
-        }
-      },
-      launch: () => {
-        ctx.clearRect(0,0,W,H)
-        const cx=W/2, cy=H/2+20
-        // rocket
-        ctx.save()
-        ctx.translate(cx, cy - Math.sin(t*2)*8)
-        ctx.font='40px sans-serif'
-        ctx.textAlign='center'; ctx.textBaseline='middle'
-        ctx.fillText('🚀',0,0)
-        ctx.restore()
-        // stars
-        for(let i=0;i<12;i++){
-          const a=(t*0.3+i/12)*Math.PI*2, r=55+i*5
-          const alpha=0.3+Math.sin(t*3+i)*0.4
-          ctx.beginPath()
-          ctx.arc(cx+Math.cos(a)*r, cy+Math.sin(a)*r*0.5-20, 1.5,0,Math.PI*2)
-          ctx.fillStyle=`rgba(200,180,255,${alpha})`
-          ctx.fill()
-        }
-        ctx.fillStyle='rgba(124,58,237,0.08)'
-        ctx.beginPath(); ctx.arc(cx,cy-20,60,0,Math.PI*2); ctx.fill()
+  useEffect(() => {
+    const cv = cvRef.current; if (!cv) return
+    const ctx = cv.getContext('2d')
+    cv.width  = cv.offsetWidth  || 360
+    cv.height = cv.offsetHeight || 280
+
+    function drawGallery(){
+      const W=cv.width, H=cv.height
+      ctx.clearRect(0,0,W,H)
+      for(let i=0;i<6;i++){
+        const col=i%3, row=Math.floor(i/3)
+        const x=16+col*(W/3), y=16+row*(H/2-12)
+        const w=W/3-24, h=H/2-28, r=10
+        const hue=240+i*25
+        ctx.fillStyle=`hsla(${hue},65%,55%,0.18)`
+        ctx.strokeStyle=`hsla(${hue},75%,65%,${active?0.7:0.25})`
+        ctx.lineWidth=1.5
+        ctx.beginPath(); ctx.roundRect(x,y,w,h,r); ctx.fill(); ctx.stroke()
+        const dot=5+Math.sin(tRef.current*2+i)*3
+        ctx.beginPath(); ctx.arc(x+22,y+18,dot,0,Math.PI*2)
+        ctx.fillStyle=`hsl(${hue},80%,${active?72:45}%)`; ctx.fill()
+      }
+    }
+    function drawCode(){
+      const W=cv.width, H=cv.height
+      ctx.clearRect(0,0,W,H)
+      ctx.fillStyle='rgba(8,8,18,0.9)'; ctx.fillRect(0,0,W,H)
+      const lines=[
+        {c:'#06b6d4', t:'  .element {'},
+        {c:'#a78bfa', t:`    color: #7c3aed;`},
+        {c:'#fbbf24', t:`    transform: scale(`},
+        {c:'#f9fafb', t:`      ${(1+Math.sin(tRef.current)*0.25).toFixed(2)}`},
+        {c:'#fbbf24', t:'    );'},
+        {c:'#06b6d4', t:'  }'},
+      ]
+      lines.forEach((l,i)=>{
+        const prog=clamp((tRef.current*0.35-i*0.12),0,1)
+        ctx.font=`${W<300?11:12}px monospace`
+        ctx.fillStyle=active?l.c:l.c+'55'
+        ctx.fillText(l.t.slice(0,Math.floor(l.t.length*prog)),20,44+i*30)
+      })
+    }
+    function drawCopy(){
+      const W=cv.width, H=cv.height, cx=W/2, cy=H/2
+      ctx.clearRect(0,0,W,H)
+      const pulse=active?(0.5+Math.sin(tRef.current*3)*0.5):0.2
+      ctx.fillStyle=`rgba(124,58,237,${0.08+pulse*0.06})`
+      ctx.strokeStyle=`rgba(124,58,237,${0.3+pulse*0.3})`
+      ctx.lineWidth=1.5
+      ctx.beginPath(); ctx.roundRect(cx-95,cy-55,190,110,12); ctx.fill(); ctx.stroke()
+      ctx.fillStyle=`rgba(124,58,237,${0.5+pulse*0.5})`
+      ctx.beginPath(); ctx.roundRect(cx-18,cy-18,36,36,6); ctx.fill()
+      ctx.fillStyle='#fff'; ctx.font='bold 18px sans-serif'
+      ctx.textAlign='center'; ctx.textBaseline='middle'
+      ctx.fillText('⎘',cx,cy)
+      for(let i=0;i<8;i++){
+        const a=(i/8)*Math.PI*2+tRef.current*2, r=36+pulse*14
+        ctx.beginPath(); ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,2+pulse*2,0,Math.PI*2)
+        ctx.fillStyle=`hsla(${260+i*12},80%,75%,${pulse})`; ctx.fill()
+      }
+    }
+    function drawLaunch(){
+      const W=cv.width, H=cv.height, cx=W/2, cy=H/2+10
+      ctx.clearRect(0,0,W,H)
+      ctx.fillStyle=`rgba(124,58,237,${active?0.08:0.03})`
+      ctx.beginPath(); ctx.arc(cx,cy-20,65,0,Math.PI*2); ctx.fill()
+      ctx.save()
+      ctx.translate(cx, cy-20-Math.sin(tRef.current*2)*(active?10:3))
+      ctx.font='44px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'
+      ctx.fillText('🚀',0,0); ctx.restore()
+      for(let i=0;i<14;i++){
+        const a=(tRef.current*0.4+i/14)*Math.PI*2
+        const r=60+i*4
+        ctx.beginPath(); ctx.arc(cx+Math.cos(a)*r, cy-20+Math.sin(a)*r*0.45, 1.5,0,Math.PI*2)
+        ctx.fillStyle=`rgba(200,180,255,${active?(0.3+Math.sin(tRef.current*2+i)*0.35):0.1})`
+        ctx.fill()
       }
     }
 
-    function tick() {
-      t += 0.03
-      draws[type]?.()
-      animId = requestAnimationFrame(tick)
+    const drawFns = {gallery:drawGallery, code:drawCode, copy:drawCopy, launch:drawLaunch}
+
+    function tick(){
+      tRef.current += 0.04
+      drawFns[type]?.()
+      animRef.current = requestAnimationFrame(tick)
     }
     tick()
-    return () => cancelAnimationFrame(animId)
-  }, [type])
-  return <canvas ref={canvasRef} className="story-visual-canvas"/>
+    return ()=> cancelAnimationFrame(animRef.current)
+  }, [type, active])
+
+  return <canvas ref={cvRef} className="story-canvas"/>
 }
 
 function ScrollySection() {
-  const sectionRef = useRef(null)
+  const wrapRef  = useRef(null)
+  const stepsRef = useRef(null)
   const [active, setActive] = useState(0)
 
   useEffect(() => {
-    const section = sectionRef.current; if (!section) return
-    const steps = section.querySelectorAll('.story-step')
-    const ios = []
-    steps.forEach((el, i) => {
-      const io = new IntersectionObserver(([e]) => {
-        if (e.isIntersecting) setActive(i)
-      }, { threshold: 0.55, rootMargin:'-10% 0px -10% 0px' })
-      io.observe(el); ios.push(io)
-    })
-    return () => ios.forEach(io => io.disconnect())
-  }, [])
+    function onScroll(){
+      const wrap = wrapRef.current
+      if (!wrap) return
+      const rect  = wrap.getBoundingClientRect()
+      const total = wrap.offsetHeight - window.innerHeight
+      if (total <= 0) return
+      // How far we've scrolled into this section (0..1)
+      const progress = clamp(-rect.top / total, 0, 1)
+      setActive(Math.min(STORY.length-1, Math.floor(progress * STORY.length + 0.15)))
+    }
+    window.addEventListener('scroll', onScroll, {passive:true})
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  },[])
 
   return (
-    <section className="scrolly-section" ref={sectionRef}>
-      <div className="container">
-        <RevealText>
-          <h2 className="section-title">From Zero to <span className="gradient-text">Stunning</span></h2>
-          <p className="section-sub">How MotionZync works — in 4 simple steps</p>
-        </RevealText>
-        <div className="scrolly-body">
-          {/* Sticky visual */}
-          <div className="scrolly-sticky">
-            <div className="scrolly-visual-wrap">
-              <StoryVisual type={storySteps[active].visual}/>
-              <div className="scrolly-step-indicator">
-                {storySteps.map((_, i) => (
-                  <div key={i} className={`step-dot ${i===active?'active':''} ${i<active?'done':''}`}/>
-                ))}
-              </div>
-            </div>
-          </div>
-          {/* Steps */}
-          <div className="scrolly-steps">
-            {storySteps.map((s, i) => (
-              <div key={i} className={`story-step ${i===active?'active':''}`}>
-                <div className="story-step-inner">
-                  <div className="story-num">{String(i+1).padStart(2,'0')}</div>
-                  <div className="story-icon">{s.icon}</div>
-                  <h3 className="story-title">{s.title}</h3>
-                  <p className="story-desc">{s.desc}</p>
-                </div>
+    <section className="scrolly-section" ref={wrapRef}>
+      <div className="scrolly-inner container">
+        {/* Sticky left panel */}
+        <div className="scrolly-sticky-col">
+          <Reveal>
+            <h2 className="section-title">From Zero to <span className="gradient-text">Stunning</span></h2>
+            <p className="section-sub">How MotionZync works — 4 simple steps</p>
+          </Reveal>
+          <div className="scrolly-visual-card">
+            {STORY.map((s,i) => (
+              <div key={i} className={`story-canvas-layer ${i===active?'visible':''}`}>
+                <StoryCanvas type={s.visual} active={i===active}/>
               </div>
             ))}
+            <div className="story-dots">
+              {STORY.map((_,i)=>(
+                <div key={i} className={`story-dot ${i===active?'active':''} ${i<active?'done':''}`}/>
+              ))}
+            </div>
+            <div className="story-active-label">{String(active+1).padStart(2,'0')} / 04</div>
+          </div>
+        </div>
+
+        {/* Scrollable right steps */}
+        <div className="scrolly-steps-col" ref={stepsRef}>
+          {STORY.map((s,i) => (
+            <div key={i} className={`story-step ${i===active?'active':''}`}>
+              <div className="step-icon">{s.icon}</div>
+              <div className="step-num">Step {String(i+1).padStart(2,'0')}</div>
+              <h3 className="step-title">{s.title}</h3>
+              <p className="step-desc">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── 9. MINI ANIMATION SHOWCASE ──────────────────────────────────────────────
+function MiniAnim({ type }) {
+  const cvRef = useRef(null)
+  useEffect(() => {
+    const cv = cvRef.current; if (!cv) return
+    const ctx = cv.getContext('2d')
+    cv.width = cv.offsetWidth || 200
+    cv.height = cv.offsetHeight || 160
+    let t=0, id
+    const W=cv.width, H=cv.height, cx=W/2, cy=H/2
+
+    const fns = {
+      neon: () => {
+        ctx.clearRect(0,0,W,H)
+        ctx.fillStyle='#080818'; ctx.fillRect(0,0,W,H)
+        for(let r=3;r>=1;r--){
+          ctx.beginPath()
+          ctx.arc(cx,cy,30+Math.sin(t*2)*10,0,Math.PI*2)
+          ctx.strokeStyle=`rgba(124,58,237,${r===1?0.9:r===2?0.4:0.15})`
+          ctx.lineWidth=r===1?2:r*4; ctx.stroke()
+        }
+        ctx.beginPath(); ctx.arc(cx,cy,8,0,Math.PI*2)
+        ctx.fillStyle='#a78bfa'; ctx.fill()
+      },
+      orbit: () => {
+        ctx.clearRect(0,0,W,H)
+        ctx.fillStyle='#04040e'; ctx.fillRect(0,0,W,H)
+        const rings=[{r:28,speed:1.2,col:'#06b6d4'},{r:44,speed:0.7,col:'#7c3aed'},{r:58,speed:0.4,col:'#ec4899'}]
+        rings.forEach(ring=>{
+          ctx.beginPath(); ctx.arc(cx,cy,ring.r,0,Math.PI*2)
+          ctx.strokeStyle=ring.col+'33'; ctx.lineWidth=1; ctx.stroke()
+          const a=t*ring.speed
+          ctx.beginPath(); ctx.arc(cx+Math.cos(a)*ring.r, cy+Math.sin(a)*ring.r, 5,0,Math.PI*2)
+          ctx.fillStyle=ring.col; ctx.fill()
+          ctx.shadowBlur=12; ctx.shadowColor=ring.col; ctx.fill(); ctx.shadowBlur=0
+        })
+        ctx.beginPath(); ctx.arc(cx,cy,10,0,Math.PI*2)
+        ctx.fillStyle='#fff'; ctx.fill()
+      },
+      wave: () => {
+        ctx.clearRect(0,0,W,H)
+        ctx.fillStyle='#050510'; ctx.fillRect(0,0,W,H)
+        for(let w=3;w>=1;w--){
+          ctx.beginPath()
+          for(let x=0;x<=W;x+=2){
+            const y=cy+Math.sin(x*0.04+t*2)*20*(4-w)+Math.sin(x*0.08+t*3)*8
+            x===0?ctx.moveTo(x,y):ctx.lineTo(x,y)
+          }
+          ctx.strokeStyle=`hsla(${220+w*20},80%,65%,${1/w})`
+          ctx.lineWidth=3-w*0.5; ctx.stroke()
+        }
+      },
+      matrix: () => {
+        ctx.fillStyle='rgba(4,4,14,0.15)'; ctx.fillRect(0,0,W,H)
+        ctx.fillStyle='#0f0'; ctx.font='10px monospace'
+        for(let x=0;x<W;x+=12){
+          const ch=String.fromCharCode(33+Math.floor(Math.random()*90))
+          const y=(t*40+x*7)%H
+          ctx.fillStyle=`rgba(0,${180+Math.random()*75},0,${0.5+Math.random()*0.5})`
+          ctx.fillText(ch,x,y)
+        }
+      },
+      dna: () => {
+        ctx.clearRect(0,0,W,H)
+        ctx.fillStyle='#030310'; ctx.fillRect(0,0,W,H)
+        for(let y=0;y<H;y+=4){
+          const prog=y/H, angle=prog*Math.PI*4+t
+          const x1=cx+Math.cos(angle)*30, x2=cx-Math.cos(angle)*30
+          if(y%20<4){
+            ctx.beginPath(); ctx.moveTo(x1,y); ctx.lineTo(x2,y)
+            ctx.strokeStyle=`rgba(99,102,241,${0.3+Math.sin(angle)*0.3})`
+            ctx.lineWidth=1; ctx.stroke()
+          }
+          ctx.beginPath(); ctx.arc(x1,y,2,0,Math.PI*2)
+          ctx.fillStyle=`hsl(${260+y},80%,65%)`; ctx.fill()
+          ctx.beginPath(); ctx.arc(x2,y,2,0,Math.PI*2)
+          ctx.fillStyle=`hsl(${200+y},80%,65%)`; ctx.fill()
+        }
+      },
+      fireworks: () => {
+        ctx.fillStyle='rgba(4,4,14,0.18)'; ctx.fillRect(0,0,W,H)
+        const burst=Math.floor(t/3)%3
+        const bx=[cx-30,cx+20,cx-10][burst], by=[cy-10,cy+15,cy-20][burst]
+        const phase=(t*3)%3
+        if(phase<1) {
+          for(let i=0;i<16;i++){
+            const a=(i/16)*Math.PI*2, r=phase*50
+            ctx.beginPath(); ctx.arc(bx+Math.cos(a)*r, by+Math.sin(a)*r, 2,0,Math.PI*2)
+            ctx.fillStyle=`hsla(${burst*60+i*15},90%,70%,${1-phase})`; ctx.fill()
+          }
+        }
+      },
+    }
+
+    function tick(){ t+=0.035; fns[type]?.(); id=requestAnimationFrame(tick) }
+    tick()
+    return ()=> cancelAnimationFrame(id)
+  },[type])
+  return <canvas ref={cvRef} className="mini-anim-canvas"/>
+}
+
+const MINI_ANIMS = [
+  { type:'neon',      label:'Neon Pulse',  color:'#7c3aed' },
+  { type:'orbit',     label:'Orbit Ring',  color:'#06b6d4' },
+  { type:'wave',      label:'Wave Flow',   color:'#3b82f6' },
+  { type:'matrix',    label:'Matrix Rain', color:'#22c55e' },
+  { type:'dna',       label:'DNA Helix',   color:'#8b5cf6' },
+  { type:'fireworks', label:'Fireworks',   color:'#f59e0b' },
+]
+
+function AnimShowcase() {
+  return (
+    <section className="showcase-section container">
+      <Reveal>
+        <h2 className="section-title">Live Animations <span className="gradient-text">Preview</span></h2>
+        <p className="section-sub">Rendered live — right here on the home page</p>
+      </Reveal>
+      <div className="showcase-grid">
+        {MINI_ANIMS.map((a,i) => (
+          <Reveal key={a.type} delay={i*0.07}>
+            <Link to="/gallery" className="showcase-card">
+              <MiniAnim type={a.type}/>
+              <div className="showcase-label" style={{'--col':a.color}}>
+                {a.label}
+              </div>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+// ─── 10. TEXT ANIMATIONS SHOWCASE ────────────────────────────────────────────
+function TextAnimSection() {
+  const [scramble1, setScramble1] = useState(false)
+  const [scramble2, setScramble2] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(()=>{
+    const io = new IntersectionObserver(([e])=>{
+      if(e.isIntersecting){ setScramble1(true); setTimeout(()=>setScramble2(true),400) }
+    },{threshold:0.3})
+    if(ref.current) io.observe(ref.current)
+    return ()=>io.disconnect()
+  },[])
+
+  return (
+    <section ref={ref} className="text-anim-section">
+      <div className="container">
+        <Reveal>
+          <h2 className="section-title">Text <span className="gradient-text">Animations</span></h2>
+          <p className="section-sub">Typography that moves, breathes, and tells stories</p>
+        </Reveal>
+
+        <div className="text-anim-grid">
+          {/* Wave text */}
+          <div className="text-anim-card">
+            <div className="text-anim-label">Wave Text</div>
+            <div className="text-anim-demo">
+              <WaveText text="MotionZync" className="demo-wave"/>
+            </div>
+          </div>
+
+          {/* Gradient slide */}
+          <div className="text-anim-card">
+            <div className="text-anim-label">Gradient Slide</div>
+            <div className="text-anim-demo">
+              <span className="demo-gradient-slide">ANIMATE</span>
+            </div>
+          </div>
+
+          {/* Scramble */}
+          <div className="text-anim-card">
+            <div className="text-anim-label">Scramble</div>
+            <div className="text-anim-demo">
+              <ScrambleText text="MOTION" trigger={scramble1}/>
+            </div>
+          </div>
+
+          {/* Typewriter */}
+          <div className="text-anim-card">
+            <div className="text-anim-label">Typewriter</div>
+            <div className="text-anim-demo">
+              <Typewriter texts={['CSS Animations','JS Effects','Live Preview','Copy Ready']} speed={70}/>
+            </div>
+          </div>
+
+          {/* Neon flicker */}
+          <div className="text-anim-card">
+            <div className="text-anim-label">Neon Flicker</div>
+            <div className="text-anim-demo">
+              <span className="demo-neon-flicker">NEON</span>
+            </div>
+          </div>
+
+          {/* Glitch */}
+          <div className="text-anim-card">
+            <div className="text-anim-label">Glitch</div>
+            <div className="text-anim-demo">
+              <GlitchText text="GLITCH"/>
+            </div>
+          </div>
+
+          {/* Blur in */}
+          <div className="text-anim-card">
+            <div className="text-anim-label">Blur Reveal</div>
+            <div className="text-anim-demo">
+              <span className="demo-blur-in">REVEAL</span>
+            </div>
+          </div>
+
+          {/* Stamp */}
+          <div className="text-anim-card">
+            <div className="text-anim-label">Stamp In</div>
+            <div className="text-anim-demo">
+              <span className="demo-stamp">STAMP!</span>
+            </div>
           </div>
         </div>
       </div>
@@ -322,306 +599,312 @@ function ScrollySection() {
   )
 }
 
-// ─── 5. STATE-MACHINE SCROLL MORPHING (Stats) ─────────────────────────────────
-function MorphStat({ value, label, index }) {
-  const ref   = useRef(null)
-  const svgRef= useRef(null)
-  const [visible, setVisible] = useState(false)
-  const [count,   setCount]   = useState(0)
+// ─── 11. VIDEO SCRUB (FIXED) ──────────────────────────────────────────────────
+function VideoScrubSection() {
+  const sectionRef = useRef(null)
+  const cvRef      = useRef(null)
+  const progRef    = useRef(0)
+  const curRef     = useRef(0)
+  const animRef    = useRef(null)
 
-  useEffect(() => {
-    const el = ref.current; if (!el) return
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setVisible(true); io.disconnect() }
-    }, { threshold: 0.4 })
-    io.observe(el); return () => io.disconnect()
-  }, [])
+  useEffect(()=>{
+    const section = sectionRef.current
+    const cv      = cvRef.current
+    if(!section||!cv) return
+    const ctx = cv.getContext('2d')
 
-  // Count-up
-  useEffect(() => {
-    if (!visible) return
-    const num = parseInt(value) || 0
-    if (!num) return
-    let start = 0, dur = 1400, startTime = null
-    function step(ts) {
-      if (!startTime) startTime = ts
-      const prog = Math.min((ts-startTime)/dur, 1)
-      const eased = 1 - Math.pow(1-prog, 3)
-      setCount(Math.floor(eased*num))
-      if (prog < 1) requestAnimationFrame(step)
+    function resize(){
+      cv.width  = cv.offsetWidth  || window.innerWidth
+      cv.height = cv.offsetHeight || window.innerHeight
     }
-    setTimeout(() => requestAnimationFrame(step), index*200)
-  }, [visible])
+    resize()
+    const ro = new ResizeObserver(resize); ro.observe(cv)
 
-  // SVG Morph
-  const paths = [
-    "M50,10 A40,40 0 1,1 49.9,10",                          // circle
-    "M10,10 L90,10 L90,90 L10,90 Z",                         // square
-    "M50,5 L95,85 L5,85 Z",                                  // triangle
-    "M50,5 L61,35 L95,35 L68,57 L79,91 L50,70 L21,91 L32,57 L5,35 L39,35 Z" // star
-  ]
-  const morphPath = paths[index % paths.length]
-  const morphColor = [`#7c3aed`,`#06b6d4`,`#10b981`,`#f59e0b`][index%4]
+    function drawFrame(p){
+      const W=cv.width, H=cv.height, cx=W/2, cy=H/2
+      ctx.clearRect(0,0,W,H)
+      const h1=200+p*100, h2=260+p*80
+      const grd=ctx.createLinearGradient(0,0,W,H)
+      grd.addColorStop(0,`hsl(${h1},70%,6%)`)
+      grd.addColorStop(1,`hsl(${h2},55%,10%)`)
+      ctx.fillStyle=grd; ctx.fillRect(0,0,W,H)
 
-  const numDisplay = parseInt(value) ? `${count}${value.replace(/[0-9]/g,'')}` : value
+      // Grid
+      ctx.strokeStyle='rgba(150,100,255,0.05)'; ctx.lineWidth=1
+      for(let x=0;x<W;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+      for(let y=0;y<H;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+
+      // Rings
+      for(let ring=0;ring<6;ring++){
+        const r=50+ring*40, angle=p*Math.PI*2*(ring%2===0?1:-0.7)+ring
+        const op=0.35-ring*0.04, hue=h1+ring*18
+        ctx.strokeStyle=`hsla(${hue},75%,60%,${op})`
+        ctx.lineWidth=2-ring*0.15
+        ctx.beginPath()
+        ctx.ellipse(cx,cy,r,r*(0.3+ring*0.05),angle,0,Math.PI*2)
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.arc(cx+Math.cos(angle)*r, cy+Math.sin(angle)*r*(0.3+ring*0.05), 4-ring*0.3,0,Math.PI*2)
+        ctx.fillStyle=`hsl(${hue},85%,70%)`
+        ctx.shadowBlur=8; ctx.shadowColor=`hsl(${hue},85%,70%)`
+        ctx.fill(); ctx.shadowBlur=0
+      }
+
+      // Center shape
+      const sides=Math.floor(3+p*6)
+      ctx.beginPath()
+      for(let i=0;i<=sides;i++){
+        const a=(i/sides)*Math.PI*2-Math.PI/2
+        const r=28+Math.sin(p*Math.PI*3+i)*6
+        i===0?ctx.moveTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r):ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r)
+      }
+      ctx.closePath()
+      ctx.fillStyle=`hsla(${h1},80%,60%,0.25)`
+      ctx.strokeStyle=`hsl(${h1},90%,72%)`
+      ctx.lineWidth=2; ctx.fill(); ctx.stroke()
+
+      // Progress bar
+      const bw=Math.min(400,W*0.6), bh=3, bx=(W-bw)/2, by=H-32
+      ctx.fillStyle='rgba(255,255,255,0.08)'
+      ctx.beginPath(); ctx.roundRect(bx,by,bw,bh,2); ctx.fill()
+      ctx.fillStyle=`hsl(${h1},80%,65%)`
+      ctx.beginPath(); ctx.roundRect(bx,by,bw*p,bh,2); ctx.fill()
+      ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='11px sans-serif'
+      ctx.textAlign='center'
+      ctx.fillText(`↓ scroll  ${Math.floor(p*100)}%`,W/2,H-10)
+    }
+
+    function onScroll(){
+      const rect=section.getBoundingClientRect()
+      const total=section.offsetHeight-window.innerHeight
+      progRef.current=clamp(-rect.top/Math.max(total,1),0,1)
+    }
+
+    let raf
+    function animate(){
+      curRef.current=lerp(curRef.current,progRef.current,0.07)
+      drawFrame(curRef.current)
+      raf=requestAnimationFrame(animate)
+    }
+
+    window.addEventListener('scroll',onScroll,{passive:true})
+    animate()
+    return ()=>{ cancelAnimationFrame(raf); window.removeEventListener('scroll',onScroll); ro.disconnect() }
+  },[])
 
   return (
-    <div ref={ref} className={`morph-stat ${visible?'visible':''}`} style={{'--delay':`${index*0.15}s`}}>
+    // height: 350vh makes enough room to scrub fully on desktop
+    <section ref={sectionRef} className="scrub-section">
+      <div className="scrub-sticky">
+        <canvas ref={cvRef} className="scrub-canvas"/>
+        <div className="scrub-overlay">
+          <Reveal>
+            <h2 className="scrub-title">Animation is <span className="gradient-text">Motion</span></h2>
+            <p className="scrub-sub">Every frame tells a story — scroll to feel it</p>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── 12. MORPHING STATS ───────────────────────────────────────────────────────
+function MorphStat({ value, label, idx }) {
+  const ref    = useRef(null)
+  const [vis,  setVis]   = useState(false)
+  const [num,  setNum]   = useState(0)
+
+  useEffect(()=>{
+    const io=new IntersectionObserver(([e])=>{
+      if(e.isIntersecting){setVis(true);io.disconnect()}
+    },{threshold:0.4})
+    if(ref.current) io.observe(ref.current)
+    return ()=>io.disconnect()
+  },[])
+
+  useEffect(()=>{
+    if(!vis) return
+    const n=parseInt(value)||0; if(!n) return
+    let start=null
+    const step=ts=>{
+      if(!start) start=ts
+      const p=clamp((ts-start)/1400,0,1)
+      setNum(Math.floor((1-Math.pow(1-p,3))*n))
+      if(p<1) setTimeout(()=>requestAnimationFrame(step),idx*180)
+    }
+    setTimeout(()=>requestAnimationFrame(step),idx*180)
+  },[vis])
+
+  const svgPaths=[
+    "M50,8 A42,42 0 1,1 49.9,8",
+    "M8,8 L92,8 L92,92 L8,92 Z",
+    "M50,4 L96,88 L4,88 Z",
+    "M50,4 L62,36 L96,36 L69,58 L80,92 L50,70 L20,92 L31,58 L4,36 L38,36 Z"
+  ]
+  const colors=['#7c3aed','#06b6d4','#10b981','#f59e0b']
+  const display=parseInt(value)?`${num}${value.replace(/[0-9]/g,'')}`:value
+
+  return (
+    <div ref={ref} className={`morph-stat ${vis?'vis':''}`}
+         style={{'--sd':`${idx*0.15}s`,'--col':colors[idx%4]}}>
       <div className="morph-svg-wrap">
         <svg viewBox="0 0 100 100" className="morph-svg">
-          <path
-            d={morphPath}
-            fill="none"
-            stroke={morphColor}
-            strokeWidth="3"
-            className={`morph-path ${visible?'morphed':''}`}
-            style={{'--color': morphColor}}
-          />
-          <circle cx="50" cy="50" r="42" fill={morphColor} opacity="0.07"/>
+          <path d={svgPaths[idx%4]} fill="none" stroke={colors[idx%4]} strokeWidth="3"
+                className={`morph-path ${vis?'drawn':''}`}/>
+          <circle cx="50" cy="50" r="44" fill={colors[idx%4]} opacity="0.06"/>
         </svg>
-        <div className="morph-value">{numDisplay}</div>
+        <div className="morph-num">{display}</div>
       </div>
-      <div className="morph-label">{label}</div>
+      <div className="morph-lbl">{label}</div>
     </div>
   )
 }
 
-// ─── 6. VIDEO SCRUBBING (Simulated with Canvas) ────────────────────────────────
-function VideoScrubSection() {
-  const ref    = useRef(null)
-  const canvas = useRef(null)
-  const prog   = useRef(0)
-  const animId = useRef(null)
-
-  useEffect(() => {
-    const section = ref.current
-    const cv      = canvas.current
-    if (!section || !cv) return
-    const ctx = cv.getContext('2d')
-    const W = cv.width  = cv.offsetWidth  || 600
-    const H = cv.height = cv.offsetHeight || 300
-
-    function drawFrame(p) {
-      // p = 0..1 — simulate scrubbing through an "animation sequence"
-      ctx.clearRect(0,0,W,H)
-
-      // Background gradient shifts
-      const hue1 = 220 + p*100
-      const hue2 = 260 + p*80
-      const grd = ctx.createLinearGradient(0,0,W,H)
-      grd.addColorStop(0, `hsl(${hue1},70%,8%)`)
-      grd.addColorStop(1, `hsl(${hue2},60%,12%)`)
-      ctx.fillStyle = grd
-      ctx.fillRect(0,0,W,H)
-
-      // Grid lines
-      ctx.strokeStyle='rgba(150,100,255,0.06)'
-      ctx.lineWidth=1
-      for(let i=0;i<W;i+=40){ ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,H);ctx.stroke() }
-      for(let j=0;j<H;j+=40){ ctx.beginPath();ctx.moveTo(0,j);ctx.lineTo(W,j);ctx.stroke() }
-
-      // Orbiting rings
-      const cx=W/2, cy=H/2
-      for (let ring=0;ring<5;ring++) {
-        const r  = 40 + ring*30
-        const rot= p*Math.PI*2*(ring%2===0?1:-1) + ring*0.5
-        const col= `hsla(${hue1+ring*20},80%,${60+ring*5}%,${0.4-ring*0.06})`
-        ctx.strokeStyle=col
-        ctx.lineWidth=2-ring*0.2
-        ctx.beginPath()
-        ctx.ellipse(cx, cy, r, r*0.35, rot, 0, Math.PI*2)
-        ctx.stroke()
-        // dot on ring
-        ctx.beginPath()
-        ctx.arc(cx+Math.cos(rot)*r, cy+Math.sin(rot)*r*0.35, 4-ring*0.3, 0, Math.PI*2)
-        ctx.fillStyle=col; ctx.fill()
-      }
-
-      // Center morphing shape
-      const sides = Math.floor(3 + p*5)
-      ctx.beginPath()
-      for(let i=0;i<=sides;i++){
-        const a = (i/sides)*Math.PI*2 - Math.PI/2
-        const r2 = 25 + Math.sin(p*Math.PI*4+i)*8
-        const x  = cx + Math.cos(a)*r2
-        const y  = cy + Math.sin(a)*r2
-        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y)
-      }
-      ctx.closePath()
-      ctx.fillStyle=`hsla(${hue1},80%,65%,0.3)`
-      ctx.strokeStyle=`hsl(${hue1},90%,75%)`
-      ctx.lineWidth=2; ctx.fill(); ctx.stroke()
-
-      // Progress bar
-      const bw=W*0.6, bh=4, bx=(W-bw)/2, by=H-28
-      ctx.fillStyle='rgba(255,255,255,0.1)'
-      ctx.beginPath(); ctx.roundRect(bx,by,bw,bh,bh/2); ctx.fill()
-      ctx.fillStyle=`hsl(${hue1},80%,65%)`
-      ctx.beginPath(); ctx.roundRect(bx,by,bw*p,bh,bh/2); ctx.fill()
-
-      // Label
-      ctx.fillStyle='rgba(255,255,255,0.6)'
-      ctx.font=`11px sans-serif`
-      ctx.textAlign='center'
-      ctx.fillText(`scroll to scrub — ${Math.floor(p*100)}%`, W/2, H-8)
-    }
-
-    function onScroll() {
-      const rect = section.getBoundingClientRect()
-      const vh = window.innerHeight
-      const total = section.offsetHeight - vh
-      const scrolled = -rect.top
-      const p = Math.max(0, Math.min(1, scrolled / (total > 0 ? total : 1)))
-      prog.current = p
-    }
-
-    let targetP = 0, currentP = 0
-    function animate() {
-      targetP = prog.current
-      currentP += (targetP - currentP) * 0.08
-      drawFrame(currentP)
-      animId.current = requestAnimationFrame(animate)
-    }
-
-    window.addEventListener('scroll', onScroll, { passive:true })
-    animate()
-
-    return () => {
-      cancelAnimationFrame(animId.current)
-      window.removeEventListener('scroll', onScroll)
-    }
-  }, [])
-
+// ─── MARQUEE ──────────────────────────────────────────────────────────────────
+const TAGS=['CSS Animations','JavaScript','Canvas API','Particle FX','Scroll FX','Kinetic Text','SVG Morph','WebGL','GSAP-style','React','Vue','Vanilla JS','Framer Motion','Keyframes']
+function Marquee() {
+  const doubled = [...TAGS,...TAGS]
   return (
-    <section ref={ref} className="video-scrub-section">
-      <div className="scrub-sticky">
-        <canvas ref={canvas} className="scrub-canvas"/>
-        <div className="scrub-overlay">
-          <RevealText>
-            <h2 className="scrub-title">Animation is <span className="gradient-text">Motion</span></h2>
-            <p className="scrub-sub">Every frame tells a story. Scroll to feel it.</p>
-          </RevealText>
-        </div>
+    <div className="marquee-wrap" aria-hidden>
+      <div className="marquee-track">
+        {doubled.map((t,i)=>(
+          <span key={i} className="marquee-tag">#{t}</span>
+        ))}
       </div>
-    </section>
+    </div>
   )
 }
 
-// ─── MAIN HOME ─────────────────────────────────────────────────────────────────
+// ─── MAIN HOME ────────────────────────────────────────────────────────────────
 export default function Home() {
   return (
     <div className="home-page">
+      <Spotlight/>
 
-      {/* ── HERO ── */}
+      {/* HERO */}
       <section className="hero-section">
-        <ParticleMorphCanvas/>
+        <ParticleMorphHero/>
+        <FloatingOrbs/>
         <div className="hero-content container">
-          <RevealText delay={0}>
+          <Reveal delay={0.05}>
             <span className="hero-badge">✦ Free Live Animation Platform</span>
-          </RevealText>
-          <RevealText delay={0.1}>
+          </Reveal>
+          <Reveal delay={0.15}>
             <h1 className="hero-title">
-              <KineticTitle text="Create & Explore" className="gradient-text"/>
-              <br/>
-              <KineticTitle text="Beautiful Animations"/>
+              <GlitchText text="MotionZync"/><br/>
+              <span className="hero-sub-line">
+                <Typewriter texts={['CSS Animations','JS Effects','Canvas Art','Scroll Magic','Particle FX']} speed={65}/>
+              </span>
             </h1>
-          </RevealText>
-          <RevealText delay={0.2}>
+          </Reveal>
+          <Reveal delay={0.25}>
             <p className="hero-desc">
-              Free live CSS & JavaScript animation playground. Browse 100+ background animations,
-              button effects, canvas animations and more.
+              Free live CSS & JavaScript animation playground. Browse 100+ animations,
+              customize live, copy code — and now submit your own.
             </p>
-          </RevealText>
-          <RevealText delay={0.3}>
+          </Reveal>
+          <Reveal delay={0.35}>
             <div className="hero-actions">
-              <Link to="/playground" className="btn-primary hero-cta glow-btn">⚡ Try Live Playground</Link>
-              <Link to="/gallery"    className="btn-secondary hero-cta">Browse Gallery →</Link>
+              <Link to="/playground" className="btn-primary hero-cta glow-btn magnetic">⚡ Try Playground</Link>
+              <Link to="/gallery"    className="btn-secondary hero-cta magnetic">Browse Gallery →</Link>
+              <Link to="/submit"     className="hero-submit-btn magnetic">+ Submit Animation</Link>
             </div>
-          </RevealText>
+          </Reveal>
         </div>
         <div className="hero-scroll-hint">
-          <span>Scroll to explore</span>
-          <div className="scroll-arrow"/>
+          <span>scroll to explore</span>
+          <div className="scroll-chevrons"><div/><div/><div/></div>
         </div>
       </section>
 
-      {/* ── SCROLLYTELLING ── */}
+      {/* MARQUEE */}
+      <Marquee/>
+
+      {/* SCROLLYTELLING */}
       <ScrollySection/>
 
       <div className="container ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_HOME}/></div>
 
-      {/* ── STATE-MACHINE MORPHING STATS ── */}
-      <section className="stats-section container">
-        <RevealText>
-          <h2 className="section-title">By the <span className="gradient-text">Numbers</span></h2>
-        </RevealText>
-        <div className="morph-stats-grid">
-          <MorphStat value="100+" label="Animations"       index={0}/>
-          <MorphStat value="Free" label="Forever"          index={1}/>
-          <MorphStat value="4"    label="Customizable"     index={2}/>
-          <MorphStat value="1"    label="Click to Copy"    index={3}/>
-        </div>
-      </section>
+      {/* LIVE ANIMATION SHOWCASE */}
+      <AnimShowcase/>
 
-      {/* ── VIDEO SCRUB SECTION ── */}
-      <VideoScrubSection/>
+      {/* TEXT ANIMATIONS */}
+      <TextAnimSection/>
 
       <div className="container ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_HOME}/></div>
 
-      {/* ── FEATURES ── */}
+      {/* VIDEO SCRUB */}
+      <VideoScrubSection/>
+
+      {/* STATS */}
+      <section className="stats-section container">
+        <Reveal>
+          <h2 className="section-title">By the <span className="gradient-text">Numbers</span></h2>
+        </Reveal>
+        <div className="morph-stats-row">
+          {[
+            {v:'100+',l:'Animations',    i:0},
+            {v:'Free', l:'Forever',      i:1},
+            {v:'4',    l:'Tab Customize', i:2},
+            {v:'1',    l:'Click Copy',    i:3},
+          ].map(s=><MorphStat key={s.l} value={s.v} label={s.l} idx={s.i}/>)}
+        </div>
+      </section>
+
+      <div className="container ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_HOME}/></div>
+
+      {/* FEATURES */}
       <section className="features-section container">
-        <RevealText>
+        <Reveal>
           <h2 className="section-title">Why Choose <span className="gradient-text">MotionZync?</span></h2>
-        </RevealText>
+        </Reveal>
         <div className="features-grid">
-          {features.map((f, i) => (
-            <RevealText key={f.title} delay={i*0.06}>
+          {features.map((f,i)=>(
+            <Reveal key={f.title} delay={i*0.06}>
               <div className="feature-card">
                 <span className="feature-icon">{f.icon}</span>
-                <h3>{f.title}</h3>
-                <p>{f.desc}</p>
-                {f.link && <Link to={f.link} className="feature-link">{f.linkText} →</Link>}
+                <h3>{f.title}</h3><p>{f.desc}</p>
+                {f.link&&<Link to={f.link} className="feature-link">{f.linkText} →</Link>}
               </div>
-            </RevealText>
+            </Reveal>
           ))}
         </div>
       </section>
 
       <div className="container ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_HOME}/></div>
 
-      {/* ── OTHER SITES ── */}
+      {/* OTHER SITES */}
       <section className="other-sites-section container">
-        <RevealText>
+        <Reveal>
           <h2 className="section-title">Our Other <span className="gradient-text">Websites</span></h2>
-        </RevealText>
+        </Reveal>
         <div className="other-sites-grid">
           {[
-            { href:'https://vaidya-guru.vercel.app',           icon:'🏥', title:'Vaidya Guru',        desc:'Health & Ayurveda guidance' },
-            { href:'https://wealth-kavach.vercel.app',         icon:'💰', title:'Wealth Kavach',       desc:'Finance & investment insights' },
-            { href:'https://shree-hari-mahendi-art.vercel.app',icon:'🌸', title:'Shree Hari Mehendi',  desc:'Traditional mehendi designs' },
-          ].map((s,i) => (
-            <RevealText key={s.href} delay={i*0.1}>
+            {href:'https://vaidya-guru.vercel.app',icon:'🏥',title:'Vaidya Guru',desc:'Health & Ayurveda guidance platform'},
+            {href:'https://wealth-kavach.vercel.app',icon:'💰',title:'Wealth Kavach',desc:'Personal finance & investment insights'},
+            {href:'https://shree-hari-mahendi-art.vercel.app',icon:'🌸',title:'Shree Hari Mehendi',desc:'Beautiful traditional mehendi designs'},
+          ].map((s,i)=>(
+            <Reveal key={s.href} delay={i*0.1}>
               <a href={s.href} target="_blank" rel="noopener noreferrer" className="other-site-card">
                 <span>{s.icon}</span><h3>{s.title}</h3><p>{s.desc}</p>
               </a>
-            </RevealText>
+            </Reveal>
           ))}
         </div>
       </section>
 
       <div className="container ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_HOME}/></div>
-
     </div>
   )
 }
 
-const features = [
-  { icon:'⚡', title:'Live Playground',  desc:'Type CSS or JavaScript and see animation run instantly. No setup required!',            link:'/playground', linkText:'Open Playground' },
-  { icon:'🎨', title:'100+ Animations',  desc:'Browse backgrounds, button effects, particle systems, canvas animations and more.',     link:'/gallery',    linkText:'View Gallery' },
-  { icon:'📚', title:'Animation Course', desc:'Learn CSS and JavaScript animation from scratch — complete free course with live demos.',link:'/course',     linkText:'Start Learning' },
-  { icon:'🖼️', title:'Live Wallpaper',   desc:'Download any animation as a live HTML wallpaper. Watch a short ad to support us.',      link:'/wallpaper',  linkText:'Get Wallpapers' },
-  { icon:'🔍', title:'Smart Search',     desc:'Search by title, #tag, or filter by category. Find exactly what you need fast.',        link:null },
-  { icon:'📋', title:'Copy-Ready Code',  desc:'One-click copy CSS and JavaScript code. Preview BG color also shown.',                  link:null },
-  { icon:'🔒', title:'100% Secure',      desc:'All code runs in sandboxed iframes — completely isolated. Your device is safe.',        link:null },
-  { icon:'📱', title:'Mobile Friendly',  desc:'Works perfectly on phones and tablets. Code, preview, and download anywhere.',          link:null },
+const features=[
+  {icon:'⚡',title:'Live Playground',  desc:'Type CSS or JavaScript and see animation run instantly. No setup required!',           link:'/playground',linkText:'Open Playground'},
+  {icon:'🎨',title:'100+ Animations',  desc:'Backgrounds, buttons, particles, canvas, text effects — all free.',                    link:'/gallery',   linkText:'View Gallery'},
+  {icon:'📚',title:'Animation Course', desc:'Learn CSS & JS animation from scratch with live demos.',                               link:'/course',    linkText:'Start Learning'},
+  {icon:'🖼️',title:'Live Wallpaper',   desc:'Download any animation as a live HTML wallpaper.',                                    link:'/wallpaper', linkText:'Get Wallpapers'},
+  {icon:'🔍',title:'Smart Search',     desc:'Search by title, tag, or category. Find exactly what you need fast.',                  link:null},
+  {icon:'📋',title:'Copy-Ready Code',  desc:'One-click copy CSS and JavaScript code. Ready to paste anywhere.',                     link:null},
+  {icon:'🔒',title:'100% Secure',      desc:'All code runs in sandboxed iframes. Your device is always safe.',                      link:null},
+  {icon:'📤',title:'Submit Animation', desc:'Built something cool? Submit for review and get featured in the gallery.',             link:'/submit', linkText:'Submit Now'},
 ]
