@@ -741,8 +741,6 @@ function VideoScrubSection() {
     </section>
   )
 }
-  )
-}
 
 // ─── 12. MORPHING STATS ───────────────────────────────────────────────────────
 function MorphStat({ value, label, idx }) {
