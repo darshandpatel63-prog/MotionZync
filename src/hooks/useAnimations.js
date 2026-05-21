@@ -4,8 +4,6 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase'
 
-// ─── Existing functions (unchanged) ─────────────────────────────────────────
-
 export function generateTags(title='', description='') {
   const text = (title+' '+description).toLowerCase()
   const words = text.match(/[a-zA-Z0-9]+/g)||[]
@@ -75,19 +73,8 @@ export async function deleteCategory(docId) {
   await deleteDoc(doc(db,'categories',docId))
 }
 
+// ─── Submissions ──────────────────────────────────────────────────────────────
 
-// ─── NEW: User Submissions ────────────────────────────────────────────────────
-
-/**
- * User thi animation submit karavo
- * Firestore 'submissions' collection ma saves with status: 'pending'
- * Firestore Rules ma add karjo:
- *   match /submissions/{doc} {
- *     allow read: if request.auth != null && request.auth.token.email == "YOUR_GMAIL";
- *     allow create: if true;
- *     allow update, delete: if request.auth != null && request.auth.token.email == "YOUR_GMAIL";
- *   }
- */
 export async function submitAnimation(data) {
   const tags = generateTags(data.title, data.description)
   const submission = {
@@ -100,39 +87,37 @@ export async function submitAnimation(data) {
     tags,
     submitterName:  data.submitterName || '',
     submitterEmail: data.submitterEmail || '',
-    status:         'pending',    // pending | approved | rejected
+    status:         'pending',
     submittedAt:    new Date(),
-    adminNote:      '',
   }
   const ref = await addDoc(collection(db, 'submissions'), submission)
   return ref.id
 }
 
-/**
- * Admin: all submissions fetch (status filter optional)
- * status: 'all' | 'pending' | 'approved' | 'rejected'
- */
+// FIX: where() + orderBy() saath Composite Index joiye Firestore ma.
+// Tene avoid karva — badha fetch karo, JS ma filter + sort karo.
 export async function getSubmissions(status = 'all') {
-  let q
-  if (status === 'all') {
-    q = query(collection(db, 'submissions'), orderBy('submittedAt', 'desc'))
-  } else {
-    q = query(
-      collection(db, 'submissions'),
-      where('status', '==', status),
-      orderBy('submittedAt', 'desc')
-    )
-  }
-  const snap = await getDocs(q)
-  return snap.docs.map(d => ({ ...d.data(), docId: d.id }))
+  // Sirf simple collection fetch — no compound query = no index needed
+  const snap = await getDocs(collection(db, 'submissions'))
+  const all = snap.docs.map(d => ({ ...d.data(), docId: d.id }))
+
+  // JS ma filter
+  const filtered = status === 'all'
+    ? all
+    : all.filter(s => s.status === status)
+
+  // JS ma sort — latest first
+  filtered.sort((a, b) => {
+    const ta = a.submittedAt?.seconds ? a.submittedAt.seconds : (new Date(a.submittedAt).getTime()/1000)
+    const tb = b.submittedAt?.seconds ? b.submittedAt.seconds : (new Date(b.submittedAt).getTime()/1000)
+    return tb - ta
+  })
+
+  return filtered
 }
 
-/**
- * Admin: submission approve karo → animations collection ma copy thase
- * Returns the new animation docId
- */
-export async function approveSubmission(submission, adminNote = '') {
-  // 1. Animations collection ma save karo
+// Approve: animations ma save karo — submission delete Admin.jsx ma karshe
+export async function approveSubmission(submission) {
   const animId = await saveAnimation({
     title:       submission.title,
     description: submission.description,
@@ -141,30 +126,11 @@ export async function approveSubmission(submission, adminNote = '') {
     cssCode:     submission.cssCode,
     jsCode:      submission.jsCode,
   })
-  // 2. Submission status update karo
-  await updateDoc(doc(db, 'submissions', submission.docId), {
-    status:    'approved',
-    adminNote: adminNote || '',
-    reviewedAt: new Date(),
-    animationId: animId,
-  })
   return animId
 }
 
-/**
- * Admin: submission reject karo
- */
-export async function rejectSubmission(docId, adminNote = '') {
-  await updateDoc(doc(db, 'submissions', docId), {
-    status:    'rejected',
-    adminNote: adminNote || '',
-    reviewedAt: new Date(),
-  })
-}
-
-/**
- * Admin: submission delete karo (permanently)
- */
+// Delete submission permanently
 export async function deleteSubmission(docId) {
   await deleteDoc(doc(db, 'submissions', docId))
-                 }
+      }
+      
