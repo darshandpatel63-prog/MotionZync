@@ -203,7 +203,7 @@
 ───────────────────────────────────────────────────────── */
 /* Height = 100vh sticky + 4 steps * 100vh each for scroll room */
 .scrolly-section {
-  height: 600vh;
+  height: 500vh;
   position: relative;
 }
 .scrolly-inner {
@@ -446,7 +446,7 @@
 ───────────────────────────────────────────────────────── */
 .scrub-section {
   /* 400vh = canvas screen par locked raheshe jya sudhi scroll complete na thay */
-  height: 400vh;
+  height: 300vh;
   position: relative;
   z-index: 2;
 }
@@ -547,4 +547,19 @@
 /* ─── Magnetic button feel ───────────────────────────────── */
 .magnetic { transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
 .magnetic:hover { transform:translateY(-2px) scale(1.03); }
+
+/* ─── Mobile fixes ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .scrolly-section { height: auto; }
+  .scrolly-inner {
+    position: relative; top: auto;
+    height: auto; min-height: auto;
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem; gap: 1.5rem;
+  }
+  .scrolly-sticky-col { position: relative; }
+  .scrolly-visual-card { aspect-ratio: 4/3; }
+  .story-step { opacity: 1 !important; transform: none !important; }
+  .scrub-section { height: 200vh; }
+  }
   
