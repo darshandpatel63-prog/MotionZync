@@ -164,7 +164,7 @@ function ParticleMorphHero() {
         p.px=lerp(p.px,tx,0.045); p.py=lerp(p.py,ty,0.045)
         ctx.beginPath()
         ctx.arc(p.px,p.py,p.size,0,Math.PI*2)
-        ctx.fillStyle=`hsla(${p.hue+t*20},80%,65%,0.65)`
+        ctx.fillStyle=`hsla(${(p.hue+t*20)%360},80%,65%,0.65)`
         ctx.fill()
       }
       animId=requestAnimationFrame(draw)
@@ -614,8 +614,8 @@ function VideoScrubSection() {
     const ctx = cv.getContext('2d')
 
     function resize() {
-      cv.width  = window.innerWidth
-      cv.height = window.innerHeight
+      cv.width  = cv.parentElement ? cv.parentElement.offsetWidth  : window.innerWidth
+      cv.height = cv.parentElement ? cv.parentElement.offsetHeight : window.innerHeight
     }
     resize()
     window.addEventListener('resize', resize, { passive: true })
