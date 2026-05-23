@@ -25,7 +25,6 @@ function ParticleBg() {
 
     function draw() {
       ctx.clearRect(0, 0, W, H)
-      // Connect nearby dots
       for (let i = 0; i < pts.length; i++) {
         for (let j = i + 1; j < pts.length; j++) {
           const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y
@@ -75,7 +74,6 @@ function GalleryHeader({ count }) {
           ? <><span className="gallery-count-pill">{count} animations</span> — ready to preview, customize & copy</>
           : 'Ready-made animations — "Try it" dabso playground ma open thase'}
       </p>
-      {/* Animated underline */}
       <div className="header-line"/>
     </div>
   )
@@ -114,7 +112,7 @@ function Counter({ to }) {
   return <>{val}</>
 }
 
-// ─── Category Filter with animation ─────────────────────────────────────────
+// ─── Category Filter ─────────────────────────────────────────────────────────
 function CategoryFilter({ categories, activeCat, onChange }) {
   return (
     <div className="category-filter">
@@ -133,16 +131,74 @@ function CategoryFilter({ categories, activeCat, onChange }) {
   )
 }
 
-// ─── Animated Card Wrapper ───────────────────────────────────────────────────
+// ─── Sort Dropdown ────────────────────────────────────────────────────────────
+const SORT_OPTIONS = [
+  { value: 'newest',  label: '🆕 Newest First',   desc: 'Latest uploaded' },
+  { value: 'views',   label: '🔥 Most Viewed',     desc: 'Popular animations' },
+  { value: 'az',      label: '🔤 A → Z',           desc: 'Alphabetical order' },
+  { value: 'oldest',  label: '📅 Oldest First',    desc: 'First uploaded' },
+]
+
+function SortDropdown({ sortBy, onChange }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  const current = SORT_OPTIONS.find(o => o.value === sortBy) || SORT_OPTIONS[0]
+
+  // Close on outside click
+  useEffect(() => {
+    function onDown(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [])
+
+  return (
+    <div className="sort-wrap" ref={ref}>
+      <button
+        className={`sort-trigger ${open ? 'open' : ''}`}
+        onClick={() => setOpen(p => !p)}
+        title="Sort animations"
+      >
+        <span className="sort-icon">⇅</span>
+        <span className="sort-label">{current.label}</span>
+        <span className={`sort-caret ${open ? 'flipped' : ''}`}>▾</span>
+      </button>
+
+      {open && (
+        <div className="sort-menu">
+          {/* Animated scanline */}
+          <div className="sort-menu-line"/>
+          {SORT_OPTIONS.map((opt, i) => (
+            <button
+              key={opt.value}
+              className={`sort-option ${sortBy === opt.value ? 'active' : ''}`}
+              style={{ animationDelay: `${i * 0.045}s` }}
+              onClick={() => { onChange(opt.value); setOpen(false) }}
+            >
+              <span className="sort-opt-label">{opt.label}</span>
+              <span className="sort-opt-desc">{opt.desc}</span>
+              {sortBy === opt.value && <span className="sort-check">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Card Reveal ─────────────────────────────────────────────────────────────
 function CardReveal({ children, index }) {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current; if (!el) return
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { el.classList.add('card-visible'); io.disconnect() }
-    }, { threshold: 0.08 })
-    io.observe(el)
-    return () => io.disconnect()
+    // Small delay so re-sort re-triggers animation
+    const t = setTimeout(() => {
+      const io = new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) { el.classList.add('card-visible'); io.disconnect() }
+      }, { threshold: 0.08 })
+      io.observe(el)
+      return () => io.disconnect()
+    }, 20)
+    return () => clearTimeout(t)
   }, [])
 
   return (
@@ -195,15 +251,41 @@ function EmptyState({ search }) {
   )
 }
 
-// ─── Main Gallery ────────────────────────────────────────────────────────────
+// ─── Sort utility ─────────────────────────────────────────────────────────────
+function applySort(list, sortBy) {
+  const arr = [...list]
+  switch (sortBy) {
+    case 'views':
+      return arr.sort((a, b) => (b.views || 0) - (a.views || 0))
+    case 'az':
+      return arr.sort((a, b) => (a.title || '').localeCompare(b.title || ''))
+    case 'oldest':
+      return arr.sort((a, b) => {
+        const ta = a.createdAt?.seconds ?? 0
+        const tb = b.createdAt?.seconds ?? 0
+        return ta - tb
+      })
+    case 'newest':
+    default:
+      return arr.sort((a, b) => {
+        const ta = a.createdAt?.seconds ?? 0
+        const tb = b.createdAt?.seconds ?? 0
+        return tb - ta
+      })
+  }
+}
+
+// ─── Main Gallery ─────────────────────────────────────────────────────────────
 export default function Gallery() {
   const [animations,  setAnimations]  = useState([])
   const [categories,  setCategories]  = useState([])
   const [activeCat,   setActiveCat]   = useState('All')
   const [search,      setSearch]      = useState('')
   const [bgFilter,    setBgFilter]    = useState('')
+  const [sortBy,      setSortBy]      = useState('newest')
   const [loading,     setLoading]     = useState(true)
   const [gridVisible, setGridVisible] = useState(false)
+  const [sortKey,     setSortKey]     = useState(0)   // forces re-animation on sort
   const searchRef = useRef(null)
 
   useEffect(() => {
@@ -225,23 +307,31 @@ export default function Gallery() {
     setAnimations(results)
   }, [])
 
-  const filtered = animations.filter(a => {
-    const catOk = activeCat === 'All' || a.category === activeCat
-    const bgOk  = !bgFilter || (a.previewBg || '').toLowerCase().includes(bgFilter.toLowerCase())
-    return catOk && bgOk
-  })
+  function handleSort(val) {
+    setSortBy(val)
+    setGridVisible(false)
+    setSortKey(k => k + 1)
+    setTimeout(() => setGridVisible(true), 80)
+  }
+
+  // Filter first, then sort
+  const filtered = applySort(
+    animations.filter(a => {
+      const catOk = activeCat === 'All' || a.category === activeCat
+      const bgOk  = !bgFilter || (a.previewBg || '').toLowerCase().includes(bgFilter.toLowerCase())
+      return catOk && bgOk
+    }),
+    sortBy
+  )
 
   return (
     <div className="gallery-page page-section">
-      {/* Animated particle background */}
       <ParticleBg/>
 
       <div className="container">
-
-        {/* Header */}
         <GalleryHeader count={filtered.length}/>
 
-        {/* Search */}
+        {/* Search + Sort Row */}
         <div className="gallery-search-row">
           <div className="search-wrap">
             <span className="search-icon search-pulse">🔍</span>
@@ -265,11 +355,14 @@ export default function Gallery() {
               value={bgFilter} onChange={e => setBgFilter(e.target.value)}/>
             {bgFilter && <button className="search-clear" onClick={() => setBgFilter('')}>✕</button>}
           </div>
+
+          {/* ── NEW: Sort Dropdown ── */}
+          <SortDropdown sortBy={sortBy} onChange={handleSort}/>
         </div>
 
         <div className="ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_GALLERY}/></div>
 
-        {/* Category */}
+        {/* Category Filter */}
         <CategoryFilter
           categories={categories}
           activeCat={activeCat}
@@ -286,6 +379,9 @@ export default function Gallery() {
               {activeCat !== 'All' ? `📁 ${activeCat}` : '📦 All categories'}
             </span>
             {search && <span className="stats-search">🔍 "{search}"</span>}
+            <span className="stats-sort">
+              {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
+            </span>
           </div>
         )}
 
@@ -299,7 +395,7 @@ export default function Gallery() {
         ) : (
           <div className={`gallery-grid ${gridVisible ? 'grid-in' : ''}`}>
             {filtered.map((anim, i) => (
-              <CardReveal key={anim.docId} index={i}>
+              <CardReveal key={`${sortKey}-${anim.docId}`} index={i}>
                 <AnimationCard animation={anim}/>
               </CardReveal>
             ))}
@@ -310,5 +406,5 @@ export default function Gallery() {
       </div>
     </div>
   )
-      }
+                                   }
       
