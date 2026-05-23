@@ -1,5 +1,3 @@
-// ─── App.jsx — Aa full file chhe, existing App.jsx replace karo ────────────
-
 import { Routes, Route, useLocation } from 'react-router-dom'
 import PageBackground    from './components/PageBackground/PageBackground.jsx'
 import Navbar            from './components/Navbar/Navbar.jsx'
@@ -18,7 +16,8 @@ import Contact           from './pages/Contact/Contact.jsx'
 import Course            from './pages/Course/Course.jsx'
 import HowToUse          from './pages/HowToUse/HowToUse.jsx'
 import Wallpaper         from './pages/Wallpaper/Wallpaper.jsx'
-import Submit            from './pages/Submit/Submit.jsx'   // ← NEW
+import Submit            from './pages/Submit/Submit.jsx'
+import Favorites         from './pages/Favorites/Favorites.jsx'   // ← NEW
 
 const bgVariant = {
   '/':           'home',
@@ -27,7 +26,8 @@ const bgVariant = {
   '/course':     'course',
   '/wallpaper':  'wallpaper',
   '/compare':    'gallery',
-  '/submit':     'gallery',   // ← NEW
+  '/submit':     'gallery',
+  '/favorites':  'gallery',   // ← NEW
 }
 
 export default function App() {
@@ -55,26 +55,11 @@ export default function App() {
           <Route path="/terms"             element={<Terms/>}/>
           <Route path="/disclaimer"        element={<Disclaimer/>}/>
           <Route path="/contact"           element={<Contact/>}/>
-          <Route path="/submit"            element={<Submit/>}/>  {/* ← NEW */}
+          <Route path="/submit"            element={<Submit/>}/>
+          <Route path="/favorites"         element={<Favorites/>}/>  {/* ← NEW */}
         </Routes>
       </main>
       {!isAdmin && <Footer/>}
     </div>
   )
 }
-
-
-// ─── Navbar.jsx ma aa link add karo: ─────────────────────────────────────────
-// Existing nav links array ma nakho:
-//
-// { to: '/submit', label: '+ Submit' }
-//
-// Ya Navbar.jsx ma CTA button add karo:
-// <Link to="/submit" className="btn-primary navbar-submit-btn">+ Submit Animation</Link>
-//
-// .navbar-submit-btn CSS:
-// .navbar-submit-btn {
-//   font-size: 0.78rem;
-//   padding: 0.4rem 0.9rem;
-//   border-radius: 99px;
-// }
