@@ -1,9 +1,20 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import MotionZyncLogo from '../Logo/Logo.jsx'
 import AuthButton     from '../AuthButton/AuthButton.jsx'
 import { useAuth }    from '../../context/AuthContext.jsx'
 import './Navbar.css'
+
+const LS_FAVS  = 'mz_favorites'
+const LS_LIKES = 'mz_likes'
+
+function getFavCount() {
+  try {
+    const f = JSON.parse(localStorage.getItem(LS_FAVS)  || '[]')
+    const l = JSON.parse(localStorage.getItem(LS_LIKES) || '{}')
+    return f.length + Object.keys(l).length
+  } catch { return 0 }
+}
 
 const navLinks = [
   { path:'/',            label:'Home' },
@@ -15,11 +26,23 @@ const navLinks = [
 ]
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false)
-  const location = useLocation()
+  const [open,     setOpen]     = useState(false)
+  const [favCount, setFavCount] = useState(getFavCount)
+  const location  = useLocation()
   const navigate  = useNavigate()
   const { isAdmin } = useAuth()
   const taps = useRef(0), timer = useRef(null)
+
+  // Live fav count update
+  useEffect(() => {
+    function update() { setFavCount(getFavCount()) }
+    window.addEventListener('mz-favs-changed', update)
+    window.addEventListener('storage', update)
+    return () => {
+      window.removeEventListener('mz-favs-changed', update)
+      window.removeEventListener('storage', update)
+    }
+  }, [])
 
   function handleLogoTap(e) {
     taps.current++
@@ -64,12 +87,21 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar-right">
-          {/* Submit CTA Button */}
+          {/* ── Favorites icon with live badge ── */}
           <Link
-            to="/submit"
-            className="navbar-submit-btn"
+            to="/favorites"
+            className={`navbar-fav-btn ${location.pathname === '/favorites' ? 'active' : ''}`}
             onClick={() => setOpen(false)}
+            title="My Favorites"
           >
+            {favCount > 0
+              ? <><span>🔖</span><span className="nav-fav-badge">{favCount > 99 ? '99+' : favCount}</span></>
+              : <span>🔖</span>
+            }
+          </Link>
+
+          {/* Submit CTA */}
+          <Link to="/submit" className="navbar-submit-btn" onClick={() => setOpen(false)}>
             + Submit
           </Link>
 
