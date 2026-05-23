@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import CodeEditor     from '../../components/CodeEditor/CodeEditor.jsx'
-import LivePreview    from '../../components/LivePreview/LivePreview.jsx'
+import LivePreview, { buildSandboxHTML } from '../../components/LivePreview/LivePreview.jsx'
 import CustomizePanel from '../../components/CustomizePanel/CustomizePanel.jsx'
 import AdSense        from '../../components/AdSense/AdSense.jsx'
-import { getAnimationById, incrementView } from '../../hooks/useAnimations.js'
+import { getAnimationById, incrementView, getAnimations } from '../../hooks/useAnimations.js'
 import './AnimationDetail.css'
 
 const SPEEDS = [
@@ -400,6 +400,121 @@ function HowToUse({ anim }) {
   )
 }
 
+// ─── Code Similarity Engine ───────────────────────────────────
+function extractTokens(css = '', js = '') {
+  const combined = (css + ' ' + js).toLowerCase()
+  const tokens = new Set()
+
+  // CSS: property names & keyframe names
+  const cssProps = combined.match(/[\w-]+(?=\s*[:{])/g) || []
+  cssProps.forEach(t => { if (t.length > 3) tokens.add(t) })
+
+  // JS: meaningful words (4+ chars, skip generic)
+  const skip = new Set(['function','return','const','let','var','for','while',
+    'true','false','null','undefined','this','Math','window','document',
+    'requestAnimationFrame','cancelAnimationFrame','addEventListener',
+    'removeEventListener','getElementById','querySelector'])
+  const jsWords = combined.match(/\b[a-z_$][a-z0-9_$]{3,}\b/g) || []
+  jsWords.forEach(t => { if (!skip.has(t)) tokens.add(t) })
+
+  return tokens
+}
+
+function codeSimilarity(a, b) {
+  const tokA = extractTokens(a.cssCode, a.jsCode)
+  const tokB = extractTokens(b.cssCode, b.jsCode)
+  if (!tokA.size || !tokB.size) return 0
+  let common = 0
+  tokA.forEach(t => { if (tokB.has(t)) common++ })
+  return common / Math.max(tokA.size, tokB.size)
+}
+
+// ─── Related Animations Section ──────────────────────────────
+function RelatedAnimations({ currentAnim }) {
+  const [related, setRelated] = useState([])
+  const [loaded,  setLoaded]  = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!currentAnim) return
+    getAnimations().then(all => {
+      const others = all.filter(a => a.docId !== currentAnim.docId)
+      const scored = others
+        .map(a => ({ ...a, score: codeSimilarity(currentAnim, a) }))
+        .filter(a => a.score > 0.05)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4)
+      setRelated(scored)
+    })
+  }, [currentAnim])
+
+  useEffect(() => {
+    const el = ref.current; if (!el) return
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setLoaded(true); io.disconnect() }
+    }, { threshold: 0.1 })
+    io.observe(el); return () => io.disconnect()
+  }, [])
+
+  if (related.length === 0) return null
+
+  return (
+    <div ref={ref} className={`related-section ${loaded ? 'related-in' : ''}`}>
+      {/* Animated header line */}
+      <div className="related-header">
+        <div className="related-line"/>
+        <h2 className="related-title">
+          <span className="related-icon">⚡</span>
+          Similar Animations
+          <span className="related-badge">By Code</span>
+        </h2>
+        <div className="related-line"/>
+      </div>
+
+      <div className="related-grid">
+        {related.map((anim, i) => (
+          <Link
+            key={anim.docId}
+            to={`/animation/${anim.docId}`}
+            className="related-card"
+            style={{ animationDelay: `${i * 0.08}s` }}
+          >
+            {/* Mini preview */}
+            <div className="related-preview" style={{ background: anim.previewBg || '#1a1a28' }}>
+              <RelatedPreview cssCode={anim.cssCode} jsCode={anim.jsCode} bg={anim.previewBg}/>
+              <div className="related-score-badge">
+                {Math.round(anim.score * 100)}% match
+              </div>
+            </div>
+            <div className="related-info">
+              <span className="related-cat">{anim.category}</span>
+              <span className="related-name">{anim.title}</span>
+              {anim.views > 0 && (
+                <span className="related-views">👁️ {anim.views > 999 ? (anim.views/1000).toFixed(1)+'k' : anim.views}</span>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function RelatedPreview({ cssCode, jsCode, bg }) {
+  const iframeRef = useRef(null)
+  useEffect(() => {
+    if (iframeRef.current) iframeRef.current.srcdoc = buildSandboxHTML(cssCode, jsCode, bg)
+  }, [cssCode, jsCode, bg])
+  return (
+    <iframe
+      ref={iframeRef}
+      className="related-iframe"
+      sandbox="allow-scripts"
+      title="related preview"
+    />
+  )
+}
+
 // ─── Main Component ───────────────────────────────────────────
 export default function AnimationDetail() {
   const { id }       = useParams()
@@ -493,6 +608,9 @@ export default function AnimationDetail() {
         <AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_PLAYGROUND}/>
 
         <HowToUse anim={anim}/>
+
+        {/* Related Animations — code similarity based */}
+        <RelatedAnimations currentAnim={{ ...anim, cssCode, jsCode }}/>
       </div>
 
       <FloatingBar
@@ -503,5 +621,4 @@ export default function AnimationDetail() {
       />
     </div>
   )
-    }
-      
+}
