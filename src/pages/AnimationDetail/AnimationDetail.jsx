@@ -189,24 +189,101 @@ function CopyRow({ cssCode, jsCode, copied, onCopy, animTitle, animBg, onDownloa
   )
 }
 
+// ─── Fullscreen Preview ──────────────────────────────────────
+function FullscreenModal({ cssCode, jsCode, bgColor, speed, onClose }) {
+  const iframeRef = useRef(null)
+  const overlayRef = useRef(null)
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (iframeRef.current)
+        iframeRef.current.srcdoc = buildSandboxHTML(cssCode, jsCode, bgColor, speed)
+    }, 80)
+    // ESC to close
+    function onKey(e) { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden'
+    return () => {
+      clearTimeout(t)
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [cssCode, jsCode, bgColor, speed])
+
+  return (
+    <div
+      ref={overlayRef}
+      className="fs-overlay"
+      onClick={e => { if (e.target === overlayRef.current) onClose() }}
+    >
+      <div className="fs-container">
+        {/* Top bar */}
+        <div className="fs-topbar">
+          <div className="fs-dots">
+            <span className="fs-dot fs-dot-red"/>
+            <span className="fs-dot fs-dot-yellow"/>
+            <span className="fs-dot fs-dot-green"/>
+          </div>
+          <span className="fs-label">⛶ Fullscreen Preview</span>
+          <div className="fs-bar-right">
+            <span className="fs-esc-hint">ESC to close</span>
+            <button className="fs-close-btn" onClick={onClose} title="Close">✕</button>
+          </div>
+        </div>
+        {/* Full iframe */}
+        <iframe
+          ref={iframeRef}
+          className="fs-iframe"
+          sandbox="allow-scripts"
+          title="fullscreen preview"
+        />
+      </div>
+    </div>
+  )
+}
+
 // ─── Preview Frame ───────────────────────────────────────────
 function PreviewFrame({ cssCode, jsCode, bgColor, speed }) {
-  const [loaded, setLoaded] = useState(false)
+  const [loaded,      setLoaded]      = useState(false)
+  const [fullscreen,  setFullscreen]  = useState(false)
+
   useEffect(()=>{ setTimeout(()=>setLoaded(true),200) },[])
+
   return (
-    <div className={`preview-frame ${loaded?'frame-in':''}`}>
-      <div className="preview-frame-header">
-        <div className="frame-dots">
-          <div className="frame-dot fd-red"/><div className="frame-dot fd-yellow"/><div className="frame-dot fd-green"/>
+    <>
+      <div className={`preview-frame ${loaded?'frame-in':''}`}>
+        <div className="preview-frame-header">
+          <div className="frame-dots">
+            <div className="frame-dot fd-red"/><div className="frame-dot fd-yellow"/><div className="frame-dot fd-green"/>
+          </div>
+          <div className="frame-url">
+            <span className="frame-url-icon">🔒</span>
+            <span>motion-zync.vercel.app / preview</span>
+          </div>
+          <div className="frame-header-right">
+            <div className="frame-live"><span className="live-blink">●</span> LIVE</div>
+            {/* Fullscreen button */}
+            <button
+              className="frame-fs-btn"
+              onClick={() => setFullscreen(true)}
+              title="Fullscreen ma juo"
+            >
+              ⛶
+            </button>
+          </div>
         </div>
-        <div className="frame-url">
-          <span className="frame-url-icon">🔒</span>
-          <span>motion-zync.vercel.app / preview</span>
-        </div>
-        <div className="frame-live"><span className="live-blink">●</span> LIVE</div>
+        <LivePreview cssCode={cssCode} jsCode={jsCode} bgColor={bgColor} speed={speed}/>
       </div>
-      <LivePreview cssCode={cssCode} jsCode={jsCode} bgColor={bgColor} speed={speed}/>
-    </div>
+
+      {fullscreen && (
+        <FullscreenModal
+          cssCode={cssCode} jsCode={jsCode}
+          bgColor={bgColor} speed={speed}
+          onClose={() => setFullscreen(false)}
+        />
+      )}
+    </>
   )
 }
 
@@ -559,4 +636,5 @@ export default function AnimationDetail() {
       />
     </div>
   )
-}
+  }
+    
