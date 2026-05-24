@@ -120,3 +120,44 @@
 .sub-reject-btn{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;padding:0.5rem 1.1rem;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;font-size:0.85rem;transition:background 0.2s;}
 .sub-reject-btn:hover{background:rgba(239,68,68,0.2);}
                    
+
+/* ─── Changelog Admin Tab ────────────────────────────────────── */
+.changelog-admin-tab { display:flex; flex-direction:column; gap:0; }
+.cl-form-card {
+  background:var(--bg-secondary); border:1px solid var(--border-color);
+  border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.5rem;
+}
+.cl-form-title { font-size:0.95rem; font-weight:700; margin-bottom:1.1rem; color:var(--text-primary); }
+.cl-form-grid  { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; }
+.cl-form-group { display:flex; flex-direction:column; gap:0.4rem; }
+.cl-form-span2 { grid-column:span 2; }
+.cl-form-fullwidth { grid-column:1/-1; }
+.cl-form-actions { display:flex; gap:0.5rem; margin-top:1.1rem; }
+
+.cl-list { margin-top:0.5rem; }
+.cl-list-title { font-size:0.88rem; font-weight:700; margin-bottom:0.85rem; color:var(--text-secondary); }
+.cl-list-item {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0.7rem 1rem; background:var(--bg-card);
+  border:1px solid var(--border-color); border-radius:var(--radius-md);
+  margin-bottom:0.45rem; gap:0.65rem; flex-wrap:wrap; transition:border-color 0.2s;
+}
+.cl-list-item:hover { border-color:rgba(124,58,237,0.4); }
+.cl-list-item.cl-editing { border-color:var(--accent-primary); background:rgba(124,58,237,0.06); }
+.cl-item-left  { display:flex; align-items:center; gap:0.45rem; flex-wrap:wrap; flex:1; }
+.cl-version-badge {
+  font-size:0.7rem; font-weight:800; font-family:var(--font-code);
+  background:rgba(124,58,237,0.15); color:var(--accent-glow);
+  border:1px solid rgba(124,58,237,0.3); padding:0.1rem 0.42rem; border-radius:4px;
+}
+.cl-type-badge { font-size:0.66rem; font-weight:700; padding:0.08rem 0.42rem; border-radius:99px; }
+.cl-pin-badge  { font-size:0.66rem; color:#f59e0b; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.25); padding:0.08rem 0.42rem; border-radius:99px; }
+.cl-item-title { font-size:0.8rem; font-weight:600; color:var(--text-primary); }
+.cl-item-date  { font-size:0.7rem; color:var(--text-muted); margin-left:auto; }
+.cl-item-actions { display:flex; gap:0.35rem; flex-shrink:0; }
+
+@media(max-width:600px) {
+  .cl-form-grid { grid-template-columns:1fr; }
+  .cl-form-span2 { grid-column:span 1; }
+          }
+  
