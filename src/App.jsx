@@ -17,7 +17,8 @@ import Course            from './pages/Course/Course.jsx'
 import HowToUse          from './pages/HowToUse/HowToUse.jsx'
 import Wallpaper         from './pages/Wallpaper/Wallpaper.jsx'
 import Submit            from './pages/Submit/Submit.jsx'
-import Favorites         from './pages/Favorites/Favorites.jsx'   // ← NEW
+import Favorites         from './pages/Favorites/Favorites.jsx'
+import Changelog         from './pages/Changelog/Changelog.jsx'
 
 const bgVariant = {
   '/':           'home',
@@ -27,7 +28,8 @@ const bgVariant = {
   '/wallpaper':  'wallpaper',
   '/compare':    'gallery',
   '/submit':     'gallery',
-  '/favorites':  'gallery',   // ← NEW
+  '/favorites':  'gallery',
+  '/changelog':  'default',
 }
 
 export default function App() {
@@ -41,22 +43,23 @@ export default function App() {
       {!isAdmin && <Navbar/>}
       <main className={isAdmin ? '' : 'main-content'}>
         <Routes>
-          <Route path="/"                  element={<Home/>}/>
-          <Route path="/gallery"           element={<Gallery/>}/>
-          <Route path="/playground"        element={<Playground/>}/>
-          <Route path="/animation/:id"     element={<AnimationDetail/>}/>
-          <Route path="/compare"           element={<Compare/>}/>
-          <Route path="/wallpaper"         element={<Wallpaper/>}/>
-          <Route path="/course"            element={<Course/>}/>
-          <Route path="/how-to-use"        element={<HowToUse/>}/>
-          <Route path="/about"             element={<About/>}/>
-          <Route path="/admin"             element={<Admin/>}/>
-          <Route path="/privacy"           element={<Privacy/>}/>
-          <Route path="/terms"             element={<Terms/>}/>
-          <Route path="/disclaimer"        element={<Disclaimer/>}/>
-          <Route path="/contact"           element={<Contact/>}/>
-          <Route path="/submit"            element={<Submit/>}/>
-          <Route path="/favorites"         element={<Favorites/>}/>  {/* ← NEW */}
+          <Route path="/"              element={<Home/>}/>
+          <Route path="/gallery"       element={<Gallery/>}/>
+          <Route path="/playground"    element={<Playground/>}/>
+          <Route path="/animation/:id" element={<AnimationDetail/>}/>
+          <Route path="/compare"       element={<Compare/>}/>
+          <Route path="/wallpaper"     element={<Wallpaper/>}/>
+          <Route path="/course"        element={<Course/>}/>
+          <Route path="/how-to-use"    element={<HowToUse/>}/>
+          <Route path="/about"         element={<About/>}/>
+          <Route path="/admin"         element={<Admin/>}/>
+          <Route path="/privacy"       element={<Privacy/>}/>
+          <Route path="/terms"         element={<Terms/>}/>
+          <Route path="/disclaimer"    element={<Disclaimer/>}/>
+          <Route path="/contact"       element={<Contact/>}/>
+          <Route path="/submit"        element={<Submit/>}/>
+          <Route path="/favorites"     element={<Favorites/>}/>
+          <Route path="/changelog"     element={<Changelog/>}/>
         </Routes>
       </main>
       {!isAdmin && <Footer/>}
