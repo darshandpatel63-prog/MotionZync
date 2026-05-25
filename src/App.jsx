@@ -19,6 +19,7 @@ import Wallpaper         from './pages/Wallpaper/Wallpaper.jsx'
 import Submit            from './pages/Submit/Submit.jsx'
 import Favorites         from './pages/Favorites/Favorites.jsx'
 import Changelog         from './pages/Changelog/Changelog.jsx'
+import Tools             from './pages/Tools/Tools.jsx'
 
 const bgVariant = {
   '/':           'home',
@@ -30,6 +31,7 @@ const bgVariant = {
   '/submit':     'gallery',
   '/favorites':  'gallery',
   '/changelog':  'default',
+  '/tools':      'default',
 }
 
 export default function App() {
@@ -60,6 +62,7 @@ export default function App() {
           <Route path="/submit"        element={<Submit/>}/>
           <Route path="/favorites"     element={<Favorites/>}/>
           <Route path="/changelog"     element={<Changelog/>}/>
+          <Route path="/tools"         element={<Tools/>}/>
         </Routes>
       </main>
       {!isAdmin && <Footer/>}
