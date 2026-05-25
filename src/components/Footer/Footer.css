@@ -23,3 +23,21 @@
 .footer-changelog-link:hover {
   color: var(--accent-primary) !important;
 }
+
+/* Tools link */
+.footer-tools-link {
+  color: #06b6d4 !important;
+  font-weight: 600 !important;
+}
+.footer-tools-link:hover {
+  color: var(--accent-primary) !important;
+}
+
+/* CodeSpace link */
+.footer-codespace-link {
+  color: #f59e0b !important;
+  font-weight: 600 !important;
+}
+.footer-codespace-link:hover {
+  color: var(--accent-primary) !important;
+}
