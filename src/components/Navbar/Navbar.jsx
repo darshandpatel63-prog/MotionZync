@@ -23,6 +23,7 @@ const navLinks = [
   { path:'/wallpaper',   label:'🖼️ Wallpaper' },
   { path:'/course',      label:'📚 Course' },
   { path:'/how-to-use',  label:'How to Use' },
+  { path:'/changelog',   label:"📋 What's New" },
 ]
 
 export default function Navbar() {
