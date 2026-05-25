@@ -23,6 +23,9 @@ export default function Footer() {
               <Link to="/course">Course</Link>
               <Link to="/how-to-use">How to Use</Link>
               <Link to="/about">About</Link>
+              <Link to="/tools" className="footer-tools-link">🔧 CSS Tools</Link>
+              <Link to="/codespace" className="footer-codespace-link">💻 CodeSpace</Link>
+              <Link to="/favorites">⭐ Favorites</Link>
             </div>
             <div className="footer-col">
               <h4>Legal</h4>
@@ -30,10 +33,7 @@ export default function Footer() {
               <Link to="/terms">Terms of Service</Link>
               <Link to="/disclaimer">Disclaimer</Link>
               <Link to="/contact">Contact Us</Link>
-              {/* ── Changelog link ── */}
-              <Link to="/changelog" className="footer-changelog-link">
-                📋 What's New
-              </Link>
+              <Link to="/changelog" className="footer-changelog-link">📋 What's New</Link>
             </div>
             <div className="footer-col">
               <h4>Our Other Sites</h4>
@@ -46,7 +46,7 @@ export default function Footer() {
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} MotionZync. All rights reserved.</p>
           <p className="footer-bottom-links">
-            <Link to="/privacy">Privacy</Link> · <Link to="/terms">Terms</Link> · <Link to="/disclaimer">Disclaimer</Link> · <Link to="/contact">Contact</Link> · <Link to="/changelog">What's New</Link>
+            <Link to="/privacy">Privacy</Link> · <Link to="/terms">Terms</Link> · <Link to="/disclaimer">Disclaimer</Link> · <Link to="/contact">Contact</Link> · <Link to="/changelog">What's New</Link> · <Link to="/tools">Tools</Link>
           </p>
         </div>
       </div>
