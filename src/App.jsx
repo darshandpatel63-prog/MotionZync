@@ -20,6 +20,7 @@ import Submit            from './pages/Submit/Submit.jsx'
 import Favorites         from './pages/Favorites/Favorites.jsx'
 import Changelog         from './pages/Changelog/Changelog.jsx'
 import Tools             from './pages/Tools/Tools.jsx'
+import CodeSpace         from './pages/CodeSpace/CodeSpace.jsx'
 
 const bgVariant = {
   '/':           'home',
@@ -32,6 +33,7 @@ const bgVariant = {
   '/favorites':  'gallery',
   '/changelog':  'default',
   '/tools':      'default',
+  '/codespace':  'default',
 }
 
 export default function App() {
@@ -63,9 +65,11 @@ export default function App() {
           <Route path="/favorites"     element={<Favorites/>}/>
           <Route path="/changelog"     element={<Changelog/>}/>
           <Route path="/tools"         element={<Tools/>}/>
+          <Route path="/codespace"     element={<CodeSpace/>}/>
         </Routes>
       </main>
       {!isAdmin && <Footer/>}
     </div>
   )
 }
+
