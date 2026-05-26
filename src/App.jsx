@@ -21,6 +21,7 @@ import Favorites         from './pages/Favorites/Favorites.jsx'
 import Changelog         from './pages/Changelog/Changelog.jsx'
 import Tools             from './pages/Tools/Tools.jsx'
 import CodeSpace         from './pages/CodeSpace/CodeSpace.jsx'
+import AnimCreator       from './pages/AnimCreator/AnimCreator.jsx'
 
 const bgVariant = {
   '/':           'home',
@@ -36,40 +37,43 @@ const bgVariant = {
   '/codespace':  'default',
 }
 
+// These routes are full-screen — no Navbar/Footer/BG
+const FULLSCREEN_ROUTES = ['/admin', '/anim-creator']
+
 export default function App() {
   const { pathname } = useLocation()
-  const isAdmin = pathname === '/admin'
+  const isFullscreen = FULLSCREEN_ROUTES.includes(pathname)
   const variant = bgVariant[pathname] || 'default'
 
   return (
     <div className="app-wrapper">
-      {!isAdmin && <PageBackground variant={variant}/>}
-      {!isAdmin && <Navbar/>}
-      <main className={isAdmin ? '' : 'main-content'}>
+      {!isFullscreen && <PageBackground variant={variant}/>}
+      {!isFullscreen && <Navbar/>}
+      <main className={isFullscreen ? '' : 'main-content'}>
         <Routes>
-          <Route path="/"              element={<Home/>}/>
-          <Route path="/gallery"       element={<Gallery/>}/>
-          <Route path="/playground"    element={<Playground/>}/>
-          <Route path="/animation/:id" element={<AnimationDetail/>}/>
-          <Route path="/compare"       element={<Compare/>}/>
-          <Route path="/wallpaper"     element={<Wallpaper/>}/>
-          <Route path="/course"        element={<Course/>}/>
-          <Route path="/how-to-use"    element={<HowToUse/>}/>
-          <Route path="/about"         element={<About/>}/>
-          <Route path="/admin"         element={<Admin/>}/>
-          <Route path="/privacy"       element={<Privacy/>}/>
-          <Route path="/terms"         element={<Terms/>}/>
-          <Route path="/disclaimer"    element={<Disclaimer/>}/>
-          <Route path="/contact"       element={<Contact/>}/>
-          <Route path="/submit"        element={<Submit/>}/>
-          <Route path="/favorites"     element={<Favorites/>}/>
-          <Route path="/changelog"     element={<Changelog/>}/>
-          <Route path="/tools"         element={<Tools/>}/>
-          <Route path="/codespace"     element={<CodeSpace/>}/>
+          <Route path="/"                element={<Home/>}/>
+          <Route path="/gallery"         element={<Gallery/>}/>
+          <Route path="/playground"      element={<Playground/>}/>
+          <Route path="/animation/:id"   element={<AnimationDetail/>}/>
+          <Route path="/compare"         element={<Compare/>}/>
+          <Route path="/wallpaper"       element={<Wallpaper/>}/>
+          <Route path="/course"          element={<Course/>}/>
+          <Route path="/how-to-use"      element={<HowToUse/>}/>
+          <Route path="/about"           element={<About/>}/>
+          <Route path="/admin"           element={<Admin/>}/>
+          <Route path="/privacy"         element={<Privacy/>}/>
+          <Route path="/terms"           element={<Terms/>}/>
+          <Route path="/disclaimer"      element={<Disclaimer/>}/>
+          <Route path="/contact"         element={<Contact/>}/>
+          <Route path="/submit"          element={<Submit/>}/>
+          <Route path="/favorites"       element={<Favorites/>}/>
+          <Route path="/changelog"       element={<Changelog/>}/>
+          <Route path="/tools"           element={<Tools/>}/>
+          <Route path="/codespace"       element={<CodeSpace/>}/>
+          <Route path="/anim-creator"    element={<AnimCreator/>}/>
         </Routes>
       </main>
-      {!isAdmin && <Footer/>}
+      {!isFullscreen && <Footer/>}
     </div>
   )
 }
-
