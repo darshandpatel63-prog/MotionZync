@@ -24,8 +24,15 @@ export default function Footer() {
               <Link to="/how-to-use">How to Use</Link>
               <Link to="/about">About</Link>
               <Link to="/tools" className="footer-tools-link">🔧 CSS Tools</Link>
-              <Link to="/codespace" className="footer-codespace-link">💻 CodeSpace</Link>
               <Link to="/favorites">⭐ Favorites</Link>
+            </div>
+            <div className="footer-col">
+              <h4>Create</h4>
+              <Link to="/codespace" className="footer-codespace-link">💻 CodeSpace</Link>
+              <Link to="/anim-creator" className="footer-creator-link">🎨 Animation Creator</Link>
+              <Link to="/compare">⚖️ Compare</Link>
+              <Link to="/submit">+ Submit Animation</Link>
+              <Link to="/changelog" className="footer-changelog-link">📋 What's New</Link>
             </div>
             <div className="footer-col">
               <h4>Legal</h4>
@@ -33,7 +40,6 @@ export default function Footer() {
               <Link to="/terms">Terms of Service</Link>
               <Link to="/disclaimer">Disclaimer</Link>
               <Link to="/contact">Contact Us</Link>
-              <Link to="/changelog" className="footer-changelog-link">📋 What's New</Link>
             </div>
             <div className="footer-col">
               <h4>Our Other Sites</h4>
@@ -46,7 +52,7 @@ export default function Footer() {
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} MotionZync. All rights reserved.</p>
           <p className="footer-bottom-links">
-            <Link to="/privacy">Privacy</Link> · <Link to="/terms">Terms</Link> · <Link to="/disclaimer">Disclaimer</Link> · <Link to="/contact">Contact</Link> · <Link to="/changelog">What's New</Link> · <Link to="/tools">Tools</Link>
+            <Link to="/privacy">Privacy</Link> · <Link to="/terms">Terms</Link> · <Link to="/contact">Contact</Link> · <Link to="/changelog">What's New</Link> · <Link to="/tools">Tools</Link> · <Link to="/anim-creator">Creator</Link>
           </p>
         </div>
       </div>
