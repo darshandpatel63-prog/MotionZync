@@ -1,0 +1,77 @@
+.right-panel {
+  width: 230px; flex-shrink: 0;
+  background: rgba(8,8,18,0.97);
+  border-left: 1px solid rgba(124,58,237,0.15);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.rp-tabs {
+  display: flex; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
+}
+.rp-tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: 1px; padding: 0.4rem 0.1rem;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: #4b5563; font-size: 0.7rem; cursor: pointer; transition: all 0.15s;
+  font-family: inherit;
+}
+.rp-tab:hover { color: #9ca3af; background: rgba(255,255,255,0.03); }
+.rp-tab.active { color: #a78bfa; border-bottom-color: #7c3aed; }
+.rp-tab-label { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.3px; }
+.rp-content { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.rp-scroll { flex: 1; overflow-y: auto; padding: 0.5rem; }
+.rp-scroll::-webkit-scrollbar { width: 3px; }
+.rp-scroll::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 99px; }
+.rp-empty { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 0.75rem; color: #374151; text-align: center; padding: 1rem; }
+
+/* Section */
+.prop-section { margin-bottom: 0.85rem; }
+.prop-section-title { font-size: 0.65rem; font-weight: 800; color: #6366f1; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 0.5rem; padding-bottom: 0.25rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+
+/* Row */
+.prop-row { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.38rem; }
+.prop-label { font-size: 0.68rem; color: #6b7280; width: 64px; flex-shrink: 0; white-space: nowrap; }
+.prop-slider { flex: 1; accent-color: #7c3aed; cursor: pointer; height: 3px; }
+.prop-val { font-size: 0.65rem; font-family: monospace; color: #a78bfa; width: 36px; text-align: right; flex-shrink: 0; }
+.prop-color { width: 26px; height: 22px; border: none; border-radius: 4px; cursor: pointer; padding: 1px; background: none; flex-shrink: 0; }
+.prop-hex { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.07); color: #9ca3af; font-size: 0.68rem; font-family: monospace; padding: 0.15rem 0.35rem; border-radius: 3px; outline: none; width: 0; }
+.prop-hex:focus { border-color: rgba(124,58,237,0.5); color: #e2e8f0; }
+.prop-num { width: 55px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.07); color: #9ca3af; font-size: 0.72rem; padding: 0.2rem 0.4rem; border-radius: 3px; outline: none; text-align: center; }
+.prop-num:focus { border-color: rgba(124,58,237,0.4); }
+.prop-select { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); color: #9ca3af; font-size: 0.68rem; padding: 0.2rem 0.3rem; border-radius: 3px; cursor: pointer; outline: none; }
+.prop-select:focus { border-color: rgba(124,58,237,0.4); }
+.prop-text-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.07); color: #e2e8f0; font-size: 0.72rem; padding: 0.2rem 0.4rem; border-radius: 3px; outline: none; }
+.prop-xy-row { display: flex; gap: 0.35rem; margin-bottom: 0.38rem; }
+.prop-xy-group { display: flex; align-items: center; gap: 0.25rem; flex: 1; }
+.prop-xy-group .prop-num { flex: 1; width: 0; }
+
+/* Toggle */
+.prop-toggle { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.4rem; }
+.prop-toggle input { display: none; }
+.toggle-track { width: 28px; height: 15px; background: rgba(255,255,255,0.1); border-radius: 99px; position: relative; transition: background 0.2s; flex-shrink: 0; }
+.prop-toggle input:checked + .toggle-track { background: #7c3aed; }
+.toggle-thumb { position: absolute; top: 2px; left: 2px; width: 11px; height: 11px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+.prop-toggle input:checked + .toggle-track .toggle-thumb { transform: translateX(13px); }
+.prop-toggle-label { font-size: 0.7rem; color: #9ca3af; }
+
+/* Animation presets */
+.anim-category { margin-bottom: 0.6rem; }
+.anim-cat-label { font-size: 0.6rem; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem; }
+.anim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+.anim-preset-btn { display: flex; align-items: center; gap: 0.25rem; padding: 0.28rem 0.4rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; color: #6b7280; font-size: 0.65rem; cursor: pointer; transition: all 0.12s; font-family: inherit; }
+.anim-preset-btn:hover { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.25); color: #a78bfa; }
+.anim-preset-btn.active { background: rgba(124,58,237,0.2); border-color: rgba(124,58,237,0.5); color: #c4b5fd; }
+
+/* Physics modes */
+.phys-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 0.6rem; }
+.phys-mode-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0.35rem 0.2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 5px; color: #6b7280; font-size: 0.6rem; cursor: pointer; transition: all 0.12s; font-family: inherit; }
+.phys-mode-btn:hover { background: rgba(6,182,212,0.08); border-color: rgba(6,182,212,0.25); color: #67e8f9; }
+.phys-mode-btn.active { background: rgba(6,182,212,0.15); border-color: rgba(6,182,212,0.5); color: #06b6d4; font-weight: 700; }
+.phys-reset-btn { width: 100%; padding: 0.3rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; color: #6b7280; font-size: 0.68rem; cursor: pointer; transition: all 0.15s; font-family: inherit; margin-top: 0.25rem; }
+.phys-reset-btn:hover { background: rgba(124,58,237,0.1); color: #a78bfa; }
+
+/* Border types */
+.border-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 0.5rem; }
+.border-type-btn { padding: 0.28rem 0.3rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; color: #6b7280; font-size: 0.62rem; cursor: pointer; transition: all 0.12s; font-family: inherit; }
+.border-type-btn:hover { background: rgba(6,182,212,0.08); border-color: rgba(6,182,212,0.2); color: #67e8f9; }
+.border-type-btn.active { background: rgba(6,182,212,0.18); border-color: rgba(6,182,212,0.5); color: #06b6d4; font-weight: 700; }
+                
