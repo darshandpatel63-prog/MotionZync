@@ -1,13 +1,14 @@
-// Canvas.jsx — UPDATED
-// New: Space+drag pan · Scroll wheel zoom · Marquee multi-select
-//      Shift+click multi-select · Ctrl+C/V copy-paste
-//      Image upload · Multi-element drag · All shapes render via CanvasElement
+// Canvas.jsx — UPDATED (Feature 2)
+// Feature 1: Space+drag pan · Scroll zoom · Marquee · Shift+click · Copy/paste · Image upload
+// Feature 2: Right-click context menu · Keyboard shortcut overlay (?key)
 
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { useCreator } from '../store/CreatorContext.jsx'
 import { KEYFRAMES_CSS, BORDER_KEYFRAMES } from '../engine/AnimEngine.js'
 import { stepPhysics } from '../engine/PhysicsEngine.js'
-import CanvasElement from './CanvasElement.jsx'
+import CanvasElement  from './CanvasElement.jsx'
+import ContextMenu    from './ContextMenu.jsx'
+import ShortcutOverlay from '../modals/ShortcutOverlay.jsx'
 import './Canvas.css'
 
 const STAGE_W = 900
@@ -129,6 +130,9 @@ export default function Canvas() {
   const [marqueeBox,  setMarqueeBox]  = useState(null)
   const [spaceDown,   setSpaceDown]   = useState(false)
   const [panning,     setPanning]     = useState(false)
+  // Feature 2
+  const [ctxMenu,     setCtxMenu]     = useState(null)  // { x, y, el }
+  const [showShortcuts, setShowShortcuts] = useState(false)
 
   // ── Inject keyframes once ─────────────────────────────────
   useEffect(() => {
@@ -204,9 +208,19 @@ export default function Canvas() {
       if (e.code!=='Space') return
       spaceRef.current=false; setSpaceDown(false); setPanning(false)
     }
+    // ? key opens shortcut overlay
+    const onQ = e => {
+      if (e.key==='?' && e.target.tagName!=='INPUT' && e.target.tagName!=='TEXTAREA')
+        setShowShortcuts(v => !v)
+    }
     window.addEventListener('keydown', down)
     window.addEventListener('keyup',   up)
-    return()=>{window.removeEventListener('keydown',down);window.removeEventListener('keyup',up)}
+    window.addEventListener('keydown', onQ)
+    return()=>{
+      window.removeEventListener('keydown',down)
+      window.removeEventListener('keyup',  up)
+      window.removeEventListener('keydown',onQ)
+    }
   }, [])
 
   // ── Scroll wheel zoom ─────────────────────────────────────
@@ -309,6 +323,100 @@ export default function Canvas() {
     window.addEventListener('mouseup',   onUp)
     return()=>{window.removeEventListener('mousemove',onMove);window.removeEventListener('mouseup',onUp)}
   }, [dispatch, select, trackCursor])
+
+  // ── Context menu — stage background ─────────────────────────
+  function handleStageContextMenu(e) {
+    e.preventDefault()
+    setCtxMenu({ x: e.clientX, y: e.clientY, el: null })
+  }
+
+  // ── Context menu — element ────────────────────────────────
+  function handleElContextMenu(e, el) {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!selected.includes(el.id)) select([el.id])
+    setCtxMenu({ x: e.clientX, y: e.clientY, el })
+  }
+
+  // ── Context menu action handler ──────────────────────────
+  function handleCtxAction(action) {
+    const el     = ctxMenu?.el
+    const ids    = selected.length > 0 ? selected : (el ? [el.id] : [])
+    const mainId = el?.id || ids[0]
+    const rect   = stageRef.current?.getBoundingClientRect()
+    const z      = zoomRef.current
+
+    switch (action) {
+      case 'copy':
+        clipboardRef.current = elementsRef.current.filter(e => ids.includes(e.id))
+        break
+      case 'cut':
+        clipboardRef.current = elementsRef.current.filter(e => ids.includes(e.id))
+        dispatch({ type:'DELETE_ELEMENTS', ids })
+        break
+      case 'paste':
+        if (clipboardRef.current?.length)
+          dispatch({ type:'PASTE_ELEMENTS', els: clipboardRef.current })
+        break
+      case 'duplicate':
+        if (mainId) dispatch({ type:'DUPLICATE_ELEMENT', id: mainId })
+        break
+      case 'delete':
+        dispatch({ type:'DELETE_ELEMENTS', ids })
+        break
+      case 'toggle-lock':
+        if (el) dispatch({ type:'UPDATE_ELEMENT', id:el.id, patch:{ locked:!el.locked } })
+        break
+      case 'toggle-vis':
+        if (el) dispatch({ type:'UPDATE_ELEMENT', id:el.id, patch:{ visible:el.visible===false } })
+        break
+      case 'to-front': {
+        const max = Math.max(...elementsRef.current.map(e=>e.zIndex||0))
+        if (mainId) dispatch({ type:'UPDATE_ELEMENT', id:mainId, patch:{ zIndex:max+1 } })
+        break
+      }
+      case 'to-back':
+        if (mainId) dispatch({ type:'UPDATE_ELEMENT', id:mainId, patch:{ zIndex:-1 } })
+        break
+      case 'forward': {
+        const cur = el?.zIndex||0
+        if (mainId) dispatch({ type:'UPDATE_ELEMENT', id:mainId, patch:{ zIndex:cur+1 } })
+        break
+      }
+      case 'backward': {
+        const cur2 = el?.zIndex||0
+        if (mainId) dispatch({ type:'UPDATE_ELEMENT', id:mainId, patch:{ zIndex:Math.max(0,cur2-1) } })
+        break
+      }
+      case 'align-cx': {
+        ids.forEach(id => {
+          const e = elementsRef.current.find(x=>x.id===id)
+          if(e) dispatch({ type:'UPDATE_ELEMENT', id, patch:{ x: Math.round((STAGE_W-e.width)/2) } })
+        })
+        break
+      }
+      case 'align-cy': {
+        ids.forEach(id => {
+          const e = elementsRef.current.find(x=>x.id===id)
+          if(e) dispatch({ type:'UPDATE_ELEMENT', id, patch:{ y: Math.round((STAGE_H-e.height)/2) } })
+        })
+        break
+      }
+      case 'toggle-grid':
+        dispatch({ type:'SET_SHOW_GRID', value:!showGrid })
+        break
+      case 'toggle-guides':
+        dispatch({ type:'SET_SHOW_GUIDES', value:!showGuides })
+        break
+      case 'clear':
+        if (window.confirm('Clear all elements?')) dispatch({ type:'CLEAR_SCENE' })
+        break
+      case 'add-rect':   addElement('rect',   100, 100); break
+      case 'add-circle': addElement('circle', 100, 100); break
+      case 'add-text':   addElement('text',   100, 100); break
+      default: break
+    }
+  }
 
   // ── Stage mouse down ──────────────────────────────────────
   function handleStageMouseDown(e) {
@@ -504,6 +612,7 @@ export default function Canvas() {
           onMouseDown={handleStageMouseDown}
           onMouseMove={e=>{onDrawMove(e);trackCursor(e)}}
           onMouseUp={onDrawEnd}
+          onContextMenu={handleStageContextMenu}
         >
           <AmbientBg bgColor={bgColor||'#0a0a0f'}/>
           {showGrid && <GridOverlay/>}
@@ -514,6 +623,7 @@ export default function Canvas() {
               el={el}
               isSelected={selected.includes(el.id)}
               onMouseDown={handleElMouseDown}
+              onContextMenu={handleElContextMenu}
             />
           ))}
 
@@ -550,6 +660,27 @@ export default function Canvas() {
         <div className="canvas-pan-hint">✋ Pan Mode — drag to pan</div>
       )}
 
+      {/* Context Menu */}
+      {ctxMenu && (
+        <ContextMenu
+          x={ctxMenu.x}
+          y={ctxMenu.y}
+          el={ctxMenu.el}
+          selected={selected}
+          hasClipboard={!!(clipboardRef.current?.length)}
+          onAction={handleCtxAction}
+          onClose={() => setCtxMenu(null)}
+        />
+      )}
+
+      {/* Shortcut overlay */}
+      {showShortcuts && <ShortcutOverlay onClose={() => setShowShortcuts(false)}/>}
+
+      {/* Shortcut hint badge */}
+      <div className="canvas-shortcut-hint" onClick={() => setShowShortcuts(true)} title="Keyboard shortcuts">
+        <kbd>?</kbd>
+      </div>
+
       {/* Status bar */}
       <div className="canvas-statusbar">
         <div className="csb-group">
@@ -580,5 +711,5 @@ export default function Canvas() {
       </div>
     </div>
   )
-            }
+    }
       
