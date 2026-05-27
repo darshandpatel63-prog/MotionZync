@@ -78,6 +78,7 @@
   color: #c4b5fd; font-size: 0.68rem; font-weight: 700;
   padding: 0.2rem 0.7rem; border-radius: 99px; backdrop-filter: blur(4px);
   animation: badgePop 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: none;
 }
 @keyframes badgePop { from{transform:translateX(-50%) scale(0.8)} to{transform:translateX(-50%) scale(1)} }
 
@@ -97,3 +98,82 @@
 .csb-hex   { width:58px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.06); color:#6b7280; font-size:0.62rem; font-family:monospace; padding:0.1rem 0.3rem; border-radius:3px; outline:none; }
 .csb-hex:focus { border-color:rgba(124,58,237,0.4); color:#e2e8f0; }
 .csb-selected { color:#a78bfa; font-size:0.65rem; font-weight:700; margin-left:auto; }
+.csb-hint { margin-left: auto; }
+
+/* ═══════════════════════════════════════════════════════════════
+   NEW STYLES (Feature 1)
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Marquee selection box ─────────────────────────────────── */
+.marquee-box {
+  position: absolute;
+  border: 1.5px solid rgba(124,58,237,0.8);
+  background: rgba(124,58,237,0.08);
+  pointer-events: none;
+  z-index: 300;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(124,58,237,0.2) inset;
+  animation: marqueeIn 0.05s ease;
+}
+@keyframes marqueeIn { from{opacity:0} to{opacity:1} }
+
+/* ── SVG shape container ───────────────────────────────────── */
+.shape-svg {
+  position: absolute;
+  top: 0; left: 0;
+  pointer-events: none;
+  display: block;
+}
+
+/* ── Image element ─────────────────────────────────────────── */
+.canvas-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.canvas-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: rgba(124,58,237,0.1);
+  border: 2px dashed rgba(124,58,237,0.35);
+  border-radius: 8px;
+  gap: 0.3rem;
+}
+.cip-icon  { font-size: 1.6rem; opacity: 0.5; }
+.cip-label { font-size: 0.65rem; color: rgba(124,58,237,0.6); font-weight:600; }
+
+/* ── Pan mode hint overlay ─────────────────────────────────── */
+.canvas-pan-hint {
+  position: absolute;
+  top: 12px; left: 50%; transform: translateX(-50%);
+  background: rgba(6,182,212,0.15);
+  border: 1px solid rgba(6,182,212,0.4);
+  color: #67e8f9;
+  font-size: 0.7rem; font-weight: 700;
+  padding: 0.25rem 0.8rem; border-radius: 99px;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  animation: badgePop 0.15s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ── Triangle / Star shape hit area fix ────────────────────── */
+.canvas-el.triangle,
+.canvas-el.star,
+.canvas-el.line,
+.canvas-el.draw {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none;
+}
+
+/* ── Snap edge highlight ───────────────────────────────────── */
+.canvas-el.snapping {
+  outline: 2px solid rgba(6,182,212,0.9) !important;
+  outline-offset: 1px;
+  }
+  
