@@ -141,7 +141,7 @@ function SelectionHandles() {
 }
 
 // ── Main element renderer ─────────────────────────────────────
-export default function CanvasElement({ el, isSelected, onMouseDown }) {
+export default function CanvasElement({ el, isSelected, onMouseDown, onContextMenu }) {
   const animStyle   = buildAnimStyle(el)
   const borderStyle = buildBorderStyle(el)
   const filterStr   = buildFilterStyle(el)
@@ -188,6 +188,7 @@ export default function CanvasElement({ el, isSelected, onMouseDown }) {
       className={`canvas-el ${isSelected ? 'sel' : ''} ${el.type}`}
       style={style}
       onMouseDown={e => onMouseDown(e, el)}
+      onContextMenu={e => onContextMenu?.(e, el)}
     >
       {/* Text */}
       {el.type === 'text' && (
