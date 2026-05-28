@@ -34,11 +34,11 @@ const bgVariant = {
   '/favorites':  'gallery',
   '/changelog':  'default',
   '/tools':      'default',
-  '/codespace':  'default',
 }
 
 // These routes are full-screen — no Navbar/Footer/BG
-const FULLSCREEN_ROUTES = ['/admin', '/anim-creator']
+// CodeSpace is fullscreen — it's a complete IDE that needs all viewport space
+const FULLSCREEN_ROUTES = ['/admin', '/anim-creator', '/codespace']
 
 export default function App() {
   const { pathname } = useLocation()
