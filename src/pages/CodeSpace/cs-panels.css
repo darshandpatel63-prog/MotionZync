@@ -479,3 +479,72 @@
 .csgit-stash-item { display: flex; align-items: center; justify-content: space-between; padding: 5px 7px; background: rgba(255,255,255,0.03); border-radius: 5px; margin-top: 4px; }
 .csgit-stash-msg { font-size: 0.72rem; color: #4b5563; flex: 1; }
 .csgit-stash-pop { background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3); color: #a78bfa; padding: 2px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; }
+
+/* ── File Explorer additions ─────────────────────────────────── */
+.csfe-inline-input {
+  flex: 1; background: #1e1e2e; border: 1px solid #7c3aed;
+  color: #e2e8f0; font-size: 0.78rem; padding: 2px 7px;
+  border-radius: 4px; outline: none; font-family: inherit;
+  min-width: 0;
+}
+.csfe-hover-actions {
+  display: none; align-items: center; gap: 1px; margin-left: auto; flex-shrink: 0;
+}
+.csfe-node:hover .csfe-hover-actions { display: flex; }
+.csfe-act-btn {
+  background: none; border: none; cursor: pointer; font-size: 0.7rem;
+  width: 18px; height: 18px; border-radius: 3px; display: flex; align-items: center;
+  justify-content: center; color: #4b5563; transition: all 0.1s; padding: 0;
+}
+.csfe-act-btn:hover { background: rgba(255,255,255,0.1); color: #e2e8f0; }
+.csfe-act-del:hover { background: rgba(239,68,68,0.15) !important; color: #f87171 !important; }
+
+/* ── Project Switcher Dropdown ────────────────────────────────── */
+.cs2-proj-switcher-wrap { position: relative; flex-shrink: 0; }
+.cs2-proj-switcher-btn {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25);
+  color: #a78bfa; padding: 4px 10px; border-radius: 99px;
+  cursor: pointer; font-size: 0.75rem; font-weight: 600;
+  max-width: 180px; transition: all 0.15s;
+}
+.cs2-proj-switcher-btn:hover { background: rgba(124,58,237,0.22); border-color: rgba(124,58,237,0.4); }
+.cs2-proj-switcher-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px; }
+.cs2-proj-switcher-arrow { font-size: 0.6rem; flex-shrink: 0; }
+.cs2-proj-dropdown {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 200;
+  width: 280px; background: rgba(14,14,22,0.99);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.7);
+  animation: cs2-slideDown 0.15s ease; overflow: hidden;
+}
+.cs2-proj-dropdown-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 1px; color: #4b5563;
+}
+.cs2-proj-new-btn {
+  background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
+  color: #a78bfa; padding: 2px 8px; border-radius: 5px; cursor: pointer; font-size: 0.72rem; font-weight: 600;
+}
+.cs2-proj-dropdown-list { max-height: 300px; overflow-y: auto; padding: 4px; }
+.cs2-proj-dropdown-empty { text-align: center; color: #4b5563; padding: 16px; font-size: 0.78rem; }
+.cs2-proj-dropdown-item {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  border-radius: 7px; cursor: pointer; transition: background 0.1s;
+}
+.cs2-proj-dropdown-item:hover { background: rgba(255,255,255,0.06); }
+.cs2-proj-dropdown-item.active { background: rgba(124,58,237,0.1); }
+.cs2-proj-dropdown-icon { font-size: 1.2rem; flex-shrink: 0; }
+.cs2-proj-dropdown-info { flex: 1; min-width: 0; }
+.cs2-proj-dropdown-name { display: block; font-size: 0.8rem; font-weight: 600; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs2-proj-dropdown-meta { display: block; font-size: 0.68rem; color: #4b5563; margin-top: 1px; }
+.cs2-proj-current-dot { color: #4ade80; font-size: 0.5rem; flex-shrink: 0; }
+.cs2-proj-dropdown-del {
+  background: none; border: none; color: #4b5563; cursor: pointer;
+  font-size: 0.78rem; padding: 3px 5px; border-radius: 4px;
+  opacity: 0; transition: all 0.1s;
+}
+.cs2-proj-dropdown-item:hover .cs2-proj-dropdown-del { opacity: 1; }
+.cs2-proj-dropdown-del:hover { background: rgba(239,68,68,0.15); color: #f87171; }
+                   
