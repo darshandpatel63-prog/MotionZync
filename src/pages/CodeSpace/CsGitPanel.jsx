@@ -333,4 +333,5 @@ export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) 
       )}
     </div>
   )
-}
+  }
+    
