@@ -550,4 +550,5 @@ app.listen(3000, () => console.log('API running on :3000'))`,
 
 export function getTemplate(id) {
   return TEMPLATES.find(t => t.id === id) || TEMPLATES[0]
-}
+                               }
+          
