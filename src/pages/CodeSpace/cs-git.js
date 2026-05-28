@@ -245,4 +245,5 @@ export class GitRepo {
       return { line, lineNo: i + 1, commit: c || null }
     })
   }
-}
+  }
+      
