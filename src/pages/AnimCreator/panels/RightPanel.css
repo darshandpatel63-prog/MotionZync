@@ -77,49 +77,64 @@
                 
 
 /* ════════════════════════════════════════════════════════════
-   Feature 5 — Gradient + Shader tab styles
+   Feature 8 — Trigger tab + Simple Mode header
 ════════════════════════════════════════════════════════════ */
 
-/* Gradient off hint */
-.grad-off-hint {
-  font-size: 0.65rem; color: #374151; text-align: center;
-  padding: 0.75rem; border: 1px dashed rgba(255,255,255,0.06);
-  border-radius: 6px; margin-top: 0.4rem;
+/* Simple mode header */
+.rp-simple-header {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.55rem 0.7rem 0.4rem;
+  border-bottom: 1px solid rgba(124,58,237,0.15);
+  flex-shrink: 0;
 }
+.rp-sh-icon  { font-size: 0.9rem; }
+.rp-sh-title { font-size: 0.72rem; font-weight: 800; color: #c4b5fd; }
 
-/* ── Shader grid ─────────────────────────────────────────────── */
-.shader-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
+/* Trigger grid */
+.trigger-desc { font-size:0.62rem; color:#374151; margin-bottom:0.35rem; }
+.trigger-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
   margin-bottom: 0.4rem;
 }
-.shader-btn {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 2px; padding: 0.4rem 0.2rem;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 6px;
-  color: #6b7280; font-size: 0.62rem;
-  cursor: pointer; font-family: inherit;
+.trigger-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 0.4rem 0.2rem; border-radius: 6px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  color: #6b7280; font-size: 0.62rem; cursor: pointer; font-family: inherit;
   transition: all 0.13s;
 }
-.shader-btn:hover {
-  background: rgba(124,58,237,0.1);
-  border-color: rgba(124,58,237,0.25);
-  color: #a78bfa;
-}
-.shader-btn.active {
-  background: rgba(124,58,237,0.22);
-  border-color: rgba(124,58,237,0.55);
-  color: #c4b5fd;
-  box-shadow: 0 0 8px rgba(124,58,237,0.2);
-}
-.shader-btn-icon  { font-size: 1rem; line-height: 1; }
-.shader-btn-label { font-size: 0.6rem; font-weight: 700; }
+.trigger-btn:hover { background:rgba(124,58,237,0.1); color:#a78bfa; border-color:rgba(124,58,237,0.25); }
+.trigger-btn.active { background:rgba(124,58,237,0.22); border-color:rgba(124,58,237,0.55); color:#c4b5fd; box-shadow:0 0 8px rgba(124,58,237,0.2); }
+.trig-icon  { font-size: 1rem; }
+.trig-label { font-size: 0.6rem; font-weight: 700; text-align:center; }
 
-.shader-preview-hint {
-  font-size: 0.62rem; color: #374151;
-  text-align: center; margin-top: 0.3rem;
-                }
-  
+/* Trigger options */
+.trigger-options { display:flex; flex-direction:column; gap:0.3rem; }
+.trig-desc-box {
+  font-size:0.65rem; color:#6b7280;
+  background:rgba(6,182,212,0.06); border:1px solid rgba(6,182,212,0.15);
+  border-radius:5px; padding:0.35rem 0.5rem; line-height:1.5;
+}
+.trig-hint {
+  font-size:0.62rem; color:#4b5563; font-style:italic; padding:0.2rem 0;
+}
+
+/* Trigger preview note */
+.trig-preview-note {
+  display:flex; gap:0.4rem; align-items:flex-start;
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);
+  border-radius:6px; padding:0.45rem 0.5rem;
+  font-size:0.62rem; color:#4b5563; line-height:1.5;
+}
+.tpn-icon { flex-shrink:0; font-size:0.8rem; }
+
+/* Trigger badge on element */
+.trigger-badge {
+  position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+  background: rgba(6,182,212,0.2); border:1px solid rgba(6,182,212,0.4);
+  color: #67e8f9; font-size: 0.55rem; font-weight: 800;
+  padding: 0.1rem 0.35rem; border-radius: 99px;
+  pointer-events: none; white-space: nowrap; z-index: 200;
+  text-transform: uppercase; letter-spacing: 0.05em;
+                         }
+                
