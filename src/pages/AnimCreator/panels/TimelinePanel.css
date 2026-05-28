@@ -1,0 +1,232 @@
+/* TimelinePanel.css */
+
+/* ── Panel wrapper ───────────────────────────────────────────── */
+.tl-panel {
+  display: flex;
+  flex-direction: column;
+  height: 220px;
+  flex-shrink: 0;
+  background: rgba(8,8,18,0.98);
+  border-top: 1px solid rgba(124,58,237,0.2);
+  font-size: 0.72rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Toolbar ─────────────────────────────────────────────────── */
+.tl-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.6rem;
+  height: 36px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(10,8,22,0.95);
+  flex-shrink: 0;
+  gap: 0.35rem;
+}
+.tl-tb-left  { display:flex; align-items:center; gap:0.3rem; }
+.tl-tb-right { display:flex; align-items:center; gap:0.35rem; }
+
+.tl-btn {
+  height: 24px; padding: 0 0.45rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 5px;
+  color: #9ca3af; font-size: 0.72rem; font-family: inherit;
+  cursor: pointer; white-space: nowrap;
+  transition: all 0.13s;
+  display: flex; align-items: center; justify-content: center;
+}
+.tl-btn:hover { background:rgba(255,255,255,0.08); color:#e2e8f0; }
+.tl-btn.play-btn { font-size:0.85rem; width:28px; }
+.tl-btn.play-btn.active { background:rgba(52,211,153,0.15); border-color:rgba(52,211,153,0.3); color:#34d399; }
+.tl-btn.accent  { background:rgba(124,58,237,0.18); border-color:rgba(124,58,237,0.4); color:#c4b5fd; font-weight:700; }
+.tl-btn.accent:hover { background:rgba(124,58,237,0.3); }
+.tl-btn.danger  { background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.3); color:#f87171; }
+.tl-btn.danger:hover { background:rgba(239,68,68,0.2); }
+.tl-btn.small   { width:22px; height:22px; padding:0; font-size:0.9rem; }
+
+.tl-divider { width:1px; height:20px; background:rgba(255,255,255,0.07); margin:0 0.1rem; }
+
+.tl-time-display { display:flex; align-items:center; gap:0.2rem; font-family:monospace; }
+.tl-time-cur { font-size:0.78rem; font-weight:800; color:#c4b5fd; }
+.tl-time-sep { color:#374151; }
+.tl-time-dur { font-size:0.68rem; color:#4b5563; }
+.tl-zoom-val { font-size:0.65rem; color:#4b5563; font-family:monospace; min-width:46px; text-align:center; }
+
+.tl-label { font-size:0.63rem; color:#374151; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
+.tl-select {
+  height:22px; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08);
+  border-radius:4px; color:#9ca3af; font-size:0.68rem; font-family:inherit;
+  padding:0 0.3rem; cursor:pointer; outline:none;
+}
+
+/* ── Main area ───────────────────────────────────────────────── */
+.tl-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Track labels column ─────────────────────────────────────── */
+.tl-labels {
+  width: 130px;
+  flex-shrink: 0;
+  background: rgba(10,8,22,0.9);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.tl-ruler-spacer {
+  height: 28px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.2);
+}
+.tl-label-row {
+  display: flex; align-items: center; gap: 0.35rem;
+  height: 32px; flex-shrink: 0;
+  padding: 0 0.55rem;
+  cursor: pointer;
+  transition: background 0.12s;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.tl-label-row:hover { background:rgba(124,58,237,0.08); }
+.tl-label-row.sel   { background:rgba(124,58,237,0.14); }
+.tl-label-dot  { width:7px; height:7px; border-radius:50%; flex-shrink:0; opacity:0.85; }
+.tl-label-name { flex:1; font-size:0.68rem; font-weight:600; color:#9ca3af; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tl-kf-count   { font-size:0.6rem; color:#374151; font-family:monospace; }
+.tl-no-tracks  { font-size:0.65rem; color:#1f2937; padding:0.5rem 0.6rem; }
+
+/* ── Scrollable tracks area ──────────────────────────────────── */
+.tl-tracks-scroll {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124,58,237,0.25) transparent;
+}
+.tl-tracks-scroll::-webkit-scrollbar { height:4px; }
+.tl-tracks-scroll::-webkit-scrollbar-thumb { background:rgba(124,58,237,0.3); border-radius:2px; }
+
+.tl-tracks-inner { position:relative; min-height:100%; }
+
+/* ── Ruler ───────────────────────────────────────────────────── */
+.tl-ruler-wrap {
+  height: 28px; flex-shrink:0;
+  position: relative;
+  background: rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: col-resize;
+  overflow: hidden;
+  user-select: none;
+}
+.tl-ruler { position:relative; height:100%; }
+.tl-tick {
+  position: absolute; top:0;
+  width:1px; height:8px;
+  background: rgba(255,255,255,0.15);
+}
+.tl-tick.major {
+  height: 16px;
+  background: rgba(124,58,237,0.5);
+}
+.tl-tick-label {
+  position:absolute; top:16px; left:3px;
+  font-size:0.55rem; color:#4b5563; font-family:monospace;
+  white-space:nowrap;
+}
+
+/* ── Track row ───────────────────────────────────────────────── */
+.tl-track {
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  cursor: crosshair;
+  transition: background 0.12s;
+  flex-shrink: 0;
+}
+.tl-track:hover   { background:rgba(255,255,255,0.015); }
+.tl-track.sel     { background:rgba(124,58,237,0.06); }
+
+/* Track fill bar between first and last kf */
+.tl-track-bar {
+  position: absolute;
+  top: 8px; height: 16px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+/* ── Keyframe diamond ────────────────────────────────────────── */
+.tl-kf {
+  position: absolute;
+  top: 50%; transform: translateY(-50%) rotate(45deg);
+  width: 10px; height: 10px;
+  background: #7c3aed;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  border-radius: 2px;
+  cursor: grab;
+  z-index: 10;
+  transition: background 0.12s, transform 0.12s;
+}
+.tl-kf:hover { background:#a78bfa; transform:translateY(-50%) rotate(45deg) scale(1.25); }
+.tl-kf:active { cursor:grabbing; }
+.tl-kf.sel { background:#06b6d4; border-color:#67e8f9; box-shadow:0 0 6px rgba(6,182,212,0.6); }
+
+/* ── Playhead ────────────────────────────────────────────────── */
+.tl-playhead {
+  position: absolute;
+  top: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 50;
+  will-change: left;
+}
+.tl-ph-head {
+  width: 10px; height: 10px;
+  background: #f97316;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  margin-left: -5px;
+  position: absolute; top: 18px;
+}
+.tl-ph-line {
+  position: absolute;
+  top: 28px; bottom: 0;
+  left: 0; width: 1px;
+  background: linear-gradient(180deg, #f97316 0%, rgba(249,115,22,0.3) 100%);
+}
+
+/* ── Easing picker ───────────────────────────────────────────── */
+.tl-ease-picker {
+  position: absolute;
+  bottom: 100%; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(12,10,26,0.98);
+  border: 1px solid rgba(124,58,237,0.3);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+  padding: 0.6rem;
+  z-index: 200;
+  min-width: 200px;
+  animation: tlEpIn 0.15s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes tlEpIn { from{opacity:0;transform:translateX(-50%) scale(0.9)} to{opacity:1;transform:translateX(-50%) scale(1)} }
+.tl-ep-title { font-size:0.65rem; font-weight:800; color:#6b7280; margin-bottom:0.4rem; }
+.tl-ep-grid  { display:flex; flex-wrap:wrap; gap:4px; }
+.tl-ep-btn {
+  padding:0.18rem 0.5rem; border-radius:4px; font-size:0.63rem; font-family:inherit;
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); color:#9ca3af;
+  cursor:pointer; transition:all 0.12s;
+}
+.tl-ep-btn:hover  { background:rgba(124,58,237,0.18); color:#c4b5fd; }
+.tl-ep-btn.active { background:rgba(124,58,237,0.3); border-color:rgba(124,58,237,0.6); color:#a78bfa; }
+
+/* ── Empty hint ──────────────────────────────────────────────── */
+.tl-empty-hint {
+  position: absolute; bottom:8px; left:50%; transform:translateX(-50%);
+  display: flex; align-items:center; gap:0.4rem;
+  font-size:0.65rem; color:#1f2937;
+  white-space: nowrap; pointer-events:none;
+}
+
