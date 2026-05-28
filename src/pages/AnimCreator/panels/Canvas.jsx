@@ -5,6 +5,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { useCreator } from '../store/CreatorContext.jsx'
 import { KEYFRAMES_CSS, BORDER_KEYFRAMES } from '../engine/AnimEngine.js'
+import { SHADER_KEYFRAMES } from '../engine/ShaderEngine.js'
 import { stepPhysics } from '../engine/PhysicsEngine.js'
 import CanvasElement  from './CanvasElement.jsx'
 import ContextMenu    from './ContextMenu.jsx'
@@ -139,7 +140,7 @@ export default function Canvas() {
     if (document.getElementById('mz-kf')) return
     const s = document.createElement('style')
     s.id = 'mz-kf'
-    s.textContent = KEYFRAMES_CSS + BORDER_KEYFRAMES
+    s.textContent = KEYFRAMES_CSS + BORDER_KEYFRAMES + SHADER_KEYFRAMES
     document.head.appendChild(s)
   }, [])
 
@@ -712,4 +713,4 @@ export default function Canvas() {
     </div>
   )
     }
-      
+    
