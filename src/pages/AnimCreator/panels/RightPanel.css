@@ -75,3 +75,51 @@
 .border-type-btn:hover { background: rgba(6,182,212,0.08); border-color: rgba(6,182,212,0.2); color: #67e8f9; }
 .border-type-btn.active { background: rgba(6,182,212,0.18); border-color: rgba(6,182,212,0.5); color: #06b6d4; font-weight: 700; }
                 
+
+/* ════════════════════════════════════════════════════════════
+   Feature 5 — Gradient + Shader tab styles
+════════════════════════════════════════════════════════════ */
+
+/* Gradient off hint */
+.grad-off-hint {
+  font-size: 0.65rem; color: #374151; text-align: center;
+  padding: 0.75rem; border: 1px dashed rgba(255,255,255,0.06);
+  border-radius: 6px; margin-top: 0.4rem;
+}
+
+/* ── Shader grid ─────────────────────────────────────────────── */
+.shader-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 0.4rem;
+}
+.shader-btn {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px; padding: 0.4rem 0.2rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  color: #6b7280; font-size: 0.62rem;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.13s;
+}
+.shader-btn:hover {
+  background: rgba(124,58,237,0.1);
+  border-color: rgba(124,58,237,0.25);
+  color: #a78bfa;
+}
+.shader-btn.active {
+  background: rgba(124,58,237,0.22);
+  border-color: rgba(124,58,237,0.55);
+  color: #c4b5fd;
+  box-shadow: 0 0 8px rgba(124,58,237,0.2);
+}
+.shader-btn-icon  { font-size: 1rem; line-height: 1; }
+.shader-btn-label { font-size: 0.6rem; font-weight: 700; }
+
+.shader-preview-hint {
+  font-size: 0.62rem; color: #374151;
+  text-align: center; margin-top: 0.3rem;
+                }
+  
