@@ -1,0 +1,52 @@
+/* FPSMonitor.css */
+
+.fps-monitor {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 7px;
+  padding: 0.18rem 0.45rem 0.18rem 0.4rem;
+  flex-shrink: 0;
+  cursor: default;
+  user-select: none;
+  transition: border-color 0.3s;
+}
+.fps-monitor.fps-good { border-color: rgba(52,211,153,0.22); }
+.fps-monitor.fps-ok   { border-color: rgba(251,191,36,0.22); }
+.fps-monitor.fps-bad  { border-color: rgba(248,113,113,0.22); }
+
+.fps-spark {
+  display: block;
+  flex-shrink: 0;
+}
+
+.fps-value {
+  font-family: ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  transition: color 0.3s;
+  min-width: 24px;
+  text-align: right;
+}
+.fps-unit {
+  font-size: 0.55rem;
+  font-weight: 600;
+  opacity: 0.6;
+  margin-left: 1px;
+}
+
+.fps-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: fpsPulse 1.4s ease-in-out infinite;
+}
+@keyframes fpsPulse {
+  0%,100% { opacity: 1;   transform: scale(1);   }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+
