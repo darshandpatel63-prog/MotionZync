@@ -42,3 +42,92 @@
 .em-close-btn { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); color: #6b7280; flex: 0.5; }
 .em-close-btn:hover { background: rgba(255,255,255,0.08); color: #9ca3af; }
 
+
+/* ════════════════════════════════════════════════════════════
+   Feature 6 — Media export tabs
+════════════════════════════════════════════════════════════ */
+
+/* Tab group headers */
+.em-tab-groups { display:flex; align-items:center; flex-wrap:wrap; border-bottom:1px solid rgba(255,255,255,0.05); flex-shrink:0; gap:0; }
+.em-tab-group-label { font-size:0.55rem; font-weight:800; color:#374151; letter-spacing:0.1em; padding:0 0.6rem; text-transform:uppercase; flex-shrink:0; }
+.em-tab-group-label.media-label { margin-left:0.25rem; }
+.em-tabs { display:flex; }
+.em-tabs.code-tabs  .em-tab { font-size:0.72rem; }
+.em-tabs.media-tabs .em-tab { font-size:0.72rem; }
+.em-tab.media-tab.active { color:#67e8f9; border-bottom-color:#06b6d4; }
+
+/* Media tab content area */
+.em-media-content { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
+.em-media-tab {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  gap:0.7rem; padding:1.4rem 2rem;
+  text-align:center;
+}
+.em-media-icon  { font-size:2.2rem; }
+.em-media-title { font-size:1rem; font-weight:800; color:#e2e8f0; }
+.em-media-desc  { font-size:0.72rem; color:#6b7280; line-height:1.6; max-width:440px; }
+.em-media-desc code { font-family:monospace; color:#a78bfa; background:rgba(124,58,237,0.12); padding:0.1rem 0.3rem; border-radius:3px; }
+
+/* Lib status pill */
+.em-lib-status {
+  font-size:0.65rem; font-weight:700;
+  padding:0.2rem 0.7rem; border-radius:99px;
+}
+.em-lib-status.ready   { background:rgba(52,211,153,0.1); color:#34d399; border:1px solid rgba(52,211,153,0.25); }
+.em-lib-status.loading { background:rgba(251,191,36,0.1);  color:#fbbf24; border:1px solid rgba(251,191,36,0.25); }
+
+/* Specs list */
+.em-media-specs {
+  display:flex; flex-direction:column; gap:0.2rem; align-items:center;
+  font-size:0.63rem; color:#374151;
+}
+
+/* Media action button */
+.em-media-btn {
+  min-width:180px; padding:0.6rem 1.4rem;
+  border-radius:8px; font-size:0.82rem; font-weight:800;
+  cursor:pointer; transition:all 0.18s; font-family:inherit;
+  background:rgba(124,58,237,0.18); border:1px solid rgba(124,58,237,0.4);
+  color:#c4b5fd;
+}
+.em-media-btn:hover:not(:disabled) { background:rgba(124,58,237,0.3); transform:translateY(-1px); }
+.em-media-btn:disabled { opacity:0.4; cursor:not-allowed; }
+.em-media-btn.loading { background:rgba(251,191,36,0.1); border-color:rgba(251,191,36,0.3); color:#fbbf24; }
+.em-media-btn.done    { background:rgba(52,211,153,0.12); border-color:rgba(52,211,153,0.3); color:#34d399; }
+.em-media-btn.error   { background:rgba(239,68,68,0.1);   border-color:rgba(239,68,68,0.3);  color:#f87171; }
+.canvas-rec   { background:rgba(124,58,237,0.15); border-color:rgba(124,58,237,0.35); color:#a78bfa; }
+.screen-rec   { background:rgba(6,182,212,0.12);  border-color:rgba(6,182,212,0.3);   color:#67e8f9; }
+.stop-btn     { background:rgba(239,68,68,0.15);  border-color:rgba(239,68,68,0.4);   color:#f87171; min-width:200px; }
+
+.em-media-msg { font-size:0.7rem; font-weight:700; }
+.em-media-msg.done  { color:#34d399; }
+.em-media-msg.error { color:#f87171; }
+.em-media-close { padding:0 2rem 1rem; display:flex; justify-content:center; }
+
+/* Recording indicator */
+.em-rec-indicator {
+  display:flex; align-items:center; gap:0.5rem;
+  background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3);
+  border-radius:99px; padding:0.3rem 0.8rem;
+  font-size:0.72rem; font-weight:700; color:#f87171;
+}
+.em-rec-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:#f87171;
+  animation:recPulse 1s ease-in-out infinite;
+}
+@keyframes recPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+.em-rec-mime { font-size:0.58rem; color:#6b7280; font-family:monospace; }
+.em-rec-btns { display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; }
+
+/* ZIP contents list */
+.em-zip-contents {
+  background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06);
+  border-radius:8px; padding:0.6rem 0.8rem; width:100%; max-width:420px; text-align:left;
+}
+.em-zip-title  { font-size:0.62rem; font-weight:800; color:#4b5563; margin-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.05em; }
+.em-zip-file   { display:flex; gap:0.6rem; align-items:baseline; padding:0.2rem 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.em-zip-file:last-child { border-bottom:none; }
+.em-zip-fname  { font-size:0.68rem; font-family:monospace; color:#a78bfa; flex-shrink:0; min-width:150px; }
+.em-zip-fdesc  { font-size:0.63rem; color:#4b5563; }
+  
