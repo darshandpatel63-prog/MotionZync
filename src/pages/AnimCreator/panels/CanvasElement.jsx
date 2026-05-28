@@ -1,10 +1,52 @@
 // CanvasElement.jsx — renders each element type on the canvas
-// NEW FILE — split from Canvas.jsx for modularity (< 500 lines rule)
+// Feature 5: adds shader CSS + overlay rendering
 
 import {
   buildAnimStyle, buildBorderStyle,
   buildFilterStyle, buildShadowStyle, buildGradient,
 } from '../engine/AnimEngine.js'
+import { buildShaderStyle, getShaderOverlay } from '../engine/ShaderEngine.js'
+
+// ── Shader overlay visuals (CSS-based, no canvas) ────────────
+function ShaderOverlay({ type, opacity }) {
+  if (!type || type==='none') return null
+
+  const base = { position:'absolute', inset:0, pointerEvents:'none', zIndex:5 }
+
+  if (type==='scanlines') return (
+    <div style={{
+      ...base, opacity,
+      background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.35) 0px, rgba(0,0,0,0.35) 1px, transparent 1px, transparent 3px)',
+    }}/>
+  )
+  if (type==='hologram') return (
+    <div style={{
+      ...base, opacity,
+      background: 'linear-gradient(180deg, transparent 0%, rgba(0,255,255,0.08) 50%, transparent 100%)',
+      animation: 'sh-holo-scan 2s linear infinite',
+    }}/>
+  )
+  if (type==='glitch') return (
+    <div style={{
+      ...base, opacity,
+      background: 'linear-gradient(90deg, rgba(255,0,80,0.15) 0%, transparent 40%, rgba(0,255,255,0.15) 100%)',
+    }}/>
+  )
+  if (type==='chromatic') return (
+    <div style={{
+      ...base, opacity,
+      background: 'linear-gradient(90deg, rgba(255,0,80,0.2) 0%, transparent 50%, rgba(0,255,255,0.2) 100%)',
+      mixBlendMode: 'screen',
+    }}/>
+  )
+  if (type==='vhs') return (
+    <div style={{
+      ...base, opacity,
+      background: 'repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px)',
+    }}/>
+  )
+  return null
+}
 
 // ── Triangle ─────────────────────────────────────────────────
 function TriangleShape({ el, fill }) {
@@ -142,12 +184,14 @@ function SelectionHandles() {
 
 // ── Main element renderer ─────────────────────────────────────
 export default function CanvasElement({ el, isSelected, onMouseDown, onContextMenu }) {
-  const animStyle   = buildAnimStyle(el)
-  const borderStyle = buildBorderStyle(el)
-  const filterStr   = buildFilterStyle(el)
-  const shadowStr   = buildShadowStyle(el)
-  const bg          = buildGradient(el)
-  const rx          = el.physics?._rotDelta || 0
+  const animStyle    = buildAnimStyle(el)
+  const borderStyle  = buildBorderStyle(el)
+  const filterStr    = buildFilterStyle(el)
+  const shadowStr    = buildShadowStyle(el)
+  const bg           = buildGradient(el)
+  const shaderCss    = buildShaderStyle(el)
+  const shaderOvl    = getShaderOverlay(el)
+  const rx           = el.physics?._rotDelta || 0
 
   // SVG shapes can't use CSS gradients for fill → use flat color
   const svgFill = el.gradient ? el.gradient.from : (el.fill || '#7c3aed')
@@ -178,8 +222,14 @@ export default function CanvasElement({ el, isSelected, onMouseDown, onContextMe
   // Box shadows only on box / text shapes
   const boxTypes = new Set(['rect', 'circle', 'text', 'image'])
   if (shadowStr && boxTypes.has(el.type)) style.boxShadow = shadowStr
-  if (filterStr)  style.filter = filterStr
-  if (animStyle && !el.physics?.enabled) style.animation = animStyle
+  if (filterStr || shaderCss) {
+    style.filter = [filterStr, shaderCss.includes('filter:') ? shaderCss.split('filter:')[1]?.split(';')[0] : ''].filter(Boolean).join(' ') || undefined
+  }
+  if (animStyle && !el.physics?.enabled && !shaderCss.includes('animation:')) style.animation = animStyle
+  if (shaderCss.includes('animation:')) {
+    const shAnim = shaderCss.split('animation:')[1]?.split(';')[0]?.trim()
+    if (shAnim) style.animation = animStyle ? `${animStyle}, ${shAnim}` : shAnim
+  }
   if (el.borderAnim?.enabled) Object.assign(style, borderStyle)
 
   return (
@@ -190,6 +240,9 @@ export default function CanvasElement({ el, isSelected, onMouseDown, onContextMe
       onMouseDown={e => onMouseDown(e, el)}
       onContextMenu={e => onContextMenu?.(e, el)}
     >
+      {/* Shader overlay */}
+      {shaderOvl && <ShaderOverlay type={shaderOvl.type} opacity={shaderOvl.opacity}/>}
+
       {/* Text */}
       {el.type === 'text' && (
         <span style={{
@@ -214,4 +267,5 @@ export default function CanvasElement({ el, isSelected, onMouseDown, onContextMe
       {isSelected && !el.locked && <SelectionHandles />}
     </div>
   )
-}
+      }
+        
