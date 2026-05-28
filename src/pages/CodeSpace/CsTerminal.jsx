@@ -533,4 +533,5 @@ export default function CsTerminal({ files, onFilesChange, projectName, gitRepo 
       </div>
     </div>
   )
-}
+          }
+          
