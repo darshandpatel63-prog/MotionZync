@@ -7,7 +7,8 @@ import { SHADERS, SHADER_NAMES } from '../engine/ShaderEngine.js'
 import { TRIGGERS, TRIGGER_NAMES, makeTriggerConfig } from '../engine/TriggerEngine.js'
 import GradientBuilder, { makeGradient } from './GradientBuilder.jsx'
 import SimpleModePanel from './SimpleModePanel.jsx'
-import ParticlePanel   from './ParticlePanel.jsx'
+import ParticlePanel        from './ParticlePanel.jsx'
+import MaskCollisionPanel   from './MaskCollisionPanel.jsx'
 import './RightPanel.css'
 
 const PHYSICS_MODES = [
@@ -353,14 +354,30 @@ const PRO_PANELS = [
   { id:'shader',     icon:'⚗️', label:'Shader'    },
   { id:'animation',  icon:'🎬', label:'Anim'      },
   { id:'trigger',    icon:'🎯', label:'Trigger'   },
-  { id:'particles',  icon:'🎆', label:'Particles' },  // NEW
+  { id:'particles',  icon:'🎆', label:'Particles' },
+  { id:'mask',       icon:'✂️', label:'Mask'      },  // NEW
   { id:'physics',    icon:'⚛️', label:'Phys'      },
   { id:'border',     icon:'🔲', label:'Border'    },
 ]
 
 export default function RightPanel() {
-  const { selectedEl, updateEl, activeRightPanel, setPanel, mode } = useCreator()
+  const { selectedEl, updateEl, activeRightPanel, setPanel, mode, elements, dispatch } = useCreator()
   const update = (patch) => { if (selectedEl) updateEl(selectedEl.id, patch) }
+
+  // Ropes state lives here — passed down to MaskCollisionPanel + Canvas via context
+  // We store ropes in a module-level ref so Canvas can also access them
+  // Simple approach: store in a window-level var for cross-component access
+  if (typeof window._mzRopes === 'undefined') window._mzRopes = []
+  const [ropes, setRopes] = window._mzRopesState || [[], ()=>{}]
+
+  function handleAddRope(rope) {
+    window._mzRopes = [...(window._mzRopes||[]), rope]
+    dispatch({ type:'SET_ROPES', ropes: window._mzRopes })
+  }
+  function handleDeleteRope(id) {
+    window._mzRopes = (window._mzRopes||[]).filter(r=>r.id!==id)
+    dispatch({ type:'SET_ROPES', ropes: window._mzRopes })
+  }
 
   // ── Simple mode → show SimpleModePanel ───────────────────
   if (mode === 'simple') {
@@ -394,6 +411,16 @@ export default function RightPanel() {
         {activeRightPanel==='animation'  && <AnimationTab  el={selectedEl} update={update}/>}
         {activeRightPanel==='trigger'    && <TriggerTab    el={selectedEl} update={update}/>}
         {activeRightPanel==='particles'  && <ParticlePanel el={selectedEl} update={update}/>}
+        {activeRightPanel==='mask'       && (
+          <MaskCollisionPanel
+            el={selectedEl}
+            update={update}
+            elements={elements}
+            ropes={window._mzRopes||[]}
+            onAddRope={handleAddRope}
+            onDeleteRope={handleDeleteRope}
+          />
+        )}
         {activeRightPanel==='physics'    && <PhysicsTab    el={selectedEl} update={update}/>}
         {activeRightPanel==='border'     && <BorderTab     el={selectedEl} update={update}/>}
       </div>
