@@ -10,6 +10,8 @@ import CanvasElement   from './CanvasElement.jsx'
 import ContextMenu     from './ContextMenu.jsx'
 import ShortcutOverlay from '../modals/ShortcutOverlay.jsx'
 import ParticleCanvas  from './ParticleCanvas.jsx'
+import RopeCanvas      from './RopeCanvas.jsx'
+import { resolveElementCollisions } from '../engine/CollisionEngine.js'
 import './Canvas.css'
 
 const STAGE_W = 900
@@ -134,6 +136,14 @@ export default function Canvas() {
   // Feature 2
   const [ctxMenu,     setCtxMenu]     = useState(null)  // { x, y, el }
   const [showShortcuts, setShowShortcuts] = useState(false)
+  const [ropes,         setRopes]         = useState([])
+
+  // Sync ropes from window (set by RightPanel)
+  useEffect(() => {
+    function syncRopes() { setRopes([...(window._mzRopes||[])]) }
+    const id = setInterval(syncRopes, 500)
+    return () => clearInterval(id)
+  }, [])
 
   // ── Inject keyframes once ─────────────────────────────────
   useEffect(() => {
@@ -182,7 +192,20 @@ export default function Canvas() {
         }
         return { ...el, x:nx, y:ny, physics:{...el.physics,...pu} }
       })
-      dispatch({ type:'LOAD_ELEMENTS', elements:newEls })
+
+      // ── Collision resolution pass ──────────────────────────
+      const colPatches = resolveElementCollisions(newEls)
+      const finalEls   = newEls.map(el => {
+        const cp = colPatches[el.id]; if (!cp) return el
+        return {
+          ...el,
+          x: cp.x ?? el.x,
+          y: cp.y ?? el.y,
+          physics: { ...el.physics, vx: cp.vx ?? el.physics?.vx ?? 0, vy: cp.vy ?? el.physics?.vy ?? 0 }
+        }
+      })
+
+      dispatch({ type:'LOAD_ELEMENTS', elements:finalEls })
       physLoopRef.current = requestAnimationFrame(loop)
     }
     physLoopRef.current = requestAnimationFrame(loop)
@@ -632,6 +655,11 @@ export default function Canvas() {
           {drawPreview && <DrawPreview points={drawPreview}/>}
           <MarqueeBox box={marqueeBox}/>
           <ParticleCanvas elements={elements}/>
+          <RopeCanvas
+            elements={elements}
+            ropes={ropes}
+            onUpdateRopes={setRopes}
+          />
 
           {elements.length===0 && (
             <div className="stage-hint">
