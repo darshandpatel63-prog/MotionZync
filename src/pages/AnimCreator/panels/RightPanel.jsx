@@ -7,6 +7,7 @@ import { SHADERS, SHADER_NAMES } from '../engine/ShaderEngine.js'
 import { TRIGGERS, TRIGGER_NAMES, makeTriggerConfig } from '../engine/TriggerEngine.js'
 import GradientBuilder, { makeGradient } from './GradientBuilder.jsx'
 import SimpleModePanel from './SimpleModePanel.jsx'
+import ParticlePanel   from './ParticlePanel.jsx'
 import './RightPanel.css'
 
 const PHYSICS_MODES = [
@@ -347,13 +348,14 @@ function BorderTab({ el, update }) {
 
 // ── Main RightPanel ───────────────────────────────────────────
 const PRO_PANELS = [
-  { id:'properties', icon:'📐', label:'Props'   },
-  { id:'gradient',   icon:'🌈', label:'Grad'    },
-  { id:'shader',     icon:'⚗️', label:'Shader'  },
-  { id:'animation',  icon:'🎬', label:'Anim'    },
-  { id:'trigger',    icon:'🎯', label:'Trigger' },  // NEW
-  { id:'physics',    icon:'⚛️', label:'Phys'    },
-  { id:'border',     icon:'🔲', label:'Border'  },
+  { id:'properties', icon:'📐', label:'Props'     },
+  { id:'gradient',   icon:'🌈', label:'Grad'      },
+  { id:'shader',     icon:'⚗️', label:'Shader'    },
+  { id:'animation',  icon:'🎬', label:'Anim'      },
+  { id:'trigger',    icon:'🎯', label:'Trigger'   },
+  { id:'particles',  icon:'🎆', label:'Particles' },  // NEW
+  { id:'physics',    icon:'⚛️', label:'Phys'      },
+  { id:'border',     icon:'🔲', label:'Border'    },
 ]
 
 export default function RightPanel() {
@@ -391,6 +393,7 @@ export default function RightPanel() {
         {activeRightPanel==='shader'     && <ShaderTab     el={selectedEl} update={update}/>}
         {activeRightPanel==='animation'  && <AnimationTab  el={selectedEl} update={update}/>}
         {activeRightPanel==='trigger'    && <TriggerTab    el={selectedEl} update={update}/>}
+        {activeRightPanel==='particles'  && <ParticlePanel el={selectedEl} update={update}/>}
         {activeRightPanel==='physics'    && <PhysicsTab    el={selectedEl} update={update}/>}
         {activeRightPanel==='border'     && <BorderTab     el={selectedEl} update={update}/>}
       </div>
