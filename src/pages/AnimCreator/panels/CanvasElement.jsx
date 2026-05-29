@@ -8,6 +8,7 @@ import {
 } from '../engine/AnimEngine.js'
 import { buildShaderStyle, getShaderOverlay } from '../engine/ShaderEngine.js'
 import { getTriggerStyle, observeScroll, unobserveScroll } from '../engine/TriggerEngine.js'
+import { buildMaskStyle } from '../engine/MaskSystem.js'
 
 // ── Shader overlay ────────────────────────────────────────────
 function ShaderOverlay({ type, opacity }) {
@@ -114,6 +115,7 @@ export default function CanvasElement({ el, isSelected, onMouseDown, onContextMe
   const shaderCss      = buildShaderStyle(el)
   const shaderOvl      = getShaderOverlay(el)
   const triggerStyle   = getTriggerStyle(el, triggered)
+  const maskStyle      = buildMaskStyle(el)
   const rx             = el.physics?._rotDelta || 0
   const svgFill        = el.gradient ? el.gradient.stops?.[0]?.color||'#7c3aed' : (el.fill || '#7c3aed')
 
@@ -165,6 +167,7 @@ export default function CanvasElement({ el, isSelected, onMouseDown, onContextMe
   }
 
   if (el.borderAnim?.enabled) Object.assign(style, borderStyle)
+  if (maskStyle.clipPath)     style.clipPath = maskStyle.clipPath
 
   // Trigger cursor hint badge
   const triggerBadge = (trigger !== 'auto') ? trigger : null
@@ -201,5 +204,5 @@ export default function CanvasElement({ el, isSelected, onMouseDown, onContextMe
       {isSelected && !el.locked && <SelectionHandles/>}
     </div>
   )
-      }
-  
+  }
+        
