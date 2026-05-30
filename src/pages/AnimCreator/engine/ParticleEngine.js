@@ -69,13 +69,13 @@ export const PARTICLE_PRESETS = {
 export const PRESET_NAMES = Object.keys(PARTICLE_PRESETS)
 
 // ─── Single particle factory ──────────────────────────────────
-function makeParticle(preset, emitterX, emitterY, stageW, stageH) {
+function makeParticle(preset, emitterX, emitterY, stageW, stageH,
+                      speedMult=1, sizeMult=1, opacMult=1, lifeMult=1) {
   const p  = preset
   const angle = p.emitMode === 'top'
     ? (p.angle || 90) + (Math.random()-0.5) * p.spread
     : Math.random() * 360
   const rad   = angle * Math.PI / 180
-  const spd   = _rand(p.speed[0], p.speed[1])
   let sx = emitterX, sy = emitterY
 
   if (p.emitMode === 'area') {
@@ -86,8 +86,10 @@ function makeParticle(preset, emitterX, emitterY, stageW, stageH) {
     sy = -10
   }
 
-  const life   = _rand(p.life[0],    p.life[1])
-  const size   = _rand(p.size[0],    p.size[1])
+  const life   = _rand(p.life[0],    p.life[1])    * lifeMult
+  const size   = _rand(p.size[0],    p.size[1])    * sizeMult
+  const spd    = _rand(p.speed[0],   p.speed[1])   * speedMult
+  const opBase = _rand(p.opacity[0], p.opacity[1]) * opacMult
   const color  = p.colorShift
     ? p.colorShift[Math.floor(Math.random()*p.colorShift.length)]
     : p.color
@@ -98,8 +100,8 @@ function makeParticle(preset, emitterX, emitterY, stageW, stageH) {
     vy:   Math.sin(rad) * spd,
     size, color,
     maxLife: life, life,
-    opacity: _rand(p.opacity[0], p.opacity[1]),
-    maxOpacity: _rand(p.opacity[0], p.opacity[1]),
+    opacity: Math.min(1, opBase),
+    maxOpacity: Math.min(1, opBase),
     wobblePhase: Math.random() * Math.PI * 2,
     rotation: Math.random() * 360,
     rotSpeed: (Math.random()-0.5) * 4,
@@ -112,8 +114,22 @@ function _rand(a, b) { return a + Math.random() * (b - a) }
 // ─── ParticleSystem class ─────────────────────────────────────
 // Used by ParticleCanvas component
 export class ParticleSystem {
-  constructor(presetName, emitterX, emitterY, stageW, stageH) {
-    this.preset    = { ...PARTICLE_PRESETS[presetName] } || PARTICLE_PRESETS.stars
+  constructor(presetName, emitterX, emitterY, stageW, stageH, overrides = {}) {
+    const base     = PARTICLE_PRESETS[presetName] || PARTICLE_PRESETS.stars
+    // Apply panel fine-tune overrides
+    this.preset    = {
+      ...base,
+      count:   overrides.count    !== undefined ? overrides.count    : base.count,
+      gravity: overrides.gravity  !== undefined ? overrides.gravity  : base.gravity,
+    }
+    if (overrides.colorOverride) {
+      this.preset.color      = overrides.colorOverride
+      this.preset.colorShift = null  // disable color shift when custom color set
+    }
+    this.speedMult  = overrides.speed   ?? 1
+    this.sizeMult   = overrides.size    ?? 1
+    this.opacMult   = overrides.opacity ?? 1
+    this.lifeMult   = overrides.life    ?? 1
     this.presetName= presetName
     this.emitterX  = emitterX
     this.emitterY  = emitterY
@@ -131,8 +147,8 @@ export class ParticleSystem {
 
   _fillInitial() {
     for (let i = 0; i < this.preset.count; i++) {
-      const p = makeParticle(this.preset, this.emitterX, this.emitterY, this.stageW, this.stageH)
-      // Spread initial particles across their lifetimes
+      const p = makeParticle(this.preset, this.emitterX, this.emitterY,
+        this.stageW, this.stageH, this.speedMult, this.sizeMult, this.opacMult, this.lifeMult)
       p.life = Math.random() * p.maxLife
       this.particles.push(p)
     }
@@ -140,7 +156,8 @@ export class ParticleSystem {
 
   _burst() {
     for (let i = 0; i < this.preset.count; i++)
-      this.particles.push(makeParticle(this.preset, this.emitterX, this.emitterY, this.stageW, this.stageH))
+      this.particles.push(makeParticle(this.preset, this.emitterX, this.emitterY,
+        this.stageW, this.stageH, this.speedMult, this.sizeMult, this.opacMult, this.lifeMult))
   }
 
   update(dt) {
@@ -153,7 +170,8 @@ export class ParticleSystem {
     if (!p.burst) {
       this.emitAccum += p.count * dt
       while (this.emitAccum >= 1 && this.particles.length < p.count * 2) {
-        this.particles.push(makeParticle(p, this.emitterX, this.emitterY, this.stageW, this.stageH))
+        this.particles.push(makeParticle(p, this.emitterX, this.emitterY,
+          this.stageW, this.stageH, this.speedMult, this.sizeMult, this.opacMult, this.lifeMult))
         this.emitAccum--
       }
     }
@@ -250,3 +268,4 @@ function _drawStar(ctx, cx, cy, points, outer, inner) {
   ctx.closePath()
 }
 
+    
