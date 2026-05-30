@@ -132,3 +132,38 @@
   .mode-switch        { order: -2; }
   .topbar-group:last-of-type { order: -1; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   BUGFIX — FPS wrapper + mode-switch mobile fixes
+════════════════════════════════════════════════════════════ */
+
+/* FPS wrapper — never pushes mode-switch off screen */
+.fps-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* mode-switch must NEVER be hidden or overflow on mobile */
+.mode-switch {
+  flex-shrink: 0 !important;
+  order: -1;   /* always near left side on mobile */
+}
+
+@media (max-width: 768px) {
+  /* Hide FPS on mobile — it was covering Simple/Pro buttons */
+  .fps-wrap { display: none !important; }
+
+  /* Move mode-switch and export to start of topbar on mobile */
+  .mode-switch                    { order: -2; }
+  .topbar-group:last-of-type      { order: -1; }
+
+  /* Shrink tool icons on mobile to save space */
+  .tool-btn   { width: 24px !important; height: 24px !important; }
+  .tool-icon  { font-size: 0.7rem !important; }
+  .tl-version { display: none; }
+
+  /* Export button always visible */
+  .topbar-action-btn.export-btn { flex-shrink: 0; }
+                       }
+                              
