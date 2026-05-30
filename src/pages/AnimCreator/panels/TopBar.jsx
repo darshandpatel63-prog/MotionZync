@@ -166,15 +166,21 @@ export default function TopBar({ onExport, onLibrary }) {
 
         <div className="topbar-spacer"/>
 
-        {/* FPS Monitor — Pro mode only (NEW) */}
-        {mode === 'pro' && <FPSMonitor/>}
+        {/* FPS Monitor — Pro mode only, hidden on mobile via CSS */}
+        {mode === 'pro' && (
+          <div className="fps-wrap">
+            <FPSMonitor/>
+          </div>
+        )}
 
         {mode === 'pro' && <div className="topbar-divider"/>}
 
-        {/* Mode switch */}
-        <div className="mode-switch">
-          <button className={`mode-btn ${mode==='simple'?'active':''}`} onClick={() => setMode('simple')}>Simple</button>
-          <button className={`mode-btn ${mode==='pro'?'active':''}`}    onClick={() => setMode('pro')}>Pro</button>
+        {/* Mode switch — always visible, flex-shrink:0 */}
+        <div className="mode-switch" style={{ flexShrink:0 }}>
+          <button className={`mode-btn ${mode==='simple'?'active':''}`}
+            onClick={() => setMode('simple')}>Simple</button>
+          <button className={`mode-btn ${mode==='pro'?'active':''}`}
+            onClick={() => setMode('pro')}>Pro</button>
         </div>
 
         <div className="topbar-divider"/>
@@ -192,4 +198,5 @@ export default function TopBar({ onExport, onLibrary }) {
     </>
   )
       }
-            
+
+          
