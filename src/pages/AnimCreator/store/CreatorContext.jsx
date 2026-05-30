@@ -21,9 +21,15 @@ export function makeElement(type, x, y) {
     shadow:     { enabled:false, color:'#7c3aed', blur:20, x:0, y:0 },
     glow:       { enabled:false, color:'#7c3aed', intensity:20 },
     anim:       { name:'none', duration:2, delay:0, easing:'ease-in-out', loop:true, direction:'normal' },
-    physics:    { enabled:false, mode:'none', gravity:0.3, bounce:0.6, mass:1, friction:0.08,
-                  wind:0, magnetic:0, stiffness:0.15, damping:0.85,
-                  vx:0, vy:0, ax:0, ay:0, restX:0, restY:0, sleeping:false },
+    physics:    {
+      enabled:false, mode:'none',
+      gravity:0.3, bounce:0.6, mass:1, friction:0.08,
+      wind:0, magnetic:0, stiffness:0.15, damping:0.85,
+      vx:0, vy:0, ax:0, ay:0,
+      restX: x,   // ── FIX: use actual placed position, not 0
+      restY: y,   // ── FIX: use actual placed position, not 0
+      sleeping:false,
+    },
     borderAnim: { enabled:false, type:'neon', color:'#06b6d4', speed:2, thickness:2, glow:15 },
     effects:    { blur:0, brightness:100, contrast:100, saturate:100, hueRotate:0 },
     visible:true, locked:false, zIndex:0, _selected:false,
@@ -265,4 +271,5 @@ export function useCreator() {
     dispatch,
   }
               }
-        
+
+                                              
