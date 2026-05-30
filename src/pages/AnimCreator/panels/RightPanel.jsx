@@ -294,7 +294,19 @@ function PhysicsTab({ el, update }) {
         <div className="phys-modes">
           {PHYSICS_MODES.map(m=>(
             <button key={m.id} className={`phys-mode-btn ${(phys.mode||'none')===m.id?'active':''}`}
-              onClick={()=>update({physics:{...phys,mode:m.id,enabled:m.id!=='none',sleeping:false}})}>
+              onClick={()=>{
+                if (m.id === 'none') {
+                  // Physics OFF — restore element to saved rest position
+                  const patch = { physics: {...phys, mode:'none', enabled:false, sleeping:true, vx:0, vy:0} }
+                  if (typeof phys.restX === 'number') patch.x = phys.restX
+                  if (typeof phys.restY === 'number') patch.y = phys.restY
+                  update(patch)
+                } else {
+                  // Physics ON — save current x/y as rest anchor (fixes fly-to-0,0 bug)
+                  update({ physics: {...phys, mode:m.id, enabled:true, sleeping:false,
+                    vx:0, vy:0, restX:el.x, restY:el.y} })
+                }
+              }}>
               <span>{m.icon}</span><span>{m.label}</span>
             </button>
           ))}
