@@ -93,7 +93,7 @@ function PNGTab({ elements, bgColor }) {
 
 // ── Record Tab ────────────────────────────────────────────────
 function RecordTab() {
-  const [recState, setRecState] = useState('idle')  // idle | recording | stopping | done | error
+  const [recState, setRecState] = useState('idle')
   const [elapsed,  setElapsed]  = useState(0)
   const [msg,      setMsg]      = useState('')
   const [mimeType, setMimeType] = useState('')
@@ -104,22 +104,18 @@ function RecordTab() {
     return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`
   }
 
-  async function startRecord(mode) {
+  async function startRecord() {
     setMsg(''); setElapsed(0); setRecState('recording')
     try {
-      let mime
-      if (mode === 'canvas') {
-        const canvasEl = document.querySelector('.stage canvas.ambient-bg')
-        if (!canvasEl) throw new Error('Canvas element not found — use Screen mode')
-        mime = await recorderRef.current.startFromCanvas(canvasEl, 30)
-      } else {
-        mime = await recorderRef.current.startFromScreen()
-      }
+      const mime = await recorderRef.current.startFromScreen()
       setMimeType(mime)
       timerRef.current = setInterval(() => setElapsed(e => e+1), 1000)
     } catch(e) {
-      setRecState('error'); setMsg(e.message)
-      setTimeout(() => { setRecState('idle'); setMsg('') }, 3500)
+      setRecState('error')
+      setMsg(e.message.includes('denied')||e.message.includes('permission')
+        ? 'Screen capture denied. Allow screen sharing when prompted.'
+        : '✗ ' + e.message)
+      setTimeout(() => { setRecState('idle'); setMsg('') }, 4000)
     }
   }
 
@@ -137,7 +133,6 @@ function RecordTab() {
   }
 
   useEffect(() => () => clearInterval(timerRef.current), [])
-
   const isRec = recState === 'recording'
 
   return (
@@ -145,11 +140,15 @@ function RecordTab() {
       <div className="em-media-icon">🎥</div>
       <div className="em-media-title">Record Animation</div>
       <div className="em-media-desc">
-        Record your animated canvas directly as MP4/WEBM video.<br/>
-        <strong>Canvas mode</strong> records the WebGL canvas element.<br/>
-        <strong>Screen mode</strong> lets you select any area on screen.
+        Records your animation as WEBM/MP4 video using screen capture.<br/>
+        Select <strong>"This Tab"</strong> or the AnimCreator window when prompted.
       </div>
-
+      <div className="em-rec-steps">
+        <div className="em-rec-step"><span className="ers-num">1</span>Click Start Recording</div>
+        <div className="em-rec-step"><span className="ers-num">2</span>Select AnimCreator tab/window</div>
+        <div className="em-rec-step"><span className="ers-num">3</span>Play your animation</div>
+        <div className="em-rec-step"><span className="ers-num">4</span>Click Stop &amp; Save</div>
+      </div>
       {isRec && (
         <div className="em-rec-indicator">
           <div className="em-rec-dot"/>
@@ -157,19 +156,11 @@ function RecordTab() {
           {mimeType && <span className="em-rec-mime">{mimeType.split(';')[0]}</span>}
         </div>
       )}
-
       <div className="em-rec-btns">
         {!isRec && recState !== 'stopping' ? (
-          <>
-            <button className="em-media-btn canvas-rec" onClick={() => startRecord('canvas')}
-              disabled={recState==='stopping'}>
-              🎬 Record Canvas
-            </button>
-            <button className="em-media-btn screen-rec" onClick={() => startRecord('screen')}
-              disabled={recState==='stopping'}>
-              🖥 Record Screen
-            </button>
-          </>
+          <button className="em-media-btn screen-rec" onClick={startRecord}>
+            🎥 Start Recording
+          </button>
         ) : (
           <button className={`em-media-btn stop-btn ${recState==='stopping'?'loading':''}`}
             onClick={stopRecord} disabled={recState==='stopping'}>
@@ -177,15 +168,12 @@ function RecordTab() {
           </button>
         )}
       </div>
-
       {(recState==='done'||recState==='error') && (
         <div className={`em-media-msg ${recState}`}>{msg}</div>
       )}
-
       <div className="em-media-specs">
-        <span>Format: MP4 (H.264) or WEBM (VP9) — browser dependent</span>
-        <span>FPS: 30 · Bitrate: 4 Mbps</span>
-        <span>Tip: Play your animation before recording</span>
+        <span>Format: WEBM (Chrome/Firefox) or MP4</span>
+        <span>⚠ Mobile browsers: screen recording not supported</span>
       </div>
     </div>
   )
@@ -393,4 +381,5 @@ export default function ExportModal({ onClose }) {
     </div>
   )
         }
+
         
