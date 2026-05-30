@@ -1,6 +1,7 @@
 // RightPanel.jsx — UPDATED (Feature 8)
 // New: Trigger tab (hover/click/scroll/auto) + Simple Mode panel
 
+import { useState } from 'react'
 import { useCreator } from '../store/CreatorContext.jsx'
 import { ANIMATIONS, ANIM_CATEGORIES, EASINGS, BORDER_ANIMS } from '../engine/AnimEngine.js'
 import { SHADERS, SHADER_NAMES } from '../engine/ShaderEngine.js'
@@ -376,19 +377,18 @@ export default function RightPanel() {
   const { selectedEl, updateEl, activeRightPanel, setPanel, mode, elements, dispatch } = useCreator()
   const update = (patch) => { if (selectedEl) updateEl(selectedEl.id, patch) }
 
-  // Ropes state lives here — passed down to MaskCollisionPanel + Canvas via context
-  // We store ropes in a module-level ref so Canvas can also access them
-  // Simple approach: store in a window-level var for cross-component access
-  if (typeof window._mzRopes === 'undefined') window._mzRopes = []
-  const [ropes, setRopes] = window._mzRopesState || [[], ()=>{}]
+  // ── Rope state — proper React useState ───────────────────
+  const [ropes, setRopes] = useState(() => window._mzRopes || [])
 
   function handleAddRope(rope) {
-    window._mzRopes = [...(window._mzRopes||[]), rope]
-    dispatch({ type:'SET_ROPES', ropes: window._mzRopes })
+    const next = [...(window._mzRopes||[]), rope]
+    window._mzRopes = next
+    setRopes(next)
   }
   function handleDeleteRope(id) {
-    window._mzRopes = (window._mzRopes||[]).filter(r=>r.id!==id)
-    dispatch({ type:'SET_ROPES', ropes: window._mzRopes })
+    const next = (window._mzRopes||[]).filter(r=>r.id!==id)
+    window._mzRopes = next
+    setRopes(next)
   }
 
   // ── Simple mode → show SimpleModePanel ───────────────────
