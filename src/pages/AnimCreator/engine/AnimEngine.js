@@ -123,13 +123,24 @@ export function buildShadowStyle(el) {
 
 // ─── Gradient background ──────────────────────────────────────
 export function buildGradient(el) {
-  if (!el.gradient) return el.fill
+  if (!el.gradient) return el.fill || '#7c3aed'
   const g = el.gradient
-  if (g.type === 'linear')
-    return `linear-gradient(${g.angle||135}deg, ${g.from}, ${g.to})`
-  if (g.type === 'radial')
-    return `radial-gradient(circle, ${g.from}, ${g.to})`
-  return el.fill
+
+  // ── NEW multi-stop format from GradientBuilder ────────────
+  if (g.stops && g.stops.length >= 2) {
+    const sorted = [...g.stops].sort((a, b) => a.pos - b.pos)
+    const stops  = sorted.map(s => `${s.color} ${s.pos}%`).join(', ')
+    if (g.type === 'radial') return `radial-gradient(circle, ${stops})`
+    if (g.type === 'conic')  return `conic-gradient(from ${g.angle||0}deg, ${stops})`
+    return `linear-gradient(${g.angle||135}deg, ${stops})`
+  }
+
+  // ── Legacy {from, to} format (backward compat) ─────────────
+  const from = g.from || el.fill || '#7c3aed'
+  const to   = g.to   || '#06b6d4'
+  if (g.type === 'linear') return `linear-gradient(${g.angle||135}deg, ${from}, ${to})`
+  if (g.type === 'radial') return `radial-gradient(circle, ${from}, ${to})`
+  return el.fill || '#7c3aed'
 }
 
 // ─── Get categories ───────────────────────────────────────────
@@ -148,4 +159,5 @@ export const EASINGS = [
   'cubic-bezier(0.68,-0.55,0.27,1.55)',
   'steps(4)',
 ]
-             
+
+                                           
