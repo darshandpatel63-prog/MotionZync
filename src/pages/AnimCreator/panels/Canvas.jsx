@@ -190,7 +190,7 @@ export default function Canvas() {
         } else if (m==='cloth') {
           nx=(pu.restX??el.x)+(pu.vx||0); ny=el.y
         }
-        return { ...el, x:nx, y:ny, physics:{...el.physics,...pu} }
+        return { ...el, x: isNaN(nx)||!isFinite(nx)?el.x:nx, y: isNaN(ny)||!isFinite(ny)?el.y:ny, physics:{...el.physics,...pu} }
       })
 
       // ── Collision resolution pass ──────────────────────────
@@ -742,4 +742,5 @@ export default function Canvas() {
     </div>
   )
           }
+
           
