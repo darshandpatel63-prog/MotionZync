@@ -131,3 +131,25 @@
 .em-zip-fname  { font-size:0.68rem; font-family:monospace; color:#a78bfa; flex-shrink:0; min-width:150px; }
 .em-zip-fdesc  { font-size:0.63rem; color:#4b5563; }
   
+
+/* ── Record steps list (bugfix) ─────────────────────────────── */
+.em-rec-steps {
+  display: flex; flex-direction: column; gap: 4px;
+  width: 100%; max-width: 320px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px; padding: 0.5rem 0.7rem;
+}
+.em-rec-step {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.68rem; color: #9ca3af;
+}
+.ers-num {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(124,58,237,0.25);
+  border: 1px solid rgba(124,58,237,0.4);
+  color: #a78bfa; font-size: 0.6rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+    }
+  
