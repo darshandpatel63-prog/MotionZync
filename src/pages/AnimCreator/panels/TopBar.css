@@ -116,3 +116,19 @@
   from { opacity:0; transform:scale(0.85) }
   to   { opacity:1; transform:scale(1)    }
 }
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE-ONLY FIXES — Desktop layout untouched
+   Bug 1: Export button hidden on mobile  → CSS order fix
+   Bug 2: FPS overlaps mode-switch        → hide FPS on mobile
+   No JSX changes, no desktop changes.
+════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Hide FPS monitor — it was overlapping the Simple/Pro buttons */
+  .fps-monitor { display: none !important; }
+
+  /* Bring mode-switch + export group to the start of the scrollable row
+     so they're immediately reachable without scrolling all the way right */
+  .mode-switch        { order: -2; }
+  .topbar-group:last-of-type { order: -1; }
+}
