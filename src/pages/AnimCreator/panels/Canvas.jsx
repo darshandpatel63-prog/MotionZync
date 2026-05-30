@@ -5,6 +5,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { useCreator } from '../store/CreatorContext.jsx'
 import { KEYFRAMES_CSS, BORDER_KEYFRAMES } from '../engine/AnimEngine.js'
+import { SHADER_KEYFRAMES } from '../engine/ShaderEngine.js'
 import { stepPhysics } from '../engine/PhysicsEngine.js'
 import CanvasElement   from './CanvasElement.jsx'
 import ContextMenu     from './ContextMenu.jsx'
@@ -150,7 +151,7 @@ export default function Canvas() {
     if (document.getElementById('mz-kf')) return
     const s = document.createElement('style')
     s.id = 'mz-kf'
-    s.textContent = KEYFRAMES_CSS + BORDER_KEYFRAMES
+    s.textContent = KEYFRAMES_CSS + BORDER_KEYFRAMES + SHADER_KEYFRAMES
     document.head.appendChild(s)
   }, [])
 
@@ -175,22 +176,38 @@ export default function Canvas() {
         const pu = updates[el.id]; if (!pu) return el
         const m = el.physics.mode
         let nx = el.x, ny = el.y
+
         if (m==='gravity'||m==='bounce') {
           nx=el.x+(pu.vx||0); ny=el.y+(pu.vy||0)
-          if(ny+el.height>=STAGE_H)ny=STAGE_H-el.height
-          if(ny<0)ny=0; if(nx<0)nx=0; if(nx+el.width>=STAGE_W)nx=STAGE_W-el.width
+          // gravity boundary handled inside PhysicsEngine already, clamp here too
+          if(ny+el.height>=STAGE_H) ny=STAGE_H-el.height
+          if(ny<0) ny=0; if(nx<0) nx=0; if(nx+el.width>=STAGE_W) nx=STAGE_W-el.width
         } else if (m==='spring'||m==='magnetic') {
           nx=el.x+(pu.vx||0); ny=el.y+(pu.vy||0)
+          // ── FIX: clamp spring/magnetic to stage ──────────
+          nx=Math.max(0, Math.min(STAGE_W-el.width,  nx))
+          ny=Math.max(0, Math.min(STAGE_H-el.height, ny))
         } else if (m==='float') {
           const rx=pu.restX??el.x, ry=pu.restY??el.y
           nx=rx+Math.sin((pu._floatT||0)*0.7+(pu._seed||0))*5
           ny=ry+Math.sin((pu._floatT||0)+(pu._seed||0))*14
+          // ── FIX: clamp float to stage ─────────────────────
+          nx=Math.max(0, Math.min(STAGE_W-el.width,  nx))
+          ny=Math.max(0, Math.min(STAGE_H-el.height, ny))
         } else if (m==='wind') {
           nx=(pu.restX??el.x)+(pu.vx||0)*8; ny=(pu.restY??el.y)+(pu.vy||0)*4
+          nx=Math.max(0, Math.min(STAGE_W-el.width,  nx))
+          ny=Math.max(0, Math.min(STAGE_H-el.height, ny))
         } else if (m==='cloth') {
           nx=(pu.restX??el.x)+(pu.vx||0); ny=el.y
+          nx=Math.max(0, Math.min(STAGE_W-el.width, nx))
         }
-        return { ...el, x: isNaN(nx)||!isFinite(nx)?el.x:nx, y: isNaN(ny)||!isFinite(ny)?el.y:ny, physics:{...el.physics,...pu} }
+
+        // ── FIX: guard against NaN / Infinity ─────────────
+        if (!isFinite(nx)||isNaN(nx)) nx=el.x
+        if (!isFinite(ny)||isNaN(ny)) ny=el.y
+
+        return { ...el, x:nx, y:ny, physics:{...el.physics,...pu} }
       })
 
       // ── Collision resolution pass ──────────────────────────
@@ -743,4 +760,5 @@ export default function Canvas() {
   )
           }
 
-          
+
+        
