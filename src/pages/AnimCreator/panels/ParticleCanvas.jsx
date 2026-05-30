@@ -23,18 +23,31 @@ export default function ParticleCanvas({ elements }) {
     elements.forEach(el => {
       if (!el.particles?.enabled || el.visible === false) return
 
-      const preset = el.particles.preset || 'stars'
-      const emitX  = el.x + el.width  / 2
-      const emitY  = el.y + el.height / 2
+      const preset    = el.particles.preset || 'stars'
+      const emitX     = el.x + el.width  / 2
+      const emitY     = el.y + el.height / 2
+      const overrides = {
+        count:         el.particles.count,
+        speed:         el.particles.speed,
+        size:          el.particles.size,
+        gravity:       el.particles.gravity,
+        opacity:       el.particles.opacity,
+        life:          el.particles.life,
+        colorOverride: el.particles.colorOverride || null,
+      }
+      // Key includes overrides so system recreates when they change
+      const overKey = JSON.stringify(overrides)
 
-      if (existing[el.id] && existing[el.id].presetName === preset) {
-        // Update emitter position if element moved
+      if (existing[el.id]
+          && existing[el.id].presetName === preset
+          && existing[el.id]._overKey   === overKey) {
         existing[el.id].emitterX = emitX
         existing[el.id].emitterY = emitY
         next[el.id] = existing[el.id]
       } else {
-        // Create new system
-        next[el.id] = new ParticleSystem(preset, emitX, emitY, STAGE_W, STAGE_H)
+        const sys = new ParticleSystem(preset, emitX, emitY, STAGE_W, STAGE_H, overrides)
+        sys._overKey = overKey
+        next[el.id]  = sys
       }
     })
 
