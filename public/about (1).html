@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>About Us – MotionZync | Free CSS & JS Animation Platform</title>
+<meta name="description" content="Learn about MotionZync – a free, open animation platform for developers, designers, and students worldwide."/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#08080f;--s1:rgba(20,20,35,.7);--border:rgba(124,58,237,.18);--p:#7c3aed;--c:#06b6d4;--g:linear-gradient(135deg,#7c3aed,#06b6d4);--text:#e2e8f0;--muted:#94a3b8}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden}
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55}
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--g);z-index:999}
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);background:rgba(8,8,15,.88);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:1200px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{text-decoration:none;font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:.5rem}
+.nav-logo span{background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-back{text-decoration:none;color:var(--muted);font-size:.85rem;border:1px solid var(--border);padding:.3rem .75rem;border-radius:6px;transition:all .2s}
+.nav-back:hover{color:var(--text);border-color:var(--p)}
+
+/* HERO */
+.hero{position:relative;z-index:1;text-align:center;padding:6rem 2rem 4rem;overflow:hidden}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);color:#a78bfa;padding:.4rem 1.1rem;border-radius:20px;font-size:.75rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:1.8rem;animation:up .6s ease forwards}
+.hero h1{font-size:clamp(2.5rem,7vw,5rem);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:1.2rem;animation:up .7s .1s ease both}
+.gt{background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--muted);font-size:1.05rem;max-width:600px;margin:0 auto 2.5rem;animation:up .7s .2s ease both}
+.hero-ctas{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;animation:up .7s .3s ease both}
+.btn-p{display:inline-flex;align-items:center;gap:.5rem;background:var(--g);color:#fff;text-decoration:none;padding:.7rem 1.6rem;border-radius:10px;font-weight:700;font-size:.9rem;transition:transform .2s,box-shadow .2s;box-shadow:0 0 20px rgba(124,58,237,.3)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 4px 28px rgba(124,58,237,.5)}
+.btn-s{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--text);text-decoration:none;padding:.7rem 1.6rem;border-radius:10px;font-weight:600;font-size:.9rem;border:1px solid var(--border);transition:all .2s}
+.btn-s:hover{border-color:var(--p);background:rgba(124,58,237,.08)}
+
+/* STATS STRIP */
+.stats-strip{position:relative;z-index:1;background:rgba(124,58,237,.06);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2rem}
+.stats-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1.5rem;text-align:center}
+.stat-item .num{font-size:2rem;font-weight:900;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block}
+.stat-item .lbl{font-size:.78rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.8px}
+
+/* CONTENT WRAP */
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:4rem 2rem}
+
+/* SECTION TITLE */
+.sec-title{font-size:clamp(1.6rem,3vw,2.3rem);font-weight:800;letter-spacing:-1px;margin-bottom:.5rem}
+.sec-sub{color:var(--muted);margin-bottom:2.5rem;font-size:.95rem}
+
+/* MISSION SECTION */
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
+.mission-text h2{font-size:2rem;font-weight:800;letter-spacing:-1px;margin-bottom:1rem}
+.mission-text p{color:var(--muted);margin-bottom:1rem;font-size:.95rem}
+.mission-canvas-wrap{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:rgba(10,10,20,.6)}
+
+/* FEATURE CARDS */
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem}
+.feat-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:1.6rem;backdrop-filter:blur(12px);transition:all .3s;opacity:0;transform:translateY(16px)}
+.feat-card.vis{opacity:1;transform:translateY(0)}
+.feat-card:hover{border-color:rgba(124,58,237,.5);transform:translateY(-3px)}
+.feat-icon{font-size:1.8rem;margin-bottom:.8rem;display:block}
+.feat-card h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.feat-card p{font-size:.87rem;color:var(--muted)}
+.feat-card a{display:inline-flex;align-items:center;gap:.3rem;color:var(--c);text-decoration:none;font-size:.82rem;font-weight:600;margin-top:.6rem;transition:gap .2s}
+.feat-card a:hover{gap:.5rem}
+
+/* TECH STACK */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.8rem}
+.tech-card{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.15);border-radius:10px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:.7rem;font-size:.87rem;font-weight:600;transition:all .2s}
+.tech-card:hover{border-color:var(--p);background:rgba(124,58,237,.13);transform:scale(1.02)}
+.tech-card span{font-size:1.2rem}
+
+/* VALUES */
+.values-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem}
+.val-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:1.4rem;text-align:center;backdrop-filter:blur(10px);transition:all .3s;opacity:0;transform:scale(.96)}
+.val-card.vis{opacity:1;transform:scale(1)}
+.val-card:hover{border-color:rgba(124,58,237,.45)}
+.val-card .vi{font-size:2rem;margin-bottom:.6rem;display:block}
+.val-card h3{font-size:.95rem;font-weight:700;margin-bottom:.3rem}
+.val-card p{font-size:.82rem;color:var(--muted)}
+
+/* OTHER SITES */
+.sites-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.2rem}
+.site-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:1.6rem;text-decoration:none;color:var(--text);transition:all .3s;display:block}
+.site-card:hover{border-color:rgba(124,58,237,.5);transform:translateY(-3px)}
+.site-card span{font-size:2rem;display:block;margin-bottom:.7rem}
+.site-card h3{font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.site-card p{font-size:.84rem;color:var(--muted)}
+
+/* DIVIDERS */
+.divider{position:relative;z-index:1;height:1px;background:var(--border);margin:0}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.82rem}
+footer a{color:var(--c);text-decoration:none}
+.footer-links{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){.mission-grid{grid-template-columns:1fr}.hero{padding:4rem 1.2rem 3rem}.wrap{padding:3rem 1.2rem}.mission-canvas-wrap{display:none}}
+@media(max-width:600px){.hero h1{font-size:2.2rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<canvas id="bgCanvas"></canvas>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="/">⚡ <span>MotionZync</span></a>
+    <a class="nav-back" href="/">← Back to App</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">✦ Free Animation Platform</div>
+  <h1>About <span class="gt">MotionZync</span></h1>
+  <p>A free, open, and powerful platform for developers, designers, and students to create, explore, and deploy beautiful web animations — with zero setup required.</p>
+  <div class="hero-ctas">
+    <a class="btn-p" href="/playground">⚡ Try Playground</a>
+    <a class="btn-s" href="/gallery">Browse Gallery →</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item"><span class="num">100+</span><span class="lbl">Animations</span></div>
+    <div class="stat-item"><span class="num">Free</span><span class="lbl">Forever</span></div>
+    <div class="stat-item"><span class="num">4</span><span class="lbl">Creative Tools</span></div>
+    <div class="stat-item"><span class="num">0</span><span class="lbl">Setup Required</span></div>
+    <div class="stat-item"><span class="num">∞</span><span class="lbl">Possibilities</span></div>
+  </div>
+</div>
+
+<!-- MISSION -->
+<div class="wrap">
+  <div class="mission-grid">
+    <div class="mission-text">
+      <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.25);color:#a78bfa;padding:.3rem .8rem;border-radius:20px;font-size:.73rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.2rem">Our Mission</div>
+      <h2>Animations for <span class="gt">Everyone</span></h2>
+      <p>MotionZync was born from a simple belief: <strong>stunning web animations should be accessible to everyone</strong>, not just developers with years of experience.</p>
+      <p>Whether you're a student just learning CSS, a freelance designer looking for inspiration, or a professional developer building a premium product — MotionZync gives you the tools and resources to bring motion to your work.</p>
+      <p>We remove barriers: no installation, no sign-up, no cost. Just open MotionZync and start creating.</p>
+    </div>
+    <div class="mission-canvas-wrap">
+      <canvas id="missionCanvas" width="400" height="320" style="display:block;width:100%;height:auto"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<div class="wrap">
+  <h2 class="sec-title">What We <span class="gt">Offer</span></h2>
+  <p class="sec-sub">A complete animation ecosystem — from beginner-friendly tools to professional-grade creative suites.</p>
+  <div class="feature-grid">
+    <div class="feat-card" id="fc1">
+      <span class="feat-icon">🎨</span>
+      <h3>Animation Gallery</h3>
+      <p>100+ handcrafted CSS & JavaScript animations — backgrounds, particles, buttons, text effects, canvas art, and more. Browse, filter, copy.</p>
+      <a href="/gallery">Browse Gallery →</a>
+    </div>
+    <div class="feat-card" id="fc2">
+      <span class="feat-icon">⚡</span>
+      <h3>Live Playground</h3>
+      <p>A real-time code editor with instant preview. Write CSS and JavaScript and watch your animation come alive instantly.</p>
+      <a href="/playground">Open Playground →</a>
+    </div>
+    <div class="feat-card" id="fc3">
+      <span class="feat-icon">🎬</span>
+      <h3>AnimCreator</h3>
+      <p>Professional visual animation design suite with canvas elements, layer management, physics engine, particle systems, timeline, and export.</p>
+      <a href="/anim-creator">Open AnimCreator →</a>
+    </div>
+    <div class="feat-card" id="fc4">
+      <span class="feat-icon">💻</span>
+      <h3>CodeSpace IDE</h3>
+      <p>A full browser-based IDE with file explorer, code editor, live preview, terminal simulation, Git panel, and project management.</p>
+      <a href="/codespace">Open CodeSpace →</a>
+    </div>
+    <div class="feat-card" id="fc5">
+      <span class="feat-icon">📚</span>
+      <h3>Free Course</h3>
+      <p>A complete, structured CSS & JS animation course covering basics to advanced canvas animations — with live code examples.</p>
+      <a href="/course">Start Learning →</a>
+    </div>
+    <div class="feat-card" id="fc6">
+      <span class="feat-icon">🖼️</span>
+      <h3>Live Wallpapers</h3>
+      <p>Download any animation as an HTML live wallpaper file. Use with wallpaper apps on Android, Windows, and more.</p>
+      <a href="/wallpaper">Get Wallpapers →</a>
+    </div>
+    <div class="feat-card" id="fc7">
+      <span class="feat-icon">🔍</span>
+      <h3>Smart Compare</h3>
+      <p>Compare two animations side-by-side with synchronized playback. Perfect for choosing between similar styles.</p>
+      <a href="/compare">Try Compare →</a>
+    </div>
+    <div class="feat-card" id="fc8">
+      <span class="feat-icon">📤</span>
+      <h3>Submit Animations</h3>
+      <p>Built something amazing? Submit your CSS/JS animation for review. Get featured in the gallery and share with the world.</p>
+      <a href="/submit">Submit Now →</a>
+    </div>
+    <div class="feat-card" id="fc9">
+      <span class="feat-icon">⭐</span>
+      <h3>Favorites</h3>
+      <p>Save your favorite animations locally. Build your personal collection and access your top picks instantly.</p>
+      <a href="/favorites">View Favorites →</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TECH STACK -->
+<div class="wrap">
+  <h2 class="sec-title">Tech <span class="gt">Stack</span></h2>
+  <p class="sec-sub">Built with modern, production-grade technologies for performance, reliability, and scalability.</p>
+  <div class="tech-grid">
+    <div class="tech-card"><span>⚛️</span> React 18</div>
+    <div class="tech-card"><span>⚡</span> Vite</div>
+    <div class="tech-card"><span>🔥</span> Firebase</div>
+    <div class="tech-card"><span>🔐</span> Google Auth</div>
+    <div class="tech-card"><span>🚀</span> Vercel</div>
+    <div class="tech-card"><span>📦</span> IndexedDB</div>
+    <div class="tech-card"><span>🎨</span> Canvas API</div>
+    <div class="tech-card"><span>💎</span> CSS Animations</div>
+    <div class="tech-card"><span>🌐</span> Vanilla JS</div>
+    <div class="tech-card"><span>📊</span> Google Analytics</div>
+    <div class="tech-card"><span>💰</span> Google AdSense</div>
+    <div class="tech-card"><span>🛡️</span> Sandboxed Iframes</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- VALUES -->
+<div class="wrap">
+  <h2 class="sec-title">Our <span class="gt">Values</span></h2>
+  <p class="sec-sub">The principles that guide every decision we make on MotionZync.</p>
+  <div class="values-grid">
+    <div class="val-card" id="vc1"><span class="vi">🆓</span><h3>Always Free</h3><p>Core features will always be free. We believe creative tools should be accessible to all, regardless of budget.</p></div>
+    <div class="val-card" id="vc2"><span class="vi">🔒</span><h3>Privacy First</h3><p>No accounts required. Minimal data collection. All code runs in sandboxed iframes for your security.</p></div>
+    <div class="val-card" id="vc3"><span class="vi">⚡</span><h3>Performance</h3><p>Fast loading, smooth animations, optimized code. We believe a great tool must also be a fast tool.</p></div>
+    <div class="val-card" id="vc4"><span class="vi">🌍</span><h3>Inclusive</h3><p>Built for everyone — students, hobbyists, professionals, and everyone in between, from any country.</p></div>
+    <div class="val-card" id="vc5"><span class="vi">📖</span><h3>Educational</h3><p>We don't just provide tools — we teach. Our course, how-to guides, and inline explanations empower learning.</p></div>
+    <div class="val-card" id="vc6"><span class="vi">🚀</span><h3>Innovation</h3><p>Constantly adding new features, animations, and tools to stay ahead of modern web development trends.</p></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- OTHER SITES -->
+<div class="wrap">
+  <h2 class="sec-title">Our Other <span class="gt">Projects</span></h2>
+  <p class="sec-sub">Other platforms created by the same developer, serving different communities.</p>
+  <div class="sites-grid">
+    <a class="site-card" href="https://vaidya-guru.vercel.app" target="_blank" rel="noopener noreferrer">
+      <span>🏥</span>
+      <h3>Vaidya Guru</h3>
+      <p>Health & Ayurveda guidance platform combining traditional wisdom with modern health education.</p>
+    </a>
+    <a class="site-card" href="https://wealth-kavach.vercel.app" target="_blank" rel="noopener noreferrer">
+      <span>💰</span>
+      <h3>Wealth Kavach</h3>
+      <p>Personal finance and investment insights platform to help you make smarter financial decisions.</p>
+    </a>
+    <a class="site-card" href="https://shree-hari-mahendi-art.vercel.app" target="_blank" rel="noopener noreferrer">
+      <span>🌸</span>
+      <h3>Shree Hari Mehendi</h3>
+      <p>Traditional and modern mehendi (henna) art designs and patterns for all occasions.</p>
+    </a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONTACT CTA -->
+<div class="wrap" style="text-align:center;padding:4rem 2rem">
+  <h2 class="sec-title">Get in <span class="gt">Touch</span></h2>
+  <p class="sec-sub" style="max-width:500px;margin:0 auto 2rem">Have questions, animation submissions, bug reports, feature ideas, or business inquiries? We'd love to hear from you.</p>
+  <div style="display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap">
+    <a class="btn-p" href="/contact.html">📧 Contact Us</a>
+    <a class="btn-s" href="mailto:wealthkavach1@gmail.com">wealthkavach1@gmail.com</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-links">
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/terms.html">Terms of Service</a>
+    <a href="/disclaimer.html">Disclaimer</a>
+    <a href="/contact.html">Contact</a>
+    <a href="/">Back to MotionZync</a>
+  </div>
+  <p>© 2025 MotionZync. All rights reserved. &nbsp;·&nbsp; Built with ❤️ for the web development community.</p>
+</footer>
+
+<script>
+// Scroll progress
+const prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{const s=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(s/h*100)+'%';},{passive:true});
+
+// Background canvas
+(function(){
+  const cv=document.getElementById('bgCanvas'),ctx=cv.getContext('2d');
+  let W,H,pts=[],t=0;
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;build()}
+  function build(){pts=[];const N=Math.floor(W*H/15000);for(let i=0;i<N;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,hue:240+Math.random()*60,size:.8+Math.random()*1.8})}
+  function draw(){
+    ctx.clearRect(0,0,W,H);t+=.009;
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<140){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(124,58,237,${(1-d/140)*.2})`;ctx.lineWidth=.6;ctx.stroke()}}
+    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue+t*12},75%,65%,.55)`;ctx.fill()});
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+// Mission canvas animation
+(function(){
+  const cv=document.getElementById('missionCanvas');
+  if(!cv)return;
+  const ctx=cv.getContext('2d'),W=400,H=320,cx=200,cy=160;
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='rgba(10,10,20,.4)';ctx.fillRect(0,0,W,H);
+    // orbiting rings
+    for(let i=0;i<4;i++){
+      const R=40+i*28,speed=0.4+i*.2,a=t*speed*(i%2?1:-1);
+      ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(124,58,237,${.12+i*.03})`;ctx.lineWidth=1;ctx.stroke();
+      ctx.beginPath();ctx.arc(cx+Math.cos(a)*R,cy+Math.sin(a)*R,4-i*.5,0,Math.PI*2);
+      const hue=240+i*25;ctx.fillStyle=`hsl(${hue},80%,65%)`;ctx.shadowBlur=10;ctx.shadowColor=`hsl(${hue},80%,65%)`;ctx.fill();ctx.shadowBlur=0;
+    }
+    // center
+    ctx.beginPath();ctx.arc(cx,cy,14,0,Math.PI*2);
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,14);
+    g.addColorStop(0,'#a78bfa');g.addColorStop(1,'#06b6d4');
+    ctx.fillStyle=g;ctx.fill();
+    t+=.025;requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// Intersection observer for card animations
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');e.target.style.transitionDelay=(e.target.dataset.d||'0')+'s'}})},{threshold:.1});
+document.querySelectorAll('.feat-card,.val-card').forEach((el,i)=>{el.dataset.d=(i%3*.08).toFixed(2);io.observe(el)});
+</script>
+</body>
+</html>
