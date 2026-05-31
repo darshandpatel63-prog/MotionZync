@@ -1,14 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://motion-zync.vercel.app/</loc><lastmod>2026-05-16</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://motion-zync.vercel.app/gallery</loc><lastmod>2026-05-16</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://motion-zync.vercel.app/playground</loc><lastmod>2026-05-16</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://motion-zync.vercel.app/course</loc><lastmod>2026-05-16</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://motion-zync.vercel.app/how-to-use</loc><lastmod>2026-05-16</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://motion-zync.vercel.app/wallpaper</loc><lastmod>2026-05-16</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://motion-zync.vercel.app/about</loc><lastmod>2026-05-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://motion-zync.vercel.app/contact</loc><lastmod>2026-05-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://motion-zync.vercel.app/privacy</loc><lastmod>2026-05-16</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://motion-zync.vercel.app/terms</loc><lastmod>2026-05-16</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://motion-zync.vercel.app/disclaimer</loc><lastmod>2026-05-16</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+
+  <!-- ══════════════════════════════════════════
+       CORE PAGES — Highest Priority
+  ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://motion-zync.vercel.app/</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/gallery</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/playground</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       CREATIVE TOOLS
+  ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://motion-zync.vercel.app/anim-creator</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/codespace</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/compare</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       LEARN & GUIDES
+  ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://motion-zync.vercel.app/course</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/how-to-use</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/tool-guide</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/why-features</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       CONTENT & UTILITY PAGES
+  ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://motion-zync.vercel.app/wallpaper</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/submit</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/favorites</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/changelog</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/tools</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       LEGAL & INFO PAGES (Static HTML in /public)
+  ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://motion-zync.vercel.app/about.html</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/contact.html</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/privacy.html</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/terms.html</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/disclaimer.html</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
 </urlset>
