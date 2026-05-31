@@ -22,6 +22,8 @@ import Changelog         from './pages/Changelog/Changelog.jsx'
 import Tools             from './pages/Tools/Tools.jsx'
 import CodeSpace         from './pages/CodeSpace/CodeSpace.jsx'
 import AnimCreator       from './pages/AnimCreator/AnimCreator.jsx'
+import ToolGuide         from './pages/ToolGuide/ToolGuide.jsx'
+import WhyFeatures       from './pages/WhyFeatures/WhyFeatures.jsx'
 
 const bgVariant = {
   '/':           'home',
@@ -34,10 +36,10 @@ const bgVariant = {
   '/favorites':  'gallery',
   '/changelog':  'default',
   '/tools':      'default',
+  '/tool-guide': 'default',
+  '/why-features':'default',
 }
 
-// These routes are full-screen — no Navbar/Footer/BG
-// CodeSpace is fullscreen — it's a complete IDE that needs all viewport space
 const FULLSCREEN_ROUTES = ['/admin', '/anim-creator', '/codespace']
 
 export default function App() {
@@ -71,6 +73,8 @@ export default function App() {
           <Route path="/tools"           element={<Tools/>}/>
           <Route path="/codespace"       element={<CodeSpace/>}/>
           <Route path="/anim-creator"    element={<AnimCreator/>}/>
+          <Route path="/tool-guide"      element={<ToolGuide/>}/>
+          <Route path="/why-features"    element={<WhyFeatures/>}/>
         </Routes>
       </main>
       {!isFullscreen && <Footer/>}
