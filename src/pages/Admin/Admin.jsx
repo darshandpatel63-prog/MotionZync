@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import LivePreview from '../../components/LivePreview/LivePreview.jsx'
@@ -47,35 +47,65 @@ export default function Admin() {
   const [settingsSaved, setSettingsSaved] = useState(false)
 
   // Submissions
-  const [submissions,   setSubmissions]   = useState([])
-  const [reviewingId,   setReviewingId]   = useState(null)
-  const [adminNote,     setAdminNote]     = useState('')
-  const [subPreviewId,  setSubPreviewId]  = useState(null)
-  const [actionLoading, setActionLoading] = useState(false)
+  const [submissions,    setSubmissions]    = useState([])
+  const [subLoadError,   setSubLoadError]   = useState(null)   // ✅ NEW
+  const [subRefreshing,  setSubRefreshing]  = useState(false)  // ✅ NEW
+  const [reviewingId,    setReviewingId]    = useState(null)
+  const [adminNote,      setAdminNote]      = useState('')
+  const [subPreviewId,   setSubPreviewId]   = useState(null)
+  const [actionLoading,  setActionLoading]  = useState(false)
 
-  // ── Changelog state ──────────────────────────────────────────
+  // Changelog
   const [changelogs,    setChangelogs]    = useState([])
   const [clEditDocId,   setClEditDocId]   = useState(null)
   const [clVersion,     setClVersion]     = useState('v1.0')
   const [clTitle,       setClTitle]       = useState('')
   const [clDate,        setClDate]        = useState(new Date().toISOString().split('T')[0])
   const [clType,        setClType]        = useState('feature')
-  const [clItemsText,   setClItemsText]   = useState('')   // one item per line
+  const [clItemsText,   setClItemsText]   = useState('')
   const [clPinned,      setClPinned]      = useState(false)
   const [clSaving,      setClSaving]      = useState(false)
 
-  useEffect(() => { if (!loading && isAdmin) loadData() }, [isAdmin, loading])
+  // ✅ FIX: Submissions load SEPARATELY so a Firestore-rules error
+  //         on 'submissions' does NOT block animations/categories loading.
+  const loadSubmissions = useCallback(async (showSpinner = false) => {
+    if (showSpinner) setSubRefreshing(true)
+    setSubLoadError(null)
+    try {
+      const subs = await getSubmissions('pending')
+      setSubmissions(subs)
+    } catch (e) {
+      console.error('Submissions load error:', e)
+      setSubLoadError(e.message || 'Permission denied')
+    } finally {
+      if (showSpinner) setSubRefreshing(false)
+    }
+  }, [])
 
+  // ✅ FIX: loadData no longer includes submissions in Promise.all
   async function loadData() {
-    const [anims, cats, sc, subs, cls] = await Promise.all([
-      getAnimations(), getCategories(), getSiteContent('main'),
-      getSubmissions('pending'), getChangelogs()
-    ])
-    setAnimations(anims); setCategories(cats)
-    if (sc) setSettings({ ...defaultContent, ...sc })
-    setSubmissions(subs)
-    setChangelogs(cls)
+    try {
+      const [anims, cats, sc, cls] = await Promise.all([
+        getAnimations(),
+        getCategories(),
+        getSiteContent('main'),
+        getChangelogs(),
+      ])
+      setAnimations(anims)
+      setCategories(cats)
+      if (sc) setSettings({ ...defaultContent, ...sc })
+      setChangelogs(cls)
+    } catch (e) {
+      console.error('loadData error:', e)
+      setStatus({ type: 'err', msg: 'Data load error: ' + e.message })
+    }
+    // Load submissions separately — never blocks other data
+    loadSubmissions()
   }
+
+  useEffect(() => {
+    if (!loading && isAdmin) loadData()
+  }, [isAdmin, loading])
 
   // ── Animation handlers ───────────────────────────────────────
   function editAnim(a) {
@@ -131,11 +161,11 @@ export default function Admin() {
     try {
       await approveSubmission(sub, adminNote)
       await deleteSubmission(sub.docId)
-      setStatus({ type:'ok', msg:`✅ "${sub.title}" approved!` })
+      setStatus({ type:'ok', msg:`✅ "${sub.title}" approved & gallery ma add thayuu!` })
       setSubmissions(prev=>prev.filter(s=>s.docId!==sub.docId))
       setReviewingId(null); setAdminNote('')
     } catch(e) { setStatus({type:'err',msg:'Error: '+e.message}) }
-    setActionLoading(false); setTimeout(()=>setStatus(null),3000)
+    setActionLoading(false); setTimeout(()=>setStatus(null),4000)
   }
   async function handleReject(sub) {
     if (!window.confirm(`"${sub.title}" reject karvu chhe?`)) return
@@ -212,6 +242,7 @@ export default function Admin() {
       {status && (
         <div className={`admin-status-bar ${status.type==='ok'?'status-ok':'status-err'}`}>
           {status.msg}
+          <button onClick={()=>setStatus(null)}>✕</button>
         </div>
       )}
 
@@ -226,6 +257,10 @@ export default function Admin() {
             :                      '📋 Changelog' }
             {t==='submissions' && submissions.length>0 && (
               <span className="sub-badge-count">{submissions.length}</span>
+            )}
+            {/* ✅ Show error dot if submissions failed to load */}
+            {t==='submissions' && subLoadError && submissions.length===0 && (
+              <span className="sub-badge-err">!</span>
             )}
           </button>
         ))}
@@ -345,18 +380,73 @@ export default function Admin() {
         {/* ── Submissions Tab ── */}
         {activeTab==='submissions' && (
           <div className="submissions-tab">
-            <h2 className="section-label">📬 Pending Submissions</h2>
-            <div className="sub-info-bar">
-              <span>⏳ <strong>{submissions.length}</strong> pending review</span>
-              <span className="sub-info-note">✅ Approve = Gallery ma live + Firestore thi delete &nbsp;|&nbsp; ❌ Reject = Seedho Firestore thi delete</span>
+
+            {/* ✅ Header row with refresh button */}
+            <div className="sub-tab-header">
+              <h2 className="section-label" style={{marginBottom:0}}>
+                📬 Pending Submissions
+                {submissions.length > 0 && (
+                  <span className="sub-count-inline"> ({submissions.length})</span>
+                )}
+              </h2>
+              <button
+                className="btn-secondary sub-refresh-btn"
+                onClick={() => loadSubmissions(true)}
+                disabled={subRefreshing}
+              >
+                {subRefreshing ? '⏳ Loading...' : '🔄 Refresh'}
+              </button>
             </div>
-            {submissions.length===0 && (
+
+            {/* ✅ Firestore Rules Error — clear fix instructions */}
+            {subLoadError && (
+              <div className="sub-rules-error">
+                <div className="sub-rules-error-title">⚠️ Submissions Load Thayi Nahi</div>
+                <div className="sub-rules-error-msg">
+                  <strong>Error:</strong> {subLoadError}
+                </div>
+                <div className="sub-rules-error-fix">
+                  <strong>Fix:</strong> Firebase Console → Firestore → Rules ma aa rules add karo:
+                </div>
+                <pre className="sub-rules-code">{`match /submissions/{doc} {
+  allow read, write: if true;
+  // OR secure version:
+  // allow read: if request.auth.token.email == "YOUR_ADMIN_EMAIL";
+  // allow write: if true; // anyone can submit
+}`}</pre>
+                <button
+                  className="btn-primary"
+                  style={{marginTop:'0.75rem', fontSize:'0.82rem', padding:'0.5rem 1.1rem'}}
+                  onClick={() => loadSubmissions(true)}
+                >
+                  🔄 Fari Try Karo
+                </button>
+              </div>
+            )}
+
+            {/* Normal info bar */}
+            {!subLoadError && (
+              <div className="sub-info-bar">
+                <span>⏳ <strong>{submissions.length}</strong> pending review</span>
+                <span className="sub-info-note">✅ Approve = Gallery ma live &nbsp;|&nbsp; ❌ Reject = Delete</span>
+              </div>
+            )}
+
+            {!subLoadError && submissions.length===0 && !subRefreshing && (
               <div className="sub-empty">
                 <div className="sub-empty-icon">🎉</div>
                 <div>Badha submissions review thai gaya!</div>
                 <div className="sub-empty-sub">Navi submissions avshe tyaare yahan dakhshe.</div>
               </div>
             )}
+
+            {subRefreshing && submissions.length === 0 && (
+              <div className="sub-empty">
+                <div className="sub-empty-icon">⏳</div>
+                <div>Submissions load thai rahi chhe...</div>
+              </div>
+            )}
+
             <div className="sub-list">
               {submissions.map(sub=>(
                 <div key={sub.docId} className="sub-item">
@@ -386,10 +476,10 @@ export default function Admin() {
                   )}
                   {reviewingId===sub.docId ? (
                     <div className="sub-review-form">
-                      <textarea className="admin-input admin-textarea" placeholder="Admin note (optional)" value={adminNote} onChange={e=>setAdminNote(e.target.value)} rows={2}/>
+                      <textarea className="admin-input admin-textarea" placeholder="Admin note (optional — credit/feedback)" value={adminNote} onChange={e=>setAdminNote(e.target.value)} rows={2}/>
                       <div className="sub-review-actions">
                         <button className="btn-primary sub-approve-btn" onClick={()=>handleApprove(sub)} disabled={actionLoading}>
-                          {actionLoading?'⏳ ...':'✅ Approve & Publish'}
+                          {actionLoading?'⏳ ...':'✅ Approve & Gallery ma Add Karo'}
                         </button>
                         <button className="sub-reject-btn" onClick={()=>handleReject(sub)} disabled={actionLoading}>
                           {actionLoading?'⏳ ...':'❌ Reject & Delete'}
@@ -414,8 +504,6 @@ export default function Admin() {
         {activeTab==='changelog' && (
           <div className="changelog-admin-tab">
             <h2 className="section-label">📋 Changelog Manager</h2>
-
-            {/* Form */}
             <div className="cl-form-card">
               <h3 className="cl-form-title">{clEditDocId?'✏️ Edit Entry':'+ New Entry'}</h3>
               <div className="cl-form-grid">
@@ -464,8 +552,6 @@ export default function Admin() {
                 {clEditDocId && <button className="btn-secondary" onClick={resetCl}>Cancel</button>}
               </div>
             </div>
-
-            {/* Existing entries list */}
             <div className="cl-list">
               <h3 className="cl-list-title">📋 Published Entries ({changelogs.length})</h3>
               {changelogs.length===0 && (
@@ -499,5 +585,6 @@ export default function Admin() {
       </div>
     </div>
   )
-                }
-                  
+        }
+            
+ 
