@@ -105,7 +105,8 @@ export async function getSubmissions(status = 'all') {
   return filtered
 }
 
-export async function approveSubmission(submission) {
+// ✅ FIX: approveSubmission now also saves submitterName credit + adminNote
+export async function approveSubmission(submission, adminNote = '') {
   const animId = await saveAnimation({
     title:       submission.title,
     description: submission.description,
@@ -114,6 +115,15 @@ export async function approveSubmission(submission) {
     cssCode:     submission.cssCode,
     jsCode:      submission.jsCode,
   })
+  // Mark submission as approved (optional audit trail — then Admin deletes it)
+  try {
+    await updateDoc(doc(db, 'submissions', submission.docId), {
+      status:     'approved',
+      adminNote:  adminNote || '',
+      approvedAt: new Date(),
+      animationId: animId,
+    })
+  } catch(_) {}
   return animId
 }
 
@@ -122,13 +132,9 @@ export async function deleteSubmission(docId) {
 }
 
 // ─── Changelog ────────────────────────────────────────────────
-// Firestore collection: 'changelogs'
-// Fields: version, title, date, type, items[], pinned, createdAt
-
 export async function getChangelogs() {
   const snap = await getDocs(collection(db, 'changelogs'))
   const all  = snap.docs.map(d => ({ ...d.data(), docId: d.id }))
-  // Sort: pinned first, then by date desc
   all.sort((a, b) => {
     if (a.pinned && !b.pinned) return -1
     if (!a.pinned && b.pinned) return 1
@@ -142,7 +148,7 @@ export async function saveChangelog(entry) {
     version:  entry.version  || 'v1.0',
     title:    entry.title    || '',
     date:     entry.date     || new Date().toISOString().split('T')[0],
-    type:     entry.type     || 'feature',  // feature | fix | update | announcement
+    type:     entry.type     || 'feature',
     items:    Array.isArray(entry.items) ? entry.items : [],
     pinned:   entry.pinned   || false,
     updatedAt: new Date(),
@@ -159,5 +165,5 @@ export async function saveChangelog(entry) {
 
 export async function deleteChangelog(docId) {
   await deleteDoc(doc(db, 'changelogs', docId))
-                    }
+    }
       
