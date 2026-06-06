@@ -1,10 +1,24 @@
 /* ─── Submit Page ─────────────────────────────────────── */
 .submit-page { min-height: 80vh; }
 
+/* ── Desktop: Remove extra top/bottom padding (page-section adds 3rem already) ── */
+@media (min-width: 769px) {
+  .submit-page.page-section {
+    padding-top: 1.25rem;
+    padding-bottom: 2rem;
+  }
+}
+
 .submit-header {
   text-align: center;
-  padding: 2rem 0 1.5rem;
+  padding: 1rem 0 1.25rem;
 }
+@media (min-width: 769px) {
+  .submit-header {
+    padding: 0.5rem 0 1rem;
+  }
+}
+
 .submit-badge {
   display: inline-block;
   background: rgba(124,58,237,0.15);
@@ -14,16 +28,16 @@
   letter-spacing: 1px;
   padding: 0.3rem 0.9rem;
   border-radius: 99px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
 }
 .submit-title {
-  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
   font-weight: 800;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 .submit-subtitle {
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   max-width: 520px;
   margin: 0 auto;
   line-height: 1.6;
@@ -35,7 +49,7 @@
   align-items: center;
   justify-content: center;
   gap: 0;
-  margin: 1.5rem auto 2rem;
+  margin: 1rem auto 1.5rem;
   max-width: 420px;
 }
 .submit-step {
@@ -109,13 +123,23 @@
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
 }
+
+/* Desktop: constrain Step-1 form width, center it */
+@media (min-width: 769px) {
+  .submit-card:not(.code-step) {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 .submit-card-title {
   font-size: 1rem;
   font-weight: 700;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
   color: var(--text-primary);
 }
 
@@ -123,7 +147,7 @@
 .submit-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.85rem;
 }
 .form-group       { display: flex; flex-direction: column; gap: 0.35rem; }
 .form-group.full  { grid-column: 1 / -1; }
@@ -138,7 +162,7 @@
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 0.6rem 0.85rem;
+  padding: 0.55rem 0.85rem;
   font-size: 0.875rem;
   outline: none;
   transition: border-color 0.2s;
@@ -146,7 +170,7 @@
   box-sizing: border-box;
 }
 .form-input:focus { border-color: var(--accent-primary); }
-.form-textarea    { resize: vertical; min-height: 70px; font-family: inherit; }
+.form-textarea    { resize: vertical; min-height: 65px; font-family: inherit; }
 .form-select      { cursor: pointer; }
 .form-hint        { font-size: 0.7rem; color: var(--text-muted); text-align: right; }
 
@@ -167,8 +191,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--border-color);
 }
 .submit-final-btn {
@@ -182,12 +206,12 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.65rem 1rem;
+  padding: 0.6rem 1rem;
   background: var(--bg-secondary);
   border-radius: var(--radius-sm);
   font-size: 0.82rem;
   color: var(--text-secondary);
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
   flex-wrap: wrap;
 }
 .submit-info-bar strong { color: var(--text-primary); }
@@ -203,19 +227,39 @@
   color: var(--accent-primary);
 }
 
+/* Desktop: code+preview split */
 .submit-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  min-height: 380px;
+  min-height: 340px;
 }
+
+@media (min-width: 769px) {
+  .submit-split {
+    min-height: 400px;
+    height: calc(100vh - 340px);
+    max-height: 560px;
+  }
+  /* Editor pane fills height */
+  .submit-editor-pane {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .submit-editor-pane > * {
+    flex: 1;
+    min-height: 0;
+  }
+}
+
 .submit-preview-label {
   font-size: 0.78rem;
   font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 /* Tips */
@@ -223,21 +267,21 @@
   background: rgba(124,58,237,0.07);
   border: 1px solid rgba(124,58,237,0.2);
   border-radius: var(--radius-sm);
-  padding: 0.85rem 1rem;
-  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  margin-top: 0.85rem;
 }
 .submit-tips h4 {
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--accent-primary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 .submit-tips ul {
   list-style: none;
   padding: 0; margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.25rem;
 }
 .submit-tips li {
   font-size: 0.8rem;
@@ -260,31 +304,33 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 70vh;
+  min-height: 55vh;
+  padding: 2rem 0;
 }
 .submit-success-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 3rem 2rem;
+  padding: 2.5rem 2rem;
   text-align: center;
   max-width: 480px;
   width: 100%;
 }
 .success-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+  font-size: 3.5rem;
+  margin-bottom: 0.75rem;
   display: block;
 }
 .submit-success-card h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 800;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.6rem;
 }
 .submit-success-card p {
   color: var(--text-secondary);
   line-height: 1.7;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.9rem;
 }
 .success-id {
   background: var(--bg-secondary);
@@ -292,7 +338,7 @@
   border-radius: var(--radius-sm);
   font-size: 0.78rem;
   color: var(--text-muted);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 .success-id code {
   color: var(--accent-primary);
@@ -309,25 +355,21 @@
 @media (max-width: 680px) {
   .submit-form-grid { grid-template-columns: 1fr; }
   .form-group.full  { grid-column: 1; }
-  .submit-split     { grid-template-columns: 1fr; }
-  .submit-card      { padding: 1.25rem; }
+  .submit-split     { grid-template-columns: 1fr; min-height: unset; height: auto; max-height: unset; }
+  .submit-card      { padding: 1.1rem; }
+  .submit-steps     { margin: 0.75rem auto 1.25rem; }
 }
 
-
-/* ── Preview pane height fix ─────────────────────────────── */
+/* ── Preview pane full height ─────────────────────────────── */
 .submit-preview-pane {
   display: flex;
   flex-direction: column;
-  min-height: 420px;
 }
-
-/* LivePreview container ne full height do */
 .submit-preview-pane .live-preview {
   flex: 1;
-  min-height: 380px;
+  min-height: 300px;
 }
-
 .submit-preview-pane .preview-iframe {
   height: 100%;
-  min-height: 340px;
+  min-height: 280px;
 }
