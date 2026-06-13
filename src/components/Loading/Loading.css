@@ -1,0 +1,25 @@
+/* Loading.css */
+.cl-wrap {
+  width:100%; height:100%;
+  min-height:200px; display:flex;
+  align-items:center; justify-content:center;
+  background:#0a0a12;
+}
+.cl-inner { display:flex; flex-direction:column; align-items:center; gap:14px; }
+.cl-ring {
+  display:inline-block; position:relative;
+  width:48px; height:48px;
+}
+.cl-ring div {
+  box-sizing:border-box; display:block; position:absolute;
+  width:38px; height:38px; margin:4px;
+  border:3px solid transparent; border-radius:50%;
+  animation:cl-spin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;
+}
+.cl-ring div:nth-child(1) { border-top-color:#7c3aed; animation-delay:-0.45s; }
+.cl-ring div:nth-child(2) { border-top-color:#06b6d4; animation-delay:-0.3s; }
+.cl-ring div:nth-child(3) { border-top-color:#a78bfa; animation-delay:-0.15s; }
+.cl-ring div:nth-child(4) { border-top-color:#7c3aed; }
+@keyframes cl-spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+.cl-msg { font-size:12px; color:#64748b; font-family:'Inter',system-ui,sans-serif; }
+
