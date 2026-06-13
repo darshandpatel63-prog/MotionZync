@@ -2,7 +2,7 @@
 // Full 3D Animation Studio
 // Features: 3D Viewport, Physics, Timeline, Keyframe Editor,
 //           Material Editor, Lighting, Camera, Export (GLB/OBJ/MP4)
-// Mobile: Touch orbit, gesture controls, floating panels
+// Mobile: Touch orbit, gesture controls, floating panels 
 
 import { useState, useRef, useCallback, useEffect, lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
