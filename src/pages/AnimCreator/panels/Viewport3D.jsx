@@ -67,6 +67,7 @@ const Viewport3D = forwardRef(function Viewport3D(
   const rafRef         = useRef(null)
   const selectedRef    = useRef(null)
   const outlineRef     = useRef(null)
+  const lightsRef      = useRef({ ambient: null, dir: null, fillA: null, fillB: null })
 
   const [isReady,   setIsReady]   = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -142,6 +143,8 @@ const Viewport3D = forwardRef(function Viewport3D(
       const fillB = new T.PointLight(0x06b6d4, 0.6, 20)
       fillB.position.set(5, 3, -5)
       scene.add(fillB)
+
+      lightsRef.current = { ambient, dir: dirLight, fillA, fillB }
 
       // Grid
       const grid = new T.GridHelper(20, 20, 0x2d2d44, 0x1e1e30)
@@ -316,14 +319,149 @@ const Viewport3D = forwardRef(function Viewport3D(
     }
   }, [])
 
-  // ── Expose API via ref ────────────────────────────────────
+  // ── Update material on selected mesh ──────────────────────
+  const updateMaterial = useCallback((meshId, props = {}) => {
+    const T = THREE
+    if (!T) return
+    const id = meshId ?? selId
+    const mesh = id ? meshMapRef.current[id] : null
+    if (!mesh || !mesh.material) return
+
+    const mat = mesh.material
+
+    if (props.color !== undefined) mat.color.set(props.color)
+    if (props.emissive !== undefined) mat.emissive.set(props.emissive)
+    if (props.metalness !== undefined) mat.metalness = props.metalness
+    if (props.roughness !== undefined) mat.roughness = props.roughness
+    if (props.opacity !== undefined) {
+      mat.opacity = props.opacity
+      mat.transparent = props.opacity < 1
+    }
+    if (props.transparent !== undefined) mat.transparent = props.transparent
+    if (props.wireframe !== undefined) mat.wireframe = props.wireframe
+    if (props.emissiveIntensity !== undefined) mat.emissiveIntensity = props.emissiveIntensity
+
+    mat.needsUpdate = true
+  }, [selId])
+
+  // ── Apply a full material preset to selected mesh ─────────
+  const applyMaterialPreset = useCallback((presetName, meshId) => {
+    const preset = MATERIALS_LIST[presetName]
+    if (!preset) return
+    updateMaterial(meshId, {
+      color: preset.color,
+      emissive: preset.emissive,
+      metalness: preset.metalness,
+      roughness: preset.roughness,
+      opacity: preset.opacity ?? 1,
+      transparent: !!preset.transparent,
+    })
+    setMaterial(presetName)
+  }, [updateMaterial])
+
+  // ── Update scene lights ─────────────────────────────────────
+  const updateLight = useCallback((type, props = {}) => {
+    const T = THREE
+    if (!T) return
+    const lights = lightsRef.current
+
+    switch (type) {
+      case 'ambient': {
+        const l = lights.ambient
+        if (!l) return
+        if (props.color !== undefined) l.color.set(props.color)
+        if (props.intensity !== undefined) l.intensity = props.intensity
+        break
+      }
+      case 'directional': {
+        const l = lights.dir
+        if (!l) return
+        if (props.color !== undefined) l.color.set(props.color)
+        if (props.intensity !== undefined) l.intensity = props.intensity
+        if (props.x !== undefined) l.position.x = props.x
+        if (props.y !== undefined) l.position.y = props.y
+        if (props.z !== undefined) l.position.z = props.z
+        break
+      }
+      case 'fillA':
+      case 'fillB': {
+        const l = lights[type]
+        if (!l) return
+        if (props.color !== undefined) l.color.set(props.color)
+        if (props.intensity !== undefined) l.intensity = props.intensity
+        if (props.x !== undefined) l.position.x = props.x
+        if (props.y !== undefined) l.position.y = props.y
+        if (props.z !== undefined) l.position.z = props.z
+        break
+      }
+      case 'preset': {
+        // props = { ambient, dirX, dirY, dirZ, color, intensity }
+        if (lights.ambient && props.ambient !== undefined) lights.ambient.intensity = props.ambient
+        if (lights.dir) {
+          if (props.color !== undefined) lights.dir.color.set(props.color)
+          if (props.intensity !== undefined) lights.dir.intensity = props.intensity
+          if (props.dirX !== undefined) lights.dir.position.x = props.dirX
+          if (props.dirY !== undefined) lights.dir.position.y = props.dirY
+          if (props.dirZ !== undefined) lights.dir.position.z = props.dirZ
+        }
+        break
+      }
+      default:
+        break
+    }
+  }, [])
+
+  // ── Update camera ────────────────────────────────────────────
+  const updateCamera = useCallback((props = {}) => {
+    const camera = cameraRef.current
+    if (!camera) return
+
+    let changed = false
+    if (props.fov !== undefined)  { camera.fov  = props.fov;  changed = true }
+    if (props.near !== undefined) { camera.near = props.near; changed = true }
+    if (props.far !== undefined)  { camera.far  = props.far;  changed = true }
+    if (changed) camera.updateProjectionMatrix()
+
+    if (props.position) {
+      camera.position.set(props.position.x, props.position.y, props.position.z)
+    }
+    if (props.lookAt) {
+      camera.lookAt(props.lookAt.x, props.lookAt.y, props.lookAt.z)
+      orbitRef.current?.target.set(props.lookAt.x, props.lookAt.y, props.lookAt.z)
+    }
+    if (props.preset) {
+      const PRESET_POS = {
+        'Front': { x:0,  y:2,  z:10 },
+        'Side':  { x:10, y:2,  z:0  },
+        'Top':   { x:0,  y:12, z:0.01 },
+        'Iso':   { x:8,  y:8,  z:8  },
+      }
+      const p = PRESET_POS[props.preset]
+      if (p) {
+        camera.position.set(p.x, p.y, p.z)
+        camera.lookAt(0, 0, 0)
+        orbitRef.current?.target.set(0, 0, 0)
+      }
+    }
+    orbitRef.current?.update()
+  }, [])
+
   useImperativeHandle(ref, () => ({
     addObject, selectObject, togglePlay, triggerExplosion,
     deleteSelected, updateBody,
+    updateMaterial, applyMaterialPreset, updateLight, updateCamera,
     getSelectedBody: () => selId ? bodyMapRef.current[selId] : null,
+    getSelectedMesh: () => selId ? meshMapRef.current[selId] : null,
+    getMesh: (id) => meshMapRef.current[id],
     getWorld: () => worldRef.current,
     getScene: () => sceneRef.current,
-  }), [addObject, selectObject, togglePlay, triggerExplosion, deleteSelected, updateBody, selId])
+    getCamera: () => cameraRef.current,
+    getRenderer: () => rendererRef.current,
+    getMeshMap: () => meshMapRef.current,
+    getBodyMap: () => bodyMapRef.current,
+    getThree: () => THREE,
+  }), [addObject, selectObject, togglePlay, triggerExplosion, deleteSelected, updateBody,
+       updateMaterial, applyMaterialPreset, updateLight, updateCamera, selId])
 
   return (
     <div className="vp3-container" style={style}>
@@ -393,4 +531,5 @@ const Viewport3D = forwardRef(function Viewport3D(
 })
 
 export default Viewport3D
-                                            
+
+                       
