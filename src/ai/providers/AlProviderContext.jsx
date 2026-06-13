@@ -341,5 +341,5 @@ export function AIProviderContext({ children }) {
       {children}
     </AIContext.Provider>
   )
-}
-
+      }
+      
