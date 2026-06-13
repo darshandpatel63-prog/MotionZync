@@ -1,4 +1,4 @@
-// src/App.jsx — MotionZync v3.0 — Complete Route Map
+// src/App.jsx — MotionZync v3.0 — Complete Route Map 
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import CenteredLoader from './components/Loading/Loading.jsx'
