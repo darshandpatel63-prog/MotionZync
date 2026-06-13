@@ -1,11 +1,10 @@
 // src/components/AuthGuard/AuthGuard.jsx
-import { useContext } from 'react'
 import { Navigate } from 'react-router-dom'
-import { AuthContext } from '../../context/AuthContext.jsx'
+import { useAuth } from '../../context/AuthContext.jsx'
 import './AuthGuard.css'
 
 export default function AuthGuard({ children, fallback }) {
-  const { user, loading } = useContext(AuthContext)
+  const { user, loading } = useAuth()
 
   if (loading) {
     return (
