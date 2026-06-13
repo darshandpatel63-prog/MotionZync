@@ -1,0 +1,25 @@
+/* AuthGuard.css */
+.ag-loading {
+  width:100vw; height:100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px;
+  background:#0a0a12; color:#64748b; font-size:13px;
+}
+.ag-spinner {
+  width:36px; height:36px; border-radius:50%;
+  border:3px solid #1e293b; border-top-color:#7c3aed;
+  animation:ag-spin .8s linear infinite;
+}
+@keyframes ag-spin { to { transform:rotate(360deg); } }
+.ag-wall {
+  width:100vw; height:100vh; display:flex;
+  align-items:center; justify-content:center;
+  background:#0a0a12;
+}
+.ag-card {
+  background:#12121e; border:1px solid #2a2a40; border-radius:20px;
+  padding:40px 32px; max-width:400px; width:100%; margin:16px;
+  text-align:center; display:flex; flex-direction:column; align-items:center; gap:16px;
+}
+.ag-icon { font-size:48px; }
+.ag-title { font-size:22px; font-weight:800; color:#e2e8f0; }
+.ag-desc { font-size:13px; color:#64748b; line-height:1.6; }
