@@ -1,0 +1,134 @@
+/* PhysicsPanel3D.css */
+.pp3-panel {
+  background: #1a1a2e;
+  color: #e2e8f0;
+  height: 100%;
+  overflow-y: auto;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.pp3-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #16213e;
+  border-bottom: 1px solid #2d2d44;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.pp3-body-name { font-weight: 700; font-size: 13px; color: #a78bfa; }
+.pp3-reset-btn {
+  background: #374151; color: #9ca3af; border: none;
+  padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;
+}
+.pp3-reset-btn:hover { background: #4b5563; }
+
+/* Sections */
+.pp3-section { border-bottom: 1px solid #1e293b; }
+.pp3-section-head {
+  width: 100%; background: #1e2a3a; color: #94a3b8;
+  border: none; padding: 8px 12px; text-align: left;
+  cursor: pointer; font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+  transition: background 0.15s;
+}
+.pp3-section-head:hover { background: #243447; color: #c4b5fd; }
+.pp3-section-body { padding: 8px 12px; display: flex; flex-direction: column; gap: 8px; }
+
+/* Row */
+.pp3-row {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+.pp3-label { flex: 0 0 110px; font-size: 11px; color: #94a3b8; }
+.pp3-slider-wrap { flex: 1; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.pp3-slider {
+  flex: 1; -webkit-appearance: none; height: 4px;
+  background: #2d2d44; border-radius: 2px; outline: none;
+  min-width: 60px;
+}
+.pp3-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px;
+  border-radius: 50%; background: #7c3aed; cursor: pointer;
+}
+.pp3-number {
+  width: 50px; background: #0f172a; border: 1px solid #2d2d44;
+  color: #e2e8f0; padding: 3px 4px; border-radius: 4px;
+  font-size: 11px; text-align: center;
+}
+.pp3-unit { font-size: 10px; color: #64748b; flex-shrink: 0; }
+.pp3-select {
+  flex: 1; background: #0f172a; border: 1px solid #2d2d44;
+  color: #e2e8f0; padding: 5px 8px; border-radius: 6px;
+  font-size: 11px;
+}
+
+/* Toggle */
+.pp3-toggle-row { cursor: pointer; padding: 4px 0; }
+.pp3-toggle-row:hover { background: rgba(124,58,237,0.05); border-radius: 6px; }
+.pp3-toggle-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.pp3-desc { font-size: 10px; color: #475569; }
+.pp3-toggle {
+  width: 32px; height: 18px; background: #374151;
+  border-radius: 9px; position: relative; flex-shrink: 0;
+  transition: background 0.2s;
+}
+.pp3-toggle.on { background: #7c3aed; }
+.pp3-toggle-thumb {
+  position: absolute; top: 2px; left: 2px;
+  width: 14px; height: 14px; background: #fff;
+  border-radius: 50%; transition: left 0.2s;
+}
+.pp3-toggle.on .pp3-toggle-thumb { left: 16px; }
+
+/* Presets */
+.pp3-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.pp3-preset-btn {
+  background: #1e293b; color: #94a3b8; border: 1px solid #2d2d44;
+  padding: 5px 10px; border-radius: 6px; cursor: pointer;
+  font-size: 11px; transition: all 0.15s;
+}
+.pp3-preset-btn.active, .pp3-preset-btn:hover {
+  background: #7c3aed; color: #fff; border-color: #7c3aed;
+}
+
+/* Lock Grid */
+.pp3-lock-grid {
+  display: grid; grid-template-columns: auto 1fr 1fr 1fr;
+  gap: 8px; align-items: center;
+}
+.pp3-lock-title { font-size: 11px; color: #64748b; }
+.pp3-lock-item {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; color: #94a3b8; cursor: pointer;
+}
+.pp3-lock-item input[type=checkbox] { accent-color: #7c3aed; width: 14px; height: 14px; }
+
+/* Force buttons */
+.pp3-force-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.pp3-force-btn {
+  flex: 1; min-width: 80px; background: #1e293b; color: #94a3b8;
+  border: 1px solid #2d2d44; padding: 8px 6px; border-radius: 8px;
+  cursor: pointer; font-size: 11px; text-align: center;
+  transition: all 0.15s;
+}
+.pp3-force-btn:hover { background: #2d3748; color: #e2e8f0; }
+.pp3-force-explode { border-color: #ef4444 !important; color: #ef4444 !important; }
+.pp3-force-explode:hover { background: #ef4444 !important; color: #fff !important; }
+
+.pp3-empty {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; height: 200px; color: #475569;
+  gap: 8px;
+}
+.pp3-empty-icon { font-size: 32px; }
+
+/* Mobile */
+@media (max-width: 600px) {
+  .pp3-label { flex: 0 0 80px; font-size: 10px; }
+  .pp3-section-body { padding: 6px 8px; }
+}
