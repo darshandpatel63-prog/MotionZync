@@ -35,11 +35,14 @@ export default function Footer() {
             {/* Create */}
             <div className="footer-col">
               <h4>Create</h4>
-              <Link to="/codespace"    className="footer-codespace-link">💻 CodeSpace</Link>
-              <Link to="/anim-creator" className="footer-creator-link">🎨 AnimCreator</Link>
+              <Link to="/codespace"      className="footer-codespace-link">💻 CodeSpace</Link>
+              <Link to="/anim-creator"   className="footer-creator-link">🎨 AnimCreator</Link>
+              <Link to="/drawing-studio">✏️ Drawing Studio</Link>
+              <Link to="/studio-3d">🌎 3D Studio</Link>
+              <Link to="/ai-studio">🧠 AI Studio</Link>
               <Link to="/compare">⚖️ Compare</Link>
               <Link to="/submit">+ Submit Animation</Link>
-              <Link to="/changelog"    className="footer-changelog-link">📋 What's New</Link>
+              <Link to="/changelog"      className="footer-changelog-link">📋 What's New</Link>
               <Link to="/why-features">💡 Why These Features?</Link>
             </div>
 
