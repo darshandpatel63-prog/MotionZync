@@ -1,122 +1,120 @@
-import { useState, useRef, useEffect } from 'react'
+// src/components/Navbar/Navbar.jsx
+// Updated Navbar — adds Drawing Studio, 3D Studio, AI Studio
+import { useState, useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import MotionZyncLogo from '../Logo/Logo.jsx'
-import AuthButton     from '../AuthButton/AuthButton.jsx'
-import { useAuth }    from '../../context/AuthContext.jsx'
+import { AuthContext } from '../../context/AuthContext.jsx'
+import AuthButton from '../AuthButton/AuthButton.jsx'
 import './Navbar.css'
 
-const LS_FAVS  = 'mz_favorites'
-const LS_LIKES = 'mz_likes'
+const NAV_ITEMS = [
+  { path:'/',               label:'Home',     icon:'⚡' },
+  { path:'/gallery',        label:'Gallery',  icon:'🎨' },
+  { path:'/playground',     label:'Play',     icon:'▶' },
+  { path:'/compare',        label:'Compare',  icon:'⊞' },
+  { path:'/tools',          label:'Tools',    icon:'🔧' },
+  { path:'/wallpaper',      label:'Wallpaper',icon:'🖼' },
+  { path:'/course',         label:'Learn',    icon:'📚' },
+]
 
-function getFavCount() {
-  try {
-    const f = JSON.parse(localStorage.getItem(LS_FAVS)  || '[]')
-    const l = JSON.parse(localStorage.getItem(LS_LIKES) || '{}')
-    return f.length + Object.keys(l).length
-  } catch { return 0 }
-}
-
-const navLinks = [
-  { path:'/',            label:'Home' },
-  { path:'/gallery',     label:'Gallery' },
-  { path:'/playground',  label:'⚡ Playground' },
-  { path:'/wallpaper',   label:'🖼️ Wallpaper' },
-  { path:'/course',      label:'📚 Course' },
-  { path:'/how-to-use',  label:'How to Use' },
-  { path:'/changelog',   label:"📋 What's New" },
+// Studio dropdown items
+const STUDIOS = [
+  { path:'/anim-creator',   label:'Animation Creator', icon:'🎬', badge:null },
+  { path:'/drawing-studio', label:'Drawing Studio',    icon:'✏️',  badge:'NEW' },
+  { path:'/studio-3d',      label:'3D Studio',         icon:'🌎', badge:'NEW', auth:true },
+  { path:'/codespace',      label:'Code Space',        icon:'💻', badge:null  },
+  { path:'/ai-studio',      label:'AI Studio',         icon:'🧠', badge:'AI',  auth:true },
 ]
 
 export default function Navbar() {
-  const [open,     setOpen]     = useState(false)
-  const [favCount, setFavCount] = useState(getFavCount)
-  const location  = useLocation()
-  const navigate  = useNavigate()
-  const { isAdmin } = useAuth()
-  const taps = useRef(0), timer = useRef(null)
+  const { pathname } = useLocation()
+  const navigate     = useNavigate()
+  const { user }     = useContext(AuthContext) || {}
+  const [menuOpen,  setMenuOpen]  = useState(false)
+  const [studioOpen,setStudioOpen]= useState(false)
+  const [tapCount,  setTapCount]  = useState(0)
 
-  // Live fav count update
-  useEffect(() => {
-    function update() { setFavCount(getFavCount()) }
-    window.addEventListener('mz-favs-changed', update)
-    window.addEventListener('storage', update)
-    return () => {
-      window.removeEventListener('mz-favs-changed', update)
-      window.removeEventListener('storage', update)
-    }
-  }, [])
-
-  function handleLogoTap(e) {
-    taps.current++
-    clearTimeout(timer.current)
-    if (taps.current >= 7) {
-      taps.current = 0
-      e.preventDefault()
-      navigate('/admin')
-      setOpen(false)
-      return
-    }
-    timer.current = setTimeout(() => { taps.current = 0 }, 2000)
+  // Admin secret tap (7 taps on logo)
+  const handleLogoTap = () => {
+    const next = tapCount + 1
+    setTapCount(next)
+    if (next >= 7) { navigate('/admin'); setTapCount(0) }
+    setTimeout(() => setTapCount(0), 2000)
   }
 
   return (
-    <nav className="navbar">
-      <div className="navbar-inner">
-        <Link to="/" className="navbar-logo" onClick={handleLogoTap}>
-          <MotionZyncLogo size={36} className="logo-svg"/>
-          <span className="logo-text">MotionZync</span>
-        </Link>
+    <nav className="nb-root">
+      {/* Logo */}
+      <button className="nb-logo" onClick={handleLogoTap}>
+        <span className="nb-logo-icon">⚡</span>
+        <span className="nb-logo-text">MotionZync</span>
+      </button>
 
-        <ul className={`navbar-links ${open ? 'open' : ''}`}>
-          {navLinks.map(l => (
-            <li key={l.path}>
-              <Link
-                to={l.path}
-                className={`nav-link ${location.pathname === l.path ? 'active' : ''}`}
-                onClick={() => setOpen(false)}
-              >
-                {l.label}
-              </Link>
-            </li>
-          ))}
-          {isAdmin && (
-            <li>
-              <Link to="/admin" className="nav-link admin-link" onClick={() => setOpen(false)}>
-                ⚙️ Admin
-              </Link>
-            </li>
-          )}
-        </ul>
-
-        <div className="navbar-right">
-          {/* ── Favorites icon with live badge ── */}
-          <Link
-            to="/favorites"
-            className={`navbar-fav-btn ${location.pathname === '/favorites' ? 'active' : ''}`}
-            onClick={() => setOpen(false)}
-            title="My Favorites"
-          >
-            {favCount > 0
-              ? <><span>🔖</span><span className="nav-fav-badge">{favCount > 99 ? '99+' : favCount}</span></>
-              : <span>🔖</span>
-            }
+      {/* Desktop nav */}
+      <div className="nb-links">
+        {NAV_ITEMS.map(item => (
+          <Link key={item.path} to={item.path}
+            className={`nb-link ${pathname===item.path?'active':''}`}>
+            {item.label}
           </Link>
+        ))}
 
-          {/* Submit CTA */}
-          <Link to="/submit" className="navbar-submit-btn" onClick={() => setOpen(false)}>
-            + Submit
-          </Link>
-
-          <AuthButton/>
-
-          <button
-            className={`menu-toggle ${open ? 'open' : ''}`}
-            onClick={() => setOpen(p => !p)}
-            aria-label="Toggle menu"
-          >
-            <span/><span/><span/>
+        {/* Studios dropdown */}
+        <div className="nb-dropdown"
+          onMouseEnter={()=>setStudioOpen(true)}
+          onMouseLeave={()=>setStudioOpen(false)}>
+          <button className={`nb-link nb-studios-btn ${STUDIOS.some(s=>pathname===s.path)?'active':''}`}>
+            Studios ▾
           </button>
+          {studioOpen && (
+            <div className="nb-dropdown-menu">
+              {STUDIOS.map(s=>(
+                <Link key={s.path} to={s.path}
+                  className="nb-dd-item"
+                  onClick={()=>setStudioOpen(false)}>
+                  <span className="nb-dd-icon">{s.icon}</span>
+                  <span className="nb-dd-label">{s.label}</span>
+                  <div className="nb-dd-right">
+                    {s.auth && !user && <span className="nb-dd-lock">🔒</span>}
+                    {s.badge && <span className={`nb-badge ${s.badge==='AI'?'ai':''}`}>{s.badge}</span>}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Right side */}
+      <div className="nb-right">
+        <Link to="/submit" className="nb-submit-btn">+ Submit</Link>
+        <AuthButton />
+        {/* Mobile hamburger */}
+        <button className="nb-hamburger" onClick={()=>setMenuOpen(o=>!o)}>
+          <span className={menuOpen?'open':''}/>
+          <span className={menuOpen?'open':''}/>
+          <span className={menuOpen?'open':''}/>
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="nb-mobile-menu" onClick={()=>setMenuOpen(false)}>
+          {NAV_ITEMS.map(item => (
+            <Link key={item.path} to={item.path}
+              className={`nb-mob-link ${pathname===item.path?'active':''}`}>
+              <span>{item.icon}</span>{item.label}
+            </Link>
+          ))}
+          <div className="nb-mob-divider">— Studios —</div>
+          {STUDIOS.map(s => (
+            <Link key={s.path} to={s.path} className="nb-mob-link">
+              <span>{s.icon}</span>{s.label}
+              {s.badge && <span className={`nb-badge ${s.badge==='AI'?'ai':''}`}>{s.badge}</span>}
+              {s.auth && !user && <span className="nb-dd-lock">🔒</span>}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   )
 }
