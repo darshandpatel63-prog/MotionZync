@@ -1,0 +1,177 @@
+/* Viewport3D.css */
+.vp3-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #0a0a1a;
+  overflow: hidden;
+}
+.vp3-canvas-mount {
+  width: 100%; height: 100%;
+}
+.vp3-canvas-mount canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none; /* let OrbitControls fully handle 1-finger orbit / 2-finger pinch+pan */
+}
+.vp3-overlay {
+  position: absolute; inset: 0; pointer-events: none;
+  display: flex; flex-direction: column;
+}
+.vp3-toolbar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 10px;
+  background: rgba(10,10,26,.85); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(124,58,237,.2);
+  pointer-events: all;
+  flex-wrap: wrap;
+}
+.vp3-add-btns {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.vp3-add-btn {
+  height: 30px; padding: 0 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 600; cursor: pointer;
+  background: rgba(124,58,237,.2); color: #a78bfa;
+  border: 1px solid rgba(124,58,237,.35);
+  transition: all .15s;
+}
+.vp3-add-btn:hover {
+  background: rgba(124,58,237,.4); color: #fff;
+  border-color: #7c3aed;
+}
+.vp3-toolbar-right {
+  display: flex; align-items: center; gap: 6px; margin-left: auto;
+}
+.vp3-mat-select {
+  height: 30px; padding: 0 8px; border-radius: 6px; font-size: 11px;
+  background: #1e293b; border: 1px solid #2d2d44; color: #e2e8f0;
+  cursor: pointer; outline: none;
+}
+.vp3-play-btn {
+  height: 32px; padding: 0 14px; border-radius: 8px;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  background: linear-gradient(135deg,#7c3aed,#06b6d4); color: #fff;
+  border: none; transition: all .15s;
+}
+.vp3-play-btn:hover { opacity: .85; transform: scale(1.03); }
+.vp3-play-btn.playing {
+  background: linear-gradient(135deg,#ef4444,#f97316);
+}
+.vp3-explode-btn {
+  width: 32px; height: 32px; border-radius: 8px; font-size: 18px;
+  background: rgba(239,68,68,.2); border: 1px solid rgba(239,68,68,.4);
+  cursor: pointer; transition: all .15s;
+}
+.vp3-explode-btn:hover { background: #ef4444; border-color: #ef4444; }
+
+/* Object List */
+.vp3-object-list {
+  position: absolute; top: 52px; left: 8px;
+  display: flex; flex-direction: column; gap: 3px;
+  pointer-events: all; max-height: 40vh; overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: #2d2d44 transparent;
+  min-width: 160px;
+}
+.vp3-obj-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 8px; cursor: pointer;
+  background: rgba(10,10,26,.8); backdrop-filter: blur(8px);
+  border: 1px solid rgba(45,45,68,.6); font-size: 11px;
+  transition: all .12s; color: #94a3b8;
+}
+.vp3-obj-item:hover { border-color: #7c3aed; color: #e2e8f0; }
+.vp3-obj-item.selected {
+  background: rgba(124,58,237,.25); border-color: #7c3aed; color: #a78bfa;
+}
+.vp3-obj-icon { flex-shrink: 0; }
+.vp3-obj-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vp3-del-btn {
+  width: 18px; height: 18px; border-radius: 4px; font-size: 10px;
+  background: rgba(239,68,68,.3); color: #f87171;
+  border: none; cursor: pointer; flex-shrink: 0;
+}
+.vp3-del-btn:hover { background: #ef4444; color: #fff; }
+
+/* Loading */
+.vp3-loading {
+  position: absolute; inset: 0; display: flex;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; color: #64748b; font-size: 13px;
+  background: rgba(10,10,26,.85); pointer-events: none;
+}
+.vp3-spinner {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid #1e293b; border-top-color: #7c3aed;
+  animation: vp3-spin .8s linear infinite;
+}
+@keyframes vp3-spin { to { transform: rotate(360deg); } }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .vp3-add-btn { height: 28px; padding: 0 8px; font-size: 10px; }
+  .vp3-object-list { max-height: 25vh; }
+}
+
+/* ─── Mobile floating Add Object button ──────────────────── */
+.vp3-fab-add {
+  display: none;
+  position: absolute; right: 14px; bottom: 24px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  color: #fff; font-size: 24px; font-weight: 700;
+  border: none; box-shadow: 0 8px 24px rgba(124,58,237,.5);
+  pointer-events: all; z-index: 30;
+  align-items: center; justify-content: center;
+}
+.vp3-fab-add:active { transform: scale(0.92); }
+
+@media (max-width: 768px) {
+  .vp3-toolbar { display: none; }
+  .vp3-fab-add { display: flex; bottom: 64px; } /* clears 40px bottom timeline bar */
+}
+
+/* ─── Mobile bottom sheet ──────────────────────────────────── */
+.vp3-sheet-backdrop {
+  position: absolute; inset: 0; z-index: 40;
+  background: rgba(0,0,0,.5); backdrop-filter: blur(2px);
+  pointer-events: all;
+  display: flex; align-items: flex-end;
+}
+.vp3-sheet {
+  width: 100%; max-height: 70vh; overflow-y: auto;
+  background: #12121f; border-top: 1px solid rgba(124,58,237,.3);
+  border-radius: 18px 18px 0 0;
+  padding: 8px 14px 18px;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.6);
+  animation: vp3-sheet-up .2s ease-out;
+}
+@keyframes vp3-sheet-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.vp3-sheet-handle {
+  width: 40px; height: 4px; border-radius: 2px;
+  background: #2d2d44; margin: 6px auto 12px;
+}
+.vp3-sheet-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; color: #64748b; margin: 12px 0 8px;
+}
+.vp3-sheet-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.vp3-sheet-btn {
+  height: 40px; border-radius: 10px; font-size: 11px; font-weight: 600;
+  background: rgba(124,58,237,.15); color: #a78bfa;
+  border: 1px solid rgba(124,58,237,.3);
+}
+.vp3-sheet-btn.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+.vp3-sheet-btn:active { transform: scale(0.96); }
+.vp3-sheet-actions {
+  display: flex; gap: 10px; margin-top: 14px;
+}
+.vp3-sheet-actions .vp3-play-btn { flex: 1; height: 44px; }
+.vp3-sheet-actions .vp3-explode-btn { width: 44px; height: 44px; }
+
