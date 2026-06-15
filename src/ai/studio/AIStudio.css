@@ -1,15 +1,19 @@
-/* AIStudio.css v3.1 — layout + mobile; base classes in index.css */
+/* AIStudio.css — only layout + overrides; base classes in index.css */
 
+/* ── Root ──────────────────────────────────────────────── */
 .ais-root {
-  width: 100vw; height: 100vh; display: flex; flex-direction: column;
+  width: 100vw; height: 100vh;
+  display: flex; flex-direction: column;
   background: var(--bg); color: var(--text);
   font-family: var(--sans); overflow: hidden;
 }
+
+/* ── Top bar ───────────────────────────────────────────── */
 .ais-topbar {
   display: flex; align-items: center; gap: 8px;
   padding: 0 14px; height: 48px; min-height: 48px;
   background: var(--bg-panel); border-bottom: 1px solid var(--border);
-  z-index: 100;
+  position: relative; z-index: 100;
 }
 .ais-back {
   font-size: 22px; color: var(--text-muted); padding: 0 6px;
@@ -17,67 +21,66 @@
 }
 .ais-back:hover { color: var(--text); }
 .ais-brand {
-  font-size: 15px; font-weight: 800; white-space: nowrap;
+  font-size: 15px; font-weight: 800;
   background: linear-gradient(135deg, var(--accent), var(--cyan));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  white-space: nowrap;
 }
 .ais-topbar-right {
   display: flex; align-items: center; gap: 8px; margin-left: auto;
 }
+.ais-provider-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-subtle); border: 1px solid var(--border);
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  font-size: 11px; color: var(--text-muted); cursor: pointer;
+  transition: border-color .15s;
+}
+.ais-provider-badge:hover { border-color: var(--accent); }
+.ais-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+}
+.ais-dot.green { background: var(--green); }
+.ais-dot.red   { background: var(--red); }
+.ais-model-tag { color: var(--text-soft); }
+
+/* Mobile hamburger */
 .ais-nav-toggle {
   display: none; width: 34px; height: 34px; border-radius: 8px;
   background: var(--bg-subtle); border: 1px solid var(--border);
-  color: var(--text-muted); font-size: 16px;
-  align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 16px; align-items: center; justify-content: center;
 }
 
-/* ── Body ────────────────────────────────────────────── */
+/* ── Body layout ───────────────────────────────────────── */
 .ais-body { display: flex; flex: 1; overflow: hidden; }
 
-/* ── Special panels (Skills / Systems / Preview) ──────── */
-.ais-special-panel {
-  flex: 1; overflow: hidden; display: flex; flex-direction: column;
-}
+/* Nav rail — My UI Design EntryNavRail */
+/* Base styles in index.css (.entry-nav-rail, .entry-nav-btn) */
+.entry-nav-rail { z-index: 50; }
 
-/* ── Chat head ──────────────────────────────────────── */
+/* ── Chat head ─────────────────────────────────────────── */
 .ais-chat-head {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 18px; border-bottom: 1px solid var(--border);
-  flex-shrink: 0; background: var(--bg-panel); flex-wrap: wrap; gap: 8px;
+  flex-shrink: 0; background: var(--bg-panel);
 }
+.ais-chat-head > div { display: flex; align-items: center; gap: 6px; }
 .ais-tool-icon { font-size: 18px; }
-.ais-sys-chip {
-  font-size: 10px; font-weight: 700; padding: 2px 8px;
-  border-radius: var(--radius-pill);
-}
+.ais-chat-head strong { font-size: 14px; font-weight: 700; }
 
-/* Design system indicator in nav */
-.ais-sys-indicator {
-  display: flex; align-items: center; gap: 6px;
-  padding: 7px 10px; border-radius: var(--radius-sm);
-  background: var(--bg-muted); border: 1px solid var(--border);
-  font-size: 10px; color: var(--text-muted); margin-top: 4px;
-}
-.ais-sys-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.ais-sys-indicator span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ais-sys-indicator button {
-  font-size: 10px; color: var(--text-faint); background: none; border: none;
-  cursor: pointer; flex-shrink: 0;
-}
-.ais-sys-indicator button:hover { color: var(--red); }
-
-/* ── No key ───────────────────────────────────────── */
+/* ── No key ────────────────────────────────────────────── */
 .ais-no-key {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 12px;
   padding: 32px; text-align: center;
 }
 
-/* ── Welcome ──────────────────────────────────────── */
+/* ── Welcome ───────────────────────────────────────────── */
 .ais-welcome {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 10px; padding: 32px;
-  text-align: center; min-height: 200px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; padding: 32px; text-align: center;
+  min-height: 200px;
 }
 .ais-welcome-icon { font-size: 44px; }
 .ais-welcome h3   { font-size: 18px; font-weight: 800; margin: 0; }
@@ -88,12 +91,9 @@
   background: var(--bg-subtle); color: var(--text-muted);
   border: 1px solid var(--border);
 }
-.ais-quick-btn:hover {
-  background: var(--accent-soft); color: var(--purple);
-  border-color: rgba(124,58,237,.4);
-}
+.ais-quick-btn:hover { background: var(--accent-soft); color: var(--purple); border-color: rgba(124,58,237,.4); }
 
-/* ── Image result ────────────────────────────────── */
+/* ── Image result ──────────────────────────────────────── */
 .ais-img {
   max-width: 300px; border-radius: var(--radius); margin-top: 8px;
   border: 1px solid var(--border); cursor: pointer; display: block;
@@ -101,61 +101,90 @@
 }
 .ais-img:hover { transform: scale(1.02); }
 
-/* ── Animation card ──────────────────────────────── */
+/* ── Animation result card ─────────────────────────────── */
 .ais-anim-card {
   background: var(--bg-elevated); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 8px;
 }
 
-/* ── Palette ─────────────────────────────────────── */
+/* ── Palette ───────────────────────────────────────────── */
 .ais-palette { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-.ais-swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.ais-swatches {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
+}
 .ais-swatch {
   display: flex; flex-direction: column; align-items: center; gap: 3px;
   cursor: pointer; padding: 4px; border-radius: 8px;
   border: 1px solid transparent; transition: border-color .12s;
 }
 .ais-swatch:hover { border-color: var(--border); }
-.ais-swatch-color { width: 100%; aspect-ratio: 1; border-radius: 7px; border: 1px solid rgba(255,255,255,.1); }
+.ais-swatch-color {
+  width: 100%; aspect-ratio: 1; border-radius: 7px;
+  border: 1px solid rgba(255,255,255,.1);
+}
 .ais-swatch-hex  { font-size: 9px; font-family: var(--mono); color: var(--text-muted); }
 .ais-swatch-name { font-size: 9px; color: var(--text-soft); text-align: center; }
 
-/* ── CSS preview ─────────────────────────────────── */
+/* ── Preview ───────────────────────────────────────────── */
 .ais-preview-wrap { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
-.ais-preview-frame { width: 100%; height: 200px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
-
-/* ── Mobile nav overlay ──────────────────────────── */
-.ais-nav-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.5);
-  z-index: 49; display: none;
+.ais-preview-frame {
+  width: 100%; height: 200px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
-/* ═══════════ MOBILE ════════════════════════════════ */
+/* ── Mobile nav overlay ────────────────────────────────── */
+.ais-nav-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.5); z-index: 49;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+   ═══════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .ais-nav-toggle { display: flex; order: -1; }
+  /* Show hamburger */
+  .ais-nav-toggle {
+    display: flex; order: -1;
+  }
+
+  /* Nav becomes slide-in drawer from left */
   .entry-nav-rail {
-    position: fixed; top: 48px; left: -100%; bottom: 0; z-index: 50;
-    width: 200px; flex-direction: column !important;
+    position: fixed; top: 48px; left: -100%; bottom: 0;
+    width: 200px; z-index: 50;
+    flex-direction: column !important;
     border-right: 1px solid var(--border) !important;
     border-bottom: none !important;
-    transition: left .25s ease; box-shadow: var(--shadow-lg);
+    transition: left .25s ease;
+    box-shadow: var(--shadow-lg);
   }
-  .entry-nav-rail.open { left: 0; }
+  .entry-nav-rail.open {
+    left: 0;
+  }
   .ais-nav-overlay { display: block; }
   .entry-nav-btn {
-    min-width: auto !important; flex-direction: row !important;
+    min-width: auto !important;
+    flex-direction: row !important;
     justify-content: flex-start !important;
   }
+
+  /* Smaller topbar */
   .ais-brand { font-size: 13px; }
-  .chat-messages { padding: 10px; }
-  .chat-msg-body { max-width: 92%; }
+  .ais-model-tag { display: none; }
+
+  /* Chat area fills screen */
+  .chat-messages { padding: 12px; }
+  .chat-msg-body { max-width: 90%; }
   .ais-img { max-width: 220px; }
-  .ais-swatches { grid-template-columns: repeat(3, 1fr); }
+  .ais-swatches { grid-template-columns: repeat(4, 1fr); }
   .ais-preview-frame { height: 160px; }
+
+  /* Composer */
   .chat-composer { padding: 8px; }
 }
+
 @media (max-width: 480px) {
   .ais-topbar { padding: 0 10px; height: 46px; }
   .ais-topbar-right .ghost { display: none; }
+  .ais-provider-badge { padding: 4px 10px; }
   }
     
