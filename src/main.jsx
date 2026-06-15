@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <AuthContext>
         <AIProviderContext>
-          <App />
+          <App/>
         </AIProviderContext>
       </AuthContext>
     </BrowserRouter>
