@@ -1,6 +1,9 @@
 // src/ai/settings/APIKeyManager.jsx
 // My UI Design SettingsDialog pattern → MotionZync BYOK
 // Mobile + Desktop both work perfectly
+// Updated (Phase 1 / Step 2): gated behind a passphrase vault — see keyVault.js.
+// Saved keys are now encrypted at rest. Everything else (test/use/delete) works
+// exactly as before once the vault is unlocked for this session.
 
 import { useState } from 'react'
 import { useAI, AI_PROVIDERS } from '../providers/AIProviderContext.jsx'
@@ -14,19 +17,90 @@ const NAV_ITEMS = [
   { id:'custom',    icon:'⚙️', label:'Custom API',     sub:'Any endpoint'  },
 ]
 
+// ── NEW: passphrase gate (setup / migrate / unlock) ──────────────────
+function VaultGate({ mode, busy, error, resetArmed, onSubmit, onReset }) {
+  const [pass, setPass]       = useState('')
+  const [confirm, setConfirm] = useState('')
+  const isSetup   = mode === 'setup' || mode === 'migrate'
+  const mismatch  = isSetup && confirm.length > 0 && pass !== confirm
+
+  return (
+    <div className="vault-gate">
+      <div className="vault-gate-icon">🔒</div>
+      <h3 className="vault-gate-title">
+        {mode === 'setup'   && 'AI keys ને encrypt કરવા passphrase બનાવો'}
+        {mode === 'migrate' && 'Existing key ને secure કરવા passphrase બનાવો'}
+        {mode === 'unlock'  && 'Vault locked છે — passphrase નાખો'}
+      </h3>
+      <p className="vault-gate-hint">
+        {isSetup
+          ? 'આ passphrase ક્યાંય save નથી થતું — ફક્ત તમારી પાસે જ રહેશે. ભૂલી જાઓ તો Reset કરવું પડશે (saved keys ફરી નાખવી પડશે).'
+          : 'Browser/tab reload પછી ફરી નાખવું પડે છે — keys ને સુરક્ષિત રાખવા માટે.'}
+      </p>
+
+      <div className="vault-gate-field">
+        <input
+          type="password"
+          value={pass}
+          onChange={e => setPass(e.target.value)}
+          placeholder="Passphrase"
+          autoFocus
+          autoComplete="new-password"
+          onKeyDown={e => e.key === 'Enter' && !isSetup && pass && onSubmit(pass)}
+        />
+      </div>
+
+      {isSetup && (
+        <div className="vault-gate-field">
+          <input
+            type="password"
+            value={confirm}
+            onChange={e => setConfirm(e.target.value)}
+            placeholder="Passphrase ફરી નાખો"
+            autoComplete="new-password"
+            onKeyDown={e => e.key === 'Enter' && !mismatch && pass && confirm && onSubmit(pass)}
+          />
+        </div>
+      )}
+
+      {mismatch && <div className="vault-gate-mismatch">બંને passphrase સરખા નથી</div>}
+      {error && <div className="vault-gate-mismatch">{error}</div>}
+
+      <button
+        className="primary vault-gate-submit"
+        disabled={busy || !pass || (isSetup && (!confirm || mismatch))}
+        onClick={() => onSubmit(pass)}
+      >
+        {busy ? '⏳ ...' : (isSetup ? '🔒 Secure Keys' : '🔓 Unlock')}
+      </button>
+
+      {mode === 'unlock' && (
+        <button className="vault-gate-forgot" onClick={onReset}>
+          {resetArmed ? '⚠️ ફરી click કરો — બધી saved keys delete થશે' : 'Passphrase ભૂલી ગયા? Reset vault'}
+        </button>
+      )}
+    </div>
+  )
+}
+
 export default function APIKeyManager({ onClose }) {
   const {
     getConfig, saveConfig, deleteConfig,
-    testConnection, setActiveProvider, setActiveModel, isLoading
+    testConnection, setActiveProvider, setActiveModel, isLoading,
+    vaultExists, vaultUnlocked, needsMigration,
+    setupVault, unlockVault, lockVault, resetVault,
   } = useAI()
 
-  const [selected,   setSelected]   = useState('openai')
-  const [showKey,    setShowKey]     = useState(false)
-  const [testing,    setTesting]     = useState(false)
-  const [testStatus, setTestStatus]  = useState(null) // null | 'running' | 'success' | 'error'
-  const [testMsg,    setTestMsg]     = useState('')
-  const [confirmDel, setConfirmDel]  = useState(false)
-  const [saving,     setSaving]      = useState(false)
+  const [selected,    setSelected]    = useState('openai')
+  const [showKey,     setShowKey]     = useState(false)
+  const [testing,     setTesting]     = useState(false)
+  const [testStatus,  setTestStatus]  = useState(null) // null | 'running' | 'success' | 'error'
+  const [testMsg,     setTestMsg]     = useState('')
+  const [confirmDel,  setConfirmDel]  = useState(false)
+  const [saving,      setSaving]      = useState(false)
+  const [vaultBusy,   setVaultBusy]   = useState(false)
+  const [vaultError,  setVaultError]  = useState('')
+  const [resetArmed,  setResetArmed]  = useState(false)
 
   const cfg      = getConfig(selected)
   const provider = AI_PROVIDERS[selected]
@@ -63,12 +137,67 @@ export default function APIKeyManager({ onClose }) {
     setTestMsg('API key deleted.')
   }
 
+  const handleVaultSubmit = async (passphrase) => {
+    setVaultBusy(true)
+    setVaultError('')
+    try {
+      if (!vaultExists || needsMigration) await setupVault(passphrase)
+      else await unlockVault(passphrase)
+    } catch (e) {
+      setVaultError(e.message || 'કંઈક ખોટું થયું, ફરી પ્રયત્ન કરો')
+    } finally {
+      setVaultBusy(false)
+    }
+  }
+
+  const handleVaultReset = () => {
+    if (!resetArmed) { setResetArmed(true); return }
+    resetVault()
+    setResetArmed(false)
+    setVaultError('')
+  }
+
+  // ── Vault locked / needs setup / needs migration → gate screen ──────
+  if (!vaultUnlocked) {
+    let mode = 'unlock'
+    if (needsMigration) mode = 'migrate'
+    else if (!vaultExists) mode = 'setup'
+
+    return (
+      <div className="modal-backdrop" onClick={e => e.target === e.currentTarget && onClose?.()}>
+        <div className="modal modal-settings" style={{ position:'relative' }}>
+          <div className="settings-chrome">
+            <span/>
+            <button className="settings-close" onClick={onClose} title="Close">✕</button>
+          </div>
+          <div className="modal-head">
+            <div className="modal-head-line">
+              <span className="kicker">AI Configuration</span>
+              <h2>API Key Settings</h2>
+            </div>
+          </div>
+          <VaultGate
+            mode={mode}
+            busy={vaultBusy}
+            error={vaultError}
+            resetArmed={resetArmed}
+            onSubmit={handleVaultSubmit}
+            onReset={handleVaultReset}
+          />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="modal-backdrop" onClick={e => e.target === e.currentTarget && onClose?.()}>
       <div className="modal modal-settings" style={{ position:'relative' }}>
 
-        {/* ── Chrome: close + autosave ─────────────────── */}
+        {/* ── Chrome: lock + close + autosave ─────────────────── */}
         <div className="settings-chrome">
+          <button className="ghost vault-lock-btn" onClick={lockVault} title="Lock vault">
+            🔒 Lock
+          </button>
           <span className={`settings-autosave ${saving ? 'is-saving' : ''}`}>
             {saving ? '⏳ Saving...' : ''}
           </span>
@@ -81,7 +210,7 @@ export default function APIKeyManager({ onClose }) {
             <span className="kicker">AI Configuration</span>
             <h2>API Key Settings</h2>
             <p className="subtitle">
-              Your keys are stored only in your browser — never sent to our servers.
+              Keys are encrypted with your passphrase and stored only in your browser — never sent to our servers.
             </p>
           </div>
         </div>
@@ -275,10 +404,10 @@ export default function APIKeyManager({ onClose }) {
                 borderRadius:'var(--radius-sm)', border:'1px solid var(--border)',
                 fontSize: 11, lineHeight: 1.6
               }}>
-                🔒 <strong>Privacy:</strong> API keys are saved only in your
-                browser's localStorage. They never leave your device — all AI
-                requests go directly from your browser to the AI provider's API.
-                You can delete your key anytime.
+                🔒 <strong>Privacy:</strong> API keys are encrypted with your passphrase
+                (AES-GCM) and saved only in your browser's localStorage. They never leave
+                your device — all AI requests go directly from your browser to the AI
+                provider's API. Lock the vault or delete your key anytime.
               </div>
 
             </div>
@@ -287,5 +416,5 @@ export default function APIKeyManager({ onClose }) {
       </div>
     </div>
   )
-          }
-                                
+      }
+        
