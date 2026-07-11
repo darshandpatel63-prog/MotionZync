@@ -4,7 +4,7 @@
 //   header (blocked by CORS in both dev + prod) + model IDs were outdated. Both fixed here.
 // Fixed (Phase 1 / Step 2): API keys are now encrypted at rest (AES-GCM, passphrase-derived
 //   key via PBKDF2 — see keyVault.js). Plaintext legacy keys auto-migrate on first unlock.
-// Added: deleteConfig() — user can delete any saved API key
+// Added: deleteConfig() — user can delete any saved API key .
 
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
 import {
