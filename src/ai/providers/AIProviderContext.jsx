@@ -1,11 +1,16 @@
 // src/ai/providers/AIProviderContext.jsx
 // BYOK — Multi-provider AI system
-// Keys stored ONLY in localStorage (⚠ see CODESPACE_MASTER_PROMPT.md — Phase 1 item 2 will encrypt this)
-// Added: deleteConfig() — user can delete any saved API key
 // Fixed (Phase 1 / Step 1): Anthropic calls were missing 'anthropic-dangerous-direct-browser-access'
 //   header (blocked by CORS in both dev + prod) + model IDs were outdated. Both fixed here.
+// Fixed (Phase 1 / Step 2): API keys are now encrypted at rest (AES-GCM, passphrase-derived
+//   key via PBKDF2 — see keyVault.js). Plaintext legacy keys auto-migrate on first unlock.
+// Added: deleteConfig() — user can delete any saved API key
 
-import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
+import {
+  hasVault, createVault, unlockVault as unlockVaultKey,
+  encryptWithKey, decryptWithKey, resetVault as resetVaultStorage,
+} from './keyVault.js'
 
 export const AI_PROVIDERS = {
   anthropic: {
@@ -94,6 +99,19 @@ export function AIProviderContext({ children }) {
   const [isConnected, setIsConnected] = useState(false)
   const [isLoading,   setIsLoading]   = useState(false)
 
+  // ── NEW (Phase 1 / Step 2): encrypted key vault ──────────────
+  const [decryptedKeys, setDecryptedKeys] = useState({})       // in-memory only, never persisted
+  const vaultKeyRef      = useRef(null)                         // derived CryptoKey, memory-only
+  const [vaultExists,    setVaultExists]    = useState(() => hasVault())
+  const [vaultUnlocked,  setVaultUnlocked]  = useState(false)
+  const [needsMigration, setNeedsMigration] = useState(false)
+
+  useEffect(() => {
+    if (vaultUnlocked) { setNeedsMigration(false); return }
+    const legacyFound = Object.values(configs).some(c => c && c.apiKey)
+    setNeedsMigration(legacyFound)
+  }, [configs, vaultUnlocked])
+
   useEffect(() => { localStorage.setItem(STORAGE_KEY, JSON.stringify(configs)) }, [configs])
   useEffect(() => { localStorage.setItem('mz_ai_active_provider', activeProvider) }, [activeProvider])
   useEffect(() => { localStorage.setItem('mz_ai_active_model', activeModel) }, [activeModel])
@@ -103,14 +121,30 @@ export function AIProviderContext({ children }) {
     const saved = configs[providerId] || {}
     return {
       ...base,
-      apiKey:        saved.apiKey        || '',
+      apiKey:        decryptedKeys[providerId]  || '',
       selectedModel: saved.selectedModel || base?.defaultModel || '',
       customBaseURL: saved.customBaseURL || base?.baseURL      || '',
       enabled:       saved.enabled       ?? false,
     }
-  }, [configs, activeProvider])
+  }, [configs, decryptedKeys, activeProvider])
 
   const saveConfig = useCallback((providerId, updates) => {
+    if (Object.prototype.hasOwnProperty.call(updates, 'apiKey')) {
+      const { apiKey, ...rest } = updates
+      setDecryptedKeys(prev => ({ ...prev, [providerId]: apiKey }))
+      if (vaultKeyRef.current) {
+        encryptWithKey(apiKey, vaultKeyRef.current).then(enc => {
+          setConfigs(prev => ({
+            ...prev,
+            [providerId]: { ...(prev[providerId] || {}), ...rest, apiKeyEnc: enc },
+          }))
+        })
+      }
+      if (Object.keys(rest).length) {
+        setConfigs(prev => ({ ...prev, [providerId]: { ...(prev[providerId] || {}), ...rest } }))
+      }
+      return
+    }
     setConfigs(prev => ({ ...prev, [providerId]: { ...(prev[providerId] || {}), ...updates } }))
   }, [])
 
@@ -119,12 +153,14 @@ export function AIProviderContext({ children }) {
     setConfigs(prev => {
       const next = { ...prev }
       if (next[providerId]) {
-        next[providerId] = {
-          ...next[providerId],
-          apiKey:  '',
-          enabled: false,
-        }
+        const { apiKey, apiKeyEnc, ...rest } = next[providerId]
+        next[providerId] = { ...rest, enabled: false }
       }
+      return next
+    })
+    setDecryptedKeys(prev => {
+      const next = { ...prev }
+      delete next[providerId]
       return next
     })
     // If deleting active provider, reset to openai
@@ -135,8 +171,90 @@ export function AIProviderContext({ children }) {
     setIsConnected(false)
   }, [activeProvider])
 
+  // ── NEW (Phase 1 / Step 2): vault lifecycle ──────────────────
+  const setupVault = useCallback(async (passphrase) => {
+    const key = await createVault(passphrase)
+    vaultKeyRef.current = key
+    setVaultExists(true)
+
+    // Migrate any legacy plaintext keys → encrypted, and warm the in-memory cache
+    const nextDecrypted = {}
+    const nextConfigs   = {}
+    for (const [providerId, saved] of Object.entries(configs)) {
+      if (saved?.apiKey) {
+        nextDecrypted[providerId] = saved.apiKey
+        const enc = await encryptWithKey(saved.apiKey, key)
+        const { apiKey, ...rest } = saved
+        nextConfigs[providerId] = { ...rest, apiKeyEnc: enc }
+      } else {
+        nextConfigs[providerId] = saved
+      }
+    }
+    setDecryptedKeys(nextDecrypted)
+    setConfigs(nextConfigs)
+    setNeedsMigration(false)
+    setVaultUnlocked(true)
+  }, [configs])
+
+  const unlockVault = useCallback(async (passphrase) => {
+    const key = await unlockVaultKey(passphrase) // throws if wrong
+    vaultKeyRef.current = key
+
+    const nextDecrypted = {}
+    for (const [providerId, saved] of Object.entries(configs)) {
+      if (saved?.apiKeyEnc) {
+        try { nextDecrypted[providerId] = await decryptWithKey(saved.apiKeyEnc, key) }
+        catch { /* corrupted entry — user can re-enter this one key */ }
+      } else if (saved?.apiKey) {
+        nextDecrypted[providerId] = saved.apiKey // legacy — migrate below
+      }
+    }
+
+    // Re-persist any legacy plaintext as encrypted now that we're unlocked
+    const legacyIds = Object.entries(configs).filter(([, c]) => c?.apiKey).map(([id]) => id)
+    if (legacyIds.length) {
+      const nextConfigs = { ...configs }
+      for (const providerId of legacyIds) {
+        const enc = await encryptWithKey(nextDecrypted[providerId], key)
+        const { apiKey, ...rest } = nextConfigs[providerId]
+        nextConfigs[providerId] = { ...rest, apiKeyEnc: enc }
+      }
+      setConfigs(nextConfigs)
+    }
+
+    setDecryptedKeys(nextDecrypted)
+    setNeedsMigration(false)
+    setVaultUnlocked(true)
+  }, [configs])
+
+  const lockVault = useCallback(() => {
+    vaultKeyRef.current = null
+    setVaultUnlocked(false)
+    setDecryptedKeys({})
+  }, [])
+
+  const resetVault = useCallback(() => {
+    resetVaultStorage()
+    vaultKeyRef.current = null
+    setVaultExists(false)
+    setVaultUnlocked(false)
+    setDecryptedKeys({})
+    // Passphrase is gone, so the ciphertext is unusable — clear it rather than keep dead weight
+    setConfigs(prev => {
+      const next = {}
+      for (const [providerId, saved] of Object.entries(prev)) {
+        const { apiKey, apiKeyEnc, ...rest } = saved || {}
+        next[providerId] = { ...rest, enabled: false }
+      }
+      return next
+    })
+  }, [])
+
   const testConnection = useCallback(async (providerId) => {
     const cfg = getConfig(providerId)
+    if (vaultExists && !vaultUnlocked && !cfg.noKeyRequired) {
+      throw new Error('Vault locked — unlock it first to use your saved key')
+    }
     if (!cfg.apiKey && !cfg.noKeyRequired) throw new Error('API key required')
     setIsLoading(true)
     try {
@@ -176,7 +294,7 @@ export function AIProviderContext({ children }) {
       setIsConnected(true)
       return true
     } finally { setIsLoading(false) }
-  }, [getConfig, saveConfig])
+  }, [getConfig, saveConfig, vaultExists, vaultUnlocked])
 
   const chat = useCallback(async (messages, opts = {}) => {
     const providerId = opts.provider || activeProvider
@@ -261,10 +379,13 @@ export function AIProviderContext({ children }) {
       getConfig, saveConfig, deleteConfig, testConnection,
       setActiveProvider, setActiveModel,
       chat, generateImage,
+      // Phase 1 / Step 2 — encrypted key vault
+      vaultExists, vaultUnlocked, needsMigration,
+      setupVault, unlockVault, lockVault, resetVault,
     }}>
       {children}
     </AIContext.Provider>
   )
 }
 
-      
+  
