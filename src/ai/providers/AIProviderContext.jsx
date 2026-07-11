@@ -1,7 +1,9 @@
 // src/ai/providers/AIProviderContext.jsx
 // BYOK — Multi-provider AI system
-// Keys stored ONLY in localStorage
+// Keys stored ONLY in localStorage (⚠ see CODESPACE_MASTER_PROMPT.md — Phase 1 item 2 will encrypt this)
 // Added: deleteConfig() — user can delete any saved API key
+// Fixed (Phase 1 / Step 1): Anthropic calls were missing 'anthropic-dangerous-direct-browser-access'
+//   header (blocked by CORS in both dev + prod) + model IDs were outdated. Both fixed here.
 
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 
@@ -10,11 +12,12 @@ export const AI_PROVIDERS = {
     id: 'anthropic', name: 'Anthropic', icon: '🔬',
     baseURL: 'https://api.anthropic.com/v1',
     models: [
-      { id:'claude-opus-4-5',   label:'Claude Opus 4.5',   ctx:200000 },
-      { id:'claude-sonnet-4-5', label:'Claude Sonnet 4.5', ctx:200000 },
-      { id:'claude-haiku-4-5',  label:'Claude Haiku 4.5',  ctx:200000 },
+      { id:'claude-opus-4-8',           label:'Claude Opus 4.8',   ctx:200000 },
+      { id:'claude-sonnet-5',           label:'Claude Sonnet 5',   ctx:200000 },
+      { id:'claude-haiku-4-5-20251001', label:'Claude Haiku 4.5',  ctx:200000 },
+      { id:'claude-fable-5',            label:'Claude Fable 5',    ctx:200000 },
     ],
-    defaultModel: 'claude-sonnet-4-5',
+    defaultModel: 'claude-sonnet-5',
     keyPlaceholder: 'sk-ant-api...',
     keyDocs: 'https://console.anthropic.com/settings/keys',
     imageModel: null, supportsVision: true, supportsStreaming: true,
@@ -140,7 +143,14 @@ export function AIProviderContext({ children }) {
       if (providerId === 'anthropic') {
         const res = await fetch(`${cfg.customBaseURL}/messages`, {
           method: 'POST',
-          headers: { 'Content-Type':'application/json', 'x-api-key': cfg.apiKey, 'anthropic-version':'2023-06-01' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': cfg.apiKey,
+            'anthropic-version': '2023-06-01',
+            // Required for direct browser calls — without this Anthropic blocks the request (CORS).
+            // Safe here because this is the user's OWN key, used only in their OWN browser session (BYOK).
+            'anthropic-dangerous-direct-browser-access': 'true',
+          },
           body: JSON.stringify({ model: cfg.selectedModel, max_tokens: 10, messages: [{ role:'user', content:'Hi' }] })
         })
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -179,7 +189,12 @@ export function AIProviderContext({ children }) {
         const msgs = messages.filter(m => m.role !== 'system')
         const res = await fetch(`${cfg.customBaseURL}/messages`, {
           method: 'POST',
-          headers: { 'Content-Type':'application/json', 'x-api-key': cfg.apiKey, 'anthropic-version':'2023-06-01' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': cfg.apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true',
+          },
           body: JSON.stringify({ model, max_tokens: opts.maxTokens||4096, system: sys?.content, messages: msgs })
         })
         if (!res.ok) throw new Error(`Anthropic error ${res.status}`)
@@ -251,4 +266,5 @@ export function AIProviderContext({ children }) {
     </AIContext.Provider>
   )
 }
-  
+
+      
