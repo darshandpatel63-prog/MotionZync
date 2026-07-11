@@ -1,3 +1,44 @@
 /* APIKeyManager.css — inherits all from index.css — only overrides here */
 /* All base classes (modal, field, ghost, etc.) are in index.css */
 .modal-settings { position: relative; }
+
+/* Phase 1 / Step 2 — passphrase vault gate (new).
+   Self-contained on purpose: .modal/.field/.settings-* classes used elsewhere
+   in this component have no CSS defined anywhere in the project (see
+   CODESPACE_MASTER_PROMPT.md audit log, item #11) — so this doesn't lean on them. */
+.vault-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 340px;
+  margin: 40px auto;
+  padding: 0 16px 24px;
+}
+.vault-gate-icon { font-size: 40px; margin-bottom: 10px; }
+.vault-gate-title {
+  font-size: 16px; font-weight: 700; margin: 0 0 8px;
+  color: var(--text-primary, #f1f5f9);
+}
+.vault-gate-hint {
+  font-size: 12px; line-height: 1.6; margin: 0 0 16px;
+  color: var(--text-muted, #94a3b8);
+}
+.vault-gate-field { width: 100%; margin-bottom: 10px; }
+.vault-gate-field input {
+  width: 100%; box-sizing: border-box; padding: 10px 12px;
+  border-radius: 8px; border: 1px solid var(--border-color, #2d2d44);
+  background: var(--bg-card, #1a1a28); color: var(--text-primary, #f1f5f9);
+  font-size: 14px;
+}
+.vault-gate-field input:focus {
+  outline: none; border-color: var(--accent-primary, #7c3aed);
+}
+.vault-gate-mismatch { font-size: 11px; color: #ef4444; margin: -2px 0 8px; }
+.vault-gate-submit { width: 100%; margin-top: 6px; }
+.vault-gate-forgot {
+  margin-top: 14px; font-size: 12px; background: none; border: none;
+  color: var(--text-muted, #94a3b8); cursor: pointer; text-decoration: underline;
+}
+.vault-lock-btn { font-size: 12px; padding: 4px 10px; }
+
