@@ -205,10 +205,10 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
           <div
             className="csp-device-frame"
             style={{
-              width:  vp.w * scale,
-              height: vp.h * scale,
+              width:  vp.w,
+              height: vp.h,
               transform: `scale(${scale})`,
-              transformOrigin: 'top left',
+              transformOrigin: 'center center',
             }}
           >
             <div className="csp-device-notch" />
@@ -217,7 +217,7 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
               className="csp-iframe"
               sandbox="allow-scripts allow-forms allow-modals"
               title="preview"
-              style={{ width: vp.w, height: vp.h, transform: `scale(${scale})`, transformOrigin: 'top left' }}
+              style={{ width: vp.w, height: vp.h }}
             />
           </div>
         ) : (
@@ -256,4 +256,4 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
   )
                                             }
 
-    
+        
