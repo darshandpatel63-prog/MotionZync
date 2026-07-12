@@ -238,7 +238,7 @@ export default function APIKeyManager({ onClose }) {
                   {c.enabled && (
                     <span style={{
                       marginLeft:'auto', width:7, height:7,
-                      borderRadius:'50%', background:'var(--green)', flexShrink:0
+                      borderRadius:'50%', background:'var(--success)', flexShrink:0
                     }}/>
                   )}
                 </button>
@@ -416,5 +416,5 @@ export default function APIKeyManager({ onClose }) {
       </div>
     </div>
   )
-}
-  
+      }
+    
