@@ -28,14 +28,14 @@ function VaultGate({ mode, busy, error, resetArmed, onSubmit, onReset }) {
     <div className="vault-gate">
       <div className="vault-gate-icon">🔒</div>
       <h3 className="vault-gate-title">
-        {mode === 'setup'   && 'AI keys ને encrypt કરવા passphrase બનાવો'}
-        {mode === 'migrate' && 'Existing key ને secure કરવા passphrase બનાવો'}
-        {mode === 'unlock'  && 'Vault locked છે — passphrase નાખો'}
+        {mode === 'setup'   && 'Create a passphrase to encrypt your AI keys'}
+        {mode === 'migrate' && 'Create a passphrase to secure your existing key'}
+        {mode === 'unlock'  && 'Vault locked — enter your passphrase'}
       </h3>
       <p className="vault-gate-hint">
         {isSetup
-          ? 'આ passphrase ક્યાંય save નથી થતું — ફક્ત તમારી પાસે જ રહેશે. ભૂલી જાઓ તો Reset કરવું પડશે (saved keys ફરી નાખવી પડશે).'
-          : 'Browser/tab reload પછી ફરી નાખવું પડે છે — keys ને સુરક્ષિત રાખવા માટે.'}
+          ? 'This passphrase is never stored anywhere — only you know it. If you forget it, you\'ll need to reset the vault (saved keys will need to be re-entered).'
+          : 'You\'ll need to enter this again after a page/tab reload — that\'s what keeps your keys protected.'}
       </p>
 
       <div className="vault-gate-field">
@@ -56,14 +56,14 @@ function VaultGate({ mode, busy, error, resetArmed, onSubmit, onReset }) {
             type="password"
             value={confirm}
             onChange={e => setConfirm(e.target.value)}
-            placeholder="Passphrase ફરી નાખો"
+            placeholder="Confirm passphrase"
             autoComplete="new-password"
             onKeyDown={e => e.key === 'Enter' && !mismatch && pass && confirm && onSubmit(pass)}
           />
         </div>
       )}
 
-      {mismatch && <div className="vault-gate-mismatch">બંને passphrase સરખા નથી</div>}
+      {mismatch && <div className="vault-gate-mismatch">Passphrases don't match</div>}
       {error && <div className="vault-gate-mismatch">{error}</div>}
 
       <button
@@ -76,7 +76,7 @@ function VaultGate({ mode, busy, error, resetArmed, onSubmit, onReset }) {
 
       {mode === 'unlock' && (
         <button className="vault-gate-forgot" onClick={onReset}>
-          {resetArmed ? '⚠️ ફરી click કરો — બધી saved keys delete થશે' : 'Passphrase ભૂલી ગયા? Reset vault'}
+          {resetArmed ? '⚠️ Click again to confirm — this deletes all saved keys' : 'Forgot passphrase? Reset vault'}
         </button>
       )}
     </div>
@@ -144,7 +144,7 @@ export default function APIKeyManager({ onClose }) {
       if (!vaultExists || needsMigration) await setupVault(passphrase)
       else await unlockVault(passphrase)
     } catch (e) {
-      setVaultError(e.message || 'કંઈક ખોટું થયું, ફરી પ્રયત્ન કરો')
+      setVaultError(e.message || 'Something went wrong, please try again')
     } finally {
       setVaultBusy(false)
     }
@@ -386,8 +386,8 @@ export default function APIKeyManager({ onClose }) {
                     <div className="confirm-panel">
                       <strong>Delete API Key?</strong>
                       <p>
-                        Tamari {provider.name} key remove thashe.
-                        Aane anytime pachi add kari shakasho.
+                        Your {provider.name} key will be removed.
+                        You can add it again anytime.
                       </p>
                       <div className="confirm-panel-btns">
                         <button className="confirm-yes" onClick={handleDelete}>Yes, Delete</button>
@@ -416,5 +416,5 @@ export default function APIKeyManager({ onClose }) {
       </div>
     </div>
   )
-      }
-        
+}
+  
