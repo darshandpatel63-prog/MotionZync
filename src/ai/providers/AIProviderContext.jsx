@@ -4,7 +4,7 @@
 //   header (blocked by CORS in both dev + prod) + model IDs were outdated. Both fixed here.
 // Fixed (Phase 1 / Step 2): API keys are now encrypted at rest (AES-GCM, passphrase-derived
 //   key via PBKDF2 — see keyVault.js). Plaintext legacy keys auto-migrate on first unlock.
-// Added: deleteConfig() — user can delete any saved API key .
+// Added: deleteConfig() — user can delete any saved API key
 
 import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
 import {
@@ -46,14 +46,18 @@ export const AI_PROVIDERS = {
     id: 'gemini', name: 'Google Gemini', icon: '💎',
     baseURL: 'https://generativelanguage.googleapis.com/v1beta',
     models: [
-      { id:'gemini-2.0-flash-exp', label:'Gemini 2.0 Flash', ctx:1000000 },
-      { id:'gemini-1.5-pro',       label:'Gemini 1.5 Pro',   ctx:2000000 },
-      { id:'gemini-1.5-flash',     label:'Gemini 1.5 Flash', ctx:1000000 },
+      // Fixed (Phase 1 / Step 4): gemini-1.5-* and gemini-2.0-* are ALL shut down
+      // as of mid-2026 (confirmed via Google's own docs) — every request 404'd,
+      // which is why "Test Connection" was failing. These are the current GA models.
+      { id:'gemini-3.5-flash',      label:'Gemini 3.5 Flash',      ctx:1000000 },
+      { id:'gemini-3.1-flash-lite', label:'Gemini 3.1 Flash-Lite', ctx:1000000 },
     ],
-    defaultModel: 'gemini-1.5-flash',
+    defaultModel: 'gemini-3.5-flash',
     keyPlaceholder: 'AIza...',
     keyDocs: 'https://aistudio.google.com/app/apikey',
-    imageModel: 'imagen-3.0-generate-001', supportsVision: true, supportsStreaming: true,
+    imageModel: null, supportsVision: true, supportsStreaming: true,
+    // imageModel intentionally null — generateImage() doesn't route Gemini's
+    // native image models yet (it's hardcoded to OpenAI); see audit item #12.
   },
   ollama: {
     id: 'ollama', name: 'Ollama (Local)', icon: '🦙',
@@ -388,4 +392,4 @@ export function AIProviderContext({ children }) {
   )
 }
 
-  
+      
