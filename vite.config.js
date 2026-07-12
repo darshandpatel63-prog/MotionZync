@@ -42,8 +42,6 @@ export default defineConfig({
           'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
           // React core
           'react-vendor':    ['react', 'react-dom', 'react-router-dom'],
-          // Animation libraries
-          'anim-vendor':     ['gsap'],
         },
       },
     },
@@ -55,7 +53,7 @@ export default defineConfig({
 
   // ── Pre-bundle for fast dev startup ──────────────────
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'firebase/app', 'firebase/auth', 'firebase/firestore', 'gsap'],
+    include: ['react', 'react-dom', 'react-router-dom', 'firebase/app', 'firebase/auth', 'firebase/firestore'],
     exclude: ['three'], // lazy loaded — don't pre-bundle
   },
 })
