@@ -1,6 +1,13 @@
 // ============================================================
 // CsPreview.jsx  –  Live preview with device frames & console
+// Fixed (Phase 1 / Step 3): removed 'allow-same-origin' from the sandbox —
+//   combined with allow-scripts + srcdoc it let previewed code read this
+//   page's localStorage (where the encrypted key vault lives). Preview is
+//   fully self-contained (CSS/JS inlined) so same-origin was never actually
+//   needed. Also validate postMessage sender via e.source (not just e.data
+//   shape) so only this iframe's console output is trusted.
 // ============================================================
+
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 const VIEWPORTS = [
@@ -116,6 +123,7 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
   // Listen for console messages from iframe
   useEffect(() => {
     function onMsg(e) {
+      if (e.source !== iframeRef.current?.contentWindow) return // only trust our own preview frame
       if (e.data?.type !== 'console') return
       const log = {
         level: e.data.level,
@@ -207,7 +215,7 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
             <iframe
               ref={iframeRef}
               className="csp-iframe"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
+              sandbox="allow-scripts allow-forms allow-modals"
               title="preview"
               style={{ width: vp.w, height: vp.h, transform: `scale(${scale})`, transformOrigin: 'top left' }}
             />
@@ -216,7 +224,7 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
           <iframe
             ref={iframeRef}
             className="csp-iframe csp-iframe-full"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
+            sandbox="allow-scripts allow-forms allow-modals"
             title="preview"
           />
         )}
@@ -247,4 +255,5 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
     </div>
   )
                                             }
+
     
