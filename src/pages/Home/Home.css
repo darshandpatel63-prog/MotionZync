@@ -155,7 +155,7 @@
   95%{transform:translate(-1px,2px)}
 }
 @keyframes glitchTop{
-  0%,88%,100%{transform:translate(0)} clip-path:polygon(0 20%,100% 20%,100% 40%,0 40%)
+  0%,88%,100%{transform:translate(0); clip-path:polygon(0 20%,100% 20%,100% 40%,0 40%)}
   89%{transform:translate(-3px,0); clip-path:polygon(0 15%,100% 15%,100% 35%,0 35%)}
   91%{transform:translate(3px,0)}
 }
@@ -562,4 +562,5 @@
   .story-step { opacity: 1 !important; transform: none !important; }
   .scrub-section { height: 200vh; }
   }
-  
+
+    
