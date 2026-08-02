@@ -550,5 +550,34 @@
 }
 .cs2-proj-dropdown-item:hover .cs2-proj-dropdown-del { opacity: 1; }
 .cs2-proj-dropdown-del:hover { background: rgba(239,68,68,0.15); color: #f87171; }
+                   
 
-                     
+/* ── GitHub tab (Phase 2 / Step 1) — matches existing csgit-* palette ── */
+.csgit-github { padding: 16px 14px; display: flex; flex-direction: column; gap: 14px; }
+.csgit-github-connect {
+  text-align: center; padding: 20px 10px; display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+}
+.csgit-github-icon { font-size: 28px; color: #7c3aed; }
+.csgit-github-connect p { font-size: 0.78rem; color: #94a3b8; line-height: 1.6; margin: 0; max-width: 220px; }
+.csgit-github-btn {
+  background: #7c3aed; color: #fff; border: none; padding: 8px 16px;
+  border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+}
+.csgit-github-btn:hover { background: #6d28d9; }
+.csgit-github-status { text-align: center; color: #94a3b8; font-size: 0.8rem; padding: 20px 0; }
+
+.csgit-github-connected {
+  display: flex; align-items: center; gap: 10px; padding: 10px;
+  background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.25); border-radius: 10px;
+}
+.csgit-github-avatar { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; }
+.csgit-github-who { flex: 1; min-width: 0; }
+.csgit-github-name { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; }
+.csgit-github-login { font-size: 0.72rem; color: #94a3b8; }
+.csgit-github-disconnect {
+  background: none; border: 1px solid rgba(255,255,255,0.15); color: #94a3b8;
+  padding: 5px 10px; border-radius: 6px; font-size: 0.72rem; cursor: pointer; flex-shrink: 0;
+}
+.csgit-github-disconnect:hover { border-color: #ef4444; color: #ef4444; }
+.csgit-github-note { font-size: 0.7rem; color: #4b5563; line-height: 1.6; text-align: center; }
