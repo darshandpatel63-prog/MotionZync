@@ -2,6 +2,7 @@
 // CodeSpace.jsx  –  Main IDE (all Phase 1 bugs fixed)
 // Fixes: delete, rename, new folder+file, move, ZIP import,
 //        project switching, no forced file naming prompts
+// Added (Phase 2 / Step 1): GitHub OAuth connect — see GitHubContext.jsx
 // ============================================================
 import { useState, useEffect, useRef, useMemo } from 'react'
 import CsEditor       from './CsEditor.jsx'
@@ -9,6 +10,7 @@ import CsFileExplorer from './CsFileExplorer.jsx'
 import CsTerminal     from './CsTerminal.jsx'
 import CsPreview      from './CsPreview.jsx'
 import CsGitPanel     from './CsGitPanel.jsx'
+import { GitHubProvider, useGitHub } from './GitHubContext.jsx'
 import {
   CodeBg, WelcomeScreen, TabBar, Breadcrumb,
   StatusBar, ActivityBar, TitleBar,
@@ -40,7 +42,7 @@ const FILE_DEFAULTS = {
   sh:'#!/bin/bash\n', sql:'-- Query\n', txt:'',
 }
 
-export default function CodeSpace() {
+function CodeSpaceInner() {
   // ── State ────────────────────────────────────────────────────
   const [projects,    setProjects]   = useState([])
   const [activeProj,  setActiveProj] = useState(null)
@@ -99,6 +101,24 @@ export default function CodeSpace() {
     }
     init()
   }, [])
+
+  // ── GitHub OAuth callback (Phase 2 / Step 1) ───────────────────
+  const { handleCallback: githubHandleCallback, error: githubError } = useGitHub()
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const code  = params.get('code')
+    const state = params.get('state')
+    if (code && state) {
+      githubHandleCallback(code, state).then(() => {
+        notify('✓ GitHub connected', 'success')
+      })
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (githubError) notify(githubError, 'error')
+  }, [githubError])
 
   // ── Keyboard shortcuts ────────────────────────────────────────
   useEffect(() => {
@@ -532,5 +552,13 @@ export default function CodeSpace() {
 
       <Notifications items={notices} />
     </div>
+  )
+}
+
+export default function CodeSpace() {
+  return (
+    <GitHubProvider>
+      <CodeSpaceInner />
+    </GitHubProvider>
   )
 }
