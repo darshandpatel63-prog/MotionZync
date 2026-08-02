@@ -1,8 +1,10 @@
 // ============================================================
 // CsGitPanel.jsx  –  GitHub-style source control panel
+// Added (Phase 2 / Step 1): real "GitHub" tab (OAuth connect/disconnect)
 // ============================================================
 import { useState, useEffect } from 'react'
 import { diffLines } from './cs-git.js'
+import { useGitHub } from './GitHubContext.jsx'
 
 function CommitItem({ commit, isHead }) {
   const [open, setOpen] = useState(false)
@@ -65,7 +67,8 @@ function DiffViewer({ path, chunks }) {
 }
 
 export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) {
-  const [tab,      setTab]      = useState('changes') // changes | log | branches
+  const { user, connected, connecting, connect, disconnect } = useGitHub()
+  const [tab,      setTab]      = useState('changes') // changes | log | branches | github
   const [commits,  setCommits]  = useState([])
   const [branches, setBranches] = useState({ branches: {}, HEAD: 'main' })
   const [changes,  setChanges]  = useState([])
@@ -166,6 +169,7 @@ export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) 
     { id: 'changes',  label: 'Changes',  badge: changes.length },
     { id: 'log',      label: 'Commits',  badge: commits.length },
     { id: 'branches', label: 'Branches', badge: Object.keys(branches.branches || {}).length },
+    { id: 'github',   label: 'GitHub',   badge: 0 },
   ]
 
   const statusIcon = { new: '✦', modified: '●', deleted: '✕' }
@@ -328,6 +332,33 @@ export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) 
                 {br.protected && <span className="csgit-protected-badge">🔒</span>}
               </div>
             ))}
+          </div>
+        </div>
+      )}
+      {/* GITHUB TAB (Phase 2 / Step 1) */}
+      {tab === 'github' && (
+        <div className="csgit-panel csgit-github">
+          {connecting ? (
+            <div className="csgit-github-status">Connecting…</div>
+          ) : connected ? (
+            <div className="csgit-github-connected">
+              {user?.avatar_url && <img src={user.avatar_url} alt="" className="csgit-github-avatar" />}
+              <div className="csgit-github-who">
+                <div className="csgit-github-name">{user?.name || user?.login || '...'}</div>
+                {user?.login && <div className="csgit-github-login">@{user.login}</div>}
+              </div>
+              <button className="csgit-github-disconnect" onClick={disconnect}>Disconnect</button>
+            </div>
+          ) : (
+            <div className="csgit-github-connect">
+              <div className="csgit-github-icon">⎇</div>
+              <p>Connect your GitHub account to push this project to your own repo.</p>
+              <button className="csgit-github-btn" onClick={connect}>🔗 Connect GitHub</button>
+            </div>
+          )}
+          <div className="csgit-github-note">
+            This step only connects your account — pushing files to a repo is next.
+            Your code never touches our servers; only the connection does.
           </div>
         </div>
       )}
