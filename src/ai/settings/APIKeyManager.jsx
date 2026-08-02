@@ -7,6 +7,7 @@
 
 import { useState } from 'react'
 import { useAI, AI_PROVIDERS } from '../providers/AIProviderContext.jsx'
+import { useVault } from '../providers/VaultContext.jsx'
 import './APIKeyManager.css'
 
 const NAV_ITEMS = [
@@ -88,8 +89,9 @@ export default function APIKeyManager({ onClose }) {
     getConfig, saveConfig, deleteConfig,
     testConnection, setActiveProvider, setActiveModel, isLoading,
     vaultExists, vaultUnlocked, needsMigration,
-    setupVault, unlockVault, lockVault, resetVault,
+    setupVault, unlockVault, lockVault,
   } = useAI()
+  const { resetVault } = useVault()
 
   const [selected,    setSelected]    = useState('openai')
   const [showKey,     setShowKey]     = useState(false)
@@ -416,5 +418,4 @@ export default function APIKeyManager({ onClose }) {
       </div>
     </div>
   )
-      }
-    
+}
