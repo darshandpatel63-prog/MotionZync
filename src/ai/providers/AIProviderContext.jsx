@@ -4,13 +4,12 @@
 //   header (blocked by CORS in both dev + prod) + model IDs were outdated. Both fixed here.
 // Fixed (Phase 1 / Step 2): API keys are now encrypted at rest (AES-GCM, passphrase-derived
 //   key via PBKDF2 — see keyVault.js). Plaintext legacy keys auto-migrate on first unlock.
+// Refactored (Phase 2): vault state moved to VaultContext.jsx (shared with GitHubContext) —
+//   this file now only holds AI-specific config + uses useVault() for encryption.
 // Added: deleteConfig() — user can delete any saved API key
 
-import { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
-import {
-  hasVault, createVault, unlockVault as unlockVaultKey,
-  encryptWithKey, decryptWithKey, resetVault as resetVaultStorage,
-} from './keyVault.js'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import { useVault } from './VaultContext.jsx'
 
 export const AI_PROVIDERS = {
   anthropic: {
@@ -90,6 +89,11 @@ const AIContext   = createContext(null)
 export const useAI = () => useContext(AIContext)
 
 export function AIProviderContext({ children }) {
+  const {
+    vaultExists, vaultUnlocked, setupVault: vaultSetup, unlockVault: vaultUnlock,
+    lockVault: vaultLock, encryptValue, decryptValue,
+  } = useVault()
+
   const [configs, setConfigs] = useState(() => {
     try { const s = localStorage.getItem(STORAGE_KEY); return s ? JSON.parse(s) : {} }
     catch { return {} }
@@ -103,11 +107,7 @@ export function AIProviderContext({ children }) {
   const [isConnected, setIsConnected] = useState(false)
   const [isLoading,   setIsLoading]   = useState(false)
 
-  // ── NEW (Phase 1 / Step 2): encrypted key vault ──────────────
-  const [decryptedKeys, setDecryptedKeys] = useState({})       // in-memory only, never persisted
-  const vaultKeyRef      = useRef(null)                         // derived CryptoKey, memory-only
-  const [vaultExists,    setVaultExists]    = useState(() => hasVault())
-  const [vaultUnlocked,  setVaultUnlocked]  = useState(false)
+  const [decryptedKeys, setDecryptedKeys] = useState({}) // in-memory only, never persisted
   const [needsMigration, setNeedsMigration] = useState(false)
 
   useEffect(() => {
@@ -115,6 +115,23 @@ export function AIProviderContext({ children }) {
     const legacyFound = Object.values(configs).some(c => c && c.apiKey)
     setNeedsMigration(legacyFound)
   }, [configs, vaultUnlocked])
+
+  // If the vault gets reset (passphrase forgotten) elsewhere, our ciphertext is
+  // now unusable — clear it out rather than keep dead, undecryptable weight.
+  useEffect(() => {
+    if (vaultExists) return
+    setDecryptedKeys({})
+    setConfigs(prev => {
+      const hadAny = Object.values(prev).some(c => c?.apiKeyEnc || c?.apiKey)
+      if (!hadAny) return prev
+      const next = {}
+      for (const [id, saved] of Object.entries(prev)) {
+        const { apiKey, apiKeyEnc, ...rest } = saved || {}
+        next[id] = { ...rest, enabled: false }
+      }
+      return next
+    })
+  }, [vaultExists])
 
   useEffect(() => { localStorage.setItem(STORAGE_KEY, JSON.stringify(configs)) }, [configs])
   useEffect(() => { localStorage.setItem('mz_ai_active_provider', activeProvider) }, [activeProvider])
@@ -136,23 +153,20 @@ export function AIProviderContext({ children }) {
     if (Object.prototype.hasOwnProperty.call(updates, 'apiKey')) {
       const { apiKey, ...rest } = updates
       setDecryptedKeys(prev => ({ ...prev, [providerId]: apiKey }))
-      if (vaultKeyRef.current) {
-        encryptWithKey(apiKey, vaultKeyRef.current).then(enc => {
-          setConfigs(prev => ({
-            ...prev,
-            [providerId]: { ...(prev[providerId] || {}), ...rest, apiKeyEnc: enc },
-          }))
-        })
-      }
+      encryptValue(apiKey).then(enc => {
+        setConfigs(prev => ({
+          ...prev,
+          [providerId]: { ...(prev[providerId] || {}), ...rest, apiKeyEnc: enc },
+        }))
+      }).catch(() => { /* vault locked — key stays memory-only until unlocked */ })
       if (Object.keys(rest).length) {
         setConfigs(prev => ({ ...prev, [providerId]: { ...(prev[providerId] || {}), ...rest } }))
       }
       return
     }
     setConfigs(prev => ({ ...prev, [providerId]: { ...(prev[providerId] || {}), ...updates } }))
-  }, [])
+  }, [encryptValue])
 
-  // ── NEW: Delete API key for a provider ──────────────────────
   const deleteConfig = useCallback((providerId) => {
     setConfigs(prev => {
       const next = { ...prev }
@@ -167,7 +181,6 @@ export function AIProviderContext({ children }) {
       delete next[providerId]
       return next
     })
-    // If deleting active provider, reset to openai
     if (activeProvider === providerId) {
       setActiveProvider('openai')
       setActiveModel('gpt-4o')
@@ -175,19 +188,15 @@ export function AIProviderContext({ children }) {
     setIsConnected(false)
   }, [activeProvider])
 
-  // ── NEW (Phase 1 / Step 2): vault lifecycle ──────────────────
+  // ── Vault setup/unlock — AI-specific: also migrates legacy plaintext keys ──
   const setupVault = useCallback(async (passphrase) => {
-    const key = await createVault(passphrase)
-    vaultKeyRef.current = key
-    setVaultExists(true)
-
-    // Migrate any legacy plaintext keys → encrypted, and warm the in-memory cache
+    await vaultSetup(passphrase)
     const nextDecrypted = {}
     const nextConfigs   = {}
     for (const [providerId, saved] of Object.entries(configs)) {
       if (saved?.apiKey) {
         nextDecrypted[providerId] = saved.apiKey
-        const enc = await encryptWithKey(saved.apiKey, key)
+        const enc = await encryptValue(saved.apiKey)
         const { apiKey, ...rest } = saved
         nextConfigs[providerId] = { ...rest, apiKeyEnc: enc }
       } else {
@@ -197,62 +206,37 @@ export function AIProviderContext({ children }) {
     setDecryptedKeys(nextDecrypted)
     setConfigs(nextConfigs)
     setNeedsMigration(false)
-    setVaultUnlocked(true)
-  }, [configs])
+  }, [configs, vaultSetup, encryptValue])
 
   const unlockVault = useCallback(async (passphrase) => {
-    const key = await unlockVaultKey(passphrase) // throws if wrong
-    vaultKeyRef.current = key
-
+    await vaultUnlock(passphrase) // throws if wrong
     const nextDecrypted = {}
     for (const [providerId, saved] of Object.entries(configs)) {
       if (saved?.apiKeyEnc) {
-        try { nextDecrypted[providerId] = await decryptWithKey(saved.apiKeyEnc, key) }
+        try { nextDecrypted[providerId] = await decryptValue(saved.apiKeyEnc) }
         catch { /* corrupted entry — user can re-enter this one key */ }
       } else if (saved?.apiKey) {
         nextDecrypted[providerId] = saved.apiKey // legacy — migrate below
       }
     }
-
-    // Re-persist any legacy plaintext as encrypted now that we're unlocked
     const legacyIds = Object.entries(configs).filter(([, c]) => c?.apiKey).map(([id]) => id)
     if (legacyIds.length) {
       const nextConfigs = { ...configs }
       for (const providerId of legacyIds) {
-        const enc = await encryptWithKey(nextDecrypted[providerId], key)
+        const enc = await encryptValue(nextDecrypted[providerId])
         const { apiKey, ...rest } = nextConfigs[providerId]
         nextConfigs[providerId] = { ...rest, apiKeyEnc: enc }
       }
       setConfigs(nextConfigs)
     }
-
     setDecryptedKeys(nextDecrypted)
     setNeedsMigration(false)
-    setVaultUnlocked(true)
-  }, [configs])
+  }, [configs, vaultUnlock, decryptValue, encryptValue])
 
   const lockVault = useCallback(() => {
-    vaultKeyRef.current = null
-    setVaultUnlocked(false)
+    vaultLock()
     setDecryptedKeys({})
-  }, [])
-
-  const resetVault = useCallback(() => {
-    resetVaultStorage()
-    vaultKeyRef.current = null
-    setVaultExists(false)
-    setVaultUnlocked(false)
-    setDecryptedKeys({})
-    // Passphrase is gone, so the ciphertext is unusable — clear it rather than keep dead weight
-    setConfigs(prev => {
-      const next = {}
-      for (const [providerId, saved] of Object.entries(prev)) {
-        const { apiKey, apiKeyEnc, ...rest } = saved || {}
-        next[providerId] = { ...rest, enabled: false }
-      }
-      return next
-    })
-  }, [])
+  }, [vaultLock])
 
   const testConnection = useCallback(async (providerId) => {
     const cfg = getConfig(providerId)
@@ -269,8 +253,6 @@ export function AIProviderContext({ children }) {
             'Content-Type': 'application/json',
             'x-api-key': cfg.apiKey,
             'anthropic-version': '2023-06-01',
-            // Required for direct browser calls — without this Anthropic blocks the request (CORS).
-            // Safe here because this is the user's OWN key, used only in their OWN browser session (BYOK).
             'anthropic-dangerous-direct-browser-access': 'true',
           },
           body: JSON.stringify({ model: cfg.selectedModel, max_tokens: 10, messages: [{ role:'user', content:'Hi' }] })
@@ -383,13 +365,11 @@ export function AIProviderContext({ children }) {
       getConfig, saveConfig, deleteConfig, testConnection,
       setActiveProvider, setActiveModel,
       chat, generateImage,
-      // Phase 1 / Step 2 — encrypted key vault
+      // Vault (shared with GitHubContext via VaultContext.jsx)
       vaultExists, vaultUnlocked, needsMigration,
-      setupVault, unlockVault, lockVault, resetVault,
+      setupVault, unlockVault, lockVault,
     }}>
       {children}
     </AIContext.Provider>
   )
 }
-
-      
