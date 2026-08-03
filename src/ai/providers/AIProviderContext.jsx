@@ -13,7 +13,7 @@ import { useVault } from './VaultContext.jsx'
 
 export const AI_PROVIDERS = {
   anthropic: {
-    id: 'anthropic', name: 'Anthropic', icon: '🔬',
+    id: 'anthropic', name: 'Anthropic', icon: '🔬', freeTextModel: true,
     baseURL: 'https://api.anthropic.com/v1',
     models: [
       { id:'claude-opus-4-8',           label:'Claude Opus 4.8',   ctx:200000 },
@@ -24,10 +24,11 @@ export const AI_PROVIDERS = {
     defaultModel: 'claude-sonnet-5',
     keyPlaceholder: 'sk-ant-api...',
     keyDocs: 'https://console.anthropic.com/settings/keys',
+    modelDocs: 'https://docs.claude.com/en/docs/about-claude/models/overview',
     imageModel: null, supportsVision: true, supportsStreaming: true,
   },
   openai: {
-    id: 'openai', name: 'OpenAI', icon: '🤖',
+    id: 'openai', name: 'OpenAI', icon: '🤖', freeTextModel: true,
     baseURL: 'https://api.openai.com/v1',
     models: [
       { id:'gpt-4o',      label:'GPT-4o',        ctx:128000 },
@@ -39,10 +40,11 @@ export const AI_PROVIDERS = {
     defaultModel: 'gpt-4o',
     keyPlaceholder: 'sk-...',
     keyDocs: 'https://platform.openai.com/api-keys',
+    modelDocs: 'https://platform.openai.com/docs/models',
     imageModel: 'dall-e-3', supportsVision: true, supportsStreaming: true,
   },
   gemini: {
-    id: 'gemini', name: 'Google Gemini', icon: '💎',
+    id: 'gemini', name: 'Google Gemini', icon: '💎', freeTextModel: true,
     baseURL: 'https://generativelanguage.googleapis.com/v1beta',
     models: [
       // Fixed (Phase 1 / Step 4): gemini-1.5-* and gemini-2.0-* are ALL shut down
@@ -54,12 +56,13 @@ export const AI_PROVIDERS = {
     defaultModel: 'gemini-3.5-flash',
     keyPlaceholder: 'AIza...',
     keyDocs: 'https://aistudio.google.com/app/apikey',
+    modelDocs: 'https://ai.google.dev/gemini-api/docs/models',
     imageModel: null, supportsVision: true, supportsStreaming: true,
     // imageModel intentionally null — generateImage() doesn't route Gemini's
     // native image models yet (it's hardcoded to OpenAI); see audit item #12.
   },
   ollama: {
-    id: 'ollama', name: 'Ollama (Local)', icon: '🦙',
+    id: 'ollama', name: 'Ollama (Local)', icon: '🦙', freeTextModel: true,
     baseURL: 'http://localhost:11434/api',
     models: [
       { id:'llama3.2',  label:'Llama 3.2',  ctx:128000 },
@@ -71,15 +74,30 @@ export const AI_PROVIDERS = {
     defaultModel: 'llama3.2',
     keyPlaceholder: 'No key needed for local',
     keyDocs: 'https://ollama.com',
+    modelDocs: 'https://ollama.com/library',
     imageModel: null, supportsVision: false, supportsStreaming: true, noKeyRequired: true,
   },
   custom: {
-    id: 'custom', name: 'Custom Endpoint', icon: '⚙️',
+    // Fixed (Phase 2 / Step 2): this used to force a single fixed "custom-model"
+    // ID via a locked dropdown — couldn't actually be used for HuggingFace,
+    // OpenRouter, Together, Groq, etc. Now a free-text model field (see
+    // freeTextModel below) + a starter presets list for common ones.
+    id: 'custom', name: 'Any OpenAI-Compatible API', icon: '⚙️',
     baseURL: '',
-    models: [{ id:'custom-model', label:'Custom Model', ctx:16000 }],
-    defaultModel: 'custom-model',
+    freeTextModel: true,
+    models: [
+      { id:'meta-llama/Llama-3.3-70B-Instruct:novita', label:'HuggingFace: Llama 3.3 70B (novita)' },
+      { id:'deepseek-ai/DeepSeek-R1:together',          label:'HuggingFace: DeepSeek R1 (together)' },
+      { id:'openai/gpt-oss-120b:cerebras',               label:'HuggingFace: gpt-oss-120b (cerebras)' },
+      { id:'meta-llama/llama-3.3-70b-instruct',          label:'OpenRouter: Llama 3.3 70B' },
+      { id:'llama-3.3-70b-versatile',                    label:'Groq: Llama 3.3 70B' },
+    ],
+    defaultModel: '',
+    modelPlaceholder: 'e.g. deepseek-ai/DeepSeek-R1:together',
     keyPlaceholder: 'Your API key...',
     keyDocs: '',
+    modelDocs: 'https://huggingface.co/docs/inference-providers',
+    modelDocsLabel: 'HF Inference Providers docs ↗',
     imageModel: null, supportsVision: false, supportsStreaming: false, isCustom: true,
   },
 }
