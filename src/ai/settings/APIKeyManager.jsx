@@ -15,7 +15,7 @@ const NAV_ITEMS = [
   { id:'openai',    icon:'🤖', label:'OpenAI',         sub:'GPT + DALL-E'  },
   { id:'gemini',    icon:'💎', label:'Google Gemini',  sub:'Gemini models' },
   { id:'ollama',    icon:'🦙', label:'Ollama',         sub:'Local / Free'  },
-  { id:'custom',    icon:'⚙️', label:'Custom API',     sub:'Any endpoint'  },
+  { id:'custom',    icon:'⚙️', label:'Custom API',     sub:'HuggingFace, OpenRouter, Groq...' },
 ]
 
 // ── NEW: passphrase gate (setup / migrate / unlock) ──────────────────
@@ -304,17 +304,37 @@ export default function APIKeyManager({ onClose }) {
                   </div>
                 )}
 
-                {/* Model selector */}
+                {/* Model selector — Fixed (Phase 2 / Step 2): was a locked <select>,
+                    so brand-new model versions (or HF/OpenRouter/Groq model IDs)
+                    could never be entered. Now a free-text input with the known
+                    models offered as suggestions via <datalist>. */}
                 <div className="field" style={{ marginTop: 14 }}>
-                  <label className="field-label">Model</label>
-                  <select value={cfg.selectedModel}
-                    onChange={e => handleSave('selectedModel', e.target.value)}>
+                  <div className="field-label-row">
+                    <label className="field-label">Model</label>
+                    {provider.modelDocs && (
+                      <a href={provider.modelDocs} target="_blank" rel="noreferrer" className="field-label-link">
+                        {provider.modelDocsLabel || 'Model list ↗'}
+                      </a>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    list={`models-${selected}`}
+                    value={cfg.selectedModel}
+                    placeholder={provider.modelPlaceholder || 'Type or pick a model ID...'}
+                    onChange={e => handleSave('selectedModel', e.target.value)}
+                    autoComplete="off" spellCheck={false}
+                  />
+                  <datalist id={`models-${selected}`}>
                     {provider.models.map(m => (
                       <option key={m.id} value={m.id}>
-                        {m.label}  ({(m.ctx / 1000).toFixed(0)}K ctx)
+                        {m.label}{m.ctx ? ` (${(m.ctx / 1000).toFixed(0)}K ctx)` : ''}
                       </option>
                     ))}
-                  </select>
+                  </datalist>
+                  <div className="hint" style={{ marginTop: 5 }}>
+                    Pick a suggestion or type any model ID this provider supports — new versions work without an app update.
+                  </div>
                 </div>
 
                 {/* Custom endpoint */}
