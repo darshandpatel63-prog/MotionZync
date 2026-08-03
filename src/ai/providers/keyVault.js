@@ -1,70 +1,101 @@
-// src/ai/providers/VaultContext.jsx
+// src/ai/providers/keyVault.js
 // ============================================================
-// Shared passphrase vault (Phase 2 refactor).
-// Previously this state lived only inside AIProviderContext (Phase 1 / Step 2).
-// Pulled out here so GitHubContext (and anything else that needs to store a
-// secret) can share the SAME unlock state — one passphrase, not one per feature.
-// The actual crypto is still in keyVault.js; this just holds React state +
-// the derived key in memory.
+// Local, passphrase-based encryption for AI provider API keys.
+// Part of Phase 1 / Step 2 (see CODESPACE_MASTER_PROMPT.md).
+//
+// HONEST SCOPE — read this before trusting it:
+//   - Keys are encrypted at rest (AES-GCM) with a key derived (PBKDF2) from a
+//     passphrase the user sets. The passphrase itself is NEVER stored anywhere.
+//   - This protects against: reading raw localStorage (devtools/back-ups),
+//     browser extensions that read storage but can't run code on this page,
+//     casual device/profile access.
+//   - This does NOT protect against an active XSS attack running on this page
+//     WHILE the vault is unlocked (the decrypted keys live in memory then).
+//     No client-only, no-backend scheme can fully solve that — the iframe
+//     origin-isolation fix (Step 3) closes the biggest XSS avenue for this app.
+//   - Forgetting the passphrase = keys are unrecoverable by design (no backdoor).
+//     resetVault() lets the user start over if that happens.
 // ============================================================
-import { createContext, useContext, useState, useRef, useCallback } from 'react'
-import {
-  hasVault, createVault, unlockVault as unlockVaultKey,
-  encryptWithKey, decryptWithKey, resetVault as resetVaultStorage,
-} from './keyVault.js'
 
-const VaultContext = createContext(null)
-export const useVault = () => useContext(VaultContext)
+const SALT_KEY   = 'mz_vault_salt_v1'
+const CHECK_KEY  = 'mz_vault_check_v1'
+const CHECK_TEXT = 'motionzync-vault-ok'
 
-export function VaultProvider({ children }) {
-  const vaultKeyRef = useRef(null) // derived CryptoKey — memory only, never persisted
-  const [vaultExists,   setVaultExists]   = useState(() => hasVault())
-  const [vaultUnlocked, setVaultUnlocked] = useState(false)
+function b64encode(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf)))
+}
+function b64decode(str) {
+  return Uint8Array.from(atob(str), c => c.charCodeAt(0))
+}
 
-  const setupVault = useCallback(async (passphrase) => {
-    const key = await createVault(passphrase)
-    vaultKeyRef.current = key
-    setVaultExists(true)
-    setVaultUnlocked(true)
-    return key
-  }, [])
-
-  const unlockVault = useCallback(async (passphrase) => {
-    const key = await unlockVaultKey(passphrase) // throws 'Wrong passphrase' if invalid
-    vaultKeyRef.current = key
-    setVaultUnlocked(true)
-    return key
-  }, [])
-
-  const lockVault = useCallback(() => {
-    vaultKeyRef.current = null
-    setVaultUnlocked(false)
-  }, [])
-
-  const resetVault = useCallback(() => {
-    resetVaultStorage()
-    vaultKeyRef.current = null
-    setVaultExists(false)
-    setVaultUnlocked(false)
-  }, [])
-
-  const encryptValue = useCallback(async (plainText) => {
-    if (!vaultKeyRef.current) throw new Error('Vault is locked')
-    return encryptWithKey(plainText, vaultKeyRef.current)
-  }, [])
-
-  const decryptValue = useCallback(async (payload) => {
-    if (!vaultKeyRef.current) throw new Error('Vault is locked')
-    return decryptWithKey(payload, vaultKeyRef.current)
-  }, [])
-
-  return (
-    <VaultContext.Provider value={{
-      vaultExists, vaultUnlocked,
-      setupVault, unlockVault, lockVault, resetVault,
-      encryptValue, decryptValue,
-    }}>
-      {children}
-    </VaultContext.Provider>
+async function deriveKey(passphrase, saltB64) {
+  const salt = b64decode(saltB64)
+  const baseKey = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(passphrase), 'PBKDF2', false, ['deriveKey']
   )
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: 150000, hash: 'SHA-256' },
+    baseKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  )
+}
+
+/** Encrypt plain text with an already-derived CryptoKey. Returns a JSON-safe payload. */
+export async function encryptWithKey(plainText, cryptoKey) {
+  const iv = crypto.getRandomValues(new Uint8Array(12))
+  const cipher = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv }, cryptoKey, new TextEncoder().encode(plainText)
+  )
+  return { iv: b64encode(iv), data: b64encode(cipher) }
+}
+
+/** Decrypt a payload produced by encryptWithKey(). Throws if the key/passphrase is wrong. */
+export async function decryptWithKey(payload, cryptoKey) {
+  const iv   = b64decode(payload.iv)
+  const data = b64decode(payload.data)
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, data)
+  return new TextDecoder().decode(plain)
+}
+
+/** Has the user ever set up a vault on this device/browser? */
+export function hasVault() {
+  return !!localStorage.getItem(SALT_KEY)
+}
+
+/** First-time setup: choose a passphrase, get back the derived CryptoKey (keep it in memory only). */
+export async function createVault(passphrase) {
+  if (!passphrase || passphrase.length < 4) {
+    throw new Error('Passphrase must be at least 4 characters')
+  }
+  const saltB64 = b64encode(crypto.getRandomValues(new Uint8Array(16)))
+  localStorage.setItem(SALT_KEY, saltB64)
+  const key = await deriveKey(passphrase, saltB64)
+  const check = await encryptWithKey(CHECK_TEXT, key)
+  localStorage.setItem(CHECK_KEY, JSON.stringify(check))
+  return key
+}
+
+/** Unlock an existing vault. Throws 'Wrong passphrase' if it doesn't match. */
+export async function unlockVault(passphrase) {
+  const saltB64 = localStorage.getItem(SALT_KEY)
+  if (!saltB64) throw new Error('No vault set up yet')
+  const key = await deriveKey(passphrase, saltB64)
+  let check
+  try { check = JSON.parse(localStorage.getItem(CHECK_KEY) || 'null') } catch { check = null }
+  if (!check) throw new Error('Vault data missing — try resetting it')
+  try {
+    const decoded = await decryptWithKey(check, key)
+    if (decoded !== CHECK_TEXT) throw new Error()
+  } catch {
+    throw new Error('Wrong passphrase')
+  }
+  return key
+}
+
+/** Forgot passphrase / start over. This permanently discards any encrypted keys. */
+export function resetVault() {
+  localStorage.removeItem(SALT_KEY)
+  localStorage.removeItem(CHECK_KEY)
 }
