@@ -4,6 +4,49 @@
    ============================================================ */
 @import './cs-panels.css';
 
+/* ── Mobile zoom fix ──────────────────────────────────────────────
+   Monaco creates a hidden <textarea> to capture native keyboard/IME
+   input, and sets its font-size to match the editor's `fontSize` option
+   (often 13–14px). Any focused input/textarea with a *computed*
+   font-size under 16px makes iOS Safari (and several Android browsers)
+   auto-zoom the whole page on focus — that's the "tap to type → zooms
+   in, nothing else clickable" bug. This textarea is invisible either
+   way, so forcing its font-size up does not change how code renders;
+   Monaco draws the visible code separately. !important is required
+   because Monaco sets this inline via JS, which normally beats plain CSS. */
+.cs-monaco-container textarea {
+  font-size: 16px !important;
+}
+
+/* ── Resize handles (draggable dividers for sidebar/preview) ───── */
+.cs2-resize-handle {
+  flex-shrink: 0;
+  width: 6px;
+  margin: 0 -3px;
+  position: relative;
+  z-index: 15;
+  cursor: col-resize;
+  touch-action: none;
+  background: transparent;
+}
+.cs2-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 2px;
+  width: 2px;
+  background: var(--cs-border2);
+  transition: background 0.15s;
+}
+.cs2-resize-handle:hover::after,
+body.cs2-resizing .cs2-resize-handle::after {
+  background: var(--cs-accent);
+}
+body.cs2-resizing { cursor: col-resize !important; }
+body.cs2-resizing * { user-select: none !important; }
+@media (max-width: 900px) {
+  .cs2-resize-handle-preview { display: none; }
+}
+
 /* ── Tokens & Reset ──────────────────────────────────────────── */
 .cs2-root {
   --cs-bg:        #0d0d14;
