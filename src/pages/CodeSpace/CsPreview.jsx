@@ -39,6 +39,21 @@ function buildPreviewHtml(files, entry) {
     return js ? `<script>\n/* ${src} */\n${js}\n</script>` : ''
   })
 
+  // Baseline background (Phase 1 / Fix 4): preview must default to white,
+  // never the dark IDE chrome behind it. Inserted at the very start of
+  // <head> — i.e. BEFORE any of the user's own <style>/<link> tags — so it
+  // sits earliest in cascade order. Any background rule the user writes
+  // themselves (even plain `body { background: ... }`) comes later at
+  // equal-or-higher specificity and wins naturally. No user code is touched.
+  const baseline = `<style>html,body{background:#fff;margin:0}</style>`
+  if (html.includes('<head>')) {
+    html = html.replace('<head>', `<head>\n${baseline}`)
+  } else if (html.includes('<body')) {
+    html = html.replace(/<body[^>]*>/, match => `${baseline}\n${match}`)
+  } else {
+    html = baseline + html
+  }
+
   // Inject console capture + error overlay
   const consolePatch = `
 <script>
@@ -156,11 +171,26 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
     }
   }, [files, entry, autoRefresh, refresh])
 
-  // Scale for device frames
+  // Scale for device frames (Phase 1 / Fix 5 rebuild). Previously only
+  // recalculated when `viewport` itself changed, so the frame stayed
+  // mis-scaled after a side-panel toggle, window resize, or orientation
+  // change — exactly the "doesn't work properly" symptom. A ResizeObserver
+  // now recalculates whenever the panel's actual size changes. A 0.35
+  // floor keeps content legible on small phones instead of shrinking to
+  // unreadable size; `.csp-frame-wrap` already has overflow:auto so the
+  // rest of the frame stays reachable by panning.
   useEffect(() => {
-    if (!wrapRef.current || !vp.w) return
-    const available = wrapRef.current.clientWidth - 48
-    setScale(Math.min(1, available / vp.w))
+    const el = wrapRef.current
+    if (!el) return
+    if (!vp.w) { setScale(1); return }
+    const recalc = () => {
+      const available = el.clientWidth - 48
+      setScale(Math.max(0.35, Math.min(1, available / vp.w)))
+    }
+    recalc()
+    const ro = new ResizeObserver(recalc)
+    ro.observe(el)
+    return () => ro.disconnect()
   }, [viewport])
 
   return (
