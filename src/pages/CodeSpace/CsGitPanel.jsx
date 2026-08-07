@@ -67,7 +67,7 @@ function DiffViewer({ path, chunks }) {
 }
 
 export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) {
-  const { user, connected, connecting, connect, disconnect } = useGitHub()
+  const { user, connected, connecting, error: githubError, connect, disconnect } = useGitHub()
   const [tab,      setTab]      = useState('changes') // changes | log | branches | github
   const [commits,  setCommits]  = useState([])
   const [branches, setBranches] = useState({ branches: {}, HEAD: 'main' })
@@ -354,6 +354,9 @@ export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) 
               <div className="csgit-github-icon">⎇</div>
               <p>Connect your GitHub account to push this project to your own repo.</p>
               <button className="csgit-github-btn" onClick={connect}>🔗 Connect GitHub</button>
+              {githubError && (
+                <div className="csgit-github-error">⚠ {githubError}</div>
+              )}
             </div>
           )}
           <div className="csgit-github-note">
