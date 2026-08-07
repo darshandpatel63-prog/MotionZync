@@ -328,7 +328,7 @@
   flex: 1; overflow: auto; background: #1a1a2e;
   display: flex; align-items: center; justify-content: center;
 }
-.csp-iframe { border: none; display: block; }
+.csp-iframe { border: none; display: block; background: #fff; }
 .csp-iframe-full { width: 100%; height: 100%; }
 .csp-device-frame {
   background: #fff; border-radius: 8px; overflow: hidden;
@@ -581,3 +581,9 @@
 }
 .csgit-github-disconnect:hover { border-color: #ef4444; color: #ef4444; }
 .csgit-github-note { font-size: 0.7rem; color: #4b5563; line-height: 1.6; text-align: center; }
+.csgit-github-error {
+  margin-top: 10px; padding: 8px 10px; max-width: 240px;
+  background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.35);
+  border-radius: var(--cs-radius); color: #f87171;
+  font-size: 0.72rem; line-height: 1.5; text-align: center;
+}
