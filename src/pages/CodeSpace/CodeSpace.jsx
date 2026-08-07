@@ -10,6 +10,7 @@ import CsFileExplorer from './CsFileExplorer.jsx'
 import CsTerminal     from './CsTerminal.jsx'
 import CsPreview      from './CsPreview.jsx'
 import CsGitPanel     from './CsGitPanel.jsx'
+import CsResizeHandle from './CsResizeHandle.jsx'
 import { GitHubProvider, useGitHub } from './GitHubContext.jsx'
 import {
   CodeBg, WelcomeScreen, TabBar, Breadcrumb,
@@ -68,15 +69,35 @@ function CodeSpaceInner() {
   const [notices,     setNotices]    = useState([])
   const autoSaveTimer = useRef(null)
 
+  // ── Phase 1 / Fix 2: live refs for the autosave stale-closure bug ──
+  // `doSave`/`scheduleSave` used to close over `files`/`activeProj` from
+  // whatever render scheduled the setTimeout — by the time it actually
+  // fired, that could be 1+ renders stale, so refresh/close could lose
+  // the most recent edits (or all of them, if refresh happened before the
+  // 2s debounce ever got to fire). Reading from refs instead means the
+  // save ALWAYS uses the latest value, no matter when the timer fires.
+  const filesRef      = useRef(files)
+  const activeProjRef = useRef(activeProj)
+  useEffect(() => { filesRef.current = files }, [files])
+  useEffect(() => { activeProjRef.current = activeProj }, [activeProj])
+
+  // ── Phase 1 / Fix 6: resizable side panels ──────────────────────
+  const [sidebarWidth, setSidebarWidth] = useState(240)
+  const [previewWidth, setPreviewWidth] = useState(420)
+  const widthSaveTimer = useRef(null)
+
   // ── Bootstrap ─────────────────────────────────────────────────
   useEffect(() => {
     async function init() {
       await openDB()
-      const [projs, saved] = await Promise.all([
+      const [projs, saved, savedWidths] = await Promise.all([
         getAllProjects(),
         getConfig('settings', DEFAULT_SETTINGS),
+        getConfig('panelWidths', { sidebar: 240, preview: 420 }),
       ])
       setSett({ ...DEFAULT_SETTINGS, ...saved })
+      if (savedWidths?.sidebar) setSidebarWidth(savedWidths.sidebar)
+      if (savedWidths?.preview) setPreviewWidth(savedWidths.preview)
       const sorted = projs.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
       setProjects(sorted)
 
@@ -187,13 +208,15 @@ function CodeSpaceInner() {
     if (proj) saveProject({ ...proj, name })
   }
 
-  // ── Save ──────────────────────────────────────────────────────
+  // ── Save (Phase 1 / Fix 2: reads refs, never a stale render) ────
   async function doSave() {
-    if (!activeProj) return
+    const proj = activeProjRef.current
+    if (!proj) return
     setSaveStatus('saving')
     try {
-      const updated = { ...activeProj, files, updatedAt: Date.now() }
+      const updated = { ...proj, files: filesRef.current, updatedAt: Date.now() }
       await saveProject(updated)
+      activeProjRef.current = updated
       setActiveProj(updated)
       setProjects(prev => prev.map(p => p.id === updated.id ? updated : p))
       setOpenTabs(prev => prev.map(t => ({ ...t, dirty: false })))
@@ -201,6 +224,38 @@ function CodeSpaceInner() {
       setTimeout(() => setSaveStatus(''), 2000)
     } catch { setSaveStatus('error'); setTimeout(() => setSaveStatus(''), 3000) }
   }
+
+  // Force-flush any pending edit immediately when the tab is backgrounded
+  // or closed. A 2s debounce alone is not enough on mobile: switching apps
+  // or closing the tab very often happens *before* that timer would ever
+  // fire, which is exactly how "everything I typed disappeared" happened.
+  // visibilitychange fires reliably on mobile (before the OS can kill the
+  // tab); pagehide/beforeunload are added as extra safety nets on desktop.
+  useEffect(() => {
+    const flush = () => {
+      clearTimeout(autoSaveTimer.current)
+      doSave()
+    }
+    const onVis = () => { if (document.visibilityState === 'hidden') flush() }
+    document.addEventListener('visibilitychange', onVis)
+    window.addEventListener('pagehide', flush)
+    window.addEventListener('beforeunload', flush)
+    return () => {
+      document.removeEventListener('visibilitychange', onVis)
+      window.removeEventListener('pagehide', flush)
+      window.removeEventListener('beforeunload', flush)
+    }
+  }, [])
+
+  // Persist panel widths (debounced — dragging fires many updates/sec,
+  // no need to hit IndexedDB on every pixel)
+  useEffect(() => {
+    clearTimeout(widthSaveTimer.current)
+    widthSaveTimer.current = setTimeout(() => {
+      setConfig('panelWidths', { sidebar: sidebarWidth, preview: previewWidth })
+    }, 500)
+    return () => clearTimeout(widthSaveTimer.current)
+  }, [sidebarWidth, previewWidth])
 
   // ── Tab operations ─────────────────────────────────────────────
   function openTab(path, fileOverride) {
@@ -358,11 +413,14 @@ function CodeSpaceInner() {
   }
 
   function scheduleSave(nextFiles) {
-    if (!activeProj) return
+    if (!activeProjRef.current) return
     clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(async () => {
-      const updated = { ...activeProj, files: nextFiles, updatedAt: Date.now() }
+      const proj = activeProjRef.current
+      if (!proj) return
+      const updated = { ...proj, files: nextFiles, updatedAt: Date.now() }
       await saveProject(updated)
+      activeProjRef.current = updated
       setActiveProj(updated)
       setProjects(prev => prev.map(p => p.id === updated.id ? updated : p))
     }, 1500)
@@ -439,7 +497,10 @@ function CodeSpaceInner() {
   }
 
   return (
-    <div className={`cs2-root ${zenMode ? 'cs2-zen' : ''}`}>
+    <div
+      className={`cs2-root ${zenMode ? 'cs2-zen' : ''}`}
+      style={{ '--sidebar-w': `${sidebarWidth}px`, '--preview-w': `${previewWidth}px` }}
+    >
       <CodeBg />
 
       {!zenMode && (
@@ -466,7 +527,13 @@ function CodeSpaceInner() {
         )}
 
         {!zenMode && sideOpen && hasProject && (
-          <div className="cs2-sidebar"><SidePanel /></div>
+          <>
+            <div className="cs2-sidebar"><SidePanel /></div>
+            <CsResizeHandle
+              width={sidebarWidth} onResize={setSidebarWidth}
+              min={180} max={480} side="left"
+            />
+          </>
         )}
 
         {!hasProject ? (
@@ -531,10 +598,17 @@ function CodeSpaceInner() {
         )}
 
         {hasProject && prevOpen && !zenMode && (
-          <div className="cs2-preview-panel">
-            <CsPreview files={files} entry={previewEntry}
-              autoRefresh={settings.autoPreview} refreshTick={refreshTick} />
-          </div>
+          <>
+            <CsResizeHandle
+              width={previewWidth} onResize={setPreviewWidth}
+              min={280} max={720} side="right"
+              className="cs2-resize-handle-preview"
+            />
+            <div className="cs2-preview-panel">
+              <CsPreview files={files} entry={previewEntry}
+                autoRefresh={settings.autoPreview} refreshTick={refreshTick} />
+            </div>
+          </>
         )}
       </div>
 
