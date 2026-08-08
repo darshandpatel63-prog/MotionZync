@@ -7,7 +7,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import CsEditor       from './CsEditor.jsx'
 import CsFileExplorer from './CsFileExplorer.jsx'
-import CsTerminal     from './CsTerminal.jsx'
+import CsTerminal, { createShell } from './CsTerminal.jsx'
 import CsPreview      from './CsPreview.jsx'
 import CsGitPanel     from './CsGitPanel.jsx'
 import CsAIPanel      from './CsAIPanel.jsx'
@@ -87,6 +87,8 @@ function CodeSpaceInner() {
   const [previewWidth, setPreviewWidth] = useState(420)
   const widthSaveTimer = useRef(null)
   const [booted, setBooted] = useState(false)
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  const [mobileView, setMobileView] = useState('editor') // 'editor' | 'preview' — mobile-only
 
   // ── Bootstrap ─────────────────────────────────────────────────
   useEffect(() => {
@@ -362,6 +364,32 @@ function CodeSpaceInner() {
     notify(`Deleted ${path.split('/').pop()}`, 'info')
   }
 
+  // ── AI Agent tools (Phase 2.1) — CsAIPanel calls these when the model
+  // requests a tool. Routed through one helper so every write stays safe
+  // (functional setState — correct even if the agent calls this several
+  // times back-to-back before a re-render) and always triggers a save.
+  function applyFilesUpdate(updater) {
+    setFiles(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater
+      filesRef.current = next
+      scheduleSave(next)
+      return next
+    })
+  }
+  function agentListFiles() { return Object.keys(filesRef.current) }
+  function agentReadFile(path) { return filesRef.current[path] ?? null }
+  function agentWriteFile(path, content) {
+    applyFilesUpdate(prev => ({ ...prev, [path]: content }))
+  }
+  function agentDeleteFile(path) {
+    applyFilesUpdate(prev => { const n = { ...prev }; delete n[path]; return n })
+    closeTab(path)
+  }
+  async function agentRunCommand(cmd) {
+    const shell = createShell(filesRef.current, applyFilesUpdate, git, activeProj?.name)
+    return await shell.run(cmd)
+  }
+
   // ── Move file (drag & drop) ───────────────────────────────────
   function handleMoveFile(srcPath, destDir) {
     const filename = srcPath.split('/').pop()
@@ -485,7 +513,7 @@ function CodeSpaceInner() {
     if (activity === 'explorer') return (
       <CsFileExplorer
         files={files} activeFile={activeTab} projectName={activeProj?.name}
-        onOpen={openTab}
+        onOpen={path => { openTab(path); setMobileSidebarOpen(false); setMobileView('editor') }}
         onNewFile={handleNewFile}
         onNewFolder={handleNewFolder}
         onRename={handleRenameFile}
@@ -504,6 +532,12 @@ function CodeSpaceInner() {
         activeFile={activeTab}
         fileContent={files[activeTab]}
         dirtyFiles={openTabs.filter(t => t.dirty).map(t => t.path)}
+        projectId={activeProj?.id}
+        onListFiles={agentListFiles}
+        onReadFile={agentReadFile}
+        onWriteFile={agentWriteFile}
+        onDeleteFile={agentDeleteFile}
+        onRunCommand={agentRunCommand}
       />
     )
     return null
@@ -535,7 +569,19 @@ function CodeSpaceInner() {
           onSettings={() => setSettings(true)}
           onDeleteProject={handleDeleteProject}
           onRenameProject={handleRenameProject}
+          onMenuToggle={() => setMobileSidebarOpen(o => !o)}
         />
+      )}
+
+      {/* Mobile-only Code/Preview switcher — Desktop Site OFF used to hide preview
+          entirely (display:none in CSS); this restores full feature parity on
+          narrow screens by making it a switchable view instead of a hidden one. */}
+      {!zenMode && hasProject && (
+        <div className="cs2-mobile-viewtabs">
+          <button className={mobileView === 'editor' ? 'cs2-mvt-active' : ''} onClick={() => { setMobileView('editor'); setMobileSidebarOpen(false) }}>📝 Code</button>
+          <button className={mobileView === 'preview' ? 'cs2-mvt-active' : ''} onClick={() => { setMobileView('preview'); setMobileSidebarOpen(false) }}>▶ Preview</button>
+          <button className={mobileView === 'ai' ? 'cs2-mvt-active' : ''} onClick={() => { setMobileView('ai'); handleActivity('ai'); setMobileSidebarOpen(true) }}>✨ AI</button>
+        </div>
       )}
 
       <div className={`cs2-layout ${zenMode ? 'cs2-layout-zen' : ''}`}>
@@ -547,12 +593,17 @@ function CodeSpaceInner() {
             onSettings={() => setSettings(true)} />
         )}
 
+        {!zenMode && mobileSidebarOpen && (
+          <div className="cs2-mobile-backdrop" onClick={() => setMobileSidebarOpen(false)} />
+        )}
+
         {!zenMode && sideOpen && hasProject && (
           <>
-            <div className="cs2-sidebar"><SidePanel /></div>
+            <div className={`cs2-sidebar ${mobileSidebarOpen ? 'cs2-sidebar-open' : ''}`}><SidePanel /></div>
             <CsResizeHandle
               width={sidebarWidth} onResize={setSidebarWidth}
               min={180} max={480} side="left"
+              className="cs2-resize-handle-sidebar"
             />
           </>
         )}
@@ -565,7 +616,7 @@ function CodeSpaceInner() {
             onRenameProject={handleRenameProject}
           />
         ) : (
-          <div className="cs2-center">
+          <div className={`cs2-center ${mobileView !== 'editor' ? 'cs2-mobile-hide' : ''}`}>
             {openTabs.length > 0 && (
               <TabBar tabs={openTabs} activeTab={activeTab} onActivate={openTab} onClose={closeTab} />
             )}
@@ -625,7 +676,7 @@ function CodeSpaceInner() {
               min={280} max={720} side="right"
               className="cs2-resize-handle-preview"
             />
-            <div className="cs2-preview-panel">
+            <div className={`cs2-preview-panel ${mobileView === 'preview' ? 'cs2-mobile-show' : ''}`}>
               <CsPreview files={files} entry={previewEntry}
                 autoRefresh={settings.autoPreview} refreshTick={refreshTick} />
             </div>
