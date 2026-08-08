@@ -670,7 +670,48 @@
 .csai-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 24px; gap: 8px; }
 .csai-empty-icon { font-size: 28px; opacity: 0.7; margin-bottom: 4px; }
 .csai-empty p { font-size: 0.78rem; color: var(--cs-text2); line-height: 1.6; margin: 0; max-width: 220px; }
-.csai-empty-sub { font-size: 0.68rem !important; color: var(--cs-text3) !important; }
+.csai-empty-sub { font-size: 0.68rem !important; color: var(--cs-text3) !important; margin-top: 10px !important; }
+.csai-empty-link { font-size: 0.72rem; color: var(--cs-accent); text-decoration: none; margin-top: 2px; }
+
+.csai-agent-badge {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--cs-accent); background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.35);
+  padding: 1px 6px; border-radius: 999px; margin-left: 6px; vertical-align: middle;
+}
+
+.csai-setup { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; max-width: 240px; }
+.csai-setup input, .csai-setup select {
+  width: 100%; background: var(--cs-bg3); border: 1px solid var(--cs-border); border-radius: var(--cs-radius);
+  color: var(--cs-text); font-size: 0.78rem; padding: 8px 10px; font-family: inherit;
+}
+.csai-setup input:focus, .csai-setup select:focus { outline: none; border-color: var(--cs-accent); }
+.csai-setup button[type="submit"] {
+  width: 100%; padding: 9px 0; border-radius: var(--cs-radius); border: none;
+  background: linear-gradient(135deg, var(--cs-accent), var(--cs-accent2)); color: #fff;
+  font-size: 0.8rem; font-weight: 600; cursor: pointer;
+}
+.csai-setup button[type="submit"]:disabled { opacity: 0.5; }
+.csai-setup-err { font-size: 0.7rem; color: #f87171; }
+
+.csai-tool-chip {
+  display: flex; align-items: center; gap: 7px; align-self: flex-start;
+  font-size: 0.72rem; color: var(--cs-text2);
+  background: var(--cs-bg3); border: 1px solid var(--cs-border); border-radius: 999px;
+  padding: 5px 12px; max-width: 92%;
+}
+.csai-tool-running .csai-tool-icon { animation: csaiSpin 1s linear infinite; }
+.csai-tool-error { border-color: rgba(248,113,113,0.4); color: #f87171; }
+.csai-tool-done .csai-tool-icon { color: #4ade80; }
+@keyframes csaiSpin { to { transform: rotate(360deg); } }
+
+.csai-retry {
+  margin-top: 6px; font-size: 0.7rem; color: var(--cs-accent); background: none;
+  border: 1px solid var(--cs-border); border-radius: 999px; padding: 3px 10px; cursor: pointer;
+}
+.csai-stop {
+  flex-shrink: 0; font-size: 0.7rem; color: #f87171; background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.35); border-radius: var(--cs-radius); padding: 0 10px; cursor: pointer;
+}
 .csgit-github-error {
   margin-top: 10px; padding: 8px 10px; max-width: 240px;
   background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.35);
