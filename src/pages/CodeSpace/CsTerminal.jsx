@@ -58,7 +58,7 @@ function parseAnsi(str) {
 }
 
 // ── Shell command processor ───────────────────────────────────
-function createShell(files, setFiles, git, projectName) {
+export function createShell(files, setFiles, git, projectName) {
   let cwd = '/'
 
   function resolve(path) {
