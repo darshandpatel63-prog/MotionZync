@@ -43,9 +43,6 @@ body.cs2-resizing .cs2-resize-handle::after {
 }
 body.cs2-resizing { cursor: col-resize !important; }
 body.cs2-resizing * { user-select: none !important; }
-@media (max-width: 900px) {
-  .cs2-resize-handle-preview { display: none; }
-}
 
 /* ── Boot / loading screen ───────────────────────────────────── */
 .cs2-boot {
@@ -414,10 +411,52 @@ body.cs2-resizing * { user-select: none !important; }
 .cs2-search-result-path { font-size: 0.7rem; color: var(--cs-accent); font-family: var(--cs-font); }
 .cs2-search-result-line { font-size: 0.72rem; color: var(--cs-text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* ── Responsive ──────────────────────────────────────────────── */
-@media (max-width: 900px) { .cs2-preview-panel { display: none; } }
-@media (max-width: 640px) {
-  .cs2-sidebar { position: absolute; z-index: 20; height: 100%; top: 0; }
+/* ── Responsive (mobile: Desktop Site OFF) ──────────────────────
+   Previously: sidebar was `position:absolute` at a fixed desktop width,
+   so it partially overlapped the code instead of a clean drawer, and the
+   preview panel simply had `display:none` — losing that feature entirely
+   on a phone. Now: sidebar is a full slide-in drawer (any width you
+   dragged it to on desktop is ignored below 900px — see width:85vw), and
+   a small Code/Preview/AI switcher (rendered in CodeSpace.jsx) makes every
+   panel reachable one at a time, matching desktop feature parity. None of
+   this applies above 900px (Desktop Site ON / real desktop/tablet) —
+   that layout is untouched. */
+.cs2-mobile-only     { display: none; }
+.cs2-mobile-viewtabs { display: none; }
+
+@media (max-width: 900px) {
+  .cs2-mobile-only     { display: inline-flex; }
+  .cs2-mobile-viewtabs {
+    display: flex; gap: 6px; padding: 6px 10px;
+    background: var(--cs-bg2); border-bottom: 1px solid var(--cs-border);
+  }
+  .cs2-mobile-viewtabs button {
+    flex: 1; font-size: 0.74rem; padding: 7px 0; border-radius: var(--cs-radius);
+    background: var(--cs-bg3); border: 1px solid var(--cs-border); color: var(--cs-text2);
+  }
+  .cs2-mobile-viewtabs button.cs2-mvt-active {
+    background: linear-gradient(135deg, var(--cs-accent), var(--cs-accent2)); color: #fff; border-color: transparent;
+  }
+
+  .cs2-sidebar {
+    position: fixed; z-index: 45; top: 0; left: 0; height: 100%;
+    width: 85vw !important; max-width: 340px;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    box-shadow: 6px 0 32px rgba(0,0,0,0.5);
+  }
+  .cs2-sidebar.cs2-sidebar-open { transform: translateX(0); }
+  .cs2-mobile-backdrop {
+    position: fixed; inset: 0; z-index: 40;
+    background: rgba(0,0,0,0.5);
+    animation: cs2BootFade 0.18s ease;
+  }
+  .cs2-resize-handle-sidebar, .cs2-resize-handle-preview { display: none; }
+
+  .cs2-center.cs2-mobile-hide { display: none; }
+  .cs2-preview-panel { display: none; }
+  .cs2-preview-panel.cs2-mobile-show { display: flex; width: 100% !important; }
+
   .cs2-palette-trigger { display: none; }
 }
 
