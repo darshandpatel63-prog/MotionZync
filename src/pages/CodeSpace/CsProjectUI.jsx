@@ -237,10 +237,11 @@ export function ActivityBar({ active, onSelect, terminalOpen, previewOpen, onTer
 }
 
 // ── Title Bar ──────────────────────────────────────────────────
-export function TitleBar({ projects, activeProj, saveStatus, onPalette, onSwitch, onNew, onSave, onShare, onExport, onEnv, onZen, onSettings, onDeleteProject, onRenameProject }) {
+export function TitleBar({ projects, activeProj, saveStatus, onPalette, onSwitch, onNew, onSave, onShare, onExport, onEnv, onZen, onSettings, onDeleteProject, onRenameProject, onMenuToggle }) {
   return (
     <div className="cs2-titlebar">
       <div className="cs2-titlebar-left">
+        <button className="cs2-tb-btn cs2-mobile-only cs2-menu-btn" onClick={onMenuToggle} aria-label="Toggle menu">☰</button>
         <div className="cs2-logo">
           <span className="cs2-logo-icon">⚡</span>
           <span className="cs2-logo-text">CodeSpace</span>
