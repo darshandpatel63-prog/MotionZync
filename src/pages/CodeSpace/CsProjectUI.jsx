@@ -218,6 +218,7 @@ const ACTIVITIES = [
   { id: 'explorer', icon: '📁', title: 'Explorer' },
   { id: 'git',      icon: '⎇',  title: 'Source Control' },
   { id: 'search',   icon: '🔍', title: 'Search' },
+  { id: 'ai',       icon: '✨', title: 'AI Assistant' },
 ]
 
 export function ActivityBar({ active, onSelect, terminalOpen, previewOpen, onTerminal, onPreview, onSettings }) {
