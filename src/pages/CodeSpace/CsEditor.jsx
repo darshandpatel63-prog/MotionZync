@@ -208,6 +208,12 @@ export default function CsEditor({
           onCursorChange?.({ line: e.position.lineNumber, col: e.position.column })
         })
 
+        // Save immediately on blur — the moment right before a user taps
+        // away to a menu/another app is exactly when a reload is most
+        // likely, so this catches edits the 500ms debounce might not
+        // reach in time.
+        ed.onDidBlurEditorWidget(() => { onSaveRef.current?.() })
+
         // Ctrl+S = save
         ed.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
           onSaveRef.current?.()
