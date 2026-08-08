@@ -10,6 +10,7 @@ import CsFileExplorer from './CsFileExplorer.jsx'
 import CsTerminal     from './CsTerminal.jsx'
 import CsPreview      from './CsPreview.jsx'
 import CsGitPanel     from './CsGitPanel.jsx'
+import CsAIPanel      from './CsAIPanel.jsx'
 import CsResizeHandle from './CsResizeHandle.jsx'
 import { GitHubProvider, useGitHub } from './GitHubContext.jsx'
 import {
@@ -85,10 +86,12 @@ function CodeSpaceInner() {
   const [sidebarWidth, setSidebarWidth] = useState(240)
   const [previewWidth, setPreviewWidth] = useState(420)
   const widthSaveTimer = useRef(null)
+  const [booted, setBooted] = useState(false)
 
   // ── Bootstrap ─────────────────────────────────────────────────
   useEffect(() => {
     async function init() {
+      try {
       await openDB()
       const [projs, saved, savedWidths] = await Promise.all([
         getAllProjects(),
@@ -119,6 +122,9 @@ function CodeSpaceInner() {
       const lastId = await getConfig('lastProjectId')
       const last   = (lastId && sorted.find(p => p.id === lastId)) || sorted[0]
       if (last) doOpenProject(last)
+      } finally {
+        setBooted(true)
+      }
     }
     init()
   }, [])
@@ -277,7 +283,7 @@ function CodeSpaceInner() {
   function handleFileChange(path, value) {
     setFiles(prev => ({ ...prev, [path]: value }))
     setOpenTabs(prev => prev.map(t => t.path === path ? { ...t, dirty: true } : t))
-    if (settings.autoSave) { clearTimeout(autoSaveTimer.current); autoSaveTimer.current = setTimeout(doSave, 2000) }
+    if (settings.autoSave) { clearTimeout(autoSaveTimer.current); autoSaveTimer.current = setTimeout(doSave, 500) }
     if (settings.autoPreview) setRefresh(t => t + 1)
   }
 
@@ -423,7 +429,7 @@ function CodeSpaceInner() {
       activeProjRef.current = updated
       setActiveProj(updated)
       setProjects(prev => prev.map(p => p.id === updated.id ? updated : p))
-    }, 1500)
+    }, 500)
   }
 
   // ── Share / Export ────────────────────────────────────────────
@@ -493,6 +499,13 @@ function CodeSpaceInner() {
         onRestoreFiles={f => { setFiles(f); notify('Checked out', 'success') }} />
     )
     if (activity === 'search') return <SearchPanel files={files} onOpen={openTab} />
+    if (activity === 'ai') return (
+      <CsAIPanel
+        activeFile={activeTab}
+        fileContent={files[activeTab]}
+        dirtyFiles={openTabs.filter(t => t.dirty).map(t => t.path)}
+      />
+    )
     return null
   }
 
@@ -502,6 +515,14 @@ function CodeSpaceInner() {
       style={{ '--sidebar-w': `${sidebarWidth}px`, '--preview-w': `${previewWidth}px` }}
     >
       <CodeBg />
+
+      {!booted && (
+        <div className="cs2-boot" role="status" aria-live="polite">
+          <div className="cs2-boot-mark">⚡</div>
+          <div className="cs2-boot-name">CodeSpace</div>
+          <div className="cs2-boot-bar"><span /></div>
+        </div>
+      )}
 
       {!zenMode && (
         <TitleBar
