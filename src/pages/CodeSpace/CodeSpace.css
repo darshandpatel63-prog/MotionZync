@@ -47,6 +47,45 @@ body.cs2-resizing * { user-select: none !important; }
   .cs2-resize-handle-preview { display: none; }
 }
 
+/* ── Boot / loading screen ───────────────────────────────────── */
+.cs2-boot {
+  position: fixed; inset: 0; z-index: 300;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px;
+  background: var(--cs-bg);
+  animation: cs2BootFade 0.25s ease-out;
+}
+@keyframes cs2BootFade { from { opacity: 0 } to { opacity: 1 } }
+.cs2-boot-mark {
+  font-size: 34px; line-height: 1;
+  filter: drop-shadow(0 0 14px rgba(124,58,237,0.55));
+  animation: cs2BootPulse 1.6s ease-in-out infinite;
+}
+@keyframes cs2BootPulse {
+  0%, 100% { transform: scale(1);   opacity: 0.85; }
+  50%      { transform: scale(1.12); opacity: 1;    }
+}
+.cs2-boot-name {
+  font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--cs-text2);
+}
+.cs2-boot-bar {
+  width: 120px; height: 3px; border-radius: 3px; overflow: hidden;
+  background: var(--cs-bg4);
+}
+.cs2-boot-bar span {
+  display: block; height: 100%; width: 40%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--cs-accent2), var(--cs-accent));
+  animation: cs2BootSlide 1.1s ease-in-out infinite;
+}
+@keyframes cs2BootSlide {
+  0%   { transform: translateX(-110%); }
+  100% { transform: translateX(340%);  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs2-boot-mark, .cs2-boot-bar span { animation: none; }
+}
+
 /* ── Tokens & Reset ──────────────────────────────────────────── */
 .cs2-root {
   --cs-bg:        #0d0d14;
