@@ -581,6 +581,96 @@
 }
 .csgit-github-disconnect:hover { border-color: #ef4444; color: #ef4444; }
 .csgit-github-note { font-size: 0.7rem; color: #4b5563; line-height: 1.6; text-align: center; }
+
+/* ── AI Assistant panel (Phase 2) ────────────────────────────── */
+.csai-panel { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.csai-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; font-size: 0.78rem; font-weight: 600; color: var(--cs-text);
+  border-bottom: 1px solid var(--cs-border); flex-shrink: 0;
+}
+.csai-model-chip {
+  font-size: 0.66rem; font-weight: 500; color: var(--cs-text2);
+  background: var(--cs-bg3); border: 1px solid var(--cs-border);
+  padding: 2px 8px; border-radius: 999px;
+}
+.csai-actions {
+  display: flex; gap: 6px; padding: 10px 12px; overflow-x: auto; flex-shrink: 0;
+  border-bottom: 1px solid var(--cs-border);
+}
+.csai-chip {
+  flex-shrink: 0; font-size: 0.72rem; white-space: nowrap; cursor: pointer;
+  padding: 6px 10px; border-radius: 999px; color: var(--cs-text2);
+  background: var(--cs-bg3); border: 1px solid var(--cs-border);
+  transition: all 0.15s;
+}
+.csai-chip:hover:not(:disabled) { color: var(--cs-text); border-color: var(--cs-accent); background: var(--cs-bg4); }
+.csai-chip:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.csai-messages { flex: 1; min-height: 0; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 14px; }
+.csai-hint { font-size: 0.76rem; color: var(--cs-text3); text-align: center; margin-top: 20px; line-height: 1.6; }
+
+.csai-msg { max-width: 92%; }
+.csai-msg-role { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cs-text3); margin-bottom: 4px; }
+.csai-msg-body { font-size: 0.8rem; line-height: 1.55; color: var(--cs-text); white-space: pre-wrap; word-break: break-word; }
+.csai-msg-body p { margin: 0 0 8px; }
+.csai-msg-body p:last-child { margin-bottom: 0; }
+.csai-msg-user { align-self: flex-end; }
+.csai-msg-user .csai-msg-role { text-align: right; }
+.csai-msg-user .csai-msg-body {
+  background: var(--cs-accent); background: linear-gradient(135deg, var(--cs-accent), var(--cs-accent2));
+  color: #fff; padding: 8px 12px; border-radius: 12px 12px 3px 12px;
+}
+.csai-msg-assistant .csai-msg-body {
+  background: var(--cs-bg3); border: 1px solid var(--cs-border);
+  padding: 8px 12px; border-radius: 12px 12px 12px 3px;
+}
+.csai-msg-error .csai-msg-body { border-color: rgba(248,113,113,0.4); color: #f87171; }
+
+.csai-code { margin: 6px 0; border: 1px solid var(--cs-border); border-radius: var(--cs-radius); overflow: hidden; }
+.csai-code-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 5px 10px; background: var(--cs-bg4); font-size: 0.65rem; color: var(--cs-text3);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.csai-code-bar button {
+  font-size: 0.65rem; color: var(--cs-text2); background: none; border: none; cursor: pointer;
+  text-transform: none; letter-spacing: normal;
+}
+.csai-code-bar button:hover { color: var(--cs-accent); }
+.csai-code pre { margin: 0; padding: 10px 12px; overflow-x: auto; background: var(--cs-bg); }
+.csai-code code { font-family: var(--cs-mono, monospace); font-size: 0.76rem; color: #e2e8f0; white-space: pre; }
+
+.csai-typing { display: flex; gap: 4px; padding: 4px 12px; align-self: flex-start; }
+.csai-typing span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--cs-text3);
+  animation: csaiTypingBounce 1.2s ease-in-out infinite;
+}
+.csai-typing span:nth-child(2) { animation-delay: 0.15s; }
+.csai-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes csaiTypingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.csai-inputrow {
+  display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--cs-border); flex-shrink: 0;
+}
+.csai-inputrow textarea {
+  flex: 1; resize: none; max-height: 100px; min-height: 36px;
+  background: var(--cs-bg3); border: 1px solid var(--cs-border); border-radius: var(--cs-radius);
+  color: var(--cs-text); font-size: 0.8rem; padding: 8px 10px; font-family: inherit;
+}
+.csai-inputrow textarea:focus { outline: none; border-color: var(--cs-accent); }
+.csai-inputrow button {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: var(--cs-radius); border: none;
+  background: var(--cs-accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.15s;
+}
+.csai-inputrow button:hover:not(:disabled) { background: var(--cs-accent2); }
+.csai-inputrow button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.csai-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 24px; gap: 8px; }
+.csai-empty-icon { font-size: 28px; opacity: 0.7; margin-bottom: 4px; }
+.csai-empty p { font-size: 0.78rem; color: var(--cs-text2); line-height: 1.6; margin: 0; max-width: 220px; }
+.csai-empty-sub { font-size: 0.68rem !important; color: var(--cs-text3) !important; }
 .csgit-github-error {
   margin-top: 10px; padding: 8px 10px; max-width: 240px;
   background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.35);
