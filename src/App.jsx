@@ -101,8 +101,8 @@ export default function App() {
 
       {!isFullscreen && <Footer/>}
 
-      {/* ── Global Floating AI — every page ── */}
-      <FloatingAI/>
+      {/* ── Global Floating AI — every page except fullscreen (CodeSpace has its own AI panel) ── */}
+      {!isFullscreen && <FloatingAI/>}
     </div>
   )
 }
