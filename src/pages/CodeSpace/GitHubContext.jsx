@@ -112,10 +112,26 @@ export function GitHubProvider({ children }) {
     }
   }, [vaultUnlocked, encryptValue])
 
+  // Phase 3 — authenticated GitHub API calls for other components (push,
+  // repo list/create) without ever exposing the raw token to them.
+  const authFetch = useCallback((path, opts = {}) => {
+    if (!token) return Promise.reject(new Error('Not connected to GitHub'))
+    const url = path.startsWith('http') ? path : `https://api.github.com${path}`
+    return fetch(url, {
+      ...opts,
+      headers: {
+        Authorization: `token ${token}`,
+        Accept: 'application/vnd.github+json',
+        ...(opts.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(opts.headers || {}),
+      },
+    })
+  }, [token])
+
   return (
     <GitHubContext.Provider value={{
       user, connected: !!token, connecting, error,
-      connect, disconnect, handleCallback,
+      connect, disconnect, handleCallback, authFetch,
       tokenPersisted: !!tokenEnc,
     }}>
       {children}
