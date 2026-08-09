@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react'
 import { diffLines } from './cs-git.js'
 import { useGitHub } from './GitHubContext.jsx'
-import { listRepos, createRepo, pushFiles } from './gh-push.js'
+import { listRepos, createRepo, pushFiles, cloneRepo } from './gh-push.js'
 import { getConfig, setConfig } from './cs-storage.js'
 
 function CommitItem({ commit, isHead }) {
@@ -68,7 +68,7 @@ function DiffViewer({ path, chunks }) {
   )
 }
 
-function RepoPush({ files, projectId, authFetch }) {
+function RepoPush({ files, projectId, authFetch, onImportProject }) {
   const [repos, setRepos]           = useState([])
   const [reposLoading, setRLoading] = useState(true)
   const [selected, setSelected]     = useState(null)
@@ -79,6 +79,8 @@ function RepoPush({ files, projectId, authFetch }) {
   const [progress, setProgress]     = useState('')
   const [result, setResult]         = useState(null)
   const [err, setErr]               = useState('')
+  const [cloning, setCloning]       = useState(false)
+  const [cloneProgress, setCloneProgress] = useState('')
   const storeKey = `githubRepo:${projectId || 'default'}`
 
   useEffect(() => {
@@ -113,6 +115,20 @@ function RepoPush({ files, projectId, authFetch }) {
     } catch (e2) { setErr(e2.message) }
   }
 
+  async function doClone() {
+    if (!selected || cloning) return
+    setErr(''); setCloning(true)
+    try {
+      const cloned = await cloneRepo(authFetch, {
+        owner: selected.owner.login, repo: selected.name,
+        branch: selected.default_branch || 'main',
+        onProgress: setCloneProgress,
+      })
+      await onImportProject?.(selected.name, cloned)
+    } catch (e2) { setErr(e2.message) }
+    setCloning(false); setCloneProgress('')
+  }
+
   async function doPush() {
     if (!selected || pushing) return
     setPushing(true); setErr(''); setResult(null)
@@ -139,7 +155,14 @@ function RepoPush({ files, projectId, authFetch }) {
             {repos.map(r => <option key={r.id} value={r.full_name}>{r.full_name}{r.private ? ' 🔒' : ''}</option>)}
           </select>
           {!creating ? (
-            <button className="csgit-push-newrepo" onClick={() => setCreating(true)}>＋ Create new repository</button>
+            <div className="csgit-push-repobtns">
+              <button className="csgit-push-newrepo" onClick={() => setCreating(true)}>＋ Create new repository</button>
+              {selected && (
+                <button className="csgit-push-clonebtn" onClick={doClone} disabled={cloning}>
+                  {cloning ? (cloneProgress || 'Importing…') : '⬇ Clone into new project'}
+                </button>
+              )}
+            </div>
           ) : (
             <form className="csgit-push-createform" onSubmit={doCreate}>
               <input placeholder="repo-name" value={newName} onChange={e => setNewName(e.target.value)} autoFocus />
@@ -172,7 +195,7 @@ function RepoPush({ files, projectId, authFetch }) {
   )
 }
 
-export default function CsGitPanel({ files, git, projectName, projectId, onRestoreFiles }) {
+export default function CsGitPanel({ files, git, projectName, projectId, onRestoreFiles, onImportProject }) {
   const { user, connected, connecting, error: githubError, connect, disconnect, authFetch } = useGitHub()
   const [tab,      setTab]      = useState('changes') // changes | log | branches | github
   const [commits,  setCommits]  = useState([])
@@ -456,7 +479,7 @@ export default function CsGitPanel({ files, git, projectName, projectId, onResto
                 </div>
                 <button className="csgit-github-disconnect" onClick={disconnect}>Disconnect</button>
               </div>
-              <RepoPush files={files} projectId={projectId} authFetch={authFetch} />
+              <RepoPush files={files} projectId={projectId} authFetch={authFetch} onImportProject={onImportProject} />
             </>
           ) : (
             <div className="csgit-github-connect">
@@ -469,9 +492,9 @@ export default function CsGitPanel({ files, git, projectName, projectId, onResto
             </div>
           )}
           <div className="csgit-github-note">
-            One push = one real commit with every changed file (via GitHub's Git API,
-            same as a real `git push`). Your code only ever talks directly to GitHub —
-            it never touches our servers.
+            Push = one real commit for every changed file. Clone imports a repo as a new
+            project (your current work is never touched). Both talk directly to GitHub —
+            nothing passes through our servers.
           </div>
         </div>
       )}
