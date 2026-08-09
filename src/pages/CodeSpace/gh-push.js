@@ -92,3 +92,43 @@ export async function pushFiles(authFetch, { owner, repo, branch = 'main', files
     url: `https://github.com/${owner}/${repo}/commit/${commitData.sha}`,
   }
 }
+
+function b64DecodeUnicode(str) {
+  return decodeURIComponent(escape(atob(str.replace(/\n/g, ''))))
+}
+
+const MAX_CLONE_FILES = 150
+
+export async function cloneRepo(authFetch, { owner, repo, branch, onProgress }) {
+  onProgress?.('Reading file list…')
+  const refRes = await authFetch(`/repos/${owner}/${repo}/git/ref/heads/${branch}`)
+  const refData = await refRes.json()
+  if (!refRes.ok) throw new Error(refData.message || 'Could not read branch')
+
+  const treeRes = await authFetch(`/repos/${owner}/${repo}/git/trees/${refData.object.sha}?recursive=1`)
+  const treeData = await treeRes.json()
+  if (!treeRes.ok) throw new Error(treeData.message || 'Could not read repo contents')
+  if (treeData.truncated) throw new Error('This repo is too large to import in one go.')
+
+  const entries = treeData.tree.filter(t => t.type === 'blob')
+  if (!entries.length) throw new Error('This repo has no files on that branch.')
+  if (entries.length > MAX_CLONE_FILES) {
+    throw new Error(`This repo has ${entries.length} files — CodeSpace can import up to ${MAX_CLONE_FILES} at a time.`)
+  }
+
+  const files = {}
+  let done = 0
+  await Promise.all(entries.map(async (entry) => {
+    const res = await authFetch(`/repos/${owner}/${repo}/git/blobs/${entry.sha}`)
+    done++
+    onProgress?.(`Downloading files… (${done}/${entries.length})`)
+    if (!res.ok) return
+    const data = await res.json()
+    try {
+      files[entry.path] = data.encoding === 'base64' ? b64DecodeUnicode(data.content) : data.content
+    } catch {
+      files[entry.path] = '' // binary file (image, font, etc.) — CodeSpace edits text files only
+    }
+  }))
+  return files
+}
