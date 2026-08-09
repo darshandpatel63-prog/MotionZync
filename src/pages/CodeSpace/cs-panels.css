@@ -582,6 +582,38 @@
 .csgit-github-disconnect:hover { border-color: #ef4444; color: #ef4444; }
 .csgit-github-note { font-size: 0.7rem; color: #4b5563; line-height: 1.6; text-align: center; }
 
+.csgit-push { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--cs-border); display: flex; flex-direction: column; gap: 6px; }
+.csgit-push-label { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--cs-text3); margin-top: 4px; }
+.csgit-push-loading { font-size: 0.76rem; color: var(--cs-text3); padding: 6px 0; }
+.csgit-push-select, .csgit-push-msg {
+  width: 100%; background: var(--cs-bg3); border: 1px solid var(--cs-border); border-radius: var(--cs-radius);
+  color: var(--cs-text); font-size: 0.78rem; padding: 7px 9px; font-family: inherit;
+}
+.csgit-push-select:focus, .csgit-push-msg:focus { outline: none; border-color: var(--cs-accent); }
+.csgit-push-newrepo {
+  align-self: flex-start; font-size: 0.72rem; color: var(--cs-accent); background: none; border: none; cursor: pointer; padding: 2px 0;
+}
+.csgit-push-createform { display: flex; gap: 6px; }
+.csgit-push-createform input {
+  flex: 1; background: var(--cs-bg3); border: 1px solid var(--cs-border); border-radius: var(--cs-radius);
+  color: var(--cs-text); font-size: 0.76rem; padding: 6px 9px;
+}
+.csgit-push-createform button {
+  font-size: 0.72rem; padding: 6px 10px; border-radius: var(--cs-radius); border: 1px solid var(--cs-border);
+  background: var(--cs-bg4); color: var(--cs-text2); cursor: pointer;
+}
+.csgit-push-btn {
+  margin-top: 4px; padding: 9px 0; border-radius: var(--cs-radius); border: none;
+  background: linear-gradient(135deg, var(--cs-accent), var(--cs-accent2)); color: #fff;
+  font-size: 0.8rem; font-weight: 600; cursor: pointer;
+}
+.csgit-push-btn:disabled { opacity: 0.75; cursor: wait; }
+.csgit-push-success {
+  font-size: 0.76rem; color: #4ade80; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3);
+  border-radius: var(--cs-radius); padding: 8px 10px; line-height: 1.6;
+}
+.csgit-push-success a { color: #4ade80; }
+
 /* ── AI Assistant panel (Phase 2) ────────────────────────────── */
 .csai-panel { display: flex; flex-direction: column; height: 100%; min-height: 0; }
 .csai-header {
