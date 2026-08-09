@@ -411,6 +411,21 @@ body.cs2-resizing * { user-select: none !important; }
 .cs2-search-result-path { font-size: 0.7rem; color: var(--cs-accent); font-family: var(--cs-font); }
 .cs2-search-result-line { font-size: 0.72rem; color: var(--cs-text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+.cs2-search-toggle {
+  font-size: 0.68rem; color: var(--cs-text2); background: var(--cs-bg3); border: 1px solid var(--cs-border);
+  border-radius: 999px; padding: 3px 10px; cursor: pointer; margin-left: auto;
+}
+.cs2-search-toggle:hover { color: var(--cs-text); border-color: var(--cs-accent); }
+.cs2-search-replacerow { display: flex; gap: 6px; }
+.cs2-search-replaceall {
+  flex-shrink: 0; font-size: 0.7rem; font-weight: 600; color: #fff; white-space: nowrap;
+  background: linear-gradient(135deg, var(--cs-accent), var(--cs-accent2)); border: none;
+  border-radius: var(--cs-radius); padding: 0 12px; cursor: pointer;
+}
+.cs2-search-replaceall:disabled { opacity: 0.4; cursor: not-allowed; }
+.cs2-search-case { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--cs-text3); }
+.cs2-search-summary { font-size: 0.68rem; color: var(--cs-text3); }
+
 /* ── Responsive (mobile: Desktop Site OFF) ──────────────────────
    Previously: sidebar was `position:absolute` at a fixed desktop width,
    so it partially overlapped the code instead of a clean drawer, and the
