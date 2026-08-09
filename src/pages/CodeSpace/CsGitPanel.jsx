@@ -5,6 +5,8 @@
 import { useState, useEffect } from 'react'
 import { diffLines } from './cs-git.js'
 import { useGitHub } from './GitHubContext.jsx'
+import { listRepos, createRepo, pushFiles } from './gh-push.js'
+import { getConfig, setConfig } from './cs-storage.js'
 
 function CommitItem({ commit, isHead }) {
   const [open, setOpen] = useState(false)
@@ -66,8 +68,112 @@ function DiffViewer({ path, chunks }) {
   )
 }
 
-export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) {
-  const { user, connected, connecting, error: githubError, connect, disconnect } = useGitHub()
+function RepoPush({ files, projectId, authFetch }) {
+  const [repos, setRepos]           = useState([])
+  const [reposLoading, setRLoading] = useState(true)
+  const [selected, setSelected]     = useState(null)
+  const [creating, setCreating]     = useState(false)
+  const [newName, setNewName]       = useState('')
+  const [commitMsg, setCommitMsg]   = useState('Update from CodeSpace')
+  const [pushing, setPushing]       = useState(false)
+  const [progress, setProgress]     = useState('')
+  const [result, setResult]         = useState(null)
+  const [err, setErr]               = useState('')
+  const storeKey = `githubRepo:${projectId || 'default'}`
+
+  useEffect(() => {
+    let cancelled = false
+    listRepos(authFetch)
+      .then(async list => {
+        if (cancelled) return
+        setRepos(list)
+        const saved = await getConfig(storeKey, null)
+        const match = saved && list.find(r => r.full_name === saved.full_name)
+        if (match) setSelected(match)
+      })
+      .catch(e => setErr(e.message))
+      .finally(() => !cancelled && setRLoading(false))
+    return () => { cancelled = true }
+  }, [authFetch, storeKey])
+
+  function selectRepo(repo) {
+    setSelected(repo); setResult(null); setErr('')
+    setConfig(storeKey, { full_name: repo.full_name })
+  }
+
+  async function doCreate(e) {
+    e.preventDefault()
+    if (!newName.trim()) return
+    setErr('')
+    try {
+      const repo = await createRepo(authFetch, newName.trim())
+      setRepos(r => [repo, ...r])
+      selectRepo(repo)
+      setCreating(false); setNewName('')
+    } catch (e2) { setErr(e2.message) }
+  }
+
+  async function doPush() {
+    if (!selected || pushing) return
+    setPushing(true); setErr(''); setResult(null)
+    try {
+      const res = await pushFiles(authFetch, {
+        owner: selected.owner.login, repo: selected.name,
+        branch: selected.default_branch || 'main',
+        files, message: commitMsg.trim() || 'Update from CodeSpace',
+        onProgress: setProgress,
+      })
+      setResult(res)
+    } catch (e2) { setErr(e2.message) }
+    setPushing(false); setProgress('')
+  }
+
+  return (
+    <div className="csgit-push">
+      <div className="csgit-push-label">Repository</div>
+      {reposLoading ? <div className="csgit-push-loading">Loading your repos…</div> : (
+        <>
+          <select className="csgit-push-select" value={selected?.full_name || ''}
+            onChange={e => { const r = repos.find(x => x.full_name === e.target.value); if (r) selectRepo(r) }}>
+            <option value="" disabled>Choose a repository…</option>
+            {repos.map(r => <option key={r.id} value={r.full_name}>{r.full_name}{r.private ? ' 🔒' : ''}</option>)}
+          </select>
+          {!creating ? (
+            <button className="csgit-push-newrepo" onClick={() => setCreating(true)}>＋ Create new repository</button>
+          ) : (
+            <form className="csgit-push-createform" onSubmit={doCreate}>
+              <input placeholder="repo-name" value={newName} onChange={e => setNewName(e.target.value)} autoFocus />
+              <button type="submit">Create</button>
+              <button type="button" onClick={() => setCreating(false)}>✕</button>
+            </form>
+          )}
+        </>
+      )}
+
+      {selected && (
+        <>
+          <div className="csgit-push-label">Commit message</div>
+          <input className="csgit-push-msg" value={commitMsg} disabled={pushing}
+            onChange={e => setCommitMsg(e.target.value)} />
+          <button className="csgit-push-btn" onClick={doPush} disabled={pushing}>
+            {pushing ? (progress || 'Pushing…') : `⬆ Push to ${selected.full_name}`}
+          </button>
+        </>
+      )}
+
+      {result && (
+        <div className="csgit-push-success">
+          ✓ Pushed {result.fileCount} file{result.fileCount === 1 ? '' : 's'}.{' '}
+          <a href={result.url} target="_blank" rel="noreferrer">View commit on GitHub ↗</a>
+        </div>
+      )}
+      {err && <div className="csgit-github-error">⚠ {err}</div>}
+    </div>
+  )
+}
+
+export default function CsGitPanel({ files, git, projectName, projectId, onRestoreFiles }) {
+  const { user, connected, connecting, error: githubError, connect, disconnect, authFetch } = useGitHub()
   const [tab,      setTab]      = useState('changes') // changes | log | branches | github
   const [commits,  setCommits]  = useState([])
   const [branches, setBranches] = useState({ branches: {}, HEAD: 'main' })
@@ -341,14 +447,17 @@ export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) 
           {connecting ? (
             <div className="csgit-github-status">Connecting…</div>
           ) : connected ? (
-            <div className="csgit-github-connected">
-              {user?.avatar_url && <img src={user.avatar_url} alt="" className="csgit-github-avatar" />}
-              <div className="csgit-github-who">
-                <div className="csgit-github-name">{user?.name || user?.login || '...'}</div>
-                {user?.login && <div className="csgit-github-login">@{user.login}</div>}
+            <>
+              <div className="csgit-github-connected">
+                {user?.avatar_url && <img src={user.avatar_url} alt="" className="csgit-github-avatar" />}
+                <div className="csgit-github-who">
+                  <div className="csgit-github-name">{user?.name || user?.login || '...'}</div>
+                  {user?.login && <div className="csgit-github-login">@{user.login}</div>}
+                </div>
+                <button className="csgit-github-disconnect" onClick={disconnect}>Disconnect</button>
               </div>
-              <button className="csgit-github-disconnect" onClick={disconnect}>Disconnect</button>
-            </div>
+              <RepoPush files={files} projectId={projectId} authFetch={authFetch} />
+            </>
           ) : (
             <div className="csgit-github-connect">
               <div className="csgit-github-icon">⎇</div>
@@ -360,8 +469,9 @@ export default function CsGitPanel({ files, git, projectName, onRestoreFiles }) 
             </div>
           )}
           <div className="csgit-github-note">
-            This step only connects your account — pushing files to a repo is next.
-            Your code never touches our servers; only the connection does.
+            One push = one real commit with every changed file (via GitHub's Git API,
+            same as a real `git push`). Your code only ever talks directly to GitHub —
+            it never touches our servers.
           </div>
         </div>
       )}
