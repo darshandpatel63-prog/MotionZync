@@ -199,6 +199,16 @@ function CodeSpaceInner() {
     notify(`Created "${proj.name}"`, 'success')
   }
 
+  async function importGitHubProject(name, files) {
+    const id = genId()
+    const entry = files['index.html'] ? 'index.html' : Object.keys(files)[0]
+    const proj = { id, name, files, entry, createdAt: Date.now(), updatedAt: Date.now() }
+    await saveProject(proj)
+    setProjects(prev => [proj, ...prev])
+    doOpenProject(proj)
+    notify(`Imported "${name}" from GitHub`, 'success')
+  }
+
   async function handleDeleteProject(id) {
     if (!window.confirm('Delete this project? This cannot be undone.')) return
     await deleteProject(id)
@@ -524,6 +534,7 @@ function CodeSpaceInner() {
     )
     if (activity === 'git') return (
       <CsGitPanel files={files} git={git} projectName={activeProj?.name} projectId={activeProj?.id}
+        onImportProject={importGitHubProject}
         onRestoreFiles={f => { setFiles(f); notify('Checked out', 'success') }} />
     )
     if (activity === 'search') return <SearchPanel files={files} onOpen={openTab} />
