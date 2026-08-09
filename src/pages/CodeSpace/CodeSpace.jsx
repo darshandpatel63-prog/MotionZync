@@ -523,7 +523,7 @@ function CodeSpaceInner() {
       />
     )
     if (activity === 'git') return (
-      <CsGitPanel files={files} git={git} projectName={activeProj?.name}
+      <CsGitPanel files={files} git={git} projectName={activeProj?.name} projectId={activeProj?.id}
         onRestoreFiles={f => { setFiles(f); notify('Checked out', 'success') }} />
     )
     if (activity === 'search') return <SearchPanel files={files} onOpen={openTab} />
@@ -578,9 +578,10 @@ function CodeSpaceInner() {
           narrow screens by making it a switchable view instead of a hidden one. */}
       {!zenMode && hasProject && (
         <div className="cs2-mobile-viewtabs">
+          <button className={mobileSidebarOpen && activity === 'explorer' ? 'cs2-mvt-active' : ''} onClick={() => { handleActivity('explorer'); setMobileSidebarOpen(true) }}>📁 Files</button>
           <button className={mobileView === 'editor' ? 'cs2-mvt-active' : ''} onClick={() => { setMobileView('editor'); setMobileSidebarOpen(false) }}>📝 Code</button>
           <button className={mobileView === 'preview' ? 'cs2-mvt-active' : ''} onClick={() => { setMobileView('preview'); setMobileSidebarOpen(false) }}>▶ Preview</button>
-          <button className={mobileView === 'ai' ? 'cs2-mvt-active' : ''} onClick={() => { setMobileView('ai'); handleActivity('ai'); setMobileSidebarOpen(true) }}>✨ AI</button>
+          <button className={mobileSidebarOpen && activity === 'ai' ? 'cs2-mvt-active' : ''} onClick={() => { handleActivity('ai'); setMobileSidebarOpen(true) }}>✨ AI</button>
         </div>
       )}
 
