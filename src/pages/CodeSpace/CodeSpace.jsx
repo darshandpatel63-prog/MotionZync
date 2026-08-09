@@ -400,6 +400,26 @@ function CodeSpaceInner() {
     return await shell.run(cmd)
   }
 
+  // Phase 4: project-wide Find & Replace
+  function handleReplaceAll(query, replacement, caseSensitive) {
+    if (!query) return
+    const flags = caseSensitive ? 'g' : 'gi'
+    const esc = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const re = new RegExp(esc, flags)
+    let changedFiles = 0, changedMatches = 0
+    applyFilesUpdate(prev => {
+      const next = { ...prev }
+      for (const [path, content] of Object.entries(prev)) {
+        const matches = content.match(re)
+        if (!matches) continue
+        next[path] = content.replace(re, replacement)
+        changedFiles++; changedMatches += matches.length
+      }
+      return next
+    })
+    notify(`Replaced ${changedMatches} match${changedMatches === 1 ? '' : 'es'} in ${changedFiles} file${changedFiles === 1 ? '' : 's'}`, 'success')
+  }
+
   // ── Move file (drag & drop) ───────────────────────────────────
   function handleMoveFile(srcPath, destDir) {
     const filename = srcPath.split('/').pop()
@@ -501,8 +521,24 @@ function CodeSpaceInner() {
       share:    handleShare,
       settings: () => setSettings(true),
       split:    () => setSplit(p => !p),
+      format:   handleFormatDocument,
     }
     MAP[id]?.()
+  }
+
+  function handleFormatDocument() {
+    if (!activeTab) return
+    if (!/\.json$/i.test(activeTab)) {
+      notify('Format Document currently supports JSON — more languages coming in Phase 4.1', 'info')
+      return
+    }
+    try {
+      const formatted = JSON.stringify(JSON.parse(files[activeTab] || '{}'), null, 2)
+      handleFileChange(activeTab, formatted)
+      notify('Formatted', 'success')
+    } catch {
+      notify('Could not format — check for a JSON syntax error', 'error')
+    }
   }
 
   function handleActivity(id) {
@@ -537,7 +573,7 @@ function CodeSpaceInner() {
         onImportProject={importGitHubProject}
         onRestoreFiles={f => { setFiles(f); notify('Checked out', 'success') }} />
     )
-    if (activity === 'search') return <SearchPanel files={files} onOpen={openTab} />
+    if (activity === 'search') return <SearchPanel files={files} onOpen={openTab} onReplaceAll={handleReplaceAll} />
     if (activity === 'ai') return (
       <CsAIPanel
         activeFile={activeTab}
