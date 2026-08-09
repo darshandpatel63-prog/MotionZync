@@ -593,6 +593,13 @@
 .csgit-push-newrepo {
   align-self: flex-start; font-size: 0.72rem; color: var(--cs-accent); background: none; border: none; cursor: pointer; padding: 2px 0;
 }
+.csgit-push-repobtns { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.csgit-push-clonebtn {
+  font-size: 0.72rem; color: var(--cs-text2); background: var(--cs-bg3); border: 1px solid var(--cs-border);
+  border-radius: 999px; padding: 4px 12px; cursor: pointer;
+}
+.csgit-push-clonebtn:hover:not(:disabled) { color: var(--cs-text); border-color: var(--cs-accent); }
+.csgit-push-clonebtn:disabled { opacity: 0.7; cursor: wait; }
 .csgit-push-createform { display: flex; gap: 6px; }
 .csgit-push-createform input {
   flex: 1; background: var(--cs-bg3); border: 1px solid var(--cs-border); border-radius: var(--cs-radius);
