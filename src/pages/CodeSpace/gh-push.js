@@ -6,7 +6,6 @@
 // FILE, which is not how a real push works and would flood the repo's
 // history. This does one commit for the whole batch, same as `git push`.
 // ============================================================
-import { importZipFile } from './cs-storage.js'
 
 function b64EncodeUnicode(str) {
   // btoa() only handles Latin1 — this round-trip makes it UTF-8 safe
@@ -94,17 +93,54 @@ export async function pushFiles(authFetch, { owner, repo, branch = 'main', files
   }
 }
 
+function b64DecodeUnicode(str) {
+  return decodeURIComponent(escape(atob(str.replace(/\n/g, ''))))
+}
+
+export const MAX_CLONE_FILES = 150
+
 export async function cloneRepo(authFetch, { owner, repo, branch, onProgress }) {
-  onProgress?.('Downloading repository…')
-  const res = await authFetch(`/repos/${owner}/${repo}/zipball/${branch}`)
-  if (!res.ok) {
-    const d = await res.json().catch(() => ({}))
-    throw new Error(d.message || 'Could not download repository')
+  onProgress?.('Reading file list…')
+  const refRes = await authFetch(`/repos/${owner}/${repo}/git/ref/heads/${branch}`)
+  const refData = await refRes.json()
+  if (!refRes.ok) throw new Error(refData.message || 'Could not read branch')
+
+  const treeRes = await authFetch(`/repos/${owner}/${repo}/git/trees/${refData.object.sha}?recursive=1`)
+  const treeData = await treeRes.json()
+  if (!treeRes.ok) throw new Error(treeData.message || 'Could not read repo contents')
+  if (treeData.truncated) throw new Error('This repo is too large to read even its file list in one go.')
+
+  const entries = treeData.tree.filter(t => t.type === 'blob')
+  if (!entries.length) throw new Error('This repo has no files on that branch.')
+  if (entries.length > MAX_CLONE_FILES) {
+    const err = new Error(`This repo has ${entries.length} files — too many for direct import.`)
+    err.tooLarge = true
+    err.fileCount = entries.length
+    throw err
   }
-  const blob = await res.blob()
-  onProgress?.('Unpacking files…')
-  const files = await importZipFile(blob)
-  const count = Object.keys(files).length
-  if (!count) throw new Error('This repo appears to be empty on that branch.')
+
+  const files = {}
+  let done = 0
+  await Promise.all(entries.map(async (entry) => {
+    const res = await authFetch(`/repos/${owner}/${repo}/git/blobs/${entry.sha}`)
+    done++
+    onProgress?.(`Downloading files… (${done}/${entries.length})`)
+    if (!res.ok) return
+    const data = await res.json()
+    try {
+      files[entry.path] = data.encoding === 'base64' ? b64DecodeUnicode(data.content) : data.content
+    } catch {
+      files[entry.path] = '' // binary file (image, font, etc.) — CodeSpace edits text files only
+    }
+  }))
   return files
+}
+
+// For repos over the direct-import limit: GitHub's own web download works
+// via the user's normal logged-in browser session (no CORS/token issues at
+// all, since it never goes through our OAuth token) — they download here,
+// then bring it back in with the existing "📦 Import ZIP" button, which
+// already creates a new project from any ZIP and is proven reliable.
+export function githubZipDownloadUrl(owner, repo, branch) {
+  return `https://github.com/${owner}/${repo}/archive/refs/heads/${branch}.zip`
 }
