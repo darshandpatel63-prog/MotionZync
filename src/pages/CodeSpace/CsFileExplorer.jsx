@@ -1,9 +1,11 @@
 // ============================================================
 // CsFileExplorer.jsx  –  VS Code-style file tree
-// Features: inline create, delete, rename, drag-drop move, ZIP import
+// Features: inline create, delete, rename, drag-drop move,
+//           drag-drop reorder (manual per-folder sort), ZIP import
 // ============================================================
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { getLangFromExt, buildTree } from './cs-filesystem.js'
+import { getConfig, setConfig } from './cs-storage.js'
 
 function FileIcon({ filename }) {
   const lang = getLangFromExt(filename)
@@ -74,12 +76,54 @@ function CtxMenu({ x, y, node, onClose, onNewFile, onNewFolder, onRename, onDele
   )
 }
 
+// ── Manual-order sort helpers (Phase 5) ─────────────────────────
+// Children render alphabetically (dirs before files) until the user
+// drags something within a folder — at that point that folder's order
+// is captured and persisted (per project), and used from then on.
+// Anything not yet in the saved order (new files, etc.) is appended
+// at the end of its type group, alphabetically among themselves.
+function sortWithOrder(children, parentPath, orderMap) {
+  const saved = orderMap[parentPath] || []
+  return Object.values(children).sort((a, b) => {
+    if (a.type !== b.type) return a.type === 'dir' ? -1 : 1
+    const oi = saved.indexOf(a.name)
+    const oj = saved.indexOf(b.name)
+    if (oi === -1 && oj === -1) return a.name.localeCompare(b.name)
+    return (oi === -1 ? Infinity : oi) - (oj === -1 ? Infinity : oj)
+  })
+}
+
+function findNodeByPath(root, path) {
+  if (!path) return root
+  let node = root
+  for (const part of path.split('/')) {
+    node = node?.children?.[part]
+    if (!node) return null
+  }
+  return node
+}
+
+// Where on a row the pointer is determines the drop action. Folders get
+// a middle "inside" band (existing drop-to-move-into behaviour); files
+// only ever split top/bottom since they can't contain anything.
+function readDropZone(e, isDir) {
+  const rect  = e.currentTarget.getBoundingClientRect()
+  const ratio = (e.clientY - rect.top) / rect.height
+  if (isDir) {
+    if (ratio < 0.25) return 'before'
+    if (ratio > 0.75) return 'after'
+    return 'inside'
+  }
+  return ratio < 0.5 ? 'before' : 'after'
+}
+
 // ── Single tree node ──────────────────────────────────────────
 function TreeNode({
-  node, depth, activeFile, expanded, onToggle,
+  node, depth, activeFile, expanded, onToggle, order,
   onOpen, onRename, onDelete, onNewFile, onNewFolder,
   creating, onCreateConfirm, onCreateCancel,
-  dragging, onDragStart, onDragEnd, onDrop,
+  dragging, onDragStart, onDragEnd, onDropInto, onReorder,
+  dropZone, onDragOverNode,
   clipboard, renamingPath, onRenameConfirm, onRenameCancel,
   onCtxMenu,
 }) {
@@ -87,7 +131,6 @@ function TreeNode({
   const isActive = !isDir && activeFile === node.path
   const isOpen   = expanded[node.path]
   const isRenaming = renamingPath === node.path
-  const isDragOver = dragging && dragging !== node.path
 
   const [renameVal, setRenameVal] = useState(node.name)
   const renameRef = useRef(null)
@@ -95,20 +138,31 @@ function TreeNode({
 
   const indent = depth * 14 + 6
 
+  const isDropTarget = dragging && dragging !== node.path && dropZone?.path === node.path
+  const dropClass = !isDropTarget ? '' :
+    dropZone.position === 'inside' ? ' csfe-drop-inside' :
+    dropZone.position === 'before' ? ' csfe-drop-before' : ' csfe-drop-after'
+
   function handleDragOver(e) {
     if (!dragging || dragging === node.path) return
     e.preventDefault(); e.dataTransfer.dropEffect = 'move'
+    onDragOverNode(node.path, readDropZone(e, isDir))
   }
 
-  const children = isDir ? Object.values(node.children || {}).sort((a, b) => {
-    if (a.type !== b.type) return a.type === 'dir' ? -1 : 1
-    return a.name.localeCompare(b.name)
-  }) : []
+  function handleDropEvent(e) {
+    e.preventDefault()
+    if (!dragging || dragging === node.path) return
+    const zone = readDropZone(e, isDir)
+    if (zone === 'inside') onDropInto(node.path)
+    else onReorder(dragging, node.path, zone)
+  }
+
+  const children = isDir ? sortWithOrder(node.children || {}, node.path, order) : []
 
   return (
     <>
       <div
-        className={`csfe-node ${isActive ? 'csfe-active' : ''} ${isDir ? 'csfe-dir' : ''}`}
+        className={`csfe-node ${isActive ? 'csfe-active' : ''} ${isDir ? 'csfe-dir' : ''}${dropClass}`}
         style={{ paddingLeft: indent }}
         onClick={() => isDir ? onToggle(node.path) : onOpen(node.path)}
         onContextMenu={e => { e.preventDefault(); onCtxMenu(e, node) }}
@@ -116,7 +170,7 @@ function TreeNode({
         onDragStart={e => { e.dataTransfer.effectAllowed = 'move'; onDragStart(node.path) }}
         onDragEnd={onDragEnd}
         onDragOver={handleDragOver}
-        onDrop={e => { e.preventDefault(); if (isDir) onDrop(node.path) }}
+        onDrop={handleDropEvent}
         title={node.path}
       >
         {/* Chevron / spacer */}
@@ -173,6 +227,7 @@ function TreeNode({
               activeFile={activeFile}
               expanded={expanded}
               onToggle={onToggle}
+              order={order}
               onOpen={onOpen}
               onRename={onRename}
               onDelete={onDelete}
@@ -184,7 +239,10 @@ function TreeNode({
               dragging={dragging}
               onDragStart={onDragStart}
               onDragEnd={onDragEnd}
-              onDrop={onDrop}
+              onDropInto={onDropInto}
+              onReorder={onReorder}
+              dropZone={dropZone}
+              onDragOverNode={onDragOverNode}
               clipboard={clipboard}
               renamingPath={renamingPath}
               onRenameConfirm={onRenameConfirm}
@@ -209,7 +267,7 @@ function TreeNode({
 
 // ═══════════════════════════════════════════════════════════════
 export default function CsFileExplorer({
-  files, activeFile, projectName,
+  files, activeFile, projectName, projectId,
   onOpen, onNewFile, onNewFolder, onRename, onDelete, onUpload, onMoveFile,
 }) {
   const [expanded,    setExpanded]   = useState({ '': true })
@@ -217,12 +275,27 @@ export default function CsFileExplorer({
   const [creating,    setCreating]   = useState(null)   // { dir, type }
   const [renamingPath,setRenaming]   = useState(null)
   const [dragging,    setDragging]   = useState(null)
+  const [dropZone,    setDropZone]   = useState(null)   // { path, position: 'before'|'inside'|'after' }
+  const [order,       setOrder]      = useState({})     // { [parentPath]: [childName, ...] }
   const [clipboard,   setClipboard]  = useState(null)   // { path, mode: 'cut' }
   const [ctx,         setCtx]        = useState(null)   // { x, y, node }
   const fileInputRef  = useRef(null)
   const zipInputRef   = useRef(null)
 
   const tree = buildTree(files || {})
+
+  // Phase 5: load this project's manual sort order, and keep it saved
+  useEffect(() => {
+    if (!projectId) { setOrder({}); return }
+    let cancelled = false
+    getConfig('fileOrder:' + projectId, {}).then(saved => { if (!cancelled) setOrder(saved || {}) })
+    return () => { cancelled = true }
+  }, [projectId])
+
+  function persistOrder(next) {
+    setOrder(next)
+    if (projectId) setConfig('fileOrder:' + projectId, next)
+  }
 
   function toggleDir(path) { setExpanded(p => ({ ...p, [path]: !p[path] })) }
 
@@ -248,6 +321,12 @@ export default function CsFileExplorer({
   function startRename(path) { setRenaming(path) }
 
   function handleRenameConfirm(oldPath, newName) {
+    // Keep this file's spot in its folder's manual order, if it has one
+    const parentPath = oldPath.includes('/') ? oldPath.slice(0, oldPath.lastIndexOf('/')) : ''
+    const oldName     = oldPath.split('/').pop()
+    if (order[parentPath]?.includes(oldName)) {
+      persistOrder({ ...order, [parentPath]: order[parentPath].map(n => n === oldName ? newName : n) })
+    }
     onRename(oldPath, newName)
     setRenaming(null)
   }
@@ -258,11 +337,40 @@ export default function CsFileExplorer({
     onDelete(path, isDir)
   }
 
-  // ── Drag & Drop Move ────────────────────────────────────────
-  function handleDrop(targetDir) {
+  // ── Drag & Drop: move into a folder (existing behaviour) ───────
+  function handleDropInto(targetDir) {
     if (!dragging || dragging === targetDir) return
     if (dragging.startsWith(targetDir + '/')) return  // Can't move into own child
     onMoveFile(dragging, targetDir)
+    setDragging(null)
+  }
+
+  // ── Drag & Drop: reorder among siblings (Phase 5, new) ──────────
+  // Dropping on the top/bottom edge of a row places the dragged item
+  // right before/after it. If the drop target lives in a different
+  // folder, this also performs the move — so dragging into a new
+  // folder and dropping it in a specific spot works in one motion.
+  function handleReorder(draggedPath, targetPath, position) {
+    if (!draggedPath || draggedPath === targetPath) return
+    if (targetPath.startsWith(draggedPath + '/')) return  // Can't drop into own descendant
+
+    const draggedName   = draggedPath.split('/').pop()
+    const draggedParent = draggedPath.includes('/') ? draggedPath.slice(0, draggedPath.lastIndexOf('/')) : ''
+    const targetName    = targetPath.split('/').pop()
+    const targetParent  = targetPath.includes('/') ? targetPath.slice(0, targetPath.lastIndexOf('/')) : ''
+
+    const parentNode = findNodeByPath(tree, targetParent)
+    if (!parentNode) return
+
+    const seq = sortWithOrder(parentNode.children || {}, targetParent, order)
+      .map(c => c.name)
+      .filter(n => n !== draggedName)
+    const idx = seq.indexOf(targetName)
+    if (idx === -1) return
+    seq.splice(position === 'after' ? idx + 1 : idx, 0, draggedName)
+
+    persistOrder({ ...order, [targetParent]: seq })
+    if (draggedParent !== targetParent) onMoveFile(draggedPath, targetParent)
     setDragging(null)
   }
 
@@ -299,18 +407,18 @@ export default function CsFileExplorer({
   const allPaths = Object.keys(files || {})
   const filtered = search ? allPaths.filter(p => p.toLowerCase().includes(search.toLowerCase())) : null
 
-  const rootChildren = Object.values(tree.children || {}).sort((a, b) => {
-    if (a.type !== b.type) return a.type === 'dir' ? -1 : 1
-    return a.name.localeCompare(b.name)
-  })
+  const rootChildren = sortWithOrder(tree.children || {}, '', order)
 
   const sharedProps = {
-    activeFile, expanded, onToggle: toggleDir, onOpen,
+    activeFile, expanded, onToggle: toggleDir, order,
+    onOpen,
     onRename: startRename, onDelete: handleDelete,
     onNewFile: (dir) => startCreate(dir, 'file'),
     onNewFolder: (dir) => startCreate(dir, 'folder'),
     creating, onCreateConfirm: handleCreateConfirm, onCreateCancel: () => setCreating(null),
-    dragging, onDragStart: setDragging, onDragEnd: () => setDragging(null), onDrop: handleDrop,
+    dragging, onDragStart: setDragging, onDragEnd: () => { setDragging(null); setDropZone(null) },
+    onDropInto: handleDropInto, onReorder: handleReorder,
+    dropZone, onDragOverNode: (path, position) => setDropZone({ path, position }),
     clipboard, renamingPath, onRenameConfirm: handleRenameConfirm, onRenameCancel: () => setRenaming(null),
     onCtxMenu: showCtx,
   }
@@ -344,7 +452,7 @@ export default function CsFileExplorer({
       {/* Tree */}
       <div className="csfe-tree"
         onDragOver={e => e.preventDefault()}
-        onDrop={e => { e.preventDefault(); if (dragging) handleDrop('') }}>
+        onDrop={e => { e.preventDefault(); if (dragging) handleDropInto('') }}>
 
         {filtered ? (
           filtered.length === 0
@@ -401,5 +509,4 @@ export default function CsFileExplorer({
       <input ref={zipInputRef}  type="file" accept=".zip" style={{ display:'none' }} onChange={handleZipImport} />
     </div>
   )
-      }
-                                        
+}
