@@ -621,6 +621,16 @@
 }
 .csgit-push-success a { color: #4ade80; }
 
+.csgit-push-toolarge {
+  font-size: 0.76rem; color: var(--cs-text2); background: var(--cs-bg3); border: 1px solid var(--cs-border);
+  border-radius: var(--cs-radius); padding: 10px; line-height: 1.6; display: flex; flex-direction: column; gap: 8px;
+}
+.csgit-push-dlbtn {
+  display: inline-block; text-align: center; text-decoration: none; font-size: 0.76rem; font-weight: 600; color: #fff;
+  background: linear-gradient(135deg, var(--cs-accent), var(--cs-accent2)); border-radius: var(--cs-radius); padding: 8px 0;
+}
+.csgit-push-toolarge-sub { font-size: 0.7rem; color: var(--cs-text3); }
+
 /* ── AI Assistant panel (Phase 2) ────────────────────────────── */
 .csai-panel { display: flex; flex-direction: column; height: 100%; min-height: 0; }
 .csai-header {
