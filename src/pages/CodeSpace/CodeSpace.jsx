@@ -593,7 +593,7 @@ function CodeSpaceInner() {
   function SidePanel() {
     if (activity === 'explorer') return (
       <CsFileExplorer
-        files={files} activeFile={activeTab} projectName={activeProj?.name}
+        files={files} activeFile={activeTab} projectName={activeProj?.name} projectId={activeProj?.id}
         onOpen={path => { openTab(path); setMobileSidebarOpen(false); setMobileView('editor') }}
         onNewFile={handleNewFile}
         onNewFolder={handleNewFolder}
