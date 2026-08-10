@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react'
 import { diffLines } from './cs-git.js'
 import { useGitHub } from './GitHubContext.jsx'
-import { listRepos, createRepo, pushFiles, cloneRepo } from './gh-push.js'
+import { listRepos, createRepo, pushFiles, cloneRepo, githubZipDownloadUrl } from './gh-push.js'
 import { getConfig, setConfig } from './cs-storage.js'
 
 function CommitItem({ commit, isHead }) {
@@ -81,6 +81,7 @@ function RepoPush({ files, projectId, authFetch, onImportProject }) {
   const [err, setErr]               = useState('')
   const [cloning, setCloning]       = useState(false)
   const [cloneProgress, setCloneProgress] = useState('')
+  const [tooLarge, setTooLarge]     = useState(null)
   const storeKey = `githubRepo:${projectId || 'default'}`
 
   useEffect(() => {
@@ -99,7 +100,7 @@ function RepoPush({ files, projectId, authFetch, onImportProject }) {
   }, [authFetch, storeKey])
 
   function selectRepo(repo) {
-    setSelected(repo); setResult(null); setErr('')
+    setSelected(repo); setResult(null); setErr(''); setTooLarge(null)
     setConfig(storeKey, { full_name: repo.full_name })
   }
 
@@ -117,7 +118,7 @@ function RepoPush({ files, projectId, authFetch, onImportProject }) {
 
   async function doClone() {
     if (!selected || cloning) return
-    setErr(''); setCloning(true)
+    setErr(''); setCloning(true); setTooLarge(null)
     try {
       const cloned = await cloneRepo(authFetch, {
         owner: selected.owner.login, repo: selected.name,
@@ -125,7 +126,13 @@ function RepoPush({ files, projectId, authFetch, onImportProject }) {
         onProgress: setCloneProgress,
       })
       await onImportProject?.(selected.name, cloned)
-    } catch (e2) { setErr(e2.message) }
+    } catch (e2) {
+      if (e2.tooLarge) {
+        setTooLarge({ fileCount: e2.fileCount, url: githubZipDownloadUrl(selected.owner.login, selected.name, selected.default_branch || 'main') })
+      } else {
+        setErr(e2.message)
+      }
+    }
     setCloning(false); setCloneProgress('')
   }
 
@@ -188,6 +195,15 @@ function RepoPush({ files, projectId, authFetch, onImportProject }) {
         <div className="csgit-push-success">
           ✓ Pushed {result.fileCount} file{result.fileCount === 1 ? '' : 's'}.{' '}
           <a href={result.url} target="_blank" rel="noreferrer">View commit on GitHub ↗</a>
+        </div>
+      )}
+      {tooLarge && (
+        <div className="csgit-push-toolarge">
+          <div>This repo has {tooLarge.fileCount} files — too many to import directly (max {150}).</div>
+          <a className="csgit-push-dlbtn" href={tooLarge.url} target="_blank" rel="noreferrer">⬇ Download ZIP from GitHub</a>
+          <div className="csgit-push-toolarge-sub">
+            Then in the Explorer tab (📁), tap <b>📦 Import ZIP</b> and pick the downloaded file — it opens as a new project, any size.
+          </div>
         </div>
       )}
       {err && <div className="csgit-github-error">⚠ {err}</div>}
@@ -492,9 +508,10 @@ export default function CsGitPanel({ files, git, projectName, projectId, onResto
             </div>
           )}
           <div className="csgit-github-note">
-            Push = one real commit for every changed file. Clone imports a repo as a new
-            project (your current work is never touched). Both talk directly to GitHub —
-            nothing passes through our servers.
+            Push = one real commit for every changed file. Clone imports a repo (up to 150
+            files) as a new project — bigger repos get a GitHub download link instead. Your
+            current work is never touched. Everything talks directly to GitHub — nothing
+            passes through our servers.
           </div>
         </div>
       )}
