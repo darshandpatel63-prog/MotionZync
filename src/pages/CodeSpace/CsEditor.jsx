@@ -1,7 +1,7 @@
 // ============================================================
 // CsEditor.jsx  –  Monaco Editor wrapper with full IDE features
 // ============================================================
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react'
 import { getMonacoLang } from './cs-filesystem.js'
 
 const MONACO_CDN = 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min'
@@ -87,7 +87,7 @@ function setupMonacoThemes() {
   })
 }
 
-export default function CsEditor({
+const CsEditor = forwardRef(function CsEditor({
   value,
   filename,
   onChange,
@@ -101,13 +101,21 @@ export default function CsEditor({
   diffMode = false,
   originalValue = '',
   className = '',
-}) {
+}, ref) {
   const containerRef = useRef(null)
   const editorRef    = useRef(null)
   const diffEditorRef = useRef(null)
   const valueRef     = useRef(value)
   const onChangeRef  = useRef(onChange)
   const onSaveRef    = useRef(onSave)
+
+  // Phase 4: lets CodeSpace.jsx trigger real Monaco actions (multi-cursor,
+  // etc.) from outside — e.g. the command palette or a toolbar button —
+  // without this component needing to know *why* it's being called.
+  useImperativeHandle(ref, () => ({
+    runAction: (id) => editorRef.current?.getAction(id)?.run(),
+    focus: () => editorRef.current?.focus(),
+  }), [])
 
   useEffect(() => { valueRef.current   = value },    [value])
   useEffect(() => { onChangeRef.current = onChange }, [onChange])
@@ -280,5 +288,6 @@ export default function CsEditor({
       style={{ width: '100%', height: '100%' }}
     />
   )
-                    }
-          
+})
+
+export default CsEditor
