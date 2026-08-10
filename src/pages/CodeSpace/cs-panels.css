@@ -210,8 +210,22 @@
 .csfe-node {
   display: flex; align-items: center; gap: 5px; padding: 3px 8px;
   cursor: pointer; user-select: none; transition: background 0.1s;
+  position: relative;
 }
 .csfe-node:hover { background: rgba(255,255,255,0.05); }
+/* Phase 5 — drag-to-reorder indicators */
+.csfe-drop-before::before,
+.csfe-drop-after::after {
+  content: ''; position: absolute; left: 6px; right: 6px; height: 2px;
+  background: #7c3aed; border-radius: 2px; pointer-events: none;
+  box-shadow: 0 0 5px rgba(124,58,237,0.8);
+}
+.csfe-drop-before::before { top: 0; }
+.csfe-drop-after::after   { bottom: 0; }
+.csfe-drop-inside {
+  background: rgba(124,58,237,0.14) !important;
+  outline: 1px dashed rgba(124,58,237,0.55); outline-offset: -1px;
+}
 .csfe-active { background: rgba(124,58,237,0.12) !important; }
 .csfe-active .csfe-name { color: #e2e8f0 !important; }
 .csfe-chevron { color: #4b5563; font-size: 0.65rem; width: 10px; flex-shrink: 0; }
