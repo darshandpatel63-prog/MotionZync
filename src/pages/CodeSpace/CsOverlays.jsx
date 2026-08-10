@@ -21,6 +21,11 @@ export function CommandPalette({ files, onClose, onOpenFile, onAction }) {
     { id: 'share',    label: 'Share Project',     icon: '🔗', shortcut: '' },
     { id: 'settings', label: 'Open Settings',     icon: '⚙️', shortcut: '' },
     { id: 'split',    label: 'Split Editor',      icon: '⬜', shortcut: '' },
+    { id: 'format',   label: 'Format Document',   icon: '✨', shortcut: '' },
+    { id: 'cursor-above', label: 'Add Cursor Above',           icon: '↖', shortcut: '' },
+    { id: 'cursor-below', label: 'Add Cursor Below',           icon: '↙', shortcut: '' },
+    { id: 'select-next',  label: 'Select Next Occurrence',     icon: '⇥', shortcut: '' },
+    { id: 'select-all-occurrences', label: 'Select All Occurrences', icon: '⇶', shortcut: '' },
   ]
 
   const lq        = query.toLowerCase()
@@ -237,32 +242,54 @@ export function EnvModal({ files, onChange, onClose }) {
 }
 
 // ── Search Panel ──────────────────────────────────────────────
-export function SearchPanel({ files, onOpen }) {
+export function SearchPanel({ files, onOpen, onReplaceAll }) {
   const [query, setQuery] = useState('')
+  const [replaceText, setReplaceText] = useState('')
+  const [showReplace, setShowReplace] = useState(false)
+  const [caseSensitive, setCaseSensitive] = useState(false)
   const [results, setResults] = useState([])
 
   useEffect(() => {
     if (!query.trim()) { setResults([]); return }
-    const lq    = query.toLowerCase()
+    const q = caseSensitive ? query : query.toLowerCase()
     const found = []
     for (const [path, content] of Object.entries(files)) {
       content.split('\n').forEach((line, i) => {
-        if (line.toLowerCase().includes(lq)) {
-          found.push({ path, lineNo: i + 1, preview: line.trim().slice(0, 80) })
-        }
+        const hay = caseSensitive ? line : line.toLowerCase()
+        if (hay.includes(q)) found.push({ path, lineNo: i + 1, preview: line.trim().slice(0, 80) })
       })
     }
-    setResults(found.slice(0, 100))
-  }, [query, files])
+    setResults(found.slice(0, 200))
+  }, [query, files, caseSensitive])
+
+  const fileCount = new Set(results.map(r => r.path)).size
+
+  function doReplaceAll() {
+    if (!query.trim() || !results.length) return
+    if (!window.confirm(`Replace ${results.length} match${results.length === 1 ? '' : 'es'} in ${fileCount} file${fileCount === 1 ? '' : 's'}? This can't be undone.`)) return
+    onReplaceAll?.(query, replaceText, caseSensitive)
+  }
 
   return (
     <div className="cs2-search-panel">
       <div className="csfe-header">
         <span className="csfe-title">SEARCH</span>
+        <button className="cs2-search-toggle" onClick={() => setShowReplace(s => !s)} title="Toggle replace">⇄ Replace</button>
       </div>
-      <div style={{ padding: '8px' }}>
+      <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
         <input className="csfe-search" placeholder="Search in files..."
           value={query} onChange={e => setQuery(e.target.value)} style={{ width: '100%' }} />
+        {showReplace && (
+          <div className="cs2-search-replacerow">
+            <input className="csfe-search" placeholder="Replace with..."
+              value={replaceText} onChange={e => setReplaceText(e.target.value)} style={{ width: '100%' }} />
+            <button className="cs2-search-replaceall" onClick={doReplaceAll} disabled={!results.length}>Replace All</button>
+          </div>
+        )}
+        <label className="cs2-search-case">
+          <input type="checkbox" checked={caseSensitive} onChange={e => setCaseSensitive(e.target.checked)} /> Case sensitive
+        </label>
+        {query && <div className="cs2-search-summary">{results.length} result{results.length === 1 ? '' : 's'} in {fileCount} file{fileCount === 1 ? '' : 's'}</div>}
       </div>
       <div className="cs2-search-results">
         {results.length === 0 && query && <div className="csfe-empty">No results found</div>}
