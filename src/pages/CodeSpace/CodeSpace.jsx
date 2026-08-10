@@ -87,6 +87,7 @@ function CodeSpaceInner() {
   const [previewWidth, setPreviewWidth] = useState(420)
   const widthSaveTimer = useRef(null)
   const [booted, setBooted] = useState(false)
+  const mainEditorRef = useRef(null)
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [mobileView, setMobileView] = useState('editor') // 'editor' | 'preview' — mobile-only
 
@@ -522,22 +523,56 @@ function CodeSpaceInner() {
       settings: () => setSettings(true),
       split:    () => setSplit(p => !p),
       format:   handleFormatDocument,
+      'cursor-above':  () => mainEditorRef.current?.runAction('editor.action.insertCursorAbove'),
+      'cursor-below':  () => mainEditorRef.current?.runAction('editor.action.insertCursorBelow'),
+      'select-next':   () => mainEditorRef.current?.runAction('editor.action.addSelectionToNextFindMatch'),
+      'select-all-occurrences': () => mainEditorRef.current?.runAction('editor.action.selectHighlights'),
     }
     MAP[id]?.()
   }
 
-  function handleFormatDocument() {
+  const FORMAT_PARSERS = {
+    js: 'babel', jsx: 'babel', mjs: 'babel', cjs: 'babel',
+    ts: 'babel-ts', tsx: 'babel-ts',
+    json: 'json', json5: 'json5', jsonc: 'json5',
+    css: 'css', scss: 'scss', less: 'less',
+    html: 'html', htm: 'html', vue: 'vue',
+    md: 'markdown', markdown: 'markdown',
+  }
+  async function loadPrettier() {
+    if (window.__csPrettier) return window.__csPrettier
+    const base = 'https://unpkg.com/prettier@3'
+    const [prettier, babel, estree, postcss, html, markdown] = await Promise.all([
+      import(/* @vite-ignore */ `${base}/standalone.mjs`),
+      import(/* @vite-ignore */ `${base}/plugins/babel.mjs`),
+      import(/* @vite-ignore */ `${base}/plugins/estree.mjs`),
+      import(/* @vite-ignore */ `${base}/plugins/postcss.mjs`),
+      import(/* @vite-ignore */ `${base}/plugins/html.mjs`),
+      import(/* @vite-ignore */ `${base}/plugins/markdown.mjs`),
+    ])
+    window.__csPrettier = { prettier, plugins: [babel, estree, postcss, html, markdown] }
+    return window.__csPrettier
+  }
+  async function handleFormatDocument() {
     if (!activeTab) return
-    if (!/\.json$/i.test(activeTab)) {
-      notify('Format Document currently supports JSON — more languages coming in Phase 4.1', 'info')
-      return
-    }
+    const ext = activeTab.split('.').pop().toLowerCase()
+    const parser = FORMAT_PARSERS[ext]
+    if (!parser) { notify(`Format Document doesn't support .${ext} files yet`, 'info'); return }
     try {
-      const formatted = JSON.stringify(JSON.parse(files[activeTab] || '{}'), null, 2)
+      const { prettier, plugins } = await loadPrettier()
+      const formatted = await prettier.format(files[activeTab] || '', { parser, plugins })
       handleFileChange(activeTab, formatted)
       notify('Formatted', 'success')
-    } catch {
-      notify('Could not format — check for a JSON syntax error', 'error')
+    } catch (e) {
+      // JSON at least always has a dependency-free fallback
+      if (parser === 'json') {
+        try {
+          handleFileChange(activeTab, JSON.stringify(JSON.parse(files[activeTab] || '{}'), null, 2))
+          notify('Formatted (fallback)', 'success')
+          return
+        } catch {}
+      }
+      notify(`Could not format — ${e.message?.slice(0, 90) || 'syntax error'}`, 'error')
     }
   }
 
@@ -677,7 +712,7 @@ function CodeSpaceInner() {
                       setSplit(p => !p)
                       if (!splitTab) setSplitTab(openTabs.find(t => t.path !== activeTab)?.path || null)
                     }} />
-                    <CsEditor key={activeTab} value={activeContent} filename={activeTab}
+                    <CsEditor ref={mainEditorRef} key={activeTab} value={activeContent} filename={activeTab}
                       onChange={v => handleFileChange(activeTab, v)} onSave={doSave}
                       theme={settings.theme} fontSize={settings.fontSize}
                       wordWrap={settings.wordWrap} minimap={settings.minimap}
