@@ -1,11 +1,22 @@
 // ============================================================
 // CsFileExplorer.jsx  –  VS Code-style file tree
 // Features: inline create, delete, rename, drag-drop move,
-//           drag-drop reorder (manual per-folder sort), ZIP import
+//           drag-drop reorder (manual per-folder sort),
+//           multi-select (bulk delete / bulk move), ZIP import
 // ============================================================
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { getLangFromExt, buildTree } from './cs-filesystem.js'
 import { getConfig, setConfig } from './cs-storage.js'
+import ignore from 'ignore'
+
+// Phase 5.3 — always-ignored noise, e.g. from a ZIP import that included
+// build output. A .gitignore committed in the project (if any) is layered
+// on top of this via the 'ignore' package (spec-correct gitignore matching,
+// safer than a hand-rolled glob matcher).
+const DEFAULT_IGNORES = [
+  'node_modules/', '.git/', 'dist/', 'build/', '.next/', 'out/',
+  'coverage/', '.DS_Store', '*.log',
+]
 
 function FileIcon({ filename }) {
   const lang = getLangFromExt(filename)
@@ -54,7 +65,6 @@ function CtxMenu({ x, y, node, onClose, onNewFile, onNewFolder, onRename, onDele
     return () => document.removeEventListener('mousedown', handler)
   }, [onClose])
 
-  // Keep menu inside viewport
   const menuX = Math.min(x, window.innerWidth  - 170)
   const menuY = Math.min(y, window.innerHeight - 220)
 
@@ -76,12 +86,7 @@ function CtxMenu({ x, y, node, onClose, onNewFile, onNewFolder, onRename, onDele
   )
 }
 
-// ── Manual-order sort helpers (Phase 5) ─────────────────────────
-// Children render alphabetically (dirs before files) until the user
-// drags something within a folder — at that point that folder's order
-// is captured and persisted (per project), and used from then on.
-// Anything not yet in the saved order (new files, etc.) is appended
-// at the end of its type group, alphabetically among themselves.
+// ── Manual-order sort helpers (Phase 5.1) ────────────────────────
 function sortWithOrder(children, parentPath, orderMap) {
   const saved = orderMap[parentPath] || []
   return Object.values(children).sort((a, b) => {
@@ -103,9 +108,6 @@ function findNodeByPath(root, path) {
   return node
 }
 
-// Where on a row the pointer is determines the drop action. Folders get
-// a middle "inside" band (existing drop-to-move-into behaviour); files
-// only ever split top/bottom since they can't contain anything.
 function readDropZone(e, isDir) {
   const rect  = e.currentTarget.getBoundingClientRect()
   const ratio = (e.clientY - rect.top) / rect.height
@@ -117,6 +119,15 @@ function readDropZone(e, isDir) {
   return ratio < 0.5 ? 'before' : 'after'
 }
 
+// Collects every folder path in the tree (root included, as '') — used
+// to populate the bulk-move destination picker.
+function collectFolderPaths(node, path, out) {
+  out.push(path)
+  Object.values(node.children || {}).forEach(child => {
+    if (child.type === 'dir') collectFolderPaths(child, child.path, out)
+  })
+}
+
 // ── Single tree node ──────────────────────────────────────────
 function TreeNode({
   node, depth, activeFile, expanded, onToggle, order,
@@ -124,6 +135,7 @@ function TreeNode({
   creating, onCreateConfirm, onCreateCancel,
   dragging, onDragStart, onDragEnd, onDropInto, onReorder,
   dropZone, onDragOverNode,
+  selectMode, selected, onToggleSelect,
   clipboard, renamingPath, onRenameConfirm, onRenameCancel,
   onCtxMenu,
 }) {
@@ -131,6 +143,7 @@ function TreeNode({
   const isActive = !isDir && activeFile === node.path
   const isOpen   = expanded[node.path]
   const isRenaming = renamingPath === node.path
+  const isChecked  = selected?.has(node.path)
 
   const [renameVal, setRenameVal] = useState(node.name)
   const renameRef = useRef(null)
@@ -138,23 +151,28 @@ function TreeNode({
 
   const indent = depth * 14 + 6
 
-  const isDropTarget = dragging && dragging !== node.path && dropZone?.path === node.path
+  const isDropTarget = !selectMode && dragging && dragging !== node.path && dropZone?.path === node.path
   const dropClass = !isDropTarget ? '' :
     dropZone.position === 'inside' ? ' csfe-drop-inside' :
     dropZone.position === 'before' ? ' csfe-drop-before' : ' csfe-drop-after'
 
   function handleDragOver(e) {
-    if (!dragging || dragging === node.path) return
+    if (selectMode || !dragging || dragging === node.path) return
     e.preventDefault(); e.dataTransfer.dropEffect = 'move'
     onDragOverNode(node.path, readDropZone(e, isDir))
   }
 
   function handleDropEvent(e) {
     e.preventDefault()
-    if (!dragging || dragging === node.path) return
+    if (selectMode || !dragging || dragging === node.path) return
     const zone = readDropZone(e, isDir)
     if (zone === 'inside') onDropInto(node.path)
     else onReorder(dragging, node.path, zone)
+  }
+
+  function handleRowClick() {
+    if (selectMode) { onToggleSelect(node.path); return }
+    isDir ? onToggle(node.path) : onOpen(node.path)
   }
 
   const children = isDir ? sortWithOrder(node.children || {}, node.path, order) : []
@@ -162,30 +180,31 @@ function TreeNode({
   return (
     <>
       <div
-        className={`csfe-node ${isActive ? 'csfe-active' : ''} ${isDir ? 'csfe-dir' : ''}${dropClass}`}
+        className={`csfe-node ${isActive ? 'csfe-active' : ''} ${isDir ? 'csfe-dir' : ''}${dropClass}${isChecked ? ' csfe-selected' : ''}`}
         style={{ paddingLeft: indent }}
-        onClick={() => isDir ? onToggle(node.path) : onOpen(node.path)}
-        onContextMenu={e => { e.preventDefault(); onCtxMenu(e, node) }}
-        draggable={!isRenaming}
+        onClick={handleRowClick}
+        onContextMenu={e => { if (selectMode) return; e.preventDefault(); onCtxMenu(e, node) }}
+        draggable={!isRenaming && !selectMode}
         onDragStart={e => { e.dataTransfer.effectAllowed = 'move'; onDragStart(node.path) }}
         onDragEnd={onDragEnd}
         onDragOver={handleDragOver}
         onDrop={handleDropEvent}
         title={node.path}
       >
-        {/* Chevron / spacer */}
+        {selectMode && (
+          <span className="csfe-select-box">{isChecked ? '☑' : '☐'}</span>
+        )}
+
         {isDir
           ? <span className="csfe-chevron">{isOpen ? '▾' : '▸'}</span>
           : <span className="csfe-file-spacer" />
         }
 
-        {/* Icon */}
         {isDir
           ? <span style={{ fontSize: '0.8rem' }}>{isOpen ? '📂' : '📁'}</span>
           : <FileIcon filename={node.name} />
         }
 
-        {/* Name or rename input */}
         {isRenaming ? (
           <input
             ref={renameRef}
@@ -201,13 +220,12 @@ function TreeNode({
             onClick={e => e.stopPropagation()}
           />
         ) : (
-          <span className="csfe-name" onDoubleClick={e => { e.stopPropagation(); onRename(node.path) }}>
+          <span className="csfe-name" onDoubleClick={e => { if (selectMode) return; e.stopPropagation(); onRename(node.path) }}>
             {node.name}
           </span>
         )}
 
-        {/* Inline action buttons on hover */}
-        {!isRenaming && (
+        {!isRenaming && !selectMode && (
           <span className="csfe-hover-actions" onClick={e => e.stopPropagation()}>
             {isDir && <button className="csfe-act-btn" title="New File" onClick={() => onNewFile(node.path)}>📄</button>}
             {isDir && <button className="csfe-act-btn" title="New Folder" onClick={() => onNewFolder(node.path)}>📁</button>}
@@ -216,7 +234,6 @@ function TreeNode({
         )}
       </div>
 
-      {/* Children when open */}
       {isDir && isOpen && (
         <>
           {children.map(child => (
@@ -243,6 +260,9 @@ function TreeNode({
               onReorder={onReorder}
               dropZone={dropZone}
               onDragOverNode={onDragOverNode}
+              selectMode={selectMode}
+              selected={selected}
+              onToggleSelect={onToggleSelect}
               clipboard={clipboard}
               renamingPath={renamingPath}
               onRenameConfirm={onRenameConfirm}
@@ -250,7 +270,6 @@ function TreeNode({
               onCtxMenu={onCtxMenu}
             />
           ))}
-          {/* Inline creation input inside this folder */}
           {creating && creating.dir === node.path && (
             <InlineInput
               type={creating.type}
@@ -272,19 +291,42 @@ export default function CsFileExplorer({
 }) {
   const [expanded,    setExpanded]   = useState({ '': true })
   const [search,      setSearch]     = useState('')
-  const [creating,    setCreating]   = useState(null)   // { dir, type }
+  const [creating,    setCreating]   = useState(null)
   const [renamingPath,setRenaming]   = useState(null)
   const [dragging,    setDragging]   = useState(null)
-  const [dropZone,    setDropZone]   = useState(null)   // { path, position: 'before'|'inside'|'after' }
-  const [order,       setOrder]      = useState({})     // { [parentPath]: [childName, ...] }
-  const [clipboard,   setClipboard]  = useState(null)   // { path, mode: 'cut' }
-  const [ctx,         setCtx]        = useState(null)   // { x, y, node }
+  const [dropZone,    setDropZone]   = useState(null)
+  const [order,       setOrder]      = useState({})
+  const [clipboard,   setClipboard]  = useState(null)
+  const [ctx,         setCtx]        = useState(null)
+  const [selectMode,  setSelectMode] = useState(false)
+  const [selected,    setSelected]   = useState(() => new Set())
+  const [movePicker,  setMovePicker] = useState(false)
+  const [moveTarget,  setMoveTarget] = useState('__none__') // sentinel: '' is a real value (project root)
+  const [showIgnored, setShowIgnored] = useState(false)
   const fileInputRef  = useRef(null)
   const zipInputRef   = useRef(null)
 
-  const tree = buildTree(files || {})
+  // Phase 5.3: baseline noise patterns + the project's own .gitignore (if any)
+  const gitignoreText = files?.['.gitignore'] || ''
+  const ig = useMemo(() => {
+    const inst = ignore()
+    inst.add(DEFAULT_IGNORES)
+    if (gitignoreText) inst.add(gitignoreText)
+    return inst
+  }, [gitignoreText])
 
-  // Phase 5: load this project's manual sort order, and keep it saved
+  const { visibleFiles, ignoredCount } = useMemo(() => {
+    const visible = {}
+    let hidden = 0
+    for (const path of Object.keys(files || {})) {
+      if (path !== '.gitignore' && ig.ignores(path)) hidden++
+      else visible[path] = files[path]
+    }
+    return { visibleFiles: showIgnored ? files : visible, ignoredCount: hidden }
+  }, [files, ig, showIgnored])
+
+  const tree = buildTree(visibleFiles || {})
+
   useEffect(() => {
     if (!projectId) { setOrder({}); return }
     let cancelled = false
@@ -301,7 +343,6 @@ export default function CsFileExplorer({
 
   // ── Create ──────────────────────────────────────────────────
   function startCreate(dir, type) {
-    // Auto-expand the target dir
     setExpanded(p => ({ ...p, [dir]: true }))
     setCreating({ dir, type })
   }
@@ -321,7 +362,6 @@ export default function CsFileExplorer({
   function startRename(path) { setRenaming(path) }
 
   function handleRenameConfirm(oldPath, newName) {
-    // Keep this file's spot in its folder's manual order, if it has one
     const parentPath = oldPath.includes('/') ? oldPath.slice(0, oldPath.lastIndexOf('/')) : ''
     const oldName     = oldPath.split('/').pop()
     if (order[parentPath]?.includes(oldName)) {
@@ -337,22 +377,18 @@ export default function CsFileExplorer({
     onDelete(path, isDir)
   }
 
-  // ── Drag & Drop: move into a folder (existing behaviour) ───────
+  // ── Drag & Drop: move into a folder (existing) ───────────────
   function handleDropInto(targetDir) {
     if (!dragging || dragging === targetDir) return
-    if (dragging.startsWith(targetDir + '/')) return  // Can't move into own child
+    if (dragging.startsWith(targetDir + '/')) return
     onMoveFile(dragging, targetDir)
     setDragging(null)
   }
 
-  // ── Drag & Drop: reorder among siblings (Phase 5, new) ──────────
-  // Dropping on the top/bottom edge of a row places the dragged item
-  // right before/after it. If the drop target lives in a different
-  // folder, this also performs the move — so dragging into a new
-  // folder and dropping it in a specific spot works in one motion.
+  // ── Drag & Drop: reorder among siblings (Phase 5.1) ─────────────
   function handleReorder(draggedPath, targetPath, position) {
     if (!draggedPath || draggedPath === targetPath) return
-    if (targetPath.startsWith(draggedPath + '/')) return  // Can't drop into own descendant
+    if (targetPath.startsWith(draggedPath + '/')) return
 
     const draggedName   = draggedPath.split('/').pop()
     const draggedParent = draggedPath.includes('/') ? draggedPath.slice(0, draggedPath.lastIndexOf('/')) : ''
@@ -372,6 +408,63 @@ export default function CsFileExplorer({
     persistOrder({ ...order, [targetParent]: seq })
     if (draggedParent !== targetParent) onMoveFile(draggedPath, targetParent)
     setDragging(null)
+  }
+
+  // ── Multi-select (Phase 5.2) ─────────────────────────────────────
+  // Explicit "Select" toggle rather than long-press: long-press would
+  // race against the drag-start gesture on rows that are already
+  // draggable (Phase 5.1), which is a known source of flaky touch
+  // behaviour. A plain toggle button keeps the two gestures from ever
+  // competing for the same tap.
+  function toggleSelectMode() {
+    setSelectMode(m => !m)
+    setSelected(new Set())
+    setMovePicker(false)
+    setCreating(null)
+    setRenaming(null)
+  }
+
+  function toggleSelected(path) {
+    setSelected(prev => {
+      const next = new Set(prev)
+      next.has(path) ? next.delete(path) : next.add(path)
+      return next
+    })
+  }
+
+  // Selecting a folder implicitly covers everything inside it, so a
+  // selected descendant of another selected folder is dropped before
+  // any bulk action runs — otherwise it'd be processed twice.
+  function topLevelSelection() {
+    const arr = [...selected]
+    return arr.filter(p => !arr.some(other => other !== p && p.startsWith(other + '/')))
+  }
+
+  function handleBulkDelete() {
+    const items = topLevelSelection()
+    if (items.length === 0) return
+    if (!window.confirm(`Delete ${items.length} item(s)? This can't be undone.`)) return
+    items.forEach(path => {
+      const n = findNodeByPath(tree, path)
+      onDelete(path, n?.type === 'dir')
+    })
+    toggleSelectMode()
+  }
+
+  function openMovePicker() {
+    if (topLevelSelection().length === 0) return
+    setMoveTarget('__none__')
+    setMovePicker(true)
+  }
+
+  function confirmBulkMove() {
+    const items = topLevelSelection()
+    items.forEach(path => {
+      if (moveTarget === path || moveTarget.startsWith(path + '/')) return
+      onMoveFile(path, moveTarget)
+    })
+    setMovePicker(false)
+    toggleSelectMode()
   }
 
   // ── Cut / Paste (keyboard move) ──────────────────────────────
@@ -399,15 +492,24 @@ export default function CsFileExplorer({
   // ── ZIP import ────────────────────────────────────────────────
   function handleZipImport(e) {
     const file = e.target.files[0]
-    if (file) onUpload('__zip__', file)   // CodeSpace.jsx handles __zip__
+    if (file) onUpload('__zip__', file)
     e.target.value = ''
   }
 
   // ── Search results ────────────────────────────────────────────
-  const allPaths = Object.keys(files || {})
+  const allPaths = Object.keys(visibleFiles || {})
   const filtered = search ? allPaths.filter(p => p.toLowerCase().includes(search.toLowerCase())) : null
 
   const rootChildren = sortWithOrder(tree.children || {}, '', order)
+
+  // Valid destinations for bulk move: every folder except ones that are
+  // themselves selected, or nested inside a selected folder.
+  let moveTargets = []
+  if (movePicker) {
+    collectFolderPaths(tree, '', moveTargets)
+    const sel = new Set(topLevelSelection())
+    moveTargets = moveTargets.filter(f => !sel.has(f) && ![...sel].some(s => f.startsWith(s + '/')))
+  }
 
   const sharedProps = {
     activeFile, expanded, onToggle: toggleDir, order,
@@ -419,6 +521,7 @@ export default function CsFileExplorer({
     dragging, onDragStart: setDragging, onDragEnd: () => { setDragging(null); setDropZone(null) },
     onDropInto: handleDropInto, onReorder: handleReorder,
     dropZone, onDragOverNode: (path, position) => setDropZone({ path, position }),
+    selectMode, selected, onToggleSelect: toggleSelected,
     clipboard, renamingPath, onRenameConfirm: handleRenameConfirm, onRenameCancel: () => setRenaming(null),
     onCtxMenu: showCtx,
   }
@@ -433,8 +536,28 @@ export default function CsFileExplorer({
           <button className="csfe-icon-btn" title="New Folder"  onClick={() => startCreate('', 'folder')}>📁</button>
           <button className="csfe-icon-btn" title="Upload Files" onClick={() => fileInputRef.current?.click()}>⬆️</button>
           <button className="csfe-icon-btn" title="Import ZIP"  onClick={() => zipInputRef.current?.click()}>📦</button>
+          <button className={`csfe-icon-btn${selectMode ? ' csfe-icon-btn-active' : ''}`} title="Select" onClick={toggleSelectMode}>☑️</button>
+          {ignoredCount > 0 && (
+            <button className={`csfe-icon-btn csfe-icon-btn-badge${showIgnored ? ' csfe-icon-btn-active' : ''}`}
+              title={showIgnored ? 'Hide ignored files again' : `${ignoredCount} files hidden (node_modules, dist, .gitignore, …) — tap to show`}
+              onClick={() => setShowIgnored(s => !s)}>
+              👁️{!showIgnored && <span className="csfe-badge">{ignoredCount}</span>}
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Bulk-select action bar */}
+      {selectMode && (
+        <div className="csfe-select-bar">
+          <span className="csfe-select-count">{selected.size} selected</span>
+          <div className="csfe-select-bar-actions">
+            <button className="csfe-select-btn" disabled={selected.size === 0} onClick={openMovePicker}>Move</button>
+            <button className="csfe-select-btn csfe-select-btn-danger" disabled={selected.size === 0} onClick={handleBulkDelete}>Delete</button>
+            <button className="csfe-select-btn" onClick={toggleSelectMode}>✕ Cancel</button>
+          </div>
+        </div>
+      )}
 
       {/* Search */}
       <div className="csfe-search-wrap">
@@ -459,9 +582,10 @@ export default function CsFileExplorer({
             ? <div className="csfe-empty">No files found</div>
             : filtered.map(path => (
               <div key={path}
-                className={`csfe-node csfe-file ${activeFile === path ? 'csfe-active' : ''}`}
+                className={`csfe-node csfe-file ${activeFile === path ? 'csfe-active' : ''}${selected.has(path) ? ' csfe-selected' : ''}`}
                 style={{ paddingLeft: 12 }}
-                onClick={() => onOpen(path)}>
+                onClick={() => selectMode ? toggleSelected(path) : onOpen(path)}>
+                {selectMode && <span className="csfe-select-box">{selected.has(path) ? '☑' : '☐'}</span>}
                 <span className="csfe-file-spacer" />
                 <FileIcon filename={path.split('/').pop()} />
                 <span className="csfe-name">{path}</span>
@@ -472,7 +596,6 @@ export default function CsFileExplorer({
             {expanded[''] && rootChildren.map(child => (
               <TreeNode key={child.path || child.name} node={child} depth={0} {...sharedProps} />
             ))}
-            {/* Root level inline creation */}
             {creating && creating.dir === '' && (
               <InlineInput type={creating.type} depth={0}
                 onConfirm={name => handleCreateConfirm('', name, creating.type)}
@@ -490,6 +613,25 @@ export default function CsFileExplorer({
           </div>
         )}
       </div>
+
+      {/* Bulk-move destination picker */}
+      {movePicker && (
+        <div className="csfe-modal-overlay" onClick={() => setMovePicker(false)}>
+          <div className="csfe-modal" onClick={e => e.stopPropagation()}>
+            <div className="csfe-modal-title">Move {topLevelSelection().length} item(s) to:</div>
+            <select className="csfe-modal-select" value={moveTarget} onChange={e => setMoveTarget(e.target.value)}>
+              <option value="__none__" disabled>Choose a folder…</option>
+              {moveTargets.map(f => (
+                <option key={f || '__root__'} value={f}>{f === '' ? '/ (project root)' : f}</option>
+              ))}
+            </select>
+            <div className="csfe-modal-actions">
+              <button className="csfe-modal-btn" onClick={() => setMovePicker(false)}>Cancel</button>
+              <button className="csfe-modal-btn csfe-modal-primary" disabled={moveTarget === '__none__'} onClick={confirmBulkMove}>Move</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Context menu */}
       {ctx && (
