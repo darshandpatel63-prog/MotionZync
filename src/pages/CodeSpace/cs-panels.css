@@ -226,6 +226,57 @@
   background: rgba(124,58,237,0.14) !important;
   outline: 1px dashed rgba(124,58,237,0.55); outline-offset: -1px;
 }
+
+/* Phase 5.2 — multi-select */
+.csfe-icon-btn-active { background: rgba(124,58,237,0.25); color: #c4b5fd; }
+.csfe-icon-btn-badge { position: relative; }
+.csfe-badge {
+  position: absolute; top: -3px; right: -3px; background: #7c3aed; color: #fff;
+  font-size: 0.55rem; line-height: 1; padding: 2px 3px; border-radius: 6px; min-width: 10px;
+}
+.csfe-select-box {
+  flex-shrink: 0; width: 14px; text-align: center; font-size: 0.85rem;
+  color: #7c3aed; line-height: 1;
+}
+.csfe-selected { background: rgba(124,58,237,0.12); }
+.csfe-select-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px; background: rgba(124,58,237,0.1);
+  border-bottom: 1px solid rgba(124,58,237,0.3);
+  font-size: 0.78rem; color: #c4b5fd;
+}
+.csfe-select-count { font-weight: 600; }
+.csfe-select-bar-actions { display: flex; gap: 6px; }
+.csfe-select-btn {
+  background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; padding: 4px 10px; font-size: 0.75rem; cursor: pointer;
+}
+.csfe-select-btn:hover:not(:disabled) { background: rgba(255,255,255,0.12); }
+.csfe-select-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.csfe-select-btn-danger { color: #fca5a5; border-color: rgba(248,113,113,0.35); }
+.csfe-select-btn-danger:hover:not(:disabled) { background: rgba(248,113,113,0.12); }
+
+/* Phase 5.2 — bulk-move destination modal */
+.csfe-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center; z-index: 200;
+}
+.csfe-modal {
+  background: #1e2028; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+  padding: 16px; width: min(320px, 90vw); box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+.csfe-modal-title { font-size: 0.85rem; color: #e2e8f0; margin-bottom: 10px; }
+.csfe-modal-select {
+  width: 100%; background: #14151b; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px; padding: 8px; font-size: 0.8rem; margin-bottom: 14px;
+}
+.csfe-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.csfe-modal-btn {
+  background: rgba(255,255,255,0.06); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; padding: 6px 14px; font-size: 0.8rem; cursor: pointer;
+}
+.csfe-modal-primary { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+.csfe-modal-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 .csfe-active { background: rgba(124,58,237,0.12) !important; }
 .csfe-active .csfe-name { color: #e2e8f0 !important; }
 .csfe-chevron { color: #4b5563; font-size: 0.65rem; width: 10px; flex-shrink: 0; }
