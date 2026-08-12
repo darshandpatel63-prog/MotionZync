@@ -45,10 +45,6 @@
 .admin-save-btn.edit-mode{background:linear-gradient(135deg,#f59e0b,#ef4444);}
 .admin-save-hint{font-size:0.8rem;color:var(--text-muted);}
 .admin-list-section{margin-top:1rem;}
-/* ─── NEW: Animations list header + Export All (ZIP) button ─── */
-.admin-list-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.6rem;}
-.export-all-btn{font-size:0.82rem;padding:0.5rem 1.1rem;white-space:nowrap;display:inline-flex;align-items:center;gap:0.35rem;}
-.export-all-btn:disabled{opacity:0.65;cursor:not-allowed;transform:none;}
 .admin-anim-list{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.75rem;}
 .admin-anim-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:0.7rem 1rem;transition:border-color 0.2s;}
 .admin-anim-item:hover{border-color:var(--accent-primary);}
