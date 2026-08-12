@@ -10,6 +10,7 @@ import {
   getChangelogs, saveChangelog, deleteChangelog,
 } from '../../hooks/useAnimations.js'
 import { getSiteContent, setSiteContent, defaultContent } from '../../hooks/useSiteContent.js'
+import { exportAnimationsAsZip } from '../../utils/exportAnimations.js'
 import './Admin.css'
 
 function GoogleIcon() {
@@ -36,6 +37,8 @@ export default function Admin() {
   const [categories, setCategories] = useState([])
   const [status,     setStatus]     = useState(null)
   const [saving,     setSaving]     = useState(false)
+  const [exporting,      setExporting]      = useState(false)  // ✅ NEW: Export All (ZIP)
+  const [exportProgress, setExportProgress] = useState(0)      // ✅ NEW
 
   // Categories
   const [catEdit,  setCatEdit]  = useState(null)
@@ -134,6 +137,20 @@ export default function Admin() {
     await deleteAnimation(docId)
     setAnimations(prev=>prev.filter(a=>a.docId!==docId))
     if (editDocId===docId) resetAnim()
+  }
+  // ✅ NEW: One-click export — ALL animations (name, category, description,
+  // code, tags, dates, etc.) bundled into a single downloadable ZIP.
+  async function handleExportAll() {
+    if (animations.length===0) { setStatus({type:'err',msg:'Export karva mate koi animation nathi!'}); return }
+    setExporting(true); setExportProgress(0)
+    try {
+      const res = await exportAnimationsAsZip(animations, { onProgress:setExportProgress })
+      setStatus({ type:'ok', msg:`✅ ${res.count} animations ZIP thai gai! (${res.filename})` })
+    } catch(e) {
+      setStatus({ type:'err', msg:'Export error: '+e.message })
+    }
+    setExporting(false); setExportProgress(0)
+    setTimeout(()=>setStatus(null), 4000)
   }
 
   // ── Category handlers ────────────────────────────────────────
@@ -313,7 +330,17 @@ export default function Admin() {
             <span className="admin-save-hint">Firestore ma save thay — turant live!</span>
           </div>
           <div className="admin-list-section">
-            <h2 className="section-label">📦 All Animations ({animations.length})</h2>
+            <div className="admin-list-header">
+              <h2 className="section-label" style={{marginBottom:0}}>📦 All Animations ({animations.length})</h2>
+              <button
+                className="btn-primary export-all-btn"
+                onClick={handleExportAll}
+                disabled={exporting || animations.length===0}
+                title="Badhi animations (name, category, description, code) ek ZIP ma download karo"
+              >
+                {exporting ? `⏳ Zipping... ${exportProgress}%` : '⬇️ Export All (ZIP)'}
+              </button>
+            </div>
             <div className="admin-anim-list">
               {animations.map(a=>(
                 <div className={`admin-anim-item ${editDocId===a.docId?'editing':''}`} key={a.docId}>
