@@ -1,0 +1,33 @@
+{
+  "docId": "lAUvHf5L7hvwxbUD4Vs4",
+  "slug": "neon-progress-loader",
+  "title": "Neon Progress Loader",
+  "description": "Ultra Max Premium Pro Super glowing progress bar that dynamically loads and fits perfectly on dark backgrounds.",
+  "category": "Loader",
+  "previewBg": "#0a0a0f",
+  "tags": [
+    "neon",
+    "progress",
+    "loader",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "glowing",
+    "bar",
+    "that",
+    "dynamically",
+    "loads",
+    "and",
+    "fits",
+    "perfectly",
+    "on",
+    "dark",
+    "backgrounds"
+  ],
+  "cssCode": ".loader-bg { \n  width: 200px; height: 10px; \n  background: #222; border-radius: 20px; \n  overflow: hidden; \n  box-shadow: 0 0 10px #000; \n}\n.loader-bar { \n  height: 100%; width: 50%; \n  background: linear-gradient(90deg, #00f2fe, #4facfe); \n  box-shadow: 0 0 15px #00f2fe; \n  animation: loadAnim 2s infinite ease-in-out; \n  border-radius: 20px; \n}\n@keyframes loadAnim { \n  0% { transform: translateX(-100%); } \n  100% { transform: translateX(200%); } \n}",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst loaderBg = document.createElement('div');\nloaderBg.className = 'loader-bg';\nconst loaderBar = document.createElement('div');\nloaderBar.className = 'loader-bar';\nloaderBg.appendChild(loaderBar);\nc.appendChild(loaderBg);",
+  "createdAt": "2026-05-11T11:25:34.000Z",
+  "updatedAt": "2026-05-12T03:53:05.000Z"
+}

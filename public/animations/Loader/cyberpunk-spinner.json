@@ -1,0 +1,28 @@
+{
+  "docId": "D81aTMe1jcJ2K2qLcrdz",
+  "slug": "cyberpunk-spinner",
+  "title": "Cyberpunk Spinner",
+  "description": "A pro-level cyber animation with two spinning rings rotating in opposite directions.",
+  "category": "Loader",
+  "previewBg": "#111111",
+  "tags": [
+    "cyberpunk",
+    "spinner",
+    "pro",
+    "level",
+    "cyber",
+    "animation",
+    "with",
+    "two",
+    "spinning",
+    "rings",
+    "rotating",
+    "in",
+    "opposite",
+    "directions"
+  ],
+  "cssCode": ".cyber-loader {\n  width: 80px;\n  height: 80px;\n  border: 5px solid transparent;\n  border-top: 5px solid #00ffcc;\n  border-right: 5px solid #00ffcc;\n  border-radius: 50%;\n  animation: spinCyber 1s linear infinite;\n  position: relative;\n}\n.cyber-loader::before {\n  content: '';\n  position: absolute;\n  top: 10px; left: 10px; right: 10px; bottom: 10px;\n  border: 5px solid transparent;\n  border-bottom: 5px solid #ff00ff;\n  border-left: 5px solid #ff00ff;\n  border-radius: 50%;\n  animation: spinCyberReverse 2s linear infinite;\n}\n@keyframes spinCyber { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }\n@keyframes spinCyberReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;';\nconst loader = document.createElement('div');\nloader.className = 'cyber-loader';\nc.appendChild(loader);\n",
+  "createdAt": "2026-05-11T10:58:02.000Z",
+  "updatedAt": "2026-08-13T07:36:17.270Z"
+}
