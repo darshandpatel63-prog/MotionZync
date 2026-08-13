@@ -1,0 +1,17 @@
+{
+  "docId": "9WUhyQGajlu7G3YdqHrL",
+  "slug": "clinical-glass-card",
+  "title": "Clinical Glass Card",
+  "description": "",
+  "category": "Card",
+  "previewBg": "#0a0a14",
+  "tags": [
+    "clinical",
+    "glass",
+    "card"
+  ],
+  "cssCode": ".clinical-card {\n  width: 280px; height: 160px;\n  background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);\n  border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 20px;\n  display: flex; flex-direction: column; justify-content: center; padding: 20px;\n  box-sizing: border-box; color: #fff; font-family: sans-serif;\n  transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer;\n}\n.clinical-card:hover {\n  transform: translateY(-10px);\n  box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2);\n  border-color: #00d4ff;\n}\n.pulse-line {\n  width: 100%; height: 3px; background: #00d4ff; margin-top: 15px;\n  position: relative; overflow: hidden;\n}\n.pulse-line::after {\n  content: ''; position: absolute; top: 0; left: -100%;\n  width: 50%; height: 100%; background: #fff;\n  animation: scanLine 2s infinite;\n}\n@keyframes scanLine { 100% { left: 200%; } }\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nc.innerHTML = `\n  <div class=\"clinical-card\">\n    <h3 style=\"margin:0; color:#00d4ff;\">Patient Assessment</h3>\n    <p style=\"color:#aaa; font-size:14px; margin:10px 0;\">Single-page dynamic report generated successfully.</p>\n    <div class=\"pulse-line\"></div>\n  </div>\n`;\n",
+  "createdAt": "2026-05-12T06:23:02.000Z",
+  "updatedAt": "2026-05-12T06:23:02.000Z"
+}

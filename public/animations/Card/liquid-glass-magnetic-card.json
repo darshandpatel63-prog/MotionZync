@@ -1,0 +1,18 @@
+{
+  "docId": "bGD7tZ5jFcABCwF2NAtH",
+  "slug": "liquid-glass-magnetic-card",
+  "title": "Liquid glass magnetic card",
+  "description": "",
+  "category": "Card",
+  "previewBg": "#121212",
+  "tags": [
+    "liquid",
+    "glass",
+    "magnetic",
+    "card"
+  ],
+  "cssCode": ".liquid-glass-wrap {\n  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative;\n}\n.fluid-blob {\n  position: absolute; width: 250px; height: 250px; background: #ff007f; border-radius: 50%;\n  filter: blur(40px); animation: fluidWander 6s infinite alternate ease-in-out;\n}\n.glass-magnetic-card {\n  width: 260px; height: 320px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);\n  border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; z-index: 10;\n  display: flex; flex-direction: column; align-items: center; justify-content: center;\n  transition: transform 0.2s ease-out; color: #fff; font-family: sans-serif;\n}\n@keyframes fluidWander { 0% { transform: translate(-50px, -50px); background: #ff007f; } 100% { transform: translate(50px, 50px); background: #00d2ff; } }\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nconst wrap = document.createElement('div');\nwrap.className = 'liquid-glass-wrap';\n\nconst blob = document.createElement('div');\nblob.className = 'fluid-blob';\n\nconst card = document.createElement('div');\ncard.className = 'glass-magnetic-card';\ncard.innerHTML = '<h2 style=\"margin:0; font-size:40px;\">🔮</h2><h3 style=\"letter-spacing:2px; margin-top:10px;\">HYBRID</h3>';\n\nwrap.appendChild(blob); wrap.appendChild(card); c.appendChild(wrap);\n\nwrap.addEventListener('pointermove', (e) => {\n  const rect = card.getBoundingClientRect();\n  const x = (e.clientX - rect.left - rect.width/2) * 0.3;\n  const y = (e.clientY - rect.top - rect.height/2) * 0.3;\n  // Magnetic pull\n  card.style.transform = `translate(${x}px, ${y}px)`;\n});\nwrap.addEventListener('pointerleave', () => { card.style.transform = `translate(0px, 0px)`; });\n",
+  "createdAt": "2026-05-16T10:06:14.000Z",
+  "updatedAt": "2026-05-16T10:06:14.000Z"
+}
