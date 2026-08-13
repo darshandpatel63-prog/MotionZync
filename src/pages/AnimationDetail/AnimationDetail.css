@@ -47,16 +47,6 @@
   padding: 0.2rem 0.65rem; border-radius: 99px; text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.detail-views {
-  display: flex; align-items: center; gap: 0.3rem;
-  font-size: 0.75rem; color: var(--text-muted);
-}
-.view-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: #22c55e;
-  animation: viewDotPulse 2s ease-in-out infinite;
-}
-@keyframes viewDotPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
-
 .detail-title {
   font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 900;
   letter-spacing: -0.8px; margin-bottom: 0.45rem;
@@ -453,9 +443,6 @@
   font-size: 0.82rem; font-weight: 700; color: var(--text-primary);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.related-views {
-  font-size: 0.68rem; color: var(--text-muted);
-}
 
 @media (max-width: 600px) {
   .related-grid { grid-template-columns: repeat(2, 1fr); }
@@ -531,7 +518,6 @@
 }
 .related-cat  { font-size:0.63rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; color:var(--accent-secondary); }
 .related-name { font-size:0.8rem; font-weight:700; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.related-views{ font-size:0.66rem; color:var(--text-muted); }
 
 @media(max-width:600px) { .related-grid { grid-template-columns:repeat(2,1fr); } }
 
