@@ -2,163 +2,1377 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- ══════════════════════════════════════════
-       CORE PAGES — Highest Priority
+       CORE + TOOL + LEGAL PAGES
   ══════════════════════════════════════════ -->
 
   <url>
     <loc>https://motion-zync.vercel.app/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/gallery</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/playground</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- ══════════════════════════════════════════
-       CREATIVE TOOLS
-  ══════════════════════════════════════════ -->
-
   <url>
     <loc>https://motion-zync.vercel.app/anim-creator</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/codespace</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/compare</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
-  <!-- ══════════════════════════════════════════
-       LEARN & GUIDES
-  ══════════════════════════════════════════ -->
-
   <url>
     <loc>https://motion-zync.vercel.app/course</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/how-to-use</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/tool-guide</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/why-features</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
-  <!-- ══════════════════════════════════════════
-       CONTENT & UTILITY PAGES
-  ══════════════════════════════════════════ -->
-
   <url>
     <loc>https://motion-zync.vercel.app/wallpaper</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/submit</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/favorites</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/changelog</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/tools</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
-  <!-- ══════════════════════════════════════════
-       LEGAL & INFO PAGES (Static HTML in /public)
-  ══════════════════════════════════════════ -->
-
   <url>
     <loc>https://motion-zync.vercel.app/about.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/contact.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/privacy.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/terms.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://motion-zync.vercel.app/disclaimer.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-08-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
+  </url>
+
+  <!-- ══════════════════════════════════════════
+       ANIMATION PAGES — auto-generated on every Admin save.
+       Do not edit this block by hand, it will be overwritten.
+  ══════════════════════════════════════════ -->
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/1oeGi5v1ar1eUS27znRM</loc>
+    <lastmod>2026-08-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Y2lwm40N48sHbCFTiXYF</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/gKjURH0mD8iUEP28sQ9Y</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/XMRtlQV9MpZyyFVaHqyF</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/8qeC8h9BG9cNTZ2zPJH9</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/nxR9PozcBz1glgiNj6Gr</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/i8DKhJFqzHr3LPzgpuMt</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/iJw1bcnfdmuW3bguEMGi</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/wF2BMQYcysMwZr5rVV6V</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/FLVJSJoNxRdm907ibiSP</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/OelbSb0fT0Dq6Ef4KLRG</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Tlixeg5grijw3i1tNQhN</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/YnXpporWJpHFkpg55uTC</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/4VEyMYW4fq0qIMVBIfBa</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/2xJID92qKF0pmuCQ5e6m</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/juMfqCI7ZomrIpdOOH9u</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/SWWvK37Esq8orCx1rNWU</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/34tekSgNDFiqm2rLr4DK</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Iv6iRUp36f2iN2Gsd98T</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/bZzFUcQSkXBJ50JM1CO9</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/i51Y9c9yq5iDiDksf2aZ</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/BKEJgGjrYpgIt88GqlqD</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/zVNJQyauGYFf2Vuggbyy</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/cFxEQBgXKT5VXmoA7oQ4</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/TEwGN8UjcoFCfZPzLwmB</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/POS2Dfmpu1pn089ixgZg</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/EGWMc2EXwtdftMHGtTWi</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/JG9IibkH0woWKqg3HnLd</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/EDVEtwf16bjotQhe9xy0</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/fdGx1fooWvvBJUkasWnd</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/uNeoIlfT7OiVpH4vb14v</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/m8y2VJw036wYMaCOwrfi</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/7Kj5R9fm1iFhKGJc77Rd</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/JJd7WOCwDCw9xoAer1EA</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/LYN0IxUnKQQ1kql8ihyj</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/el3FZvyBJTtd83vLu84J</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/pYv6P5ipQR6dRX5vTXTs</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Oj4FkEgYQ9Fwnb5hpwMw</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/bGD7tZ5jFcABCwF2NAtH</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/rCdigLVEg8LoIg3LCsZd</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/4lTIOSpAg8PuYivqOWdI</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/ETnfIFfptuGeeWzzeRLd</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Ii51KKIr5PJ1hhXBM9TP</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/jYyfoACTynaDU7fJzHNE</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/vgMFQeG9sZFPUhYWsOGv</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/xw29X7GqLqSMPRpYVTGF</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/ZdkHWUny6XJGe7xKnRIh</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/d799OZQbAlHoMYQPwpBE</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/mevXQhLFmfIgebCTp0b5</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/GwOJorTbhBPEPsJkf0t8</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/738dJN3A9l7ik1vK6fk3</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/LiNKElw9OHJo70K3b9ZO</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/f58BgiEpirV1DuuMXxOg</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/QGlRjnaFYLWqcDdxsB2S</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/cfjVWc12ArhcOkY6RRkN</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/yVgAooaUOj1T8bJ34EmM</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/ZamoCO9zamtDBGU4fYjK</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/BOkWedX7IH4zuaCz7Rci</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/DA1zeFgreevAgcAEnigC</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/N6lLZcm7wyFf1gO7ojdd</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/8vHGAkISLJSa0zWQStbb</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/kr9nnabxo3hUkfbb2Kkw</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/wX9hyFmXIqZicL5Elb5A</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Uh4y01ielOa63RxfLtoN</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/fj6xu0tXaT3cfUCbeA9x</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/CXvudDUqAw7eFvB8UYDq</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/RqWDfLVyr5JuyF8rWUOJ</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/FCJQV8yLesHUsU5oCPZC</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/IekjvTh6UeCkrXFpW2VU</loc>
+    <lastmod>2026-05-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/bqOHWQXtjqv0Q0a24b5V</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/jIJ3kKPIfYFHGNV13LVl</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Goc1gNbAqnfpLRyfPu40</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/eWIEwpg4qgc6cXqyE0SN</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/kjfALnKa1B7jGmHVBzs4</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/2NzyfukYOSMyKyq2uh9o</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Lh8sinzeB44Vh3JsVzBf</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Hz7XCA72T8wPjUQjXDG6</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/We4ORoafG5agzbtuQnUp</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/lY9u7R03wyxmjHpRStJy</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/oxobpYL7B8zAKuZcbxtX</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/YSrmyMLDorez4esZjY14</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/I9gMJBth3KDWsmoFYQbM</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/9i9ssuM5AWLsZBBQNVMV</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Jg42JGoaXxVbMCJ8kVo5</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/DQjPgnPaBCGMKt3uLtSH</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/qQz9Ec6bimG5SA2ljhiA</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/ZG8CKfTrzEKTUhyKVf8W</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Jj7Qp5TxeaVnDEyEmfUY</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/qGaD01xLGsX1A324Pm2U</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/rQc9p6iIiFZwrQr0TLlY</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/dFBDfSFBkhzZJjrGuHW6</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/SRyVKl1YPdXQyT1UGuvZ</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/MZ16x82RHoc8U4gvwI4X</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/WMUkqQ2o0fFcdACJH7gp</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/A0d6Iw9jCU5KarFrYjxE</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/2WXMmihJubbvHZkzREvJ</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/CG3mzbkxPFKSCKb116gZ</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/GlVo8XLhQnwqOyYL5gOl</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/rRO9rMqA9AFlZNpRiiEr</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/6d8BNpMxv5wvaimm49A4</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/fzkPH52Val6m58TLr5Pb</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/9WUhyQGajlu7G3YdqHrL</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/VTB2CjqvtHiJxsPKd1Q6</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/mv3BENw9FWetHQdt0wKw</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/VDs8NSpZxrcelLyA1MZJ</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/8GhXKpCH4SOKmmQ2i9Z6</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/oUOrxkHUpJo0XsxGsKcS</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/X4OSSJGc00Q2ip5QxQuF</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/AhocC53JGfXkSQfVyEUu</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/LLjyH42HZ6txF5Yv8xT2</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/rQ72hSMJ6D3IkYFjEx09</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/lB7DxMWuSQCij6RftmCb</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/9U9w5g6H4LSQwsjSVPP9</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/7QVwtMg2wd4iW341J6fi</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/CY2oVVqz3rCWWSz74VkV</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/9sgNqbD9yGqN298cR4qo</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/mey5M41A1iDctePZrvOm</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/02LwjqixAEd9g3NcAhxC</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Bftlf4D0VlKIlcYEg8dj</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/qXvJPPtL2p5hPbtR7gp1</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/TvT2LmU5T65UW9oZtfiF</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/L7g6JUhLrmLfKs26J8R2</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/luZzPFgrmN3KZKlEuvmM</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Ccu9G09NBm908KE2flbI</loc>
+    <lastmod>2026-05-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/wG43F5liUWi6aSp0Ihd8</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/arOAjH53AfZNoMp6vAmu</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/SBrdyR4LEux1NDKBumqX</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/qHg3SoBVE5Adg4SdRYfl</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/QNwzNN0rMJx3nrVucFr5</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/p3JdW8TDg9SqItHDCNAq</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/QHbCj9xf7CDf52LP1Yy6</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/H3VM4oSfiZwR7EBplHLJ</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/YMRUtCnD3JnXRHGs0MgY</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/oGPjOlD0HYkseSWEcIsy</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/xt7HH3MDTQBNmdbAm9g2</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/LlwX9C59yai9pclAMrqM</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/0HVTTqX94Nb2TWWHC3O2</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/dSRfwjtE2huUBm6VA8es</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Uga3LHrGpc7fq1kfl50Q</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/QQlG8YXttFKUlqAOcauM</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Tg5qG8RJQxhzuk0aRI0m</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/h3SGwd3vimnAze3N1BMm</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/iZBroXwdIajWJGq9Ehns</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/TesAMXPOwQP1Dsz1hkfl</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/8DnbfjPyfwTWJhEwjzjo</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/lfPCzJUOnSO68HuyP7Go</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/ntTAwnQTZYBrpZRh537J</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/IGcXOXTpslsXiJ0Dv3Cj</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/sPXhT7jgrLRGRfFlmu5X</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/tiFo2xFVbCY9Ofw2Rgyj</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/xNiSr0nOjJF0aFILZgJJ</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Dkg5Jiurfn7z4hbXsgfE</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/uYevLGn32oVvlYliOapA</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/yHLxYiEZHY7huCMWHIHd</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/oAIFnQlF5rb6FZ984Hm2</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/igBMFd4DcAjqYJH62uAZ</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/zVXFCoJquRuoMzfnPbPd</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/mm3UsxAQvFhauFH14lMq</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/6qcPsaegScQ46D0CotwO</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/mocgtimz8nVpYOya6ts9</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Ho8U2C61dAluUaR9LkhT</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/W9QVxOpCuEwcvRbIQQHC</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/lAUvHf5L7hvwxbUD4Vs4</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/M5oOgVrhA8LOzKGw752k</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/Kxs2OeFh7KuRjHBSRWPF</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/nVar67xqu54uJrG0EX9L</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/IMawlmBSm8od6Cwd1ThV</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/lc7HrG9shsFiWkI5AITh</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/UMJIYXYtmAYCvPoC5yDA</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/0LhiTe0baovb7pjtsijr</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/CPhnVfg20YIcjn98z9pe</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/D81aTMe1jcJ2K2qLcrdz</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/6I3jRaiY7vQ0SS9LdMLv</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/KDmqfHoHYQ3xbXKuKMUW</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://motion-zync.vercel.app/animation/rA0XLc9oy3JX96xuS8fY</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 
 </urlset>
