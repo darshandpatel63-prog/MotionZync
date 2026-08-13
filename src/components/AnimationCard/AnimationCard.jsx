@@ -76,7 +76,7 @@ function HeartBurst({ active }) {
 
 // ─── Main Card ────────────────────────────────────────────────
 export default function AnimationCard({ animation }) {
-  const { docId, title, description, category, cssCode, jsCode, previewBg, tags=[], views=0 } = animation
+  const { docId, title, description, category, cssCode, jsCode, previewBg, tags=[] } = animation
   const iframeRef = useRef(null)
 
   // Like state — from localStorage
@@ -119,13 +119,6 @@ export default function AnimationCard({ animation }) {
 
         {/* Category badge */}
         <span className="anim-cat-badge">{category}</span>
-
-        {/* Views badge */}
-        {views > 0 && (
-          <span className="anim-views-badge">
-            👁️ {views > 999 ? (views/1000).toFixed(1)+'k' : views}
-          </span>
-        )}
 
         {/* ── Like button (top-right overlay on hover) ── */}
         <button
