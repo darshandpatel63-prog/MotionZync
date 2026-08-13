@@ -4,7 +4,8 @@ import CodeEditor          from '../../components/CodeEditor/CodeEditor.jsx'
 import LivePreview, { buildSandboxHTML } from '../../components/LivePreview/LivePreview.jsx'
 import CustomizePanel      from '../../components/CustomizePanel/CustomizePanel.jsx'
 import AdSense             from '../../components/AdSense/AdSense.jsx'
-import { getAnimationById, incrementView, getAnimations } from '../../hooks/useAnimations.js'
+import { getAnimationById, getAnimations } from '../../hooks/useAnimations.js'
+import { useSEO } from '../../hooks/useSEO.js'
 import './AnimationDetail.css'
 
 const SPEEDS = [
@@ -126,7 +127,6 @@ function DetailHeader({ anim, copied, onShare }) {
       <div className="dh-left">
         <div className="dh-cat-row">
           <span className="detail-cat">{anim.category}</span>
-          {anim.views>0 && <span className="detail-views"><span className="view-dot"/>{ anim.views>999?(anim.views/1000).toFixed(1)+'k':anim.views} views</span>}
         </div>
         <h1 className="detail-title">{anim.title}</h1>
         {anim.description && <p className="detail-desc">{anim.description}</p>}
@@ -539,9 +539,6 @@ function RelatedAnimations({ currentAnim }) {
             <div className="related-info">
               <span className="related-cat">{anim.category}</span>
               <span className="related-name">{anim.title}</span>
-              {anim.views > 0 && (
-                <span className="related-views">👁️ {anim.views>999?(anim.views/1000).toFixed(1)+'k':anim.views}</span>
-              )}
             </div>
           </Link>
         ))}
@@ -567,9 +564,17 @@ export default function AnimationDetail() {
     getAnimationById(id).then(data => {
       if (!data) { setLoading(false); return }
       setAnim(data); setCssCode(data.cssCode||''); setJsCode(data.jsCode||'')
-      setLoading(false); incrementView(id)
+      setLoading(false)
     })
   }, [id])
+
+  useSEO(anim ? {
+    title: `${anim.title} — Free ${anim.category} CSS/JS Animation | MotionZync`,
+    description: anim.description?.trim()
+      ? anim.description
+      : `${anim.title} — a free, copy-paste ready ${anim.category} animation from MotionZync. Live preview with full CSS & JS source included.`,
+    url: `https://motion-zync.vercel.app/animation/${id}`,
+  } : {})
 
   async function copy(text, which) {
     await navigator.clipboard.writeText(text)
