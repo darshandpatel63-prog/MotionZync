@@ -134,7 +134,6 @@ function CategoryFilter({ categories, activeCat, onChange }) {
 // ─── Sort Dropdown ────────────────────────────────────────────────────────────
 const SORT_OPTIONS = [
   { value: 'newest',  label: '🆕 Newest First',   desc: 'Latest uploaded' },
-  { value: 'views',   label: '🔥 Most Viewed',     desc: 'Popular animations' },
   { value: 'az',      label: '🔤 A → Z',           desc: 'Alphabetical order' },
   { value: 'oldest',  label: '📅 Oldest First',    desc: 'First uploaded' },
 ]
@@ -252,26 +251,27 @@ function EmptyState({ search }) {
 }
 
 // ─── Sort utility ─────────────────────────────────────────────────────────────
+// toEpoch: animations created after the Aug 2026 GitHub migration store
+// createdAt as a plain ISO string ("2026-08-12T01:40:41.000Z"); anything
+// migrated from the old Firestore data still round-trips fine too since we
+// check for the legacy {seconds:...} Timestamp shape first.
+function toEpoch(v) {
+  if (!v) return 0
+  if (typeof v === 'object' && typeof v.seconds === 'number') return v.seconds
+  const t = new Date(v).getTime()
+  return Number.isFinite(t) ? t / 1000 : 0
+}
+
 function applySort(list, sortBy) {
   const arr = [...list]
   switch (sortBy) {
-    case 'views':
-      return arr.sort((a, b) => (b.views || 0) - (a.views || 0))
     case 'az':
       return arr.sort((a, b) => (a.title || '').localeCompare(b.title || ''))
     case 'oldest':
-      return arr.sort((a, b) => {
-        const ta = a.createdAt?.seconds ?? 0
-        const tb = b.createdAt?.seconds ?? 0
-        return ta - tb
-      })
+      return arr.sort((a, b) => toEpoch(a.createdAt) - toEpoch(b.createdAt))
     case 'newest':
     default:
-      return arr.sort((a, b) => {
-        const ta = a.createdAt?.seconds ?? 0
-        const tb = b.createdAt?.seconds ?? 0
-        return tb - ta
-      })
+      return arr.sort((a, b) => toEpoch(b.createdAt) - toEpoch(a.createdAt))
   }
 }
 
