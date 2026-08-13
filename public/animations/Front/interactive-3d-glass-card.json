@@ -1,0 +1,30 @@
+{
+  "docId": "CPhnVfg20YIcjn98z9pe",
+  "slug": "interactive-3d-glass-card",
+  "title": "Interactive 3D Glass Card",
+  "description": "A premium front card that tilts in 3D and glows the moment you touch it.",
+  "category": "Front",
+  "previewBg": "#1a1a2e",
+  "tags": [
+    "interactive",
+    "3d",
+    "glass",
+    "card",
+    "premium",
+    "front",
+    "that",
+    "tilts",
+    "in",
+    "and",
+    "glows",
+    "the",
+    "moment",
+    "you",
+    "touch",
+    "it"
+  ],
+  "cssCode": ".glass-card {\n  width: 160px;\n  height: 220px;\n  background: rgba(255, 255, 255, 0.05);\n  backdrop-filter: blur(15px);\n  border-radius: 20px;\n  border: 1px solid rgba(255, 255, 255, 0.2);\n  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);\n  transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  color: rgba(255,255,255,0.5);\n  font-family: sans-serif;\n  font-weight: bold;\n}\n\n/* ટચ કે હોવર કરવા પર થતો ફેરફાર */\n.glass-card:hover, .glass-card:active {\n  transform: translateY(-15px) rotateX(15deg) rotateY(15deg) scale(1.05);\n  box-shadow: 0 20px 40px rgba(0, 255, 204, 0.5);\n  background: rgba(0, 255, 204, 0.15);\n  color: #00ffcc;\n  border: 1px solid rgba(0, 255, 204, 0.5);\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;perspective:1000px;';\nconst card = document.createElement('div');\ncard.className = 'glass-card';\ncard.innerText = 'TOUCH ME';\nc.appendChild(card);\n",
+  "createdAt": "2026-05-11T11:02:59.000Z",
+  "updatedAt": "2026-08-13T07:36:17.270Z"
+}

@@ -1,0 +1,17 @@
+{
+  "docId": "wG43F5liUWi6aSp0Ihd8",
+  "slug": "holographic-glitch-card",
+  "title": "Holographic Glitch Card",
+  "description": "",
+  "category": "Front",
+  "previewBg": "#0a0a0f",
+  "tags": [
+    "holographic",
+    "glitch",
+    "card"
+  ],
+  "cssCode": ".holo-card {\n  width: 240px; height: 340px; border-radius: 20px; position: relative;\n  overflow: hidden; animation: cardFloat 4s ease-in-out infinite;\n  border: 1px solid rgba(255,255,255,0.15);\n}\n.holo-bg {\n  position: absolute; inset: 0;\n  background: linear-gradient(135deg, #1a1a3e 0%, #2d1b69 25%, #0f4c75 50%, #1a2a4a 75%, #2d1b69 100%);\n  background-size: 400% 400%; animation: holoShift 6s ease infinite;\n}\n.holo-sheen {\n  position: absolute; inset: 0;\n  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 55%, transparent 70%);\n  background-size: 200% 200%; animation: sheenMove 3s ease-in-out infinite;\n}\n.holo-rainbow {\n  position: absolute; inset: 0;\n  background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(6,182,212,0.3), rgba(16,185,129,0.2), rgba(251,191,36,0.2), rgba(239,68,68,0.2), rgba(168,85,247,0.3));\n  background-size: 300% 300%; animation: rainbowShift 4s ease infinite; mix-blend-mode: screen;\n}\n.holo-content {\n  position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column;\n  align-items: center; justify-content: center; gap: 12px; padding: 1.5rem;\n}\n.holo-icon { font-size: 3rem; filter: drop-shadow(0 0 12px rgba(168,85,247,0.8)); }\n.holo-title {\n  font-family: monospace; font-size: 1.1rem; font-weight: 800; color: white; letter-spacing: 3px;\n  text-transform: uppercase; text-shadow: 0 0 20px rgba(168,85,247,0.9), 0 0 40px rgba(6,182,212,0.5);\n  animation: glitch 5s infinite;\n}\n.holo-sub { font-family: monospace; font-size: 0.7rem; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase; }\n.holo-line { width: 80%; height: 1px; background: linear-gradient(90deg, transparent, rgba(168,85,247,0.8), transparent); }\n\n@keyframes cardFloat { 0%,100% { transform: translateY(0) rotateX(0deg); } 50% { transform: translateY(-12px) rotateX(3deg); } }\n@keyframes holoShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }\n@keyframes sheenMove { 0% { background-position: -100% -100%; } 100% { background-position: 200% 200%; } }\n@keyframes rainbowShift { 0%,100% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } }\n@keyframes glitch { 0%,90%,100% { text-shadow: 0 0 20px rgba(168,85,247,0.9); transform: none; } 92% { transform: translate(-2px, 0); text-shadow: 2px 0 #06b6d4, -2px 0 #ec4899; } 94% { transform: translate(2px, 0); text-shadow: -2px 0 #06b6d4, 2px 0 #ec4899; } 96% { transform: none; } }\n",
+  "jsCode": "const el = document.getElementById('container');\nel.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:transparent;perspective:1000px;';\nel.innerHTML = `\n<div class=\"holo-card\">\n  <div class=\"holo-bg\"></div>\n  <div class=\"holo-rainbow\"></div>\n  <div class=\"holo-sheen\"></div>\n  <div class=\"holo-content\">\n    <div class=\"holo-icon\">◈</div>\n    <div class=\"holo-line\"></div>\n    <div class=\"holo-title\">MotionZync</div>\n    <div class=\"holo-sub\">Premium Edition</div>\n    <div class=\"holo-line\"></div>\n  </div>\n</div>`;\n",
+  "createdAt": "2026-05-11T12:54:31.000Z",
+  "updatedAt": "2026-05-11T12:54:31.000Z"
+}

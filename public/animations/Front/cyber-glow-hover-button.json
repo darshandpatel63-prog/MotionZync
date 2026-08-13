@@ -1,0 +1,31 @@
+{
+  "docId": "mocgtimz8nVpYOya6ts9",
+  "slug": "cyber-glow-hover-button",
+  "title": "Cyber Glow Hover Button",
+  "description": "Ultra Max Premium Pro Super interactive button with a dynamic glowing hover effect for dark themes.",
+  "category": "Front",
+  "previewBg": "#0a0a0f",
+  "tags": [
+    "cyber",
+    "glow",
+    "hover",
+    "button",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "interactive",
+    "with",
+    "dynamic",
+    "glowing",
+    "effect",
+    "for",
+    "dark",
+    "themes"
+  ],
+  "cssCode": ".cyber-btn { \n  padding: 12px 25px; font-size: 14px; font-weight: bold; \n  color: #fff; background: transparent; \n  border: 2px solid #ff00ff; border-radius: 8px; \n  cursor: pointer; transition: all 0.3s ease; \n  text-transform: uppercase; letter-spacing: 2px; \n}\n.cyber-btn:hover, .cyber-btn:active { \n  background: #ff00ff; \n  box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff; \n  transform: scale(1.1); color: #000; \n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst btn = document.createElement('button');\nbtn.className = 'cyber-btn';\nbtn.innerText = 'HOVER ME';\nc.appendChild(btn);\n",
+  "createdAt": "2026-05-11T11:43:13.000Z",
+  "updatedAt": "2026-05-11T11:43:13.000Z"
+}

@@ -1,0 +1,31 @@
+{
+  "docId": "Ho8U2C61dAluUaR9LkhT",
+  "slug": "auto-reveal-neon-text",
+  "title": "Auto Reveal Neon Text",
+  "description": "Ultra Max Premium Pro Super neon text that automatically reveals itself with a smooth glowing animation.",
+  "category": "Front",
+  "previewBg": "#0a0a0f",
+  "tags": [
+    "auto",
+    "reveal",
+    "neon",
+    "text",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "that",
+    "automatically",
+    "reveals",
+    "itself",
+    "with",
+    "smooth",
+    "glowing",
+    "animation"
+  ],
+  "cssCode": ".neon-text { \n  font-size: 28px; font-weight: bold; \n  color: transparent; \n  -webkit-text-stroke: 1px #00ffcc; \n  text-shadow: 0 0 0px rgba(0,255,204,0); \n  animation: textReveal 2s infinite alternate; \n  font-family: sans-serif; letter-spacing: 4px; \n}\n@keyframes textReveal { \n  0% { text-shadow: 0 0 0px rgba(0,255,204,0); color: transparent; } \n  100% { text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc; color: #fff; } \n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst textEl = document.createElement('div');\ntextEl.className = 'neon-text';\ntextEl.innerText = 'PREMIUM';\nc.appendChild(textEl);\n",
+  "createdAt": "2026-05-11T11:42:25.000Z",
+  "updatedAt": "2026-05-11T11:42:25.000Z"
+}

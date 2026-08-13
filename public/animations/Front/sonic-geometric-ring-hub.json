@@ -1,0 +1,18 @@
+{
+  "docId": "Y2lwm40N48sHbCFTiXYF",
+  "slug": "sonic-geometric-ring-hub",
+  "title": "Sonic Geometric Ring Hub",
+  "description": "",
+  "category": "Front",
+  "previewBg": "#0a0a0f",
+  "tags": [
+    "sonic",
+    "geometric",
+    "ring",
+    "hub"
+  ],
+  "cssCode": "#container { display: flex; justify-content: center; align-items: center; background: #0a0a0f; perspective: 1000px; }\n.sonic-ring {\n  width: 250px; height: 250px; position: relative;\n  transform-style: preserve-3d; transition: transform 0.1s ease-out;\n}\n.circle-layer {\n  position: absolute; top: 0; left: 0; width: 100%; height: 100%;\n  border-radius: 50%; border: 2px solid transparent;\n}\n.c1 { border-top: 2px solid #00ffcc; border-bottom: 2px solid #00ffcc; transform: translateZ(30px) scale(1.1); animation: spin1 4s linear infinite; }\n.c2 { border-left: 2px solid #ff007f; border-right: 2px solid #ff007f; transform: translateZ(0px) scale(1.0); animation: spin2 5s linear infinite; }\n.c3 { border-top: 2px dashed #00d2ff; transform: translateZ(-30px) scale(0.9); animation: spin3 6s linear infinite; }\n\n.core-text {\n  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) translateZ(50px);\n  color: white; font-family: sans-serif; font-size: 24px; font-weight: 900;\n  text-shadow: 0 0 20px #fff; letter-spacing: 5px;\n}\n\n@keyframes spin1 { 100% { transform: translateZ(30px) scale(1.1) rotateZ(360deg) rotateX(20deg); } }\n@keyframes spin2 { 100% { transform: translateZ(0px) scale(1.0) rotateZ(-360deg) rotateY(20deg); } }\n@keyframes spin3 { 100% { transform: translateZ(-30px) scale(0.9) rotateZ(360deg) rotateX(-20deg); } }\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;justify-content:center;align-items:center;background:#0a0a0f;perspective:1000px;';\n\nc.innerHTML = `\n  <div class=\"sonic-ring\" id=\"sRing\">\n    <div class=\"circle-layer c1\"></div>\n    <div class=\"circle-layer c2\"></div>\n    <div class=\"circle-layer c3\"></div>\n    <div class=\"core-text\">ZYNK</div>\n  </div>\n`;\n\nconst sRing = document.getElementById('sRing');\n\nc.addEventListener('pointermove', (e) => {\n  const rect = c.getBoundingClientRect();\n  const x = (e.clientX - rect.left - rect.width/2) * 0.15;\n  const y = (e.clientY - rect.top - rect.height/2) * -0.15;\n  \n  // આખી સિસ્ટમને 3D માં ફેરવવા\n  sRing.style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;\n});\n\nc.addEventListener('pointerleave', () => {\n  sRing.style.transform = `rotateX(0deg) rotateY(0deg)`;\n});\n",
+  "createdAt": "2026-06-05T15:27:22.000Z",
+  "updatedAt": "2026-06-05T15:27:22.000Z"
+}

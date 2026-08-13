@@ -1,0 +1,31 @@
+{
+  "docId": "lfPCzJUOnSO68HuyP7Go",
+  "slug": "elegant-booking-button",
+  "title": "Elegant Booking Button",
+  "description": "Ultra Max Premium Pro Super interactive booking button with a sweeping gold shimmer effect for salon appointments.",
+  "category": "Front",
+  "previewBg": "#0a0a0a",
+  "tags": [
+    "elegant",
+    "booking",
+    "button",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "interactive",
+    "with",
+    "sweeping",
+    "gold",
+    "shimmer",
+    "effect",
+    "for",
+    "salon",
+    "appointments"
+  ],
+  "cssCode": ".booking-btn {\n  position: relative; overflow: hidden;\n  padding: 15px 35px; font-size: 16px; font-weight: bold;\n  color: #d4af37; background: transparent;\n  border: 2px solid #d4af37; border-radius: 30px;\n  cursor: pointer; transition: color 0.4s ease;\n  font-family: sans-serif; letter-spacing: 1px;\n}\n.booking-btn::before {\n  content: \"\"; position: absolute;\n  top: 0; left: -100%; width: 100%; height: 100%;\n  background: #d4af37; z-index: -1;\n  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);\n}\n.booking-btn:hover, .booking-btn:active {\n  color: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);\n}\n.booking-btn:hover::before, .booking-btn:active::before {\n  transform: translateX(100%);\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;';\nconst btn = document.createElement('button');\nbtn.className = 'booking-btn';\nbtn.innerText = 'BOOK APPOINTMENT';\nc.appendChild(btn);\n",
+  "createdAt": "2026-05-11T11:56:09.000Z",
+  "updatedAt": "2026-05-11T11:56:09.000Z"
+}
