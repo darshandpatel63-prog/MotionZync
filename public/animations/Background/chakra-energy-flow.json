@@ -1,0 +1,17 @@
+{
+  "docId": "VTB2CjqvtHiJxsPKd1Q6",
+  "slug": "chakra-energy-flow",
+  "title": "Chakra Energy Flow",
+  "description": "",
+  "category": "Background",
+  "previewBg": "#000000",
+  "tags": [
+    "chakra",
+    "energy",
+    "flow"
+  ],
+  "cssCode": ".chakra-orb {\n  position: absolute; width: 40px; height: 40px;\n  border-radius: 50%; filter: blur(10px);\n  animation: riseChakra 6s infinite ease-in; opacity: 0;\n}\n@keyframes riseChakra {\n  0% { transform: translateY(100px) scale(0.5); opacity: 0; }\n  50% { opacity: 0.8; }\n  100% { transform: translateY(-200px) scale(1.5); opacity: 0; }\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;display:flex;justify-content:center;align-items:center;';\n\nconst colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3'];\n\ncolors.forEach((color, index) => {\n  const orb = document.createElement('div');\n  orb.className = 'chakra-orb';\n  orb.style.background = color;\n  orb.style.boxShadow = `0 0 20px ${color}`;\n  orb.style.animationDelay = `${index * 0.8}s`;\n  c.appendChild(orb);\n});\n",
+  "createdAt": "2026-05-12T06:22:03.000Z",
+  "updatedAt": "2026-05-12T06:22:03.000Z"
+}

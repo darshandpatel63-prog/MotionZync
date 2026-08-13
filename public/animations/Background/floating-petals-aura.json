@@ -1,0 +1,33 @@
+{
+  "docId": "8DnbfjPyfwTWJhEwjzjo",
+  "slug": "floating-petals-aura",
+  "title": "Floating Petals Aura",
+  "description": "Ultra Max Premium Pro Super deep background animation featuring gently falling rose petals for a relaxing parlor vibe.",
+  "category": "Background",
+  "previewBg": "#1a0505",
+  "tags": [
+    "floating",
+    "petals",
+    "aura",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "deep",
+    "background",
+    "animation",
+    "featuring",
+    "gently",
+    "falling",
+    "rose",
+    "for",
+    "relaxing",
+    "parlor",
+    "vibe"
+  ],
+  "cssCode": ".petal {\n  position: absolute; width: 15px; height: 15px;\n  background: #ff4d6d;\n  border-radius: 50% 0 50% 50%;\n  opacity: 0.7; box-shadow: 0 0 10px rgba(255, 77, 109, 0.5);\n  animation: fallPetal linear infinite;\n}\n@keyframes fallPetal {\n  0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }\n  20% { opacity: 0.7; }\n  80% { opacity: 0.7; }\n  100% { transform: translateY(300px) rotate(360deg); opacity: 0; }\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;';\n\nfor(let i=0; i<15; i++) {\n  const petal = document.createElement('div');\n  petal.className = 'petal';\n  petal.style.left = `${Math.random() * 100}%`;\n  petal.style.animationDuration = `${3 + Math.random() * 4}s`;\n  petal.style.animationDelay = `${Math.random() * 5}s`;\n  c.appendChild(petal);\n}\n",
+  "createdAt": "2026-05-11T11:57:12.000Z",
+  "updatedAt": "2026-05-11T11:57:12.000Z"
+}

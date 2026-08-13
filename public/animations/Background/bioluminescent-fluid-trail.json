@@ -1,0 +1,17 @@
+{
+  "docId": "XMRtlQV9MpZyyFVaHqyF",
+  "slug": "bioluminescent-fluid-trail",
+  "title": "Bioluminescent Fluid Trail",
+  "description": "",
+  "category": "Background",
+  "previewBg": "#010105",
+  "tags": [
+    "bioluminescent",
+    "fluid",
+    "trail"
+  ],
+  "cssCode": "#container { margin: 0; padding: 0; background: #010105; overflow: hidden; touch-action: none; }\ncanvas { display: block; }\n.fluid-text {\n  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);\n  color: rgba(255, 255, 255, 0.1); font-family: sans-serif; font-size: 60px;\n  font-weight: 900; pointer-events: none; text-transform: uppercase; letter-spacing: 10px;\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;background:#010105;position:relative;overflow:hidden;';\n\nc.innerHTML = `\n  <canvas id=\"fluid-canvas\"></canvas>\n  <div class=\"fluid-text\">FLUIDIC</div>\n`;\n\nconst fCvs = document.getElementById('fluid-canvas');\nconst fCtx = fCvs.getContext('2d');\nlet fW = fCvs.width = window.innerWidth;\nlet fH = fCvs.height = window.innerHeight;\n\nlet points = [];\nconst maxPoints = 50;\n\nc.addEventListener('pointermove', (e) => {\n  const rect = c.getBoundingClientRect();\n  points.push({\n    x: e.clientX - rect.left,\n    y: e.clientY - rect.top,\n    life: 1.0\n  });\n});\n\nfunction drawFluid() {\n  fCtx.globalCompositeOperation = 'source-over';\n  fCtx.fillStyle = 'rgba(1, 1, 5, 0.2)'; // સ્મૂધ ફેડિંગ ટ્રેલ\n  fCtx.fillRect(0, 0, fW, fH);\n  \n  fCtx.globalCompositeOperation = 'lighter';\n  \n  if(points.length > 1) {\n    fCtx.beginPath();\n    for(let i = 0; i < points.length; i++) {\n      let p = points[i];\n      p.life -= 0.02; // ધીમે ધીમે ગાયબ થશે\n      \n      if(p.life <= 0) {\n        points.splice(i, 1);\n        i--; continue;\n      }\n      \n      if(i === 0) fCtx.moveTo(p.x, p.y);\n      else {\n        // સ્મૂધ કર્વ (Smooth Curve) દોરવા માટે Quadratic Curve\n        let prev = points[i - 1];\n        let midX = (prev.x + p.x) / 2;\n        let midY = (prev.y + p.y) / 2;\n        fCtx.quadraticCurveTo(prev.x, prev.y, midX, midY);\n      }\n    }\n    \n    fCtx.strokeStyle = 'rgba(0, 255, 204, 0.8)';\n    fCtx.lineWidth = 15;\n    fCtx.lineCap = 'round';\n    fCtx.lineJoin = 'round';\n    fCtx.shadowBlur = 30;\n    fCtx.shadowColor = '#00ffcc';\n    fCtx.stroke();\n  }\n  \n  requestAnimationFrame(drawFluid);\n}\ndrawFluid();\n",
+  "createdAt": "2026-06-05T15:24:59.000Z",
+  "updatedAt": "2026-06-05T15:24:59.000Z"
+}

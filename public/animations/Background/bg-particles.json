@@ -1,0 +1,24 @@
+{
+  "docId": "KDmqfHoHYQ3xbXKuKMUW",
+  "slug": "bg-particles",
+  "title": "bg-particles",
+  "description": "Golden particles fade in and out against a dark background.",
+  "category": "Background",
+  "previewBg": "#0a0a0f",
+  "tags": [
+    "bg",
+    "particles",
+    "golden",
+    "fade",
+    "in",
+    "and",
+    "out",
+    "against",
+    "dark",
+    "background"
+  ],
+  "cssCode": ".particle{position:absolute;border-radius:50%;animation:float linear infinite;opacity:0;}@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-10vh) scale(1);opacity:0;}}\n    ",
+  "jsCode": "const container=document.getElementById('container');const colors=['#7c3aed','#06b6d4','#a855f7','#10b981','#f59e0b'];for(let i=0;i<40;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*6+2;p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*8+4}s;animation-delay:${Math.random()*6}s;box-shadow:0 0 ${size*2}px currentColor;`;container.appendChild(p);}",
+  "createdAt": "2026-05-11T10:49:32.000Z",
+  "updatedAt": "2026-08-13T07:36:17.270Z"
+}

@@ -1,0 +1,18 @@
+{
+  "docId": "8qeC8h9BG9cNTZ2zPJH9",
+  "slug": "magic-glassmorphism-lens-reveal",
+  "title": "Magic Glassmorphism Lens Reveal",
+  "description": "",
+  "category": "Background",
+  "previewBg": "#0a0a0a",
+  "tags": [
+    "magic",
+    "glassmorphism",
+    "lens",
+    "reveal"
+  ],
+  "cssCode": "#container { width: 100%; height: 100%; position: relative; background: #0a0a0a; overflow: hidden; cursor: none; }\n\n/* કંટાળાજનક લેયર */\n.boring-layer {\n  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;\n  color: #333; font-size: 50px; font-weight: 900; font-family: sans-serif;\n  background: #0a0a0a; z-index: 1; pointer-events: none;\n}\n/* જાદુઈ કલરફુલ લેયર */\n.magic-layer {\n  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;\n  color: #fff; font-size: 50px; font-weight: 900; font-family: sans-serif;\n  background: linear-gradient(45deg, #ff007f, #6c63ff, #00ffcc);\n  z-index: 2; pointer-events: none;\n  /* ક્લિપ પાથ લેન્સની જેમ કામ કરશે */\n  clip-path: circle(0px at var(--x, 50%) var(--y, 50%));\n  transition: clip-path 0.1s ease-out;\n}\n.magic-layer span { text-shadow: 0 5px 20px rgba(0,0,0,0.5); }\n/* કાચની ફ્રેમ (Lens Border) */\n.glass-ring {\n  position: absolute; width: 160px; height: 160px;\n  border-radius: 50%; border: 2px solid rgba(255,255,255,0.5);\n  box-shadow: 0 0 20px rgba(0,255,204,0.5), inset 0 0 10px rgba(255,0,127,0.3);\n  transform: translate(-50%, -50%); top: -200px; left: -200px;\n  pointer-events: none; z-index: 5; backdrop-filter: blur(2px);\n  transition: width 0.2s, height 0.2s;\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:#0a0a0a;overflow:hidden;';\n\nc.innerHTML = `\n  <div class=\"boring-layer\">NOTHING HERE</div>\n  <div class=\"magic-layer\" id=\"mLayer\"><span>PURE MAGIC</span></div>\n  <div class=\"glass-ring\" id=\"gRing\"></div>\n`;\n\nconst mLayer = document.getElementById('mLayer');\nconst gRing = document.getElementById('gRing');\n\nc.addEventListener('pointermove', (e) => {\n  const rect = c.getBoundingClientRect();\n  const x = e.clientX - rect.left;\n  const y = e.clientY - rect.top;\n  \n  // આંગળીની નીચે કલરફુલ લેયર દેખાશે\n  mLayer.style.clipPath = `circle(80px at ${x}px ${y}px)`;\n  \n  // ગ્લાસ રીંગને આંગળીની પાછળ પાછળ ચલાવવી\n  gRing.style.left = `${x}px`;\n  gRing.style.top = `${y}px`;\n});\n\nc.addEventListener('pointerdown', () => {\n  // ક્લિક કરતા લેન્સ મોટો થાય છે\n  mLayer.style.clipPath = `circle(120px at ${gRing.style.left} ${gRing.style.top})`;\n  gRing.style.width = '240px';\n  gRing.style.height = '240px';\n});\n\nc.addEventListener('pointerup', () => {\n  mLayer.style.clipPath = `circle(80px at ${gRing.style.left} ${gRing.style.top})`;\n  gRing.style.width = '160px';\n  gRing.style.height = '160px';\n});\n\nc.addEventListener('pointerleave', () => {\n  mLayer.style.clipPath = `circle(0px at 50% 50%)`;\n  gRing.style.left = `-200px`; // છુપાવી દેવું\n});\n",
+  "createdAt": "2026-05-27T16:46:09.000Z",
+  "updatedAt": "2026-05-27T16:46:09.000Z"
+}

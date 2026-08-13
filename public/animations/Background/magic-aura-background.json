@@ -1,0 +1,31 @@
+{
+  "docId": "0LhiTe0baovb7pjtsijr",
+  "slug": "magic-aura-background",
+  "title": "Magic Aura Background",
+  "description": "An ultra-pro background animation that shifts color and shape the moment you touch the screen.",
+  "category": "Background",
+  "previewBg": "#000000",
+  "tags": [
+    "magic",
+    "aura",
+    "background",
+    "an",
+    "ultra",
+    "pro",
+    "animation",
+    "that",
+    "shifts",
+    "color",
+    "and",
+    "shape",
+    "the",
+    "moment",
+    "you",
+    "touch",
+    "screen"
+  ],
+  "cssCode": ".interactive-wave {\n  position: absolute;\n  width: 250px;\n  height: 250px;\n  background: radial-gradient(circle, rgba(255, 0, 128, 0.8), transparent 70%);\n  border-radius: 50%;\n  opacity: 0.6;\n  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease, background 0.4s ease;\n  animation: floatWave 5s infinite alternate ease-in-out;\n}\n\n/* કન્ટેનર પર ટચ કરવાથી બેકગ્રાઉન્ડમાં થતો ફેરફાર */\n#container:hover .interactive-wave, #container:active .interactive-wave {\n  transform: scale(2.5);\n  opacity: 1;\n  background: radial-gradient(circle, rgba(0, 200, 255, 0.8), transparent 70%);\n  animation-play-state: paused;\n}\n\n@keyframes floatWave {\n  0% { transform: translateY(0px) scale(1); }\n  100% { transform: translateY(-40px) scale(1.2); }\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;background:#050510;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;';\nconst wave = document.createElement('div');\nwave.className = 'interactive-wave';\nc.appendChild(wave);\n",
+  "createdAt": "2026-05-11T11:04:53.000Z",
+  "updatedAt": "2026-08-13T07:36:17.270Z"
+}

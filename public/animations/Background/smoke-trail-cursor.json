@@ -1,0 +1,27 @@
+{
+  "docId": "738dJN3A9l7ik1vK6fk3",
+  "slug": "smoke-trail-cursor",
+  "title": "Smoke Trail Cursor",
+  "description": "Ultra Max Premium Pro Super live canvas organic smoke trail interaction animation.",
+  "category": "Background",
+  "previewBg": "#000000",
+  "tags": [
+    "smoke",
+    "trail",
+    "cursor",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "live",
+    "canvas",
+    "organic",
+    "interaction",
+    "animation"
+  ],
+  "cssCode": "html, body, #container { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; touch-action: none; }\ncanvas { display: block; }\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;touch-action:none;';\n\nconst canvas = document.createElement('canvas');\nconst ctx = canvas.getContext('2d');\ncanvas.width = c.offsetWidth || 400; canvas.height = c.offsetHeight || 500;\nc.appendChild(canvas);\n\nlet particles = [];\n\nc.addEventListener('pointermove', e => {\n  const rect = c.getBoundingClientRect();\n  // ધુમાડાના કણો ઉત્પન્ન કરવા\n  for(let i=0; i<2; i++){\n    particles.push({\n      x: e.clientX - rect.left, \n      y: e.clientY - rect.top,\n      size: Math.random() * 10 + 5, \n      life: 1,\n      vx: (Math.random() - 0.5) * 2, \n      vy: -(Math.random() * 2 + 1) // ધુમાડો હંમેશા ઉપર જાય છે\n    });\n  }\n});\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  for (let i = 0; i < particles.length; i++) {\n    let p = particles[i];\n    ctx.fillStyle = `rgba(180, 180, 200, ${p.life * 0.5})`;\n    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();\n    \n    p.x += p.vx; p.y += p.vy; \n    p.size += 0.3; // કણો ધીમે ધીમે મોટા થાય\n    p.life -= 0.02; // કણો ધીમે ધીમે ગાયબ થાય\n    \n    if(p.life <= 0) { particles.splice(i, 1); i--; }\n  }\n  requestAnimationFrame(draw);\n}\ndraw();\n",
+  "createdAt": "2026-05-15T17:19:40.000Z",
+  "updatedAt": "2026-05-15T17:19:40.000Z"
+}

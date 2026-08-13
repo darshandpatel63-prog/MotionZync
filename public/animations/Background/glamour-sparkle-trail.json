@@ -1,0 +1,33 @@
+{
+  "docId": "IGcXOXTpslsXiJ0Dv3Cj",
+  "slug": "glamour-sparkle-trail",
+  "title": "Glamour Sparkle Trail",
+  "description": "Ultra Max Premium Pro Super interactive background featuring a luxurious trail of fading golden sparkles following user touch.",
+  "category": "Background",
+  "previewBg": "#0a0505",
+  "tags": [
+    "glamour",
+    "sparkle",
+    "trail",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "interactive",
+    "background",
+    "featuring",
+    "luxurious",
+    "of",
+    "fading",
+    "golden",
+    "sparkles",
+    "following",
+    "user",
+    "touch"
+  ],
+  "cssCode": ".sparkle {\n  position: absolute; width: 8px; height: 8px;\n  background: radial-gradient(circle, #fff 10%, #d4af37 60%, transparent 100%);\n  border-radius: 50%; pointer-events: none;\n  box-shadow: 0 0 10px #d4af37;\n  animation: sparkleFade 1s forwards ease-out;\n  transform: translate(-50%, -50%);\n}\n@keyframes sparkleFade {\n  0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }\n  100% { transform: translate(-50%, -50%) scale(0) rotate(180deg); opacity: 0; }\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;touch-action:none;';\n\nc.addEventListener('pointermove', (e) => {\n  const rect = c.getBoundingClientRect();\n  const spark = document.createElement('div');\n  spark.className = 'sparkle';\n  spark.style.left = `${e.clientX - rect.left}px`;\n  spark.style.top = `${e.clientY - rect.top}px`;\n  c.appendChild(spark);\n  setTimeout(() => spark.remove(), 1000);\n});\n",
+  "createdAt": "2026-05-11T11:54:25.000Z",
+  "updatedAt": "2026-05-11T11:54:25.000Z"
+}

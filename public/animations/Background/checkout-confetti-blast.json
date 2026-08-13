@@ -1,0 +1,32 @@
+{
+  "docId": "tiFo2xFVbCY9Ofw2Rgyj",
+  "slug": "checkout-confetti-blast",
+  "title": "Checkout Confetti Blast",
+  "description": "Ultra Max Premium Pro Super background explosion of neon confetti particles triggered to celebrate a successful purchase.",
+  "category": "Background",
+  "previewBg": "#0d0d12",
+  "tags": [
+    "checkout",
+    "confetti",
+    "blast",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "background",
+    "explosion",
+    "of",
+    "neon",
+    "particles",
+    "triggered",
+    "to",
+    "celebrate",
+    "successful",
+    "purchase"
+  ],
+  "cssCode": ".confetti {\n  position: absolute; width: 10px; height: 10px;\n  background: #fff; opacity: 0; pointer-events: none;\n  animation: explode 1s ease-out forwards;\n}\n@keyframes explode {\n  0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }\n  100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(720deg); opacity: 0; }\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;cursor:pointer;';\nc.title = \"Click/Touch to Blast!\";\n\nc.addEventListener('pointerdown', (e) => {\n  const rect = c.getBoundingClientRect();\n  const x = e.clientX - rect.left;\n  const y = e.clientY - rect.top;\n  \n  const colors = ['#00ffcc', '#ff007f', '#ffff00', '#007fff'];\n  \n  for(let i=0; i<30; i++) {\n    const p = document.createElement('div');\n    p.className = 'confetti';\n    p.style.left = `${x}px`;\n    p.style.top = `${y}px`;\n    p.style.background = colors[Math.floor(Math.random() * colors.length)];\n    \n    // રેન્ડમ દિશા\n    const angle = Math.random() * Math.PI * 2;\n    const velocity = 50 + Math.random() * 100;\n    p.style.setProperty('--tx', `${Math.cos(angle) * velocity}px`);\n    p.style.setProperty('--ty', `${Math.sin(angle) * velocity}px`);\n    \n    c.appendChild(p);\n    setTimeout(() => p.remove(), 1000);\n  }\n});\n",
+  "createdAt": "2026-05-11T11:52:43.000Z",
+  "updatedAt": "2026-05-11T11:52:43.000Z"
+}

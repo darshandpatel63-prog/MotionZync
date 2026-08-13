@@ -1,0 +1,33 @@
+{
+  "docId": "W9QVxOpCuEwcvRbIQQHC",
+  "slug": "glowing-particles-background",
+  "title": "Glowing Particles Background",
+  "description": "Ultra Max Premium Pro Super floating neon particles that auto-generate and rise elegantly in the dark background.",
+  "category": "Background",
+  "previewBg": "#0a0a0f",
+  "tags": [
+    "glowing",
+    "particles",
+    "background",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "floating",
+    "neon",
+    "that",
+    "auto",
+    "generate",
+    "and",
+    "rise",
+    "elegantly",
+    "in",
+    "the",
+    "dark"
+  ],
+  "cssCode": ".glow-particle { \n  position: absolute; \n  width: 8px; height: 8px; \n  background: #ff007f; \n  border-radius: 50%; \n  box-shadow: 0 0 15px #ff007f, 0 0 30px #ff007f; \n  animation: floatUp 4s infinite linear; \n}\n@keyframes floatUp { \n  0% { transform: translateY(0) scale(1); opacity: 0; } \n  50% { opacity: 1; } \n  100% { transform: translateY(-150px) scale(0); opacity: 0; } \n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;overflow:hidden;background:transparent;';\nfor(let i=0; i<20; i++) {\n  const p = document.createElement('div');\n  p.className = 'glow-particle';\n  p.style.left = Math.random() * 100 + '%';\n  p.style.top = Math.random() * 100 + '%';\n  p.style.animationDelay = (Math.random() * 3) + 's';\n  c.appendChild(p);\n}\n",
+  "createdAt": "2026-05-11T11:41:37.000Z",
+  "updatedAt": "2026-05-11T11:41:37.000Z"
+}

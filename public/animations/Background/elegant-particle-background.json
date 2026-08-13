@@ -1,0 +1,33 @@
+{
+  "docId": "M5oOgVrhA8LOzKGw752k",
+  "slug": "elegant-particle-background",
+  "title": "Elegant Particle Background",
+  "description": "A sophisticated, subtle floating particle animation that adds depth and a professional atmosphere to any website without distracting users.",
+  "category": "Background",
+  "previewBg": "#1a1a1a",
+  "tags": [
+    "elegant",
+    "particle",
+    "background",
+    "sophisticated",
+    "subtle",
+    "floating",
+    "animation",
+    "that",
+    "adds",
+    "depth",
+    "and",
+    "professional",
+    "atmosphere",
+    "to",
+    "any",
+    "website",
+    "without",
+    "distracting",
+    "users"
+  ],
+  "cssCode": ".particle {\n  position: absolute;\n  width: 6px; height: 6px;\n  background: rgba(255, 255, 255, 0.3);\n  border-radius: 50%;\n  animation: float 10s infinite linear;\n}\n@keyframes float {\n  0% { transform: translateY(0) translateX(0); opacity: 0; }\n  50% { opacity: 0.5; }\n  100% { transform: translateY(-500px) translateX(100px); opacity: 0; }\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%; height:100%; position:relative; background:#1a1a1a; overflow:hidden;';\n\n// 10 پارટિકલ્સ બનાવવા માટેનું લૂપ\nfor(let i=0; i<10; i++) {\n  const p = document.createElement('div');\n  p.className = 'particle';\n  p.style.left = Math.random() * 100 + '%';\n  p.style.top = Math.random() * 100 + '%';\n  p.style.animationDelay = Math.random() * 5 + 's';\n  c.appendChild(p);\n}\n",
+  "createdAt": "2026-05-11T11:18:01.000Z",
+  "updatedAt": "2026-05-11T11:18:01.000Z"
+}
