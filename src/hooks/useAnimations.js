@@ -1,8 +1,25 @@
+// src/hooks/useAnimations.js
+// ============================================================
+// MIGRATION NOTE (Aug 2026): animations + categories used to live in
+// Firestore. They now live as JSON files in this repo, under
+// public/animations/, and are pushed there by the Admin panel via
+// /api/admin-animations (see that file + api/_lib/github.js).
+//
+// Every function below keeps its ORIGINAL name and return shape on
+// purpose — Gallery, Home, AnimationDetail, Favorites, Compare,
+// Wallpaper, Playground, Submit and Admin all import these and none of
+// them needed to change because of this migration.
+//
+// Firestore is still used for: community submissions and changelog
+// entries — unrelated to this migration, unchanged. (View counters were
+// removed entirely — Aug 2026 — this file no longer touches Firestore
+// for animation reads/writes at all.)
+// ============================================================
+
 import {
-  collection, getDocs, addDoc, updateDoc, deleteDoc,
-  doc, query, where, orderBy, getDoc, increment
+  collection, getDocs, addDoc, updateDoc, deleteDoc, doc
 } from 'firebase/firestore'
-import { db } from '../firebase'
+import { db, auth } from '../firebase'
 
 export function generateTags(title='', description='') {
   const text = (title+' '+description).toLowerCase()
@@ -10,70 +27,86 @@ export function generateTags(title='', description='') {
   return [...new Set(words.filter(w=>w.length>1))]
 }
 
+// ─── Reading animation data (GitHub-hosted static JSON) ───────
+async function fetchManifest() {
+  const res = await fetch('/animations/manifest.json')
+  if (!res.ok) throw new Error('Could not load animations (manifest.json ' + res.status + ')')
+  return res.json()
+}
+
 export async function getAnimations() {
-  const snap = await getDocs(query(collection(db,'animations'), orderBy('createdAt','desc')))
-  return snap.docs.map(d=>({...d.data(), docId:d.id}))
+  return fetchManifest()
 }
 
 export async function getAnimationById(docId) {
-  const snap = await getDoc(doc(db,'animations',docId))
-  return snap.exists() ? {...snap.data(), docId:snap.id} : null
+  const manifest = await fetchManifest()
+  return manifest.find(a => a.docId === docId) || null
 }
 
 export async function searchByTag(tag) {
-  const snap = await getDocs(query(collection(db,'animations'), where('tags','array-contains',tag.toLowerCase().trim())))
-  return snap.docs.map(d=>({...d.data(), docId:d.id}))
+  const needle = (tag || '').toLowerCase().trim()
+  const manifest = await fetchManifest()
+  return manifest.filter(a => Array.isArray(a.tags) && a.tags.includes(needle))
+}
+
+// ─── Writing animation data (goes through the secure Admin API,
+//     which commits to GitHub — see api/admin-animations.js) ───────
+async function callAdminAPI(action, payload) {
+  const user = auth.currentUser
+  if (!user) throw new Error('You must be signed in as admin to do this')
+  const idToken = await user.getIdToken()
+
+  const res = await fetch('/api/admin-animations', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+    body: JSON.stringify({ action, payload }),
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`)
+  return data
 }
 
 export async function saveAnimation(animation) {
   const tags = generateTags(animation.title, animation.description)
-  const data = {
-    title:       animation.title||'',
-    description: animation.description||'',
-    category:    animation.category||'Background',
-    previewBg:   animation.previewBg||'#0a0a0f',
-    cssCode:     animation.cssCode||'',
-    jsCode:      animation.jsCode||'',
+  const data = await callAdminAPI('saveAnimation', {
+    docId:       animation.docId || null,
+    title:       animation.title || '',
+    description: animation.description || '',
+    category:    animation.category || 'Background',
+    previewBg:   animation.previewBg || '#0a0a0f',
+    cssCode:     animation.cssCode || '',
+    jsCode:      animation.jsCode || '',
     tags,
-    updatedAt: new Date()
-  }
-  if (animation.docId) {
-    await updateDoc(doc(db,'animations',animation.docId), data)
-    return animation.docId
-  } else {
-    data.createdAt = new Date()
-    data.views = 0
-    const ref = await addDoc(collection(db,'animations'), data)
-    return ref.id
-  }
+  })
+  return data.docId // same return shape as before: just the id
 }
 
 export async function deleteAnimation(docId) {
-  await deleteDoc(doc(db,'animations',docId))
-}
-
-export async function incrementView(docId) {
-  try { await updateDoc(doc(db,'animations',docId), {views: increment(1)}) } catch(_) {}
+  await callAdminAPI('deleteAnimation', { docId })
 }
 
 export async function getCategories() {
-  const snap = await getDocs(query(collection(db,'categories'), orderBy('order','asc')))
-  return snap.docs.length>0
-    ? snap.docs.map(d=>({...d.data(),docId:d.id}))
-    : [{docId:'bg',name:'Background',order:0},{docId:'fr',name:'Front',order:1}]
+  try {
+    const res = await fetch('/animations/categories.json')
+    if (!res.ok) throw new Error('not found')
+    const cats = await res.json()
+    return cats.length > 0
+      ? [...cats].sort((a,b) => (a.order||0)-(b.order||0))
+      : [{docId:'background',name:'Background',order:0},{docId:'front',name:'Front',order:1}]
+  } catch {
+    return [{docId:'background',name:'Background',order:0},{docId:'front',name:'Front',order:1}]
+  }
 }
 
 export async function saveCategory(cat) {
-  const data = { name:cat.name, order:cat.order||0 }
-  if (cat.docId && cat.docId.length>5) await updateDoc(doc(db,'categories',cat.docId),data)
-  else await addDoc(collection(db,'categories'),data)
+  await callAdminAPI('saveCategory', { docId: cat.docId || null, name: cat.name, order: cat.order || 0 })
 }
 
 export async function deleteCategory(docId) {
-  await deleteDoc(doc(db,'categories',docId))
+  await callAdminAPI('deleteCategory', { docId })
 }
 
-// ─── Submissions ──────────────────────────────────────────────
+// ─── Submissions (unchanged — still Firestore) ──────────────────────
 export async function submitAnimation(data) {
   const tags = generateTags(data.title, data.description)
   const submission = {
@@ -105,7 +138,9 @@ export async function getSubmissions(status = 'all') {
   return filtered
 }
 
-// ✅ FIX: approveSubmission now also saves submitterName credit + adminNote
+// approveSubmission calls saveAnimation() above — since that now pushes to
+// GitHub instead of Firestore, approving a submission automatically goes
+// through the new pipeline too. Nothing else here needed to change.
 export async function approveSubmission(submission, adminNote = '') {
   const animId = await saveAnimation({
     title:       submission.title,
@@ -115,7 +150,6 @@ export async function approveSubmission(submission, adminNote = '') {
     cssCode:     submission.cssCode,
     jsCode:      submission.jsCode,
   })
-  // Mark submission as approved (optional audit trail — then Admin deletes it)
   try {
     await updateDoc(doc(db, 'submissions', submission.docId), {
       status:     'approved',
@@ -131,7 +165,7 @@ export async function deleteSubmission(docId) {
   await deleteDoc(doc(db, 'submissions', docId))
 }
 
-// ─── Changelog ────────────────────────────────────────────────
+// ─── Changelog (unchanged — still Firestore) ────────────────────────
 export async function getChangelogs() {
   const snap = await getDocs(collection(db, 'changelogs'))
   const all  = snap.docs.map(d => ({ ...d.data(), docId: d.id }))
@@ -165,5 +199,4 @@ export async function saveChangelog(entry) {
 
 export async function deleteChangelog(docId) {
   await deleteDoc(doc(db, 'changelogs', docId))
-    }
-      
+}
