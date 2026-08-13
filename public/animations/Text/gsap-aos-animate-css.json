@@ -1,0 +1,18 @@
+{
+  "docId": "4lTIOSpAg8PuYivqOWdI",
+  "slug": "gsap-aos-animate-css",
+  "title": "GSAP + AOS + Animate.css",
+  "description": "",
+  "category": "Text",
+  "previewBg": "#1a1a2e",
+  "tags": [
+    "gsap",
+    "aos",
+    "animate",
+    "css"
+  ],
+  "cssCode": ".scroll-area { height: 150vh; width: 100%; display: flex; flex-direction: column; align-items: center; }\n.reveal-text-wrap { display: flex; gap: 8px; margin-top: 60vh; overflow: hidden; }\n.char {\n  font-size: 45px; font-weight: 900; color: transparent; font-family: sans-serif;\n  -webkit-text-stroke: 1px #fff;\n  transform: translateY(100px) rotate(20deg); opacity: 0;\n  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s, color 0.4s;\n}\n.char.visible { transform: translateY(0) rotate(0deg); opacity: 1; }\n.char.visible:hover { color: #ff007f; -webkit-text-stroke: 1px #ff007f; transform: scale(1.2) translateY(-10px); }\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;overflow-y:auto;background:transparent;';\n\nconst area = document.createElement('div');\narea.className = 'scroll-area';\narea.innerHTML = '<div style=\"color:#555; margin-top:20px;\">SCROLL DOWN ↓</div>';\n\nconst wrap = document.createElement('div');\nwrap.className = 'reveal-text-wrap';\n\nconst word = \"AWESOME\";\nconst chars = [];\nword.split('').forEach((letter, i) => {\n  const span = document.createElement('div');\n  span.className = 'char';\n  span.innerText = letter;\n  span.style.transitionDelay = `${i * 0.1}s`; // GSAP Stagger effect\n  chars.push(span);\n  wrap.appendChild(span);\n});\n\narea.appendChild(wrap); c.appendChild(area);\n\nconst observer = new IntersectionObserver((entries) => {\n  entries.forEach(entry => {\n    if(entry.isIntersecting) {\n      chars.forEach(ch => ch.classList.add('visible'));\n    } else {\n      chars.forEach(ch => ch.classList.remove('visible'));\n    }\n  });\n}, { threshold: 0.5 });\nobserver.observe(wrap);\n",
+  "createdAt": "2026-05-16T10:04:05.000Z",
+  "updatedAt": "2026-05-16T10:04:05.000Z"
+}

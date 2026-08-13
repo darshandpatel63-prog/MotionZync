@@ -1,0 +1,16 @@
+{
+  "docId": "Ccu9G09NBm908KE2flbI",
+  "slug": "typewriter-effect",
+  "title": "Typewriter Effect",
+  "description": "",
+  "category": "Text",
+  "previewBg": "#0a0a0f",
+  "tags": [
+    "typewriter",
+    "effect"
+  ],
+  "cssCode": ".typewriter {\n  font-family: monospace;\n  font-size: 1.6rem;\n  color: #06b6d4;\n  border-right: 2px solid #06b6d4;\n  white-space: nowrap;\n  overflow: hidden;\n  animation:\n    typing 3s steps(20) infinite alternate,\n    blink 0.7s step-end infinite;\n}\n@keyframes typing {\n  from { width: 0; }\n  to   { width: 100%; }\n}\n@keyframes blink {\n  50% { border-color: transparent; }\n}",
+  "jsCode": "const container = document.getElementById('container');\ncontainer.style.cssText = 'display:flex;align-items:center;justify-content:center;width:100%;height:100%;';\nconst el = document.createElement('div');\nel.className = 'typewriter';\nel.textContent = 'Hello, MotionZync! ✦';\ncontainer.appendChild(el);",
+  "createdAt": "2026-05-11T12:55:31.000Z",
+  "updatedAt": "2026-05-13T11:00:25.000Z"
+}

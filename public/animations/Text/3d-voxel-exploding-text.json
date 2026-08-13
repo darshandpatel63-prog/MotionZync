@@ -1,0 +1,18 @@
+{
+  "docId": "gKjURH0mD8iUEP28sQ9Y",
+  "slug": "3d-voxel-exploding-text",
+  "title": "3D Voxel Exploding Text",
+  "description": "",
+  "category": "Text",
+  "previewBg": "#111111",
+  "tags": [
+    "3d",
+    "voxel",
+    "exploding",
+    "text"
+  ],
+  "cssCode": "#container { background: #111; position: relative; overflow: hidden; }\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;background:#111;position:relative;overflow:hidden;';\n\nconst vCvs = document.createElement('canvas');\nconst vCtx = vCvs.getContext('2d');\nvCvs.width = window.innerWidth; vCvs.height = window.innerHeight;\nc.appendChild(vCvs);\n\nlet voxels = [];\nlet vW = vCvs.width, vH = vCvs.height;\nlet mouse = { x: -1000, y: -1000 };\n\nfunction initVoxels() {\n  vCtx.fillStyle = 'white'; vCtx.font = '900 80px sans-serif';\n  vCtx.textAlign = 'center'; vCtx.textBaseline = 'middle';\n  vCtx.fillText('VOXEL', vW/2, vH/2);\n  \n  const data = vCtx.getImageData(0,0,vW,vH).data;\n  vCtx.clearRect(0,0,vW,vH);\n  \n  voxels = [];\n  for(let y=0; y<vH; y+=8){\n    for(let x=0; x<vW; x+=8){\n      if(data[(y*vW+x)*4+3] > 128) {\n        voxels.push({\n          baseX: x, baseY: y, x: x, y: y, z: 0,\n          vx: 0, vy: 0, vz: 0, size: 6,\n          color: `hsl(${300 + Math.random()*50}, 100%, 60%)` // પિંક અને પર્પલ\n        });\n      }\n    }\n  }\n}\ninitVoxels(); window.addEventListener('resize', () => { vW = vCvs.width = window.innerWidth; vH = vCvs.height = window.innerHeight; initVoxels(); });\n\nc.addEventListener('pointermove', (e) => {\n  const rect = c.getBoundingClientRect();\n  mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top;\n});\nc.addEventListener('pointerleave', () => { mouse.x = -1000; mouse.y = -1000; });\n\nfunction drawVoxels() {\n  vCtx.fillStyle = 'rgba(17, 17, 17, 0.4)'; vCtx.fillRect(0,0,vW,vH);\n  \n  // Z-index મુજબ સોર્ટિંગ (પાછળના ક્યુબ પેલા દોરાય)\n  voxels.sort((a, b) => a.z - b.z);\n  \n  voxels.forEach(v => {\n    let dx = mouse.x - v.x, dy = mouse.y - v.y;\n    let dist = Math.sqrt(dx*dx + dy*dy);\n    \n    // જો કર્સર નજીક આવે તો 3D વિસ્ફોટ\n    if(dist < 80) {\n      let force = (80 - dist) / 80;\n      v.vx -= (dx / dist) * force * 15;\n      v.vy -= (dy / dist) * force * 15;\n      v.vz += force * 20; // 3D માં આગળ આવવું\n    }\n    \n    // મૂળ જગ્યાએ પાછા ફરવાનું ફિઝિક્સ (Spring physics)\n    v.vx += (v.baseX - v.x) * 0.05;\n    v.vy += (v.baseY - v.y) * 0.05;\n    v.vz += (0 - v.z) * 0.05;\n    \n    // ઘર્ષણ (Friction)\n    v.vx *= 0.8; v.vy *= 0.8; v.vz *= 0.8;\n    \n    v.x += v.vx; v.y += v.vy; v.z += v.vz;\n    \n    // 3D પ્રોજેક્શન (Projection Math)\n    let perspective = 500 / (500 - v.z);\n    let px = (v.x - vW/2) * perspective + vW/2;\n    let py = (v.y - vH/2) * perspective + vH/2;\n    let pSize = v.size * perspective;\n    \n    vCtx.fillStyle = v.color;\n    vCtx.fillRect(px, py, pSize, pSize);\n  });\n  requestAnimationFrame(drawVoxels);\n}\ndrawVoxels();\n",
+  "createdAt": "2026-06-05T15:26:14.000Z",
+  "updatedAt": "2026-06-05T15:26:14.000Z"
+}
