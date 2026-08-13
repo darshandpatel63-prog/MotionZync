@@ -1,0 +1,28 @@
+{
+  "docId": "i8DKhJFqzHr3LPzgpuMt",
+  "slug": "quantum-liquid-orb-morphing",
+  "title": "Quantum Liquid Orb Morphing",
+  "description": "Ultra Max Premium Pro Super Features and Ultra Max Premium Pro Super Animation, Graphic Effects.",
+  "category": "Scroll",
+  "previewBg": "#030014",
+  "tags": [
+    "quantum",
+    "liquid",
+    "orb",
+    "morphing",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "features",
+    "and",
+    "animation",
+    "graphic",
+    "effects"
+  ],
+  "cssCode": ".quantum-wrap { position: relative; width: 100%; height: 300vh; background: #030014; }\n#quantum-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none; }\n.q-text-layer {\n  position: fixed; top: 0; left: 0; width: 100%; height: 100vh;\n  display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; pointer-events: none;\n}\n.q-msg {\n  position: absolute; color: #fff; font-size: 20px; font-weight: bold; text-align: center;\n  opacity: 0; transition: opacity 0.5s; text-shadow: 0 5px 15px rgba(0,255,204,0.8);\n}\n",
+  "jsCode": "const mc = document.getElementById('container');\nmc.style.cssText = 'width:100%;height:100%;overflow-y:auto;background:#030014;position:relative;';\n\nmc.innerHTML = `\n  <div class=\"quantum-wrap\">\n    <canvas id=\"quantum-canvas\"></canvas>\n    <div class=\"q-text-layer\">\n      <div id=\"q1\" class=\"q-msg\" style=\"top:15%; color:#aaa;\">Quantum Core Active ↓</div>\n      <div id=\"q2\" class=\"q-msg\" style=\"font-size:40px; color:#ff007f;\">UNLEASH POWER</div>\n      <div id=\"q3\" class=\"q-msg\" style=\"font-size:55px; color:#00ffcc; top:75%;\">ZYNK</div>\n    </div>\n  </div>\n`;\n\nconst qCvs = document.getElementById('quantum-canvas');\nconst qCtx = qCvs.getContext('2d');\nlet qW, qH;\nlet qParticles = [], targetTxtPts = [];\nconst qCount = 800;\n\nfunction getTxtPts(txt, size) {\n  const tc = document.createElement('canvas');\n  tc.width = qW; tc.height = qH;\n  const tctx = tc.getContext('2d');\n  tctx.fillStyle = 'white'; tctx.font = `900 ${size}px sans-serif`;\n  tctx.textAlign = 'center'; tctx.textBaseline = 'middle';\n  tctx.fillText(txt, qW/2, qH/2);\n  const data = tctx.getImageData(0,0,qW,qH).data;\n  let pts = [];\n  for(let y=0; y<qH; y+=7){\n    for(let x=0; x<qW; x+=7){\n      if(data[(y*qW+x)*4+3] > 128) pts.push({x:x, y:y});\n    }\n  }\n  return pts.length ? pts : [{x: qW/2, y: qH/2}];\n}\n\nfunction initQ() {\n  qW = qCvs.width = window.innerWidth;\n  qH = qCvs.height = window.innerHeight;\n  targetTxtPts = getTxtPts('ZYNK', Math.min(qW/3, 100));\n  \n  qParticles = [];\n  for(let i=0; i<qCount; i++){\n    qParticles.push({\n      x: qW/2, y: qH/2, \n      angle: Math.random() * Math.PI * 2,\n      baseRadius: Math.random() * 80 + 20,\n      c: `hsl(${180 + Math.random()*80}, 100%, 60%)` // Cyan & Blue\n    });\n  }\n}\ninitQ(); window.addEventListener('resize', initQ);\n\nlet qProg = 0;\nmc.addEventListener('scroll', () => {\n  qProg = mc.scrollTop / (mc.scrollHeight - mc.clientHeight);\n  document.getElementById('q1').style.opacity = (qProg < 0.2) ? 1 : 0;\n  document.getElementById('q2').style.opacity = (qProg > 0.35 && qProg < 0.6) ? 1 : 0;\n  document.getElementById('q3').style.opacity = (qProg > 0.8) ? 1 : 0;\n});\n\nfunction lerp(a, b, t) { return a + (b - a) * t; }\n\nfunction drawQ() {\n  qCtx.fillStyle = 'rgba(3, 0, 20, 0.3)'; \n  qCtx.fillRect(0,0,qW,qH);\n  \n  let time = Date.now() * 0.002;\n  \n  for(let i=0; i<qCount; i++){\n    let p = qParticles[i];\n    let tx, ty;\n    \n    if(qProg < 0.5) {\n      // પ્રવાહી ગોળો (Liquid Orb)\n      let currentScale = 1 + (qProg * 3); // સ્ક્રોલથી મોટો થશે\n      let wave = Math.sin(p.angle * 4 + time) * 15;\n      let r = (p.baseRadius + wave) * currentScale;\n      tx = qW/2 + Math.cos(p.angle + time*0.5) * r;\n      ty = qH/2 + Math.sin(p.angle + time*0.5) * r;\n    } else {\n      // વિસ્ફોટ અને ટેક્સ્ટ મોર્ફિંગ\n      let mProg = (qProg - 0.5) * 2;\n      let tPt = targetTxtPts[i % targetTxtPts.length];\n      \n      let explodeX = qW/2 + Math.cos(p.angle) * qW;\n      let explodeY = qH/2 + Math.sin(p.angle) * qW;\n      \n      tx = lerp(explodeX, tPt.x, mProg);\n      ty = lerp(explodeY, tPt.y, mProg);\n    }\n    \n    p.x += (tx - p.x) * 0.1; p.y += (ty - p.y) * 0.1;\n    qCtx.beginPath(); qCtx.arc(p.x, p.y, 2, 0, Math.PI*2);\n    qCtx.fillStyle = p.c; qCtx.fill();\n  }\n  requestAnimationFrame(drawQ);\n}\ndrawQ();\n",
+  "createdAt": "2026-05-27T08:53:26.000Z",
+  "updatedAt": "2026-05-27T08:53:26.000Z"
+}
