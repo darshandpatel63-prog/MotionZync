@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/((?!api/|ads\\.txt|sitemap\\.xml|robots\\.txt|favicon\\.svg).*)",
+      "source": "/((?!api/|animations/|ads\\.txt|sitemap-new\\.xml|robots\\.txt|favicon\\.svg).*)",
       "destination": "/"
     }
   ],
@@ -23,10 +23,16 @@
       ]
     },
     {
-      "source": "/sitemap.xml",
+      "source": "/sitemap-new.xml",
       "headers": [
         { "key": "Content-Type",   "value": "application/xml" },
         { "key": "Cache-Control",  "value": "public, max-age=3600" }
+      ]
+    },
+    {
+      "source": "/animations/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=60, stale-while-revalidate=300" }
       ]
     }
   ]
