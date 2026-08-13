@@ -1,0 +1,27 @@
+{
+  "docId": "GwOJorTbhBPEPsJkf0t8",
+  "slug": "pixelated-snake-trail",
+  "title": "Pixelated Snake Trail",
+  "description": "Ultra Max Premium Pro Super live pixelated snake trail with spring physics animation.",
+  "category": "Indicator",
+  "previewBg": "#0a0b10",
+  "tags": [
+    "pixelated",
+    "snake",
+    "trail",
+    "ultra",
+    "max",
+    "premium",
+    "pro",
+    "super",
+    "live",
+    "with",
+    "spring",
+    "physics",
+    "animation"
+  ],
+  "cssCode": ".snake-dot {\n  position: absolute; width: 12px; height: 12px; background: #00ffcc;\n  top: -6px; left: -6px; pointer-events: none; border-radius: 2px;\n  box-shadow: 0 0 10px rgba(0,255,204,0.5);\n}\n",
+  "jsCode": "const c = document.getElementById('container');\nc.style.cssText = 'width:100%;height:100%;position:relative;background:transparent;overflow:hidden;touch-action:none;';\n\nconst dots = [];\nfor(let i=0; i<12; i++){\n  const d = document.createElement('div');\n  d.className = 'snake-dot';\n  c.appendChild(d);\n  dots.push({el: d, x: -20, y: -20});\n}\n\nlet mouse = {x: -20, y: -20};\n\nc.addEventListener('pointermove', e => {\n  const rect = c.getBoundingClientRect();\n  mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top;\n});\n\nfunction anim() {\n  let x = mouse.x, y = mouse.y;\n  dots.forEach((dot, index) => {\n    // ધીમેથી પાછળ આવવા માટેનું લોજિક (Lerp)\n    dot.x += (x - dot.x) * 0.3;\n    dot.y += (y - dot.y) * 0.3;\n    dot.el.style.transform = `translate(${dot.x}px, ${dot.y}px) scale(${1 - index*0.06})`;\n    x = dot.x; y = dot.y;\n  });\n  requestAnimationFrame(anim);\n}\nanim();\n",
+  "createdAt": "2026-05-15T17:20:59.000Z",
+  "updatedAt": "2026-05-15T17:20:59.000Z"
+}
