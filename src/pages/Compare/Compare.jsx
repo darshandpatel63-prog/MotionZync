@@ -158,7 +158,6 @@ function CompareSlot({ slot, index, animations, onPick, onRemove, speed, canRemo
       {anim && (
         <div className="compare-info">
           <span className="detail-cat">{anim.category}</span>
-          <span className="detail-views">👁️ {anim.views>999?(anim.views/1000).toFixed(1)+'k':anim.views||0}</span>
           {anim.tags?.slice(0,3).map(t=><span key={t} className="detail-tag">#{t}</span>)}
         </div>
       )}
