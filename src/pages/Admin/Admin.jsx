@@ -122,18 +122,35 @@ export default function Admin() {
     if (!title.trim()) { setStatus({type:'err',msg:'Title required!'}); return }
     setSaving(true)
     try {
-      await saveAnimation({ docId:editDocId, title, description:desc, category, previewBg, cssCode, jsCode })
-      const anims = await getAnimations(); setAnimations(anims)
-      setStatus({ type:'ok', msg: editDocId?`✅ "${title}" updated!`:`✅ "${title}" saved!` })
+      const docId = await saveAnimation({ docId:editDocId, title, description:desc, category, previewBg, cssCode, jsCode })
+      // Optimistic local update: the GitHub commit is done, but the live
+      // site needs ~30-60s to redeploy, so re-fetching manifest.json right
+      // now would still show the old version. Update the list from what we
+      // just sent instead — it'll match exactly once the redeploy lands.
+      const optimistic = {
+        docId, title, description: desc, category, previewBg, cssCode, jsCode,
+        tags: generateTags(title, desc), updatedAt: new Date().toISOString(),
+      }
+      setAnimations(prev => {
+        const idx = prev.findIndex(a => a.docId === docId)
+        if (idx === -1) return [optimistic, ...prev]
+        const copy = [...prev]; copy[idx] = { ...copy[idx], ...optimistic }
+        return copy
+      })
+      setStatus({ type:'ok', msg: (editDocId?`✅ "${title}" updated!`:`✅ "${title}" saved!`) + ' GitHub par commit thai gayu — live site ~30-60 sec ma update thashe.' })
       resetAnim()
     } catch(e) { setStatus({type:'err',msg:'Error: '+e.message}) }
-    setSaving(false); setTimeout(()=>setStatus(null), 3000)
+    setSaving(false); setTimeout(()=>setStatus(null), 5000)
   }
   async function handleDelete(docId, t) {
     if (!window.confirm(`Delete "${t}"?`)) return
-    await deleteAnimation(docId)
-    setAnimations(prev=>prev.filter(a=>a.docId!==docId))
-    if (editDocId===docId) resetAnim()
+    try {
+      await deleteAnimation(docId)
+      setAnimations(prev=>prev.filter(a=>a.docId!==docId))
+      if (editDocId===docId) resetAnim()
+      setStatus({ type:'ok', msg:`🗑️ "${t}" deleted` })
+    } catch(e) { setStatus({type:'err',msg:'Error: '+e.message}) }
+    setTimeout(()=>setStatus(null), 3000)
   }
 
   // ── Category handlers ────────────────────────────────────────
@@ -141,12 +158,21 @@ export default function Admin() {
   function resetCat()  { setCatEdit(null); setCatName(''); setCatOrder(0) }
   async function handleSaveCat() {
     if (!catName.trim()) return
-    await saveCategory({ docId:catEdit, name:catName, order:parseInt(catOrder)||0 })
-    const cats = await getCategories(); setCategories(cats); resetCat()
+    try {
+      await saveCategory({ docId:catEdit, name:catName, order:parseInt(catOrder)||0 })
+      const cats = await getCategories(); setCategories(cats); resetCat()
+      setStatus({ type:'ok', msg: catEdit ? '✅ Category updated!' : '✅ Category added!' })
+    } catch(e) { setStatus({type:'err',msg:'Error: '+e.message}) }
+    setTimeout(()=>setStatus(null), 3000)
   }
   async function handleDeleteCat(docId, name) {
     if (!window.confirm(`Delete category "${name}"?`)) return
-    await deleteCategory(docId); setCategories(prev=>prev.filter(c=>c.docId!==docId))
+    try {
+      await deleteCategory(docId)
+      setCategories(prev=>prev.filter(c=>c.docId!==docId))
+      setStatus({ type:'ok', msg:`🗑️ "${name}" category deleted` })
+    } catch(e) { setStatus({type:'err',msg:'Error: '+e.message}) }
+    setTimeout(()=>setStatus(null), 3000)
   }
 
   // ── Settings handler ─────────────────────────────────────────
