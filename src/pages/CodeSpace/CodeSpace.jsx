@@ -4,13 +4,13 @@
 //        project switching, no forced file naming prompts
 // Added (Phase 2 / Step 1): GitHub OAuth connect — see GitHubContext.jsx
 // ============================================================
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, lazy, Suspense } from 'react'
 import CsEditor       from './CsEditor.jsx'
 import CsFileExplorer from './CsFileExplorer.jsx'
 import CsTerminal, { createShell } from './CsTerminal.jsx'
 import CsPreview      from './CsPreview.jsx'
-import CsGitPanel     from './CsGitPanel.jsx'
-import CsAIPanel      from './CsAIPanel.jsx'
+const CsGitPanel = lazy(() => import('./CsGitPanel.jsx'))
+const CsAIPanel  = lazy(() => import('./CsAIPanel.jsx'))
 import CsResizeHandle from './CsResizeHandle.jsx'
 import { GitHubProvider, useGitHub } from './GitHubContext.jsx'
 import {
@@ -29,6 +29,16 @@ import {
 import { getLangFromExt, getTemplate } from './cs-filesystem.js'
 import { GitRepo } from './cs-git.js'
 import './CodeSpace.css'
+
+// Phase 6.1 — fallback shown while a lazy-loaded panel chunk (Git/AI) downloads
+function PanelLoading() {
+  return (
+    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100%', color:'#6b7280', fontSize:'0.8rem', gap:8 }}>
+      <span className="csp-spinner" />
+      Loading…
+    </div>
+  )
+}
 
 const DEFAULT_SETTINGS = {
   theme: 'cs-dark', fontSize: 14, minimap: true,
@@ -604,23 +614,27 @@ function CodeSpaceInner() {
       />
     )
     if (activity === 'git') return (
-      <CsGitPanel files={files} git={git} projectName={activeProj?.name} projectId={activeProj?.id}
-        onImportProject={importGitHubProject}
-        onRestoreFiles={f => { setFiles(f); notify('Checked out', 'success') }} />
+      <Suspense fallback={<PanelLoading />}>
+        <CsGitPanel files={files} git={git} projectName={activeProj?.name} projectId={activeProj?.id}
+          onImportProject={importGitHubProject}
+          onRestoreFiles={f => { setFiles(f); notify('Checked out', 'success') }} />
+      </Suspense>
     )
     if (activity === 'search') return <SearchPanel files={files} onOpen={openTab} onReplaceAll={handleReplaceAll} />
     if (activity === 'ai') return (
-      <CsAIPanel
-        activeFile={activeTab}
-        fileContent={files[activeTab]}
-        dirtyFiles={openTabs.filter(t => t.dirty).map(t => t.path)}
-        projectId={activeProj?.id}
-        onListFiles={agentListFiles}
-        onReadFile={agentReadFile}
-        onWriteFile={agentWriteFile}
-        onDeleteFile={agentDeleteFile}
-        onRunCommand={agentRunCommand}
-      />
+      <Suspense fallback={<PanelLoading />}>
+        <CsAIPanel
+          activeFile={activeTab}
+          fileContent={files[activeTab]}
+          dirtyFiles={openTabs.filter(t => t.dirty).map(t => t.path)}
+          projectId={activeProj?.id}
+          onListFiles={agentListFiles}
+          onReadFile={agentReadFile}
+          onWriteFile={agentWriteFile}
+          onDeleteFile={agentDeleteFile}
+          onRunCommand={agentRunCommand}
+        />
+      </Suspense>
     )
     return null
   }
