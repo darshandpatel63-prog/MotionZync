@@ -642,7 +642,7 @@ function CodeSpaceInner() {
 
   return (
     <div
-      className={`cs2-root ${zenMode ? 'cs2-zen' : ''}`}
+      className={`cs2-root ${zenMode ? 'cs2-zen' : ''} ${settings.theme === 'cs-light' ? 'cs2-light' : ''}`}
       style={{ '--sidebar-w': `${sidebarWidth}px`, '--preview-w': `${previewWidth}px` }}
     >
       <CodeBg />
