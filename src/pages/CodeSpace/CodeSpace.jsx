@@ -7,7 +7,8 @@
 import { useState, useEffect, useRef, useMemo, lazy, Suspense } from 'react'
 import CsEditor       from './CsEditor.jsx'
 import CsFileExplorer from './CsFileExplorer.jsx'
-import CsTerminal, { createShell } from './CsTerminal.jsx'
+import { createShell } from './cs-shell.js'
+const CsTerminal = lazy(() => import('./CsTerminal.jsx'))
 import CsPreview      from './CsPreview.jsx'
 const CsGitPanel = lazy(() => import('./CsGitPanel.jsx'))
 const CsAIPanel  = lazy(() => import('./CsAIPanel.jsx'))
@@ -759,8 +760,10 @@ function CodeSpaceInner() {
 
             {termOpen && (
               <div className="cs2-terminal-pane">
-                <CsTerminal files={files} onFilesChange={setFiles}
-                  projectName={activeProj?.name} gitRepo={git} />
+                <Suspense fallback={<PanelLoading />}>
+                  <CsTerminal files={files} onFilesChange={setFiles}
+                    projectName={activeProj?.name} gitRepo={git} />
+                </Suspense>
               </div>
             )}
           </div>
