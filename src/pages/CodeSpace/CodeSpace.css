@@ -123,10 +123,35 @@ body.cs2-resizing * { user-select: none !important; }
   -webkit-font-smoothing: antialiased;
 }
 
+/* Phase 7.1 — Light theme. Same token names, light values — everything
+   already styled via var(--cs-*) picks this up automatically. Activated
+   together with the Monaco 'cs-light' editor theme (Settings → Theme)
+   so the editor and the surrounding chrome always match. */
+.cs2-root.cs2-light {
+  --cs-bg:        #f6f7fb;
+  --cs-bg2:       #ffffff;
+  --cs-bg3:       #f1f2f6;
+  --cs-bg4:       #e8e9f0;
+  --cs-border:    rgba(15,23,42,0.08);
+  --cs-border2:   rgba(15,23,42,0.14);
+  --cs-text:      #1e293b;
+  --cs-text2:     #64748b;
+  --cs-text3:     #94a3b8;
+  --cs-accent:    #7c3aed;
+  --cs-accent2:   #6d28d9;
+  --cs-cyan:      #0891b2;
+  --cs-green:     #16a34a;
+  --cs-yellow:    #d97706;
+  --cs-red:       #dc2626;
+  --cs-glow:      rgba(124,58,237,0.15);
+}
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
+.cs2-root.cs2-light ::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.15); }
+.cs2-root.cs2-light ::-webkit-scrollbar-thumb:hover { background: rgba(15,23,42,0.28); }
 
 .cs2-bg-canvas {
   position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.5;
