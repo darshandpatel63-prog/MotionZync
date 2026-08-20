@@ -190,6 +190,14 @@ function TreeNode({
         onDragOver={handleDragOver}
         onDrop={handleDropEvent}
         title={node.path}
+        role="treeitem"
+        tabIndex={isRenaming ? -1 : 0}
+        aria-expanded={isDir ? isOpen : undefined}
+        aria-selected={isActive || isChecked}
+        onKeyDown={e => {
+          if (isRenaming) return
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleRowClick() }
+        }}
       >
         {selectMode && (
           <span className="csfe-select-box">{isChecked ? '☑' : '☐'}</span>
@@ -573,7 +581,7 @@ export default function CsFileExplorer({
       </div>
 
       {/* Tree */}
-      <div className="csfe-tree"
+      <div className="csfe-tree" role="tree" aria-multiselectable={selectMode}
         onDragOver={e => e.preventDefault()}
         onDrop={e => { e.preventDefault(); if (dragging) handleDropInto('') }}>
 
@@ -584,7 +592,9 @@ export default function CsFileExplorer({
               <div key={path}
                 className={`csfe-node csfe-file ${activeFile === path ? 'csfe-active' : ''}${selected.has(path) ? ' csfe-selected' : ''}`}
                 style={{ paddingLeft: 12 }}
-                onClick={() => selectMode ? toggleSelected(path) : onOpen(path)}>
+                role="treeitem" tabIndex={0} aria-selected={activeFile === path || selected.has(path)}
+                onClick={() => selectMode ? toggleSelected(path) : onOpen(path)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectMode ? toggleSelected(path) : onOpen(path) } }}>
                 {selectMode && <span className="csfe-select-box">{selected.has(path) ? '☑' : '☐'}</span>}
                 <span className="csfe-file-spacer" />
                 <FileIcon filename={path.split('/').pop()} />
