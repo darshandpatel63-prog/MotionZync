@@ -235,9 +235,9 @@ function TreeNode({
 
         {!isRenaming && !selectMode && (
           <span className="csfe-hover-actions" onClick={e => e.stopPropagation()}>
-            {isDir && <button className="csfe-act-btn" title="New File" onClick={() => onNewFile(node.path)}>📄</button>}
-            {isDir && <button className="csfe-act-btn" title="New Folder" onClick={() => onNewFolder(node.path)}>📁</button>}
-            <button className="csfe-act-btn csfe-act-del" title="Delete" onClick={() => onDelete(node.path, isDir)}>🗑</button>
+            {isDir && <button className="csfe-act-btn" title="New File" aria-label="New File" onClick={() => onNewFile(node.path)}>📄</button>}
+            {isDir && <button className="csfe-act-btn" title="New Folder" aria-label="New Folder" onClick={() => onNewFolder(node.path)}>📁</button>}
+            <button className="csfe-act-btn csfe-act-del" title="Delete" aria-label="Delete" onClick={() => onDelete(node.path, isDir)}>🗑</button>
           </span>
         )}
       </div>
@@ -540,14 +540,15 @@ export default function CsFileExplorer({
       <div className="csfe-header">
         <span className="csfe-title">EXPLORER</span>
         <div className="csfe-header-actions">
-          <button className="csfe-icon-btn" title="New File"    onClick={() => startCreate('', 'file')}>📄</button>
-          <button className="csfe-icon-btn" title="New Folder"  onClick={() => startCreate('', 'folder')}>📁</button>
-          <button className="csfe-icon-btn" title="Upload Files" onClick={() => fileInputRef.current?.click()}>⬆️</button>
-          <button className="csfe-icon-btn" title="Import ZIP"  onClick={() => zipInputRef.current?.click()}>📦</button>
-          <button className={`csfe-icon-btn${selectMode ? ' csfe-icon-btn-active' : ''}`} title="Select" onClick={toggleSelectMode}>☑️</button>
+          <button className="csfe-icon-btn" title="New File" aria-label="New File"    onClick={() => startCreate('', 'file')}>📄</button>
+          <button className="csfe-icon-btn" title="New Folder" aria-label="New Folder"  onClick={() => startCreate('', 'folder')}>📁</button>
+          <button className="csfe-icon-btn" title="Upload Files" aria-label="Upload Files" onClick={() => fileInputRef.current?.click()}>⬆️</button>
+          <button className="csfe-icon-btn" title="Import ZIP" aria-label="Import ZIP"  onClick={() => zipInputRef.current?.click()}>📦</button>
+          <button className={`csfe-icon-btn${selectMode ? ' csfe-icon-btn-active' : ''}`} title="Select" aria-label="Select" onClick={toggleSelectMode}>☑️</button>
           {ignoredCount > 0 && (
             <button className={`csfe-icon-btn csfe-icon-btn-badge${showIgnored ? ' csfe-icon-btn-active' : ''}`}
               title={showIgnored ? 'Hide ignored files again' : `${ignoredCount} files hidden (node_modules, dist, .gitignore, …) — tap to show`}
+              aria-label={showIgnored ? 'Hide ignored files again' : `${ignoredCount} files hidden, tap to show`}
               onClick={() => setShowIgnored(s => !s)}>
               👁️{!showIgnored && <span className="csfe-badge">{ignoredCount}</span>}
             </button>
@@ -571,7 +572,7 @@ export default function CsFileExplorer({
       <div className="csfe-search-wrap">
         <input className="csfe-search" placeholder="Search files..." value={search}
           onChange={e => setSearch(e.target.value)} />
-        {search && <button className="csfe-search-clear" onClick={() => setSearch('')}>✕</button>}
+        {search && <button className="csfe-search-clear" aria-label="Clear search" onClick={() => setSearch('')}>✕</button>}
       </div>
 
       {/* Project root */}
