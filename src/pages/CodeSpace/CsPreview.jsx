@@ -225,7 +225,7 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
           >
             🖥 Console {errorCount > 0 && <span className="csp-err-badge">{errorCount}</span>}
           </button>
-          <button className="csp-refresh-btn" onClick={refresh} title="Refresh">↻</button>
+          <button className="csp-refresh-btn" onClick={refresh} title="Refresh" aria-label="Refresh">↻</button>
         </div>
       </div>
 
