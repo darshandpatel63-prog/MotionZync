@@ -183,7 +183,7 @@ export function Breadcrumb({ path, onSplit }) {
       ))}
       <div className="cs2-breadcrumb-right">
         <span className="cs2-lang-badge">{lang.label}</span>
-        <button className="cs2-split-btn" onClick={onSplit} title="Split Editor">⬜⬜</button>
+        <button className="cs2-split-btn" onClick={onSplit} title="Split Editor" aria-label="Split Editor">⬜⬜</button>
       </div>
     </div>
   )
@@ -229,9 +229,9 @@ export function ActivityBar({ active, onSelect, terminalOpen, previewOpen, onTer
           title={a.title} onClick={() => onSelect(a.id)}>{a.icon}</button>
       ))}
       <div className="cs2-activity-spacer" />
-      <button className={`cs2-activity-btn ${terminalOpen ? 'active' : ''}`} title="Terminal (Ctrl+`)" onClick={onTerminal}>⚡</button>
-      <button className={`cs2-activity-btn ${previewOpen ? 'active' : ''}`}  title="Preview" onClick={onPreview}>👁</button>
-      <button className="cs2-activity-btn" title="Settings" onClick={onSettings}>⚙️</button>
+      <button className={`cs2-activity-btn ${terminalOpen ? 'active' : ''}`} title="Terminal (Ctrl+`)" aria-label="Terminal (Ctrl+`)" onClick={onTerminal}>⚡</button>
+      <button className={`cs2-activity-btn ${previewOpen ? 'active' : ''}`}  title="Preview" aria-label="Preview" onClick={onPreview}>👁</button>
+      <button className="cs2-activity-btn" title="Settings" aria-label="Settings" onClick={onSettings}>⚙️</button>
     </div>
   )
 }
@@ -253,7 +253,7 @@ export function TitleBar({ projects, activeProj, saveStatus, onPalette, onSwitch
         />
       </div>
 
-      <button className="cs2-palette-trigger" onClick={onPalette} title="Command Palette (Ctrl+P)">
+      <button className="cs2-palette-trigger" onClick={onPalette} title="Command Palette (Ctrl+P)" aria-label="Command Palette (Ctrl+P)">
         🔍 Search commands...
         <span className="cs2-palette-hint">⌘P</span>
       </button>
@@ -265,7 +265,7 @@ export function TitleBar({ projects, activeProj, saveStatus, onPalette, onSwitch
         <button className="cs2-tb-btn" onClick={onShare}>🔗 Share</button>
         <button className="cs2-tb-btn" onClick={onExport}>📦 Export</button>
         <button className="cs2-tb-btn" onClick={onEnv}>🔐 .env</button>
-        <button className="cs2-tb-btn cs2-zen-btn" onClick={onZen} title="Zen Mode">🧘</button>
+        <button className="cs2-tb-btn cs2-zen-btn" onClick={onZen} title="Zen Mode" aria-label="Zen Mode">🧘</button>
       </div>
     </div>
   )
