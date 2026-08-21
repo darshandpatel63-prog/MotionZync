@@ -356,7 +356,7 @@ export default function CsGitPanel({ files, git, projectName, projectId, onResto
               rows={2}
             />
             <div className="csgit-commit-actions">
-              <button className="csgit-stash-btn" onClick={doStash} title="Stash changes">📦 Stash</button>
+              <button className="csgit-stash-btn" onClick={doStash} title="Stash changes" aria-label="Stash changes">📦 Stash</button>
               <button
                 className="csgit-commit-btn"
                 onClick={doCommit}
