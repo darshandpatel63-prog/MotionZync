@@ -101,6 +101,9 @@ body.cs2-resizing * { user-select: none !important; }
   --cs-yellow:    #fbbf24;
   --cs-red:       #f87171;
   --cs-glow:      rgba(124,58,237,0.35);
+  --cs-accent3:   #a78bfa;
+  --cs-green2:    #4ade80;
+  --cs-fg-rgb:    255,255,255;
   --cs-radius:    8px;
   --cs-radius-lg: 12px;
   --cs-font:      'JetBrains Mono','Fira Code','Cascadia Code',monospace;
@@ -144,6 +147,9 @@ body.cs2-resizing * { user-select: none !important; }
   --cs-yellow:    #d97706;
   --cs-red:       #dc2626;
   --cs-glow:      rgba(124,58,237,0.15);
+  --cs-accent3:   #8b5cf6;
+  --cs-green2:    #15803d;
+  --cs-fg-rgb:    15,23,42;
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
