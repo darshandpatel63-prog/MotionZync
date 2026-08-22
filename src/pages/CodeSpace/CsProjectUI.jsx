@@ -57,8 +57,8 @@ export function ProjectCard({ project, isActive, onOpen, onDelete, onRename }) {
         </div>
       </div>
       <div className="cs2-proj-actions" onClick={e => e.stopPropagation()}>
-        <button onClick={() => setRenaming(true)} title="Rename">✏️</button>
-        <button onClick={() => onDelete(project.id)} title="Delete" className="cs2-proj-del">🗑️</button>
+        <button onClick={() => setRenaming(true)} title="Rename" aria-label="Rename">✏️</button>
+        <button onClick={() => onDelete(project.id)} title="Delete" aria-label="Delete" className="cs2-proj-del">🗑️</button>
       </div>
     </div>
   )
@@ -78,7 +78,7 @@ export function ProjectSwitcher({ projects, activeProj, onSwitch, onNew, onDelet
 
   return (
     <div ref={ref} className="cs2-proj-switcher-wrap">
-      <button className="cs2-proj-switcher-btn" onClick={() => setOpen(p => !p)} title="Switch project">
+      <button className="cs2-proj-switcher-btn" onClick={() => setOpen(p => !p)} title="Switch project" aria-label="Switch project">
         <span className="cs2-proj-switcher-name">{activeProj?.name || 'No project'}</span>
         <span className="cs2-proj-switcher-arrow">{open ? '▴' : '▾'}</span>
       </button>
@@ -109,7 +109,7 @@ export function ProjectSwitcher({ projects, activeProj, onSwitch, onNew, onDelet
                 {activeProj?.id === p.id && <span className="cs2-proj-current-dot">●</span>}
                 <button className="cs2-proj-dropdown-del"
                   onClick={e => { e.stopPropagation(); onDelete(p.id) }}
-                  title="Delete">🗑</button>
+                  title="Delete" aria-label={`Delete ${p.name}`}>🗑</button>
               </div>
             ))}
           </div>
@@ -161,7 +161,7 @@ export function TabBar({ tabs, activeTab, onActivate, onClose }) {
             <span className="cs2-tab-icon" style={{ color: lang.color }}>{lang.icon}</span>
             <span className="cs2-tab-name">{filename}</span>
             {tab.dirty && <span className="cs2-tab-dirty">●</span>}
-            <button className="cs2-tab-close"
+            <button className="cs2-tab-close" aria-label={`Close ${filename}`}
               onClick={e => { e.stopPropagation(); onClose(tab.path) }}>✕</button>
           </div>
         )
@@ -226,7 +226,7 @@ export function ActivityBar({ active, onSelect, terminalOpen, previewOpen, onTer
     <div className="cs2-activity-bar">
       {ACTIVITIES.map(a => (
         <button key={a.id} className={`cs2-activity-btn ${active === a.id ? 'active' : ''}`}
-          title={a.title} onClick={() => onSelect(a.id)}>{a.icon}</button>
+          title={a.title} aria-label={a.title} onClick={() => onSelect(a.id)}>{a.icon}</button>
       ))}
       <div className="cs2-activity-spacer" />
       <button className={`cs2-activity-btn ${terminalOpen ? 'active' : ''}`} title="Terminal (Ctrl+`)" aria-label="Terminal (Ctrl+`)" onClick={onTerminal}>⚡</button>
