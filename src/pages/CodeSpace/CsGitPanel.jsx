@@ -174,7 +174,7 @@ function RepoPush({ files, projectId, authFetch, onImportProject }) {
             <form className="csgit-push-createform" onSubmit={doCreate}>
               <input placeholder="repo-name" value={newName} onChange={e => setNewName(e.target.value)} autoFocus />
               <button type="submit">Create</button>
-              <button type="button" onClick={() => setCreating(false)}>✕</button>
+              <button type="button" aria-label="Cancel" onClick={() => setCreating(false)}>✕</button>
             </form>
           )}
         </>
@@ -394,7 +394,7 @@ export default function CsGitPanel({ files, git, projectName, projectId, onResto
             <div className="csgit-diff-area">
               <div className="csgit-diff-title">
                 <span>📄 {selectedFile}</span>
-                <button onClick={() => setFile(null)}>✕</button>
+                <button aria-label="Close diff" onClick={() => setFile(null)}>✕</button>
               </div>
               <DiffViewer path={selectedFile} chunks={fileDiff} />
             </div>
@@ -455,7 +455,7 @@ export default function CsGitPanel({ files, git, projectName, projectId, onResto
                 autoFocus
               />
               <button className="csgit-create-btn" onClick={doCreateBranch}>Create</button>
-              <button className="csgit-cancel-btn" onClick={() => setCreating(false)}>✕</button>
+              <button className="csgit-cancel-btn" aria-label="Cancel" onClick={() => setCreating(false)}>✕</button>
             </div>
           ) : (
             <button className="csgit-new-branch-btn" onClick={() => setCreating(true)}>
