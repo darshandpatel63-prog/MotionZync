@@ -204,6 +204,7 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
               className={`csp-vp-btn ${viewport === v.id ? 'active' : ''}`}
               onClick={() => setViewport(v.id)}
               title={v.label}
+              aria-label={v.label}
             >{v.icon}</button>
           ))}
         </div>
@@ -222,6 +223,7 @@ export default function CsPreview({ files, entry, autoRefresh = true, refreshTic
             className={`csp-console-btn ${errorCount > 0 ? 'csp-has-errors' : ''}`}
             onClick={() => setConsole(p => !p)}
             title="Toggle Console"
+            aria-label="Toggle Console"
           >
             🖥 Console {errorCount > 0 && <span className="csp-err-badge">{errorCount}</span>}
           </button>
