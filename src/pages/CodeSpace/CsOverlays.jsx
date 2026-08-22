@@ -3,12 +3,14 @@
 // ============================================================
 import { useState, useEffect, useRef } from 'react'
 import { getLangFromExt, TEMPLATES } from './cs-filesystem.js'
+import { useModalA11y } from './cs-a11y.js'
 
 // ── Command Palette ───────────────────────────────────────────
 export function CommandPalette({ files, onClose, onOpenFile, onAction }) {
   const [query, setQuery] = useState('')
   const inputRef = useRef(null)
   useEffect(() => { inputRef.current?.focus() }, [])
+  const modalRef = useModalA11y(onClose)
 
   const COMMANDS = [
     { id: 'save',     label: 'Save File',        icon: '💾', shortcut: 'Ctrl+S' },
@@ -35,7 +37,7 @@ export function CommandPalette({ files, onClose, onOpenFile, onAction }) {
 
   return (
     <div className="cs2-palette-overlay" onClick={onClose}>
-      <div className="cs2-palette" onClick={e => e.stopPropagation()}>
+      <div className="cs2-palette" ref={modalRef} role="dialog" aria-modal="true" aria-label="Command palette" onClick={e => e.stopPropagation()}>
         <div className="cs2-palette-search">
           <span className="cs2-palette-magnify">🔍</span>
           <input
@@ -92,12 +94,13 @@ const THEMES = [
 ]
 
 export function SettingsPanel({ settings, onChange, onClose }) {
+  const modalRef = useModalA11y(onClose)
   return (
     <div className="cs2-settings-overlay" onClick={onClose}>
-      <div className="cs2-settings" onClick={e => e.stopPropagation()}>
+      <div className="cs2-settings" ref={modalRef} role="dialog" aria-modal="true" aria-label="Settings" onClick={e => e.stopPropagation()}>
         <div className="cs2-settings-header">
           <span>⚙️ Settings</span>
-          <button onClick={onClose}>✕</button>
+          <button aria-label="Close settings" onClick={onClose}>✕</button>
         </div>
         <div className="cs2-settings-body">
           <label className="cs2-setting">
@@ -142,13 +145,14 @@ export function SettingsPanel({ settings, onChange, onClose }) {
 export function TemplatePicker({ onSelect, onClose }) {
   const categories = [...new Set(TEMPLATES.map(t => t.category))]
   const [cat, setCat] = useState(categories[0])
+  const modalRef = useModalA11y(onClose)
 
   return (
     <div className="cs2-tmpl-overlay" onClick={onClose}>
-      <div className="cs2-tmpl" onClick={e => e.stopPropagation()}>
+      <div className="cs2-tmpl" ref={modalRef} role="dialog" aria-modal="true" aria-label="New project from template" onClick={e => e.stopPropagation()}>
         <div className="cs2-tmpl-header">
           <span>🚀 New Project</span>
-          <button onClick={onClose}>✕</button>
+          <button aria-label="Close" onClick={onClose}>✕</button>
         </div>
         <div className="cs2-tmpl-cats">
           {categories.map(c => (
@@ -212,11 +216,11 @@ export function EnvEditor({ files, onChange }) {
           <span className="cs2-env-key">{k}</span>
           <input className="cs2-env-val" type={masked[k] ? 'password' : 'text'}
             value={v} onChange={e => update(k, e.target.value)} />
-          <button className="cs2-env-mask"
+          <button className="cs2-env-mask" aria-label={masked[k] ? `Show value of ${k}` : `Hide value of ${k}`}
             onClick={() => setMask(p => ({ ...p, [k]: !p[k] }))}>
             {masked[k] ? '👁' : '🙈'}
           </button>
-          <button className="cs2-env-del" onClick={() => removeVar(k)}>✕</button>
+          <button className="cs2-env-del" aria-label={`Remove ${k}`} onClick={() => removeVar(k)}>✕</button>
         </div>
       ))}
       {Object.keys(vals).length === 0 && (
@@ -228,12 +232,13 @@ export function EnvEditor({ files, onChange }) {
 
 // ── ENV Modal Wrapper ─────────────────────────────────────────
 export function EnvModal({ files, onChange, onClose }) {
+  const modalRef = useModalA11y(onClose)
   return (
     <div className="cs2-env-overlay" onClick={onClose}>
-      <div className="cs2-env-modal" onClick={e => e.stopPropagation()}>
+      <div className="cs2-env-modal" ref={modalRef} role="dialog" aria-modal="true" aria-label="Environment variables" onClick={e => e.stopPropagation()}>
         <div className="cs2-env-modal-header">
           <span>🔐 Environment Variables</span>
-          <button onClick={onClose}>✕</button>
+          <button aria-label="Close" onClick={onClose}>✕</button>
         </div>
         <EnvEditor files={files} onChange={onChange} />
       </div>
