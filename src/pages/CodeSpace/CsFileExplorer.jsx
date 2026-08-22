@@ -8,6 +8,30 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { getLangFromExt, buildTree } from './cs-filesystem.js'
 import { getConfig, setConfig } from './cs-storage.js'
 import ignore from 'ignore'
+import { useModalA11y } from './cs-a11y.js'
+
+// ── Bulk-move destination picker (own component so it can use the
+// focus-trap hook, which expects to mount only while actually open) ──
+function MovePickerModal({ count, targets, moveTarget, setMoveTarget, onCancel, onConfirm }) {
+  const modalRef = useModalA11y(onCancel)
+  return (
+    <div className="csfe-modal-overlay" onClick={onCancel}>
+      <div className="csfe-modal" ref={modalRef} role="dialog" aria-modal="true" aria-label="Move items" onClick={e => e.stopPropagation()}>
+        <div className="csfe-modal-title">Move {count} item(s) to:</div>
+        <select className="csfe-modal-select" value={moveTarget} onChange={e => setMoveTarget(e.target.value)}>
+          <option value="__none__" disabled>Choose a folder…</option>
+          {targets.map(f => (
+            <option key={f || '__root__'} value={f}>{f === '' ? '/ (project root)' : f}</option>
+          ))}
+        </select>
+        <div className="csfe-modal-actions">
+          <button className="csfe-modal-btn" onClick={onCancel}>Cancel</button>
+          <button className="csfe-modal-btn csfe-modal-primary" disabled={moveTarget === '__none__'} onClick={onConfirm}>Move</button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // Phase 5.3 — always-ignored noise, e.g. from a ZIP import that included
 // build output. A .gitignore committed in the project (if any) is layered
@@ -627,21 +651,14 @@ export default function CsFileExplorer({
 
       {/* Bulk-move destination picker */}
       {movePicker && (
-        <div className="csfe-modal-overlay" onClick={() => setMovePicker(false)}>
-          <div className="csfe-modal" onClick={e => e.stopPropagation()}>
-            <div className="csfe-modal-title">Move {topLevelSelection().length} item(s) to:</div>
-            <select className="csfe-modal-select" value={moveTarget} onChange={e => setMoveTarget(e.target.value)}>
-              <option value="__none__" disabled>Choose a folder…</option>
-              {moveTargets.map(f => (
-                <option key={f || '__root__'} value={f}>{f === '' ? '/ (project root)' : f}</option>
-              ))}
-            </select>
-            <div className="csfe-modal-actions">
-              <button className="csfe-modal-btn" onClick={() => setMovePicker(false)}>Cancel</button>
-              <button className="csfe-modal-btn csfe-modal-primary" disabled={moveTarget === '__none__'} onClick={confirmBulkMove}>Move</button>
-            </div>
-          </div>
-        </div>
+        <MovePickerModal
+          count={topLevelSelection().length}
+          targets={moveTargets}
+          moveTarget={moveTarget}
+          setMoveTarget={setMoveTarget}
+          onCancel={() => setMovePicker(false)}
+          onConfirm={confirmBulkMove}
+        />
       )}
 
       {/* Context menu */}
