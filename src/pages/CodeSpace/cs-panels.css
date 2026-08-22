@@ -26,6 +26,7 @@
   display: flex; align-items: center; gap: 10px;
   padding: 12px 16px; border-bottom: 1px solid rgba(var(--cs-fg-rgb),0.07);
 }
+.cs2-palette-search:focus-within { border-bottom-color: var(--cs-accent); }
 .cs2-palette-magnify { font-size: 1rem; color: var(--cs-text3); }
 .cs2-palette-input {
   flex: 1; background: none; border: none; outline: none;
@@ -524,6 +525,7 @@
   flex: 1; background: var(--cs-bg4); border: 1px solid var(--cs-accent);
   color: var(--cs-text); font-size: 0.78rem; padding: 5px 8px; border-radius: 5px; outline: none;
 }
+.csgit-branch-input:focus { box-shadow: 0 0 0 2px var(--cs-glow); }
 .csgit-create-btn, .csgit-cancel-btn { padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.73rem; font-weight: 600; }
 .csgit-create-btn { background: var(--cs-accent); border: none; color: #fff; }
 .csgit-cancel-btn { background: rgba(var(--cs-fg-rgb),0.06); border: 1px solid rgba(var(--cs-fg-rgb),0.07); color: var(--cs-text2); }
@@ -556,6 +558,7 @@
   border-radius: 4px; outline: none; font-family: inherit;
   min-width: 0;
 }
+.csfe-inline-input:focus { box-shadow: 0 0 0 2px var(--cs-glow); }
 .csfe-hover-actions {
   display: none; align-items: center; gap: 1px; margin-left: auto; flex-shrink: 0;
 }
