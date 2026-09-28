@@ -149,7 +149,6 @@ export default function Course() {
                     ))}
                     <div className="try-link-row">
                       <Link to="/playground" className="btn-primary try-link">⚡ Try in Playground</Link>
-                      <Link to="/anim-creator" className="btn-secondary try-link">🎬 Open AnimCreator</Link>
                     </div>
                     {mod.id % 2 === 0 && <div className="ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_COURSE}/></div>}
                   </div>
@@ -166,7 +165,6 @@ export default function Course() {
           <div style={{display:'flex',gap:'.7rem',justifyContent:'center',flexWrap:'wrap',marginTop:'1rem'}}>
             <Link to="/playground" className="btn-primary">⚡ Open Playground</Link>
             <Link to="/gallery" className="btn-secondary">🎨 Browse Gallery</Link>
-            <Link to="/anim-creator" className="btn-secondary">🎬 AnimCreator</Link>
           </div>
         </div>
 
