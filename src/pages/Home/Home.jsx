@@ -834,7 +834,7 @@ export default function Home() {
           <Reveal delay={0.25}>
             <p className="hero-desc">
               Free live CSS & JavaScript animation playground. Browse 100+ animations,
-              customize live, copy code — and now submit your own.
+              customize live, copy code —.
             </p>
           </Reveal>
           <Reveal delay={0.35}>
