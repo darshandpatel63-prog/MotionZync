@@ -89,6 +89,35 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 
 Do not edit other existing project files unless a future Design Intelligence milestone proves it necessary.
 
+
+
+## Documentation milestone — 2026-09-28
+
+### IMPLEMENTED
+- Expanded the canonical Design Intelligence blueprint without removing earlier requirements.
+- Added target taxonomy for product/UI types, device/platform targets, layouts, components, UX states, motion, live effects, 3D/graphics, game UI, design systems, accessibility, internationalization and developer/architecture intelligence.
+- Added anti-template-convergence requirements so generated interfaces should not share one obvious fixed "AI-generated" visual pattern.
+- Added local-first npm/CLI architectural requirements.
+- Added server-authoritative premium subscription expiry/entitlement rules and documented the technical limitation that downloaded client-readable data cannot be guaranteed to be physically deleted.
+- Added the Universal Master Orchestrator protocol to the canonical project blueprint and common instructions.
+
+### ARCHITECTURALLY SUPPORTED
+- One canonical Design Intelligence core can serve Web, npm/local, CLI, API and future MCP/agent interfaces.
+- Premium access can be server-authoritative while free/local content can remain locally executable.
+- Design diversity can be produced through structured design dimensions, compatibility rules and controlled variation rather than a single fixed template.
+
+### PLANNED / FUTURE
+- Actual npm/local package.
+- Actual CLI.
+- Actual premium entitlement backend, billing and expiring API credentials.
+- Advanced animation/live-effects/3D/game adapters.
+- Expanded responsive/platform-specific generators.
+- Full anti-template diversity engine and validation.
+- Actual runtime implementation of any autonomous multi-agent orchestration; the blueprint currently defines the coordination protocol only.
+
+### UNVERIFIED
+- None of the newly documented future capabilities should be treated as runtime-verified merely because they are now documented.
+
 ## FIRST UNFINISHED TASK
 Get a real build/preview verification of feature/design-intelligence and test:
 - /design-intelligence
