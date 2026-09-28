@@ -24,9 +24,3 @@
   color: var(--accent-primary) !important;
 }
 
-.footer-tools-link      { color: #06b6d4 !important; font-weight: 600 !important; }
-.footer-codespace-link  { color: #f59e0b !important; font-weight: 600 !important; }
-.footer-creator-link    { color: #a78bfa !important; font-weight: 700 !important; }
-.footer-changelog-link  { color: var(--accent-glow) !important; font-weight: 600 !important; }
-
-.footer-creator-link:hover { color: #7c3aed !important; }
