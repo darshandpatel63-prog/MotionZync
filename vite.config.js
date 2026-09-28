@@ -36,8 +36,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Three.js — 1MB+ → separate chunk (lazy loaded)
-          'three-vendor':    ['three'],
           // Firebase — loaded only when auth used
           'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
           // React core

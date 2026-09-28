@@ -1,12 +1,7 @@
 // api/_lib/github.js
 // ============================================================
 // Server-side GitHub helper for the Admin panel's "push to GitHub"
-// feature. Deliberately separate from src/pages/CodeSpace/gh-push.js:
-// that one runs in the BROWSER with a per-user OAuth token (CodeSpace
-// lets any signed-in visitor push to a repo of their own choosing).
-// This one runs ONLY on the server, with a single fixed admin token
-// (GITHUB_TOKEN) that never reaches the browser, and always targets
-// the one repo configured in env vars.
+// feature. The browser-side editor integration was removed; this helper is now used only by the Admin animation content pipeline.
 //
 // Same underlying technique though: the Git Data API (blobs → tree →
 // commit → ref) so one Admin "Save" = exactly one commit, even when it

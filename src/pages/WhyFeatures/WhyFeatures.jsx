@@ -24,13 +24,6 @@ const WHY_FEATURES = [
     link:'/anim-creator', linkLabel:'Open AnimCreator'
   },
   {
-    icon:'💻', title:'CodeSpace IDE',
-    problem:'To code a web project, you need: install Node.js, install VS Code, install extensions, configure project, set up a local server, learn Git... before writing a single line of HTML.',
-    solution:'CodeSpace is a complete IDE in your browser. Open it, start coding immediately. File explorer, syntax highlighting, autocomplete, live preview, terminal simulation, Git panel — everything a development environment needs, zero setup.',
-    useCases:['Prototyping a web app idea instantly without local setup','Learning HTML/CSS/JS without installing anything','Building a quick demo to show a client from any device','Writing and testing JavaScript without leaving the browser'],
-    link:'/codespace', linkLabel:'Open CodeSpace'
-  },
-  {
     icon:'📚', title:'Animation Course',
     problem:'CSS and JavaScript animation tutorials on YouTube are scattered, outdated, or too basic/advanced. Finding a structured path from beginner to production-ready is difficult.',
     solution:'A structured, free, complete course designed specifically for MotionZync\'s context. Module 1 → Module 4, each building on the last. Code examples run directly in the Playground for immediate practice.',
@@ -38,25 +31,11 @@ const WHY_FEATURES = [
     link:'/course', linkLabel:'Start Course'
   },
   {
-    icon:'🖼️', title:'Live Wallpapers',
-    problem:'Live wallpapers for phones and desktops are complex apps requiring native development. Most live wallpaper creators provide only basic patterns.',
-    solution:'MotionZync turns any web animation into a live wallpaper HTML file. Download, load in a wallpaper app, done. Your phone or desktop gets a beautiful, unique, technical live wallpaper in 2 minutes.',
-    useCases:['Creating a unique galaxy particle wallpaper for your phone','Setting an animated neon grid as your desktop background','Sharing a beautiful wallpaper with friends','Impressing clients by using your own animated wallpaper during presentations'],
-    link:'/wallpaper', linkLabel:'Get Wallpapers'
-  },
-  {
     icon:'🔍', title:'Animation Compare',
     problem:'When choosing between two similar animations for a project, you have to open them in separate tabs, switch back and forth, and rely on memory to compare.',
     solution:'Compare lets you load two animations side-by-side in a single view with synchronized playback controls. See them together, choose confidently.',
     useCases:['Choosing between a particle burst and a floating orb for a hero section','Comparing a wave animation vs DNA helix for a biotech landing page','Showing two animation options to a client in a single view'],
     link:'/compare', linkLabel:'Try Compare'
-  },
-  {
-    icon:'📤', title:'Submit Animation',
-    problem:'Developers and designers build unique animations for projects but have no platform to share, discover, or get credit for their work in the web animation community.',
-    solution:'Submit your animation to MotionZync\'s gallery. After admin review, your animation is featured for thousands of users to discover, use, and credit you for.',
-    useCases:['Sharing an animation you\'re proud of with the developer community','Building a portfolio by getting animations published on a real platform','Contributing to an open animation resource others can learn from'],
-    link:'/submit', linkLabel:'Submit Now'
   },
   {
     icon:'⭐', title:'Favorites',
@@ -71,13 +50,6 @@ const WHY_FEATURES = [
     solution:'MotionZync\'s Tools page provides utility tools specifically for animation and web development work, all in one place without leaving the platform.',
     useCases:['Converting hex colors to HSL for CSS animations','Visualizing easing curves for animation timing','Converting pixel values to viewport units (vw/vh)'],
     link:'/tools', linkLabel:'Open Tools'
-  },
-  {
-    icon:'📋', title:'Changelog',
-    problem:'When using a platform regularly, it\'s important to know what new features, bug fixes, and improvements were added — so you can take advantage of them.',
-    solution:'MotionZync\'s Changelog documents every platform update: new animations added, features released, bugs fixed, and improvements made.',
-    useCases:['Staying updated on new animation types added to gallery','Learning about new AnimCreator or CodeSpace features','Knowing when bugs you reported are fixed'],
-    link:'/changelog', linkLabel:'View Changelog'
   },
 ]
 

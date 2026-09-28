@@ -141,7 +141,7 @@ footer a{color:var(--c);text-decoration:none}
     <div class="info-card">
       <span class="ic-icon">📧</span>
       <h3>Email</h3>
-      <a href="mailto:wealthkavach1@gmail.com">wealthkavach1@gmail.com</a>
+      <a href="mailto:Contact Us page">Contact Us page</a>
     </div>
     <div class="info-card">
       <span class="ic-icon">⏱️</span>
@@ -286,7 +286,7 @@ function handleSubmit(){
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){alert('Please enter a valid email address.');return;}
   const emailSubject=`[MotionZync] ${topic?topic+' - ':''}${subject}`;
   const body=`Name: ${name}\nEmail: ${email}\nTopic: ${topic||'General'}\n\nMessage:\n${message}${copy?`\n\n--- Copy to sender: ${email} ---`:''}`;
-  let mailto=`mailto:wealthkavach1@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(body)}`;
+  let mailto=`mailto:Contact Us page?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(body)}`;
   if(copy)mailto+=`&cc=${encodeURIComponent(email)}`;
   window.location.href=mailto;
   document.getElementById('formWrap').style.display='none';
