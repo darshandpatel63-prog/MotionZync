@@ -144,7 +144,6 @@ export default function AnimationCard({ animation }) {
 
         <div className="anim-card-actions">
           <Link to={`/animation/${docId}`} className="btn-primary anim-try-btn">Try it ⚡</Link>
-          <Link to={`/wallpaper?id=${docId}`} className="btn-secondary anim-wall-btn">🖼️</Link>
           <button className="btn-secondary anim-share-btn" onClick={handleShare}>🔗</button>
 
           {/* ── Bookmark / Save to Favorites ── */}

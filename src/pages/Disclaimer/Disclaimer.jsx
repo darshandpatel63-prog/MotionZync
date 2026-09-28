@@ -13,14 +13,12 @@ export default function Disclaimer() {
           <li>Optimize for performance as needed</li>
           <li>We are not responsible for issues from code implementation</li>
         </ul>
-        <h2>Wallpaper Downloads</h2>
-        <p>Live wallpapers are HTML files requiring third-party apps. We are not responsible for device performance impacts.</p>
         <h2>Advertisements</h2>
         <p>Ads are served by Google AdSense. We do not endorse advertised products or services.</p>
         <h2>Course Content</h2>
         <p>Course content is for education. Web technologies evolve — always refer to official documentation for current standards.</p>
         <h2>Contact</h2>
-        <p><a href="mailto:wealthkavach1@gmail.com">wealthkavach1@gmail.com</a></p>
+        <p><a href="/contact.html">Contact Us</a></p>
       </div>
       <AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_HOME}/>
     </div></div>

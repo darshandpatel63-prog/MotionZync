@@ -139,7 +139,6 @@ function DetailHeader({ anim, copied, onShare }) {
           {copied==='link'?'✅ Copied!':'🔗 Share'}
         </button>
         <Link to={`/compare?a=${anim.docId}`} className="dh-btn">⚖️ Compare</Link>
-        <Link to={`/wallpaper?id=${anim.docId}`} className="dh-btn">🖼️ Wallpaper</Link>
         <Link to="/playground" className="dh-btn dh-btn-primary">⚡ Playground</Link>
       </div>
     </div>

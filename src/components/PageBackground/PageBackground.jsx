@@ -15,7 +15,6 @@ export default function PageBackground({ variant = 'default' }) {
         <span className="page-bg__sym s5">@keyframes</span>
         <span className="page-bg__sym s6">canvas</span>
       </>}
-      {variant==='wallpaper' && <div className="page-bg__aurora"/>}
     </div>
   )
 }
