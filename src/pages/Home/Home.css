@@ -85,16 +85,6 @@
 .hero-cta { font-size:0.93rem; padding:0.72rem 1.7rem; }
 .glow-btn { box-shadow:0 0 28px rgba(124,58,237,0.4); }
 .glow-btn:hover { box-shadow:0 0 42px rgba(124,58,237,0.65); }
-.hero-submit-btn {
-  display:inline-flex; align-items:center;
-  background:rgba(124,58,237,0.12);
-  border:1px solid rgba(124,58,237,0.35);
-  color:var(--accent-glow); font-size:0.85rem; font-weight:700;
-  padding:0.65rem 1.4rem; border-radius:var(--radius-md);
-  text-decoration:none; transition:all 0.2s;
-}
-.hero-submit-btn:hover { background:rgba(124,58,237,0.22); transform:translateY(-2px); }
-
 /* Scroll hint */
 .hero-scroll-hint {
   position:absolute; bottom:1.8rem; left:50%;
