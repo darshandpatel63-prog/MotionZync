@@ -35,49 +35,11 @@
 .nb-link:hover  { color: #e2e8f0; background: rgba(255,255,255,.06); }
 .nb-link.active { color: #a78bfa; background: rgba(124,58,237,.18); }
 
-/* ── Studios dropdown ─────────────────────────────── */
-.nb-dropdown { position: relative; }
-.nb-studios-btn { cursor: pointer; border: none; font-size: 13px; }
-.nb-dropdown-menu {
-  position: absolute; top: calc(100% + 8px); left: 50%;
-  transform: translateX(-50%);
-  background: #12121e; border: 1px solid #2a2a40;
-  border-radius: 14px; padding: 6px;
-  min-width: 220px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 0 1px rgba(124,58,237,.1);
-  animation: nb-drop .15s ease;
-}
-@keyframes nb-drop { from { opacity:0; transform:translateX(-50%) translateY(-6px); } }
-.nb-dd-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px; border-radius: 9px; text-decoration: none;
-  color: #94a3b8; font-size: 13px; transition: all .12s;
-}
-.nb-dd-item:hover { background: rgba(124,58,237,.15); color: #e2e8f0; }
-.nb-dd-icon { font-size: 16px; flex-shrink: 0; }
-.nb-dd-label { flex: 1; }
-.nb-dd-right { display: flex; align-items: center; gap: 5px; }
-.nb-dd-lock { font-size: 11px; opacity: .6; }
-.nb-badge {
-  font-size: 9px; font-weight: 800; padding: 2px 6px;
-  border-radius: 20px; background: rgba(124,58,237,.3);
-  color: #a78bfa; border: 1px solid rgba(124,58,237,.4);
-  letter-spacing: .03em;
-}
-.nb-badge.ai { background: rgba(6,182,212,.3); color: #67e8f9; border-color: rgba(6,182,212,.4); }
 
 /* ── Right side ───────────────────────────────────── */
-.nb-right {
-  display: flex; align-items: center; gap: 8px; margin-left: auto;
-}
-.nb-submit-btn {
-  height: 32px; padding: 0 14px; border-radius: 8px;
-  font-size: 12px; font-weight: 700; text-decoration: none;
-  background: rgba(124,58,237,.2); color: #a78bfa;
-  border: 1px solid rgba(124,58,237,.35); transition: all .15s;
-  display: flex; align-items: center;
-}
-.nb-submit-btn:hover { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+.nb-right{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.nb-key-btn{height:32px;padding:0 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;background:rgba(124,58,237,.14);color:#c4b5fd;border:1px solid rgba(124,58,237,.32);display:flex;align-items:center;gap:5px;}
+.nb-key-btn:hover{background:rgba(124,58,237,.25);border-color:#7c3aed;color:#fff;}
 
 /* ── Hamburger ────────────────────────────────────── */
 .nb-hamburger {
@@ -111,16 +73,8 @@
 }
 .nb-mob-link:hover,
 .nb-mob-link.active { background: rgba(124,58,237,.15); color: #e2e8f0; }
-.nb-mob-divider {
-  padding: 8px 14px; font-size: 11px; color: #374151;
-  text-align: center; letter-spacing: .05em;
-}
 
-@media (max-width: 900px) {
-  .nb-links { display: none; }
-  .nb-hamburger { display: flex; }
-  .nb-submit-btn { display: none; }
-}
+@media (max-width: 900px) { .nb-links{display:none;} .nb-hamburger{display:flex;} .nb-key-btn span{display:none;} }
 @media (max-width: 480px) {
   .nb-root { padding: 0 10px; height: 50px; }
   .nb-logo-text { font-size: 14px; }
