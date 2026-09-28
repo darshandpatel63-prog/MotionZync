@@ -55,3 +55,14 @@ IMPLEMENTED / VERIFIED / UNVERIFIED / ARCHITECTURALLY SUPPORTED / PLANNED-FUTURE
 ## Safety checkpoint
 Before each milestone check:
 existing-feature regression, functionality, accessibility, privacy/security, performance, data quality, build/test and documentation.
+
+
+## Extended project requirements
+- Preserve and expand the existing blueprint; do not delete earlier requirements when adding new domains.
+- Design Intelligence is intended to cover web, desktop, mobile/tablet, games, 3D, live effects, animation, accessibility, responsive behavior, design systems, UX, developer architecture and other verified interface domains.
+- The generator must avoid converging on one recognizable "AI-made" visual pattern. Use deliberate, compatible design diversity rather than one fixed template or arbitrary randomness.
+- Future npm/CLI interfaces should prefer local execution when technically possible; never claim offline/local behavior until it is implemented and verified.
+- Premium expiry must be server-authoritative. A frontend timer is not entitlement control. Do not promise physical deletion of premium data already downloaded to a user's device.
+- Keep one canonical Design Intelligence core across Web, npm, CLI, API and MCP/agent interfaces.
+- For meaningful tasks, follow the Universal Master Orchestrator protocol in MotionZync_Design_Intelligence_Master_Prompt_README.md. Dynamically choose the smallest justified specialist team and use independent challenge/verification when warranted.
+- Do not claim that autonomous multi-agent infrastructure exists in the repository unless it has actually been implemented and verified.
