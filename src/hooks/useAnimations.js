@@ -16,9 +16,6 @@
 // for animation reads/writes at all.)
 // ============================================================
 
-import {
-  collection, getDocs, addDoc, updateDoc, deleteDoc, doc
-} from 'firebase/firestore'
 import { db, auth } from '../firebase'
 
 export function generateTags(title='', description='') {
