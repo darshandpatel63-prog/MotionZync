@@ -26,11 +26,6 @@ export default function Footer() {
               <Link to="/playground">Playground</Link>
             </div>
 
-            {/* Create */}
-            <div className="footer-col">
-              <h4>Create</h4>
-            </div>
-
             {/* Legal — all point to public .html files, NOT React routes */}
             <div className="footer-col">
               <h4>Legal</h4>
@@ -57,7 +52,6 @@ export default function Footer() {
             <a href="/terms.html"      target="_blank" rel="noopener noreferrer">Terms</a> ·{' '}
             <a href="/disclaimer.html" target="_blank" rel="noopener noreferrer">Disclaimer</a> ·{' '}
             <a href="/contact.html"    target="_blank" rel="noopener noreferrer">Contact</a> ·{' '}
-            <Link to="/tools">Tools</Link> ·{' '}
 
           </p>
         </div>
