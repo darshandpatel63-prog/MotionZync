@@ -111,8 +111,6 @@ export default function HowToUse() {
         {/* CTA CARDS */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:'1.2rem',marginTop:'1rem'}}>
           {[
-            { icon:'🎬', title:'AnimCreator Full Guide', desc:'Complete A–Z guide: all tools, panels, physics, particles, shaders, export and every feature explained.', to:'/tool-guide' },
-            { icon:'💻', title:'CodeSpace Full Guide', desc:'Complete IDE documentation: file system, editor, terminal, Git panel, templates, all shortcuts.', to:'/tool-guide' },
             { icon:'🤔', title:'Why These Features?', desc:'Understand exactly how each MotionZync tool helps you build better websites and apps.', to:'/why-features' },
           ].map(c=>(
             <div key={c.to} style={{background:'rgba(20,20,35,.7)',border:'1px solid rgba(124,58,237,.18)',borderRadius:'14px',padding:'1.5rem',backdropFilter:'blur(12px)'}}>
