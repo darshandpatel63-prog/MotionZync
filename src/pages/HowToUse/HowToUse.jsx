@@ -39,7 +39,7 @@ export default function HowToUse() {
         <div className="ad-zone"><AdSense slot={import.meta.env.VITE_ADSENSE_SLOT_HOME}/></div>
 
         <div className="how-quick-links" style={{display:'flex',flexWrap:'wrap',gap:'.5rem',marginBottom:'2rem'}}>
-          {[['⚡','Playground','/playground'],['🎨','Gallery','/gallery'],['🎬','AnimCreator','/anim-creator'],['💻','CodeSpace','/codespace'],['📚','Course','/course'],['🖼️','Wallpaper','/wallpaper'],['📖','Full Tool Guide','/tool-guide']].map(([ic,lbl,to])=>(
+          {[['⚡','Playground','/playground'],['🎨','Gallery','/gallery'],['📚','Course','/course'],['🔧','Tools','/tools'],['⭐','Favorites','/favorites'],['📖','Tool Guide','/tool-guide']].map(([ic,lbl,to])=>(
             <Link key={to} to={to} style={{display:'inline-flex',alignItems:'center',gap:'.35rem',background:'rgba(124,58,237,.1)',border:'1px solid rgba(124,58,237,.25)',color:'#a78bfa',padding:'.35rem .8rem',borderRadius:'8px',textDecoration:'none',fontSize:'.82rem',fontWeight:600,transition:'all .2s'}}>{ic} {lbl}</Link>
           ))}
         </div>
