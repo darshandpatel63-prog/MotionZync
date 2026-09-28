@@ -841,7 +841,6 @@ export default function Home() {
             <div className="hero-actions">
               <Link to="/playground" className="btn-primary hero-cta glow-btn magnetic">⚡ Try Playground</Link>
               <Link to="/gallery"    className="btn-secondary hero-cta magnetic">Browse Gallery →</Link>
-              <Link to="/submit"     className="hero-submit-btn magnetic">+ Submit Animation</Link>
             </div>
           </Reveal>
         </div>
@@ -935,9 +934,7 @@ const features=[
   {icon:'⚡',title:'Live Playground',  desc:'Type CSS or JavaScript and see animation run instantly. No setup required!',           link:'/playground',linkText:'Open Playground'},
   {icon:'🎨',title:'100+ Animations',  desc:'Backgrounds, buttons, particles, canvas, text effects — all free.',                    link:'/gallery',   linkText:'View Gallery'},
   {icon:'📚',title:'Animation Course', desc:'Learn CSS & JS animation from scratch with live demos.',                               link:'/course',    linkText:'Start Learning'},
-  {icon:'🖼️',title:'Live Wallpaper',   desc:'Download any animation as a live HTML wallpaper.',                                    link:'/wallpaper', linkText:'Get Wallpapers'},
   {icon:'🔍',title:'Smart Search',     desc:'Search by title, tag, or category. Find exactly what you need fast.',                  link:null},
   {icon:'📋',title:'Copy-Ready Code',  desc:'One-click copy CSS and JavaScript code. Ready to paste anywhere.',                     link:null},
   {icon:'🔒',title:'100% Secure',      desc:'All code runs in sandboxed iframes. Your device is always safe.',                      link:null},
-  {icon:'📤',title:'Submit Animation', desc:'Built something cool? Submit for review and get featured in the gallery.',             link:'/submit', linkText:'Submit Now'},
 ]
