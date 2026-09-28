@@ -17,13 +17,6 @@ const WHY_FEATURES = [
     link:'/playground', linkLabel:'Open Playground'
   },
   {
-    icon:'🎬', title:'AnimCreator',
-    problem:'Designing custom animations requires learning GSAP, Framer Motion, or complex CSS keyframe sequences. Even experienced developers spend hours on complex multi-element animations.',
-    solution:'AnimCreator lets you design visually — draw shapes, click to assign animations, configure physics — and it generates the CSS+JS code automatically. Designers can create without coding. Developers save hours.',
-    useCases:['Creating a custom animated hero section for a client website','Designing an animated logo intro for a startup','Building an animated product showcase for an e-commerce site','Creating interactive background animations for a SaaS landing page'],
-    link:'/anim-creator', linkLabel:'Open AnimCreator'
-  },
-  {
     icon:'📚', title:'Animation Course',
     problem:'CSS and JavaScript animation tutorials on YouTube are scattered, outdated, or too basic/advanced. Finding a structured path from beginner to production-ready is difficult.',
     solution:'A structured, free, complete course designed specifically for MotionZync\'s context. Module 1 → Module 4, each building on the last. Code examples run directly in the Playground for immediate practice.',
