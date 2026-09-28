@@ -123,5 +123,6 @@ export default function HowToUse() {
         </div>
 
       </div>
+      </div>
     </div>
   )
