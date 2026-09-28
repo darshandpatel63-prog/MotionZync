@@ -1,0 +1,43 @@
+# MotionZync — Design Intelligence START HERE
+
+This folder contains the Design Intelligence + UI Generation feature only.
+
+## Mandatory first-read order for every new chat
+1. START_HERE.md
+2. handover.md
+3. MotionZync_Design_Intelligence_Master_Prompt_README.md
+4. CHATGPT_PROJECT_COMMON_INSTRUCTIONS.md
+5. Inspect every current file inside src/pages/DesignIntelligence/
+6. Inspect only the minimum integration files named by handover.md
+7. Resume from FIRST UNFINISHED TASK in handover.md
+
+## Absolute rules
+- Work only on feature/design-intelligence.
+- Never work on or merge to main unless explicitly requested.
+- Never rewrite, remove or “clean up” unrelated MotionZync code.
+- Existing MotionZync behaviour is protected.
+- Prefer additive, minimum-scope integration.
+- Keep one canonical Design Intelligence data core.
+- Do not fabricate 1,000+/10,000+ records.
+- Never claim a build/test/live result that was not actually verified.
+- Update handover.md after every meaningful milestone.
+
+## Current implementation
+Phase 1 foundation is implemented:
+- multipage route family under /design-intelligence/*
+- internal navigation
+- structured seed catalog
+- deterministic search
+- entitlement-aware deterministic recipe generation
+- visual preview
+- design-token output
+- Free/Premium/Ultra Premium+ access taxonomy
+- Google-login entry using existing MotionZync AuthContext
+- in-product workflow/help documentation
+- continuation/common-instruction files
+
+## FIRST UNFINISHED TASK
+1. Obtain a real build/preview verification for the new branch and check every Design Intelligence route.
+2. Fix any import/runtime/responsive/accessibility errors discovered.
+3. Update handover.md with the actual verification result.
+4. Only after verification, expand content and compatibility rules.
