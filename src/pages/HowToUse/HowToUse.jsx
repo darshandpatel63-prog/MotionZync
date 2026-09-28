@@ -21,10 +21,6 @@ const faqs = [
   { q:'How do I change animation colors to match my brand?', a:'Find all hex color codes in the CSS (like #7c3aed for purple) and replace them with your brand colors using Ctrl+H Find & Replace.' },
   { q:'Can I use animations in React/Vue/Angular?', a:'Yes! Copy CSS to your component stylesheet and wrap JS in useEffect (React) or mounted() (Vue). See Module 4 in the Course for full examples.' },
   { q:'How do I make the animation fill my whole screen?', a:'Set container to: position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; and update canvas size accordingly.' },
-  { q:'What is AnimCreator?', a:'AnimCreator is a visual animation design tool — like Figma but for web animations. Draw shapes, add motion, configure physics/particles, and export CSS+JS code. No deep coding required.' },
-  { q:'What is CodeSpace?', a:'CodeSpace is a browser-based IDE similar to VS Code. It has file explorer, Monaco code editor, live preview, terminal simulation, and Git panel. Build full web projects directly in browser.' },
-  { q:'Is CodeSpace project saved to the cloud?', a:'No. CodeSpace projects are saved in browser IndexedDB (local storage). Export your project as ZIP regularly to avoid data loss from browser clearing.' },
-  { q:'How does the wallpaper download work?', a:'Wallpapers are HTML files. You need a live wallpaper app (KLWP for Android, Lively for Windows) to set them as device wallpaper.' },
   { q:'What is the Preview BG Color in Playground?', a:"It's the background color the animation was designed for. Use this color for your container's background so the animation looks correct in your project." },
   { q:'How do I compare two animations?', a:'Go to the Compare page and select two animations. They play side-by-side with synchronized controls for easy comparison.' },
 ]
@@ -72,8 +68,6 @@ export default function HowToUse() {
           <h2 className="section-title" style={{marginBottom:'1.5rem'}}>⌨️ Keyboard <span className="gradient-text">Shortcuts</span></h2>
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:'1.2rem'}}>
             {[
-              { title:'🎬 AnimCreator', rows:[['V','Select tool'],['R','Rectangle'],['C','Circle'],['T','Triangle'],['X','Text tool'],['L','Line'],['D','Draw freehand'],['I','Image upload'],['G','Toggle grid'],['Ctrl+Z','Undo'],['Ctrl+Y','Redo'],['Ctrl+C','Copy element'],['Ctrl+V','Paste element'],['Ctrl+D','Duplicate'],['Delete','Delete selected'],['Ctrl+S','Save scene'],['Ctrl+]','Bring to front'],['Ctrl+[','Send to back'],['?','Shortcut help overlay'],['Esc','Deselect / close'],['+ / −','Zoom in / out'],['Scroll wheel','Zoom canvas'],['Space+drag','Pan canvas'],['Shift+click','Multi-select'],['Drag empty area','Marquee select']] },
-              { title:'💻 CodeSpace IDE', rows:[['Ctrl+P','Command Palette'],['Ctrl+S','Save file'],['Ctrl+`','Toggle terminal'],['Ctrl+/','Toggle comment'],['Ctrl+D','Select next match'],['Ctrl+F','Find in file'],['Ctrl+H','Find & Replace'],['Ctrl+Z','Undo'],['Ctrl+Shift+Z','Redo'],['Alt+↑/↓','Move line up/down'],['Ctrl+G','Go to line'],['Tab','Indent'],['Shift+Tab','Unindent'],['F1','Editor commands'],['F11','Fullscreen']] },
               { title:'⚡ General Platform', rows:[['Ctrl+C','Copy code to clipboard'],['Ctrl+Enter','Run / preview code'],['Esc','Close modal / overlay'],['Click card','Open animation detail'],['❤️ icon','Add to favorites'],['"Try it" button','Open in Playground']] },
             ].map(group=>(
               <div key={group.title} style={{background:'rgba(20,20,35,.7)',border:'1px solid rgba(124,58,237,.18)',borderRadius:'12px',padding:'1.2rem',backdropFilter:'blur(12px)'}}>
@@ -133,5 +127,3 @@ export default function HowToUse() {
       </div>
     </div>
   )
-              }
-                            
