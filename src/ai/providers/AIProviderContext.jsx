@@ -300,89 +300,12 @@ export function AIProviderContext({ children }) {
     } finally { setIsLoading(false) }
   }, [getConfig, saveConfig, vaultExists, vaultUnlocked])
 
-  const chat = useCallback(async (messages, opts = {}) => {
-    const providerId = opts.provider || activeProvider
-    const cfg   = getConfig(providerId)
-    const model = opts.model || cfg.selectedModel
-    setIsLoading(true)
-    try {
-      if (providerId === 'anthropic') {
-        const sys  = messages.find(m => m.role === 'system')
-        const msgs = messages.filter(m => m.role !== 'system')
-        const res = await fetch(`${cfg.customBaseURL}/messages`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': cfg.apiKey,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true',
-          },
-          body: JSON.stringify({ model, max_tokens: opts.maxTokens||4096, system: sys?.content, messages: msgs })
-        })
-        if (!res.ok) throw new Error(`Anthropic error ${res.status}`)
-        const d = await res.json(); return d.content?.[0]?.text || ''
-      }
-      if (providerId === 'openai' || providerId === 'custom') {
-        const res = await fetch(`${cfg.customBaseURL}/chat/completions`, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${cfg.apiKey}` },
-          body: JSON.stringify({ model, max_tokens: opts.maxTokens||4096, messages })
-        })
-        if (!res.ok) throw new Error(`OpenAI error ${res.status}`)
-        const d = await res.json(); return d.choices?.[0]?.message?.content || ''
-      }
-      if (providerId === 'gemini') {
-        const parts = messages.map(m => ({
-          role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }]
-        }))
-        const res = await fetch(`${cfg.customBaseURL}/models/${model}:generateContent?key=${cfg.apiKey}`, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify({ contents: parts, generationConfig: { maxOutputTokens: opts.maxTokens||4096 } })
-        })
-        if (!res.ok) throw new Error(`Gemini error ${res.status}`)
-        const d = await res.json(); return d.candidates?.[0]?.content?.parts?.[0]?.text || ''
-      }
-      if (providerId === 'ollama') {
-        const res = await fetch(`${cfg.customBaseURL}/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify({ model, stream: false, messages })
-        })
-        if (!res.ok) throw new Error(`Ollama error ${res.status}`)
-        const d = await res.json(); return d.message?.content || ''
-      }
-      throw new Error(`Unknown provider: ${providerId}`)
-    } finally { setIsLoading(false) }
-  }, [activeProvider, getConfig])
-
-  const generateImage = useCallback(async (prompt, opts = {}) => {
-    const cfg = getConfig('openai')
-    if (!cfg.apiKey) throw new Error('OpenAI key required for image generation')
-    setIsLoading(true)
-    try {
-      const res = await fetch(`${cfg.customBaseURL}/images/generations`, {
-        method: 'POST',
-        headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${cfg.apiKey}` },
-        body: JSON.stringify({
-          model: opts.model || 'dall-e-3', prompt,
-          n: opts.n||1, size: opts.size||'1024x1024',
-          quality: opts.quality||'standard', style: opts.style||'vivid',
-          response_format: 'b64_json',
-        })
-      })
-      if (!res.ok) throw new Error(`Image gen error ${res.status}`)
-      const d = await res.json()
-      return d.data?.[0]?.b64_json ? `data:image/png;base64,${d.data[0].b64_json}` : d.data?.[0]?.url
-    } finally { setIsLoading(false) }
-  }, [getConfig])
 
   return (
     <AIContext.Provider value={{
       configs, activeProvider, activeModel, isConnected, isLoading, AI_PROVIDERS,
       getConfig, saveConfig, deleteConfig, testConnection,
       setActiveProvider, setActiveModel,
-      chat, generateImage,
       // Vault (shared with GitHubContext via VaultContext.jsx)
       vaultExists, vaultUnlocked, needsMigration,
       setupVault, unlockVault, lockVault,
