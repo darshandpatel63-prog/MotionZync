@@ -14,13 +14,4 @@
 .footer-bottom-links a{color:var(--text-muted);text-decoration:none;font-size:0.78rem;margin:0 0.25rem;transition:color 0.2s;}
 .footer-bottom-links a:hover{color:var(--accent-glow);}
 
-/* Changelog link — slightly highlighted */
-.footer-changelog-link {
-  color: var(--accent-glow) !important;
-  font-weight: 600 !important;
-  margin-top: 0.25rem;
-}
-.footer-changelog-link:hover {
-  color: var(--accent-primary) !important;
-}
 
