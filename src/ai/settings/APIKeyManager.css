@@ -2,10 +2,9 @@
 /* All base classes (modal, field, ghost, etc.) are in index.css */
 .modal-settings { position: relative; }
 
-/* Phase 1 / Step 2 — passphrase vault gate (new).
+/* API-key vault — passphrase vault gate (new).
    Self-contained on purpose: .modal/.field/.settings-* classes used elsewhere
-   in this component have no CSS defined anywhere in the project (see
-   CODESPACE_MASTER_PROMPT.md audit log, item #11) — so this doesn't lean on them. */
+   in this component have no CSS defined anywhere in the project — so this doesn't lean on them. */
 .vault-gate {
   display: flex;
   flex-direction: column;
@@ -43,7 +42,7 @@
 .vault-lock-btn { font-size: 12px; padding: 4px 10px; }
 
 /* ============================================================
-   Phase 1 / Step 5 (audit #11) — the rest of this modal had
+   API-key settings — the rest of this modal had
    ZERO CSS anywhere in the project (confirmed via project-wide
    grep) until now. Reuses the app's real design tokens from
    src/index.css (--bg-card, --accent-primary, etc.) so it's
