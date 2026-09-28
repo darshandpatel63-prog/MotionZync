@@ -6,17 +6,12 @@
 // /api/admin-animations (see that file + api/_lib/github.js).
 //
 // Every function below keeps its ORIGINAL name and return shape on
-// purpose — Gallery, Home, AnimationDetail, Favorites, Compare,
-// Wallpaper, Playground, Submit and Admin all import these and none of
-// them needed to change because of this migration.
+// purpose — the animation-facing pages keep their existing function names and return shapes.
 //
-// Firestore is still used for: community submissions and changelog
-// entries — unrelated to this migration, unchanged. (View counters were
-// removed entirely — Aug 2026 — this file no longer touches Firestore
-// for animation reads/writes at all.)
+// Firebase authentication is used for protected Admin API calls.
 // ============================================================
 
-import { db, auth } from '../firebase'
+import { auth } from '../firebase'
 
 export function generateTags(title='', description='') {
   const text = (title+' '+description).toLowerCase()
