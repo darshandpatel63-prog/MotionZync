@@ -24,7 +24,6 @@ export default function Footer() {
               <Link to="/">Home</Link>
               <Link to="/gallery">Gallery</Link>
               <Link to="/playground">Playground</Link>
-              <Link to="/wallpaper">Wallpaper</Link>
               <Link to="/course">Course</Link>
               <Link to="/how-to-use">How to Use</Link>
               <Link to="/tool-guide">Tool Guide</Link>
@@ -35,14 +34,7 @@ export default function Footer() {
             {/* Create */}
             <div className="footer-col">
               <h4>Create</h4>
-              <Link to="/codespace"      className="footer-codespace-link">💻 CodeSpace</Link>
-              <Link to="/anim-creator"   className="footer-creator-link">🎨 AnimCreator</Link>
-              <Link to="/drawing-studio">✏️ Drawing Studio</Link>
-              <Link to="/studio-3d">🌎 3D Studio</Link>
-              <Link to="/ai-studio">🧠 AI Studio</Link>
               <Link to="/compare">⚖️ Compare</Link>
-              <Link to="/submit">+ Submit Animation</Link>
-              <Link to="/changelog"      className="footer-changelog-link">📋 What's New</Link>
               <Link to="/why-features">💡 Why These Features?</Link>
             </div>
 
@@ -59,8 +51,7 @@ export default function Footer() {
             {/* Other Sites */}
             <div className="footer-col">
               <h4>Our Other Sites</h4>
-              <a href="https://vaidya-guru.vercel.app"           target="_blank" rel="noopener noreferrer">🏥 Vaidya Guru</a>
-              <a href="https://wealth-kavach.vercel.app"         target="_blank" rel="noopener noreferrer">💰 Wealth Kavach</a>
+              <a href="https://dd-tech-labs-hub.vercel.app" target="_blank" rel="noopener noreferrer">🧰 DD Tech Labs</a>
               <a href="https://shree-hari-mahendi-art.vercel.app" target="_blank" rel="noopener noreferrer">🌸 Shree Hari Mehendi</a>
             </div>
           </div>
@@ -73,9 +64,8 @@ export default function Footer() {
             <a href="/terms.html"      target="_blank" rel="noopener noreferrer">Terms</a> ·{' '}
             <a href="/disclaimer.html" target="_blank" rel="noopener noreferrer">Disclaimer</a> ·{' '}
             <a href="/contact.html"    target="_blank" rel="noopener noreferrer">Contact</a> ·{' '}
-            <Link to="/changelog">What's New</Link> ·{' '}
             <Link to="/tools">Tools</Link> ·{' '}
-            <Link to="/anim-creator">Creator</Link>
+
           </p>
         </div>
       </div>

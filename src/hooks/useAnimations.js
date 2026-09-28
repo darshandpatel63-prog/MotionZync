@@ -165,38 +165,3 @@ export async function deleteSubmission(docId) {
   await deleteDoc(doc(db, 'submissions', docId))
 }
 
-// ─── Changelog (unchanged — still Firestore) ────────────────────────
-export async function getChangelogs() {
-  const snap = await getDocs(collection(db, 'changelogs'))
-  const all  = snap.docs.map(d => ({ ...d.data(), docId: d.id }))
-  all.sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1
-    if (!a.pinned && b.pinned) return 1
-    return new Date(b.date||0) - new Date(a.date||0)
-  })
-  return all
-}
-
-export async function saveChangelog(entry) {
-  const data = {
-    version:  entry.version  || 'v1.0',
-    title:    entry.title    || '',
-    date:     entry.date     || new Date().toISOString().split('T')[0],
-    type:     entry.type     || 'feature',
-    items:    Array.isArray(entry.items) ? entry.items : [],
-    pinned:   entry.pinned   || false,
-    updatedAt: new Date(),
-  }
-  if (entry.docId) {
-    await updateDoc(doc(db, 'changelogs', entry.docId), data)
-    return entry.docId
-  } else {
-    data.createdAt = new Date()
-    const ref = await addDoc(collection(db, 'changelogs'), data)
-    return ref.id
-  }
-}
-
-export async function deleteChangelog(docId) {
-  await deleteDoc(doc(db, 'changelogs', docId))
-}

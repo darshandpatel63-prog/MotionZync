@@ -7,22 +7,17 @@ import AuthButton from '../AuthButton/AuthButton.jsx'
 import './Navbar.css'
 
 const NAV_ITEMS = [
-  { path:'/',               label:'Home',     icon:'⚡' },
-  { path:'/gallery',        label:'Gallery',  icon:'🎨' },
-  { path:'/playground',     label:'Play',     icon:'▶' },
-  { path:'/compare',        label:'Compare',  icon:'⊞' },
-  { path:'/tools',          label:'Tools',    icon:'🔧' },
-  { path:'/wallpaper',      label:'Wallpaper',icon:'🖼' },
-  { path:'/course',         label:'Learn',    icon:'📚' },
+  { path:'/', label:'Home', icon:'⚡' },
+  { path:'/gallery', label:'Gallery', icon:'🎨' },
+  { path:'/playground', label:'Play', icon:'▶' },
+  { path:'/compare', label:'Compare', icon:'⊞' },
+  { path:'/tools', label:'Tools', icon:'🔧' },
+  { path:'/course', label:'Learn', icon:'📚' },
 ]
 
 // Studio dropdown items
 const STUDIOS = [
-  { path:'/anim-creator',   label:'Animation Creator', icon:'🎬', badge:null },
-  { path:'/drawing-studio', label:'Drawing Studio',    icon:'✏️',  badge:'NEW' },
-  { path:'/studio-3d',      label:'3D Studio',         icon:'🌎', badge:'NEW', auth:true },
-  { path:'/codespace',      label:'Code Space',        icon:'💻', badge:null  },
-  { path:'/ai-studio',      label:'AI Studio',         icon:'🧠', badge:'AI',  auth:true },
+  { path:'/ai-studio', label:'AI Studio', icon:'🧠', badge:'AI', auth:true },
 ]
 
 export default function Navbar() {
@@ -86,7 +81,6 @@ export default function Navbar() {
 
       {/* Right side */}
       <div className="nb-right">
-        <Link to="/submit" className="nb-submit-btn">+ Submit</Link>
         <AuthButton />
         {/* Mobile hamburger */}
         <button className="nb-hamburger" onClick={()=>setMenuOpen(o=>!o)}>

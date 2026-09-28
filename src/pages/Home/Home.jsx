@@ -914,8 +914,7 @@ export default function Home() {
         </Reveal>
         <div className="other-sites-grid">
           {[
-            {href:'https://vaidya-guru.vercel.app',icon:'🏥',title:'Vaidya Guru',desc:'Health & Ayurveda guidance platform'},
-            {href:'https://wealth-kavach.vercel.app',icon:'💰',title:'Wealth Kavach',desc:'Personal finance & investment insights'},
+            {href:'https://dd-tech-labs-hub.vercel.app',icon:'🧰',title:'DD Tech Labs',desc:'Apps and tools by DD Tech Labs'},
             {href:'https://shree-hari-mahendi-art.vercel.app',icon:'🌸',title:'Shree Hari Mehendi',desc:'Beautiful traditional mehendi designs'},
           ].map((s,i)=>(
             <Reveal key={s.href} delay={i*0.1}>
