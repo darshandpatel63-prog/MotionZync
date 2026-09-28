@@ -1,7 +1,7 @@
 // src/ai/providers/keyVault.js
 // ============================================================
 // Local, passphrase-based encryption for AI provider API keys.
-// Part of Phase 1 / Step 2 (see CODESPACE_MASTER_PROMPT.md).
+// Used by MotionZync's local API-key vault.
 //
 // HONEST SCOPE — read this before trusting it:
 //   - Keys are encrypted at rest (AES-GCM) with a key derived (PBKDF2) from a
