@@ -58,8 +58,6 @@ export const AI_PROVIDERS = {
     keyDocs: 'https://aistudio.google.com/app/apikey',
     modelDocs: 'https://ai.google.dev/gemini-api/docs/models',
     imageModel: null, supportsVision: true, supportsStreaming: true,
-    // imageModel intentionally null — generateImage() doesn't route Gemini's
-    // native image models yet (it's hardcoded to OpenAI); see audit item #12.
   },
   ollama: {
     id: 'ollama', name: 'Ollama (Local)', icon: '🦙', freeTextModel: true,
