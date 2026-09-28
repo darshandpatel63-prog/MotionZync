@@ -160,9 +160,9 @@ export default function Admin() {
       <div className="admin-tabs container">
         {['animations','categories','settings'].map(t => (
           <button key={t} className={`admin-tab-btn ${activeTab===t?'active':''}`} onClick={()=>setActiveTab(t)}>
-            { t==='animations'   ? '🎬 Animations'
-            : t==='categories'   ? '🗂️ Categories'
-            : t==='settings'     ? '⚙️ Settings'
+            { t==='animations' ? '🎬 Animations'
+            : t==='categories' ? '🗂️ Categories'
+            : '⚙️ Settings'
             }
           </button>
         ))}
