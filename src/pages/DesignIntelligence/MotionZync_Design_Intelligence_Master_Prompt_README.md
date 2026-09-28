@@ -450,3 +450,373 @@ AUDIT SIXTH.
 Never destroy existing MotionZync to build Design Intelligence.
 Never fabricate the dataset.
 Never create a second unrelated knowledge core.
+
+
+## 29. EXPANDED DESIGN INTELLIGENCE TAXONOMY
+
+The owner requires Design Intelligence to grow beyond the initial UUPM-style reference categories. Existing sections and requirements must remain; this section expands them.
+
+The canonical knowledge model should eventually cover, where verified and meaningful:
+
+### Product / UI types
+- websites, landing pages, web apps, SaaS, dashboards, admin panels, analytics, CRM, ERP
+- ecommerce, marketplaces, portfolios, blogs, documentation, AI products, developer tools
+- fintech, healthcare, education, social/community, media/streaming, booking, travel, food/hospitality
+- productivity, communication, monitoring, IoT, enterprise, search, authentication, onboarding
+- profile, settings, pricing, checkout, payment, forms, tables, command centers and other legitimate product patterns
+
+### Platforms and devices
+- desktop web, laptop, tablet web, mobile web
+- Windows, macOS, Linux desktop applications
+- Android, iOS, iPadOS
+- React Native, Flutter and other verified cross-platform targets
+- PWA/offline web, browser extensions, embedded interfaces, kiosk/large displays
+- future wearable, TV, automotive, spatial/AR/VR and other verified interfaces
+
+A platform-specific design is not considered equivalent to a responsive web design. Platform conventions, input methods, navigation, accessibility and performance constraints must be represented separately.
+
+### Layout systems
+- sidebar, top navigation, bottom navigation, tabs, command palette
+- split view, master-detail, bento, masonry, dashboard grids
+- full-screen, modal/drawer driven, multi-column, floating, canvas and spatial layouts
+- adaptive layouts that transform between mobile/tablet/desktop rather than merely shrinking
+
+### Component intelligence
+Buttons, cards, forms, inputs, selects, menus, navigation, dialogs, drawers, popovers, tooltips, tables/data grids, charts, pagination, search, uploaders, editors, timelines, steppers, progress, skeletons, notifications, carousels and other validated reusable patterns.
+
+### UX/state intelligence
+Normal, hover, focus, pressed, disabled, loading, skeleton, empty, partial, success, warning, error, offline, permission-denied, expired-session, destructive-confirmation, retry and recovery states.
+
+### Motion / animation
+- micro-interactions
+- hover/press/focus/toggle transitions
+- page and route transitions
+- expand/collapse and shared-element transitions
+- scroll/parallax/stagger/text/number animations
+- drag/gesture/spring/physics-based motion
+- reduced-motion alternatives
+
+### Live / interactive effects
+- cursor/touch reactive effects
+- real-time data visualizations
+- live counters and status indicators
+- streaming interfaces
+- dynamic gradients and backgrounds
+- particle systems
+- audio-reactive effects
+- presence and collaborative/live states
+- interaction-driven visual effects
+
+### 3D / graphics
+- CSS 3D and perspective
+- Three.js / React Three Fiber
+- WebGL / Canvas / SVG
+- 3D cards, product viewers, scenes, particles, lighting, depth, reflections, distortion and shaders
+- performance-aware 3D fallbacks for mobile and low-power devices
+
+Do not claim a 3D technology is supported by the generator until its adapter is actually implemented and verified.
+
+### Game UI intelligence
+Support meaningful game UI knowledge for PC, mobile and tablet targets, including:
+- action, RPG, strategy, racing, simulation, puzzle, adventure, platformer, shooter, sports, card, board, casual and multiplayer patterns
+- HUD, health/mana, inventory, skills, quests, maps/minimaps, leaderboard, shop, battle UI
+- pause/settings/loading screens, achievements/rewards, notifications, dialogue and multiplayer lobbies
+- touch, mouse/keyboard, controller and adaptive input considerations
+- performance and readability constraints for games
+
+Game UI knowledge must remain separate from claims about game-engine implementation unless an engine adapter is actually implemented.
+
+### Design systems and tokens
+Colors, semantic colors, typography scales, spacing, radii, borders, elevation, shadows, z-index, breakpoints, motion durations/easing, component states and theme variants.
+
+### Accessibility and inclusive design
+Keyboard navigation, focus management, semantic structure, screen-reader support, ARIA where appropriate, contrast, target sizes, reduced motion, color-vision considerations, readable typography, localization, RTL and cognitive accessibility.
+
+Never claim formal accessibility compliance without actual validation.
+
+### Internationalization
+Eventually support design guidance for:
+- localization
+- RTL layouts
+- long/short translated strings
+- date/time/number/currency formats
+- locale-specific typography and spacing
+- culturally appropriate patterns
+
+### Developer and architecture intelligence
+Eventually cover, where actually implemented:
+- frontend architecture
+- component architecture
+- state management
+- data fetching/caching
+- routing
+- authentication/authorization
+- forms/validation
+- API integration
+- error handling
+- offline/PWA behavior
+- testing
+- observability
+- logging
+- performance budgets
+- SEO where relevant
+- security/privacy considerations
+- deployment/build considerations
+- maintainability and scalability
+
+This knowledge must complement, not replace, the canonical design recipe.
+
+### Additional output contexts
+Future adapters may support verified patterns for:
+- web
+- desktop
+- mobile/tablet
+- browser extensions
+- email interfaces
+- printable/document interfaces
+- widgets/embedded components
+- PWA/offline experiences
+- game interfaces
+- spatial/3D experiences
+
+Only advertise an output context after its adapter and validation exist.
+
+## 30. HUMAN-DESIGN / ANTI-TEMPLATE CONVERGENCE PRINCIPLE
+
+The generated UI must NOT converge into one recognizable "AI-made" visual pattern.
+
+The goal is not random ugliness and not arbitrary variation. The goal is deliberate design diversity.
+
+The engine should eventually combine independent design dimensions:
+- product purpose
+- information architecture
+- platform conventions
+- layout grammar
+- typography
+- color system
+- component language
+- density
+- spacing rhythm
+- imagery direction
+- iconography
+- motion language
+- interaction model
+- accessibility requirements
+- performance constraints
+- brand/mood
+- industry context
+
+The generator should support multiple valid design directions for the same request.
+
+Avoid:
+- one universal card style
+- one universal gradient treatment
+- one universal hero section
+- one universal sidebar
+- one universal border radius
+- one universal typography pairing
+- one universal animation style
+- repeated AI-looking spacing/structure
+- copying a reference site's exact visual identity
+
+Use controlled variation, compatibility rules and optional reproducible seeds. Randomness must never override usability, accessibility or consistency.
+
+A generated result should feel like a purpose-built design system for its request, not a fixed MotionZync template.
+
+## 31. NPM / LOCAL-FIRST EXECUTION MODEL
+
+The long-term npm/package experience must support local execution on the user's own computer whenever the selected feature is designed to run locally.
+
+Target architecture:
+- npm package contains the reusable client/core/adapters that are actually licensed for local use.
+- local generation/search/rendering should run on the user's machine without sending ordinary design-generation work to MotionZync servers.
+- the canonical Design Intelligence schema/core must remain reusable by Web, npm, CLI and future API/MCP interfaces.
+- platform-specific adapters may use the user's local runtime and installed dependencies.
+- the package must clearly state which capabilities require internet access, a remote API, GPU/WebGL, native dependencies or external services.
+
+Privacy principle:
+If a feature can run locally without a server, prefer local execution.
+
+Do not falsely claim "100% offline" until network behavior has been tested and documented.
+
+## 32. PREMIUM SUBSCRIPTION EXPIRATION / ENTITLEMENT MODEL
+
+A time-limited premium subscription must not be implemented as a frontend-only timer.
+
+Future authoritative model:
+1. User authenticates.
+2. Payment is verified by the backend/payment provider.
+3. Server creates an entitlement with plan, start time, expiry time and status.
+4. Server/API verifies entitlement on every protected operation or through a short-lived signed session.
+5. Expiry causes premium API access and protected generation to stop.
+6. Renewal extends the server entitlement.
+7. Revocation/cancellation can invalidate access independently of the client.
+
+Important limitation:
+Once premium knowledge has been downloaded to a user's machine as plain client-readable files, no web application can guarantee physical deletion from that machine.
+
+Therefore:
+- Do not ship protected premium datasets permanently inside an unrestricted frontend/npm package if revocation is required.
+- Keep authoritative premium knowledge behind an authenticated API when revocation is required.
+- A local client may cache authorized results for performance, but cached premium data must be treated as revocable application data, not as a promise of secure physical deletion.
+- If strong local protection is ever required, investigate a server-issued, short-lived, cryptographically protected licensing model and document its real limitations. Never claim DRM-like protection that the architecture cannot provide.
+
+Free local/npm content may be distributed openly.
+Premium/Ultra Premium+ access must remain server-authoritative when access control is required.
+
+## 33. CANONICAL CORE + MULTI-INTERFACE RULE
+
+There must remain exactly one canonical Design Intelligence knowledge model and rule engine.
+
+Interfaces:
+Web UI
+→ canonical core
+
+npm/local interface
+→ canonical core
+
+CLI
+→ canonical core
+
+REST/API
+→ canonical core
+
+MCP/AI-agent interface
+→ canonical core
+
+Do not fork the dataset or create separate incompatible business logic for each interface.
+
+Where runtime constraints differ, create adapters around the same canonical schema and rules.
+
+## 34. UNIVERSAL MASTER ORCHESTRATOR
+
+For every meaningful implementation/research task in this project, first activate a Universal Master Orchestrator workflow.
+
+The orchestrator must dynamically decide:
+1. whether one agent is enough
+2. whether multiple specialists are justified
+3. exactly which specialties are needed
+4. each agent's responsibility and boundaries
+5. dependencies and communication
+6. which outputs require independent verification
+7. which agents should challenge/audit other work
+8. how disagreements will be resolved
+9. when temporary specialist agents should be added
+10. which final quality-control process is required
+
+There is no fixed agent count. Two agents may be enough; a large multidisciplinary team may be justified for a complex task. Never create agents merely to increase the count.
+
+### Agent operating rules
+Every specialist must have:
+- objective
+- scope
+- inputs
+- outputs
+- evidence requirements
+- uncertainty reporting
+- review relationships
+- explicit exclusions where useful
+
+For complex work, use as appropriate:
+Round 1: independent analysis
+Round 2: knowledge exchange
+Round 3: cross-critique
+Round 4: conflict resolution
+Round 5: verification
+Round 6: synthesis
+Round 7: final audit
+
+Not every task needs every round.
+
+### Truth-first orchestration
+Agents must never fabricate facts, records, sources, citations, calculations, APIs, compatibility, tests, implementation results or certainty.
+
+If something is unknown, label it unknown.
+If something is inferred, label it inferred.
+If something is planned, label it planned.
+If something is unverified, label it unverified.
+
+Never optimize for the appearance of intelligence.
+
+### Adversarial review
+For complex, risky or important work, create one or more independent challenge/audit roles to search for:
+- unsupported claims
+- logical errors
+- security/privacy issues
+- accessibility problems
+- performance problems
+- data-quality problems
+- missing edge cases
+- outdated assumptions
+- regressions
+- hidden dependencies
+
+Do not automatically accept a majority vote. Resolve disagreements by comparing evidence and assumptions; preserve uncertainty when it cannot be resolved.
+
+### Final synthesis
+Before a significant milestone is declared complete, the orchestrator must ensure the final result:
+- covers the request
+- respects repository constraints
+- distinguishes implemented from planned work
+- has appropriate verification
+- does not expose private chain-of-thought or internal agent transcripts
+- is documented in handover.md
+
+This project-specific orchestrator rule is a coordination protocol, not a claim that the repository currently contains 100+ autonomous agents. Actual agent/tool availability depends on the runtime.
+
+## 35. FUTURE KNOWLEDGE EXPANSION — DO NOT STOP AT THIS LIST
+
+The taxonomy is intentionally extensible.
+
+When a future specialist identifies another genuinely useful design/development domain, it should propose the addition before changing the canonical schema.
+
+Potential future areas include:
+- voice UI
+- multimodal interfaces
+- accessibility-first design systems
+- AI interaction patterns
+- agentic UI
+- collaborative interfaces
+- offline-first systems
+- spatial computing
+- AR/VR
+- robotics interfaces
+- industrial/HMI interfaces
+- scientific visualization
+- GIS/map interfaces
+- education/learning interfaces
+- medical/clinical interfaces
+- command-line/TUI design
+- developer IDE interfaces
+- browser extension UI
+- automotive interfaces
+- TV/10-foot UI
+- wearable UI
+- embedded/device UI
+- security/admin consoles
+- data-heavy enterprise systems
+
+These are candidates, not claims that all are already implemented.
+
+## 36. EXPANSION SAFETY RULE
+
+Before adding large new catalog domains, check:
+- schema fit
+- provenance/source quality
+- duplicates
+- relationship correctness
+- platform compatibility
+- accessibility
+- performance
+- privacy/security
+- licensing/copyright
+- testability
+- documentation
+
+Then update the canonical catalog and handover.
+
+## 37. STATUS
+
+The sections above describe the target architecture and requirements unless separately marked implemented in the repository.
+
+Current implementation remains Phase 1 as described in earlier sections. Expanded taxonomy, local npm execution, premium expiry enforcement, anti-template convergence, advanced animation/3D/game intelligence and universal orchestration are predominantly PLANNED / FUTURE until their implementation and verification milestones are completed.
