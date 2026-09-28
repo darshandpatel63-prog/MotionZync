@@ -24,18 +24,11 @@ export default function Footer() {
               <Link to="/">Home</Link>
               <Link to="/gallery">Gallery</Link>
               <Link to="/playground">Playground</Link>
-              <Link to="/course">Course</Link>
-              <Link to="/how-to-use">How to Use</Link>
-              <Link to="/tool-guide">Tool Guide</Link>
-              <Link to="/tools" className="footer-tools-link">🔧 CSS Tools</Link>
-              <Link to="/favorites">⭐ Favorites</Link>
             </div>
 
             {/* Create */}
             <div className="footer-col">
               <h4>Create</h4>
-              <Link to="/compare">⚖️ Compare</Link>
-              <Link to="/why-features">💡 Why These Features?</Link>
             </div>
 
             {/* Legal — all point to public .html files, NOT React routes */}
