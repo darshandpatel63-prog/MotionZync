@@ -164,13 +164,6 @@ export default function Admin() {
             : t==='categories'   ? '🗂️ Categories'
             : t==='settings'     ? '⚙️ Settings'
             }
-            {t==='submissions' && submissions.length>0 && (
-              <span className="sub-badge-count">{submissions.length}</span>
-            )}
-            {/* ✅ Show error dot if submissions failed to load */}
-            {t==='submissions' && subLoadError && submissions.length===0 && (
-              <span className="sub-badge-err">!</span>
-            )}
           </button>
         ))}
       </div>
