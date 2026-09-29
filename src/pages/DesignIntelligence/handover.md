@@ -1,6 +1,6 @@
 # MotionZync Design Intelligence — Handover
 
-Last updated: 2026-09-28
+Last updated: 2026-09-29
 
 ## Branch
 feature/design-intelligence
@@ -164,3 +164,35 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Run accessibility/responsive checks.
 3. Then implement the actual Design Intelligence Generator connection to the existing `useAI()` / BYOK provider system.
 4. Verify provider capability handling, output validation and safe preview before expanding content/compatibility rules.
+
+
+## 2026-09-29 — Phase A AI bridge milestone
+
+### IMPLEMENTED
+- Added optional `generateText()` to the existing BYOK `AIProviderContext`; no second API-key vault/provider system was created.
+- Design Intelligence Generator now supports deterministic mode plus explicit AI-assisted recipe refinement.
+- AI receives canonical Design Intelligence rules, known catalog IDs and anti-template constraints.
+- AI output is parsed and validated against existing catalog IDs before affecting the preview.
+- Generated HTML/JavaScript is not executed; the preview remains deterministic React markup driven by validated recipe data.
+
+### ARCHITECTURALLY SUPPORTED
+- User prompt → Design Intelligence → existing selected provider/model → structured recipe refinement → deterministic preview.
+- Direct deterministic generation remains available without an external AI key.
+
+### UNVERIFIED
+- Live provider CORS/capability behavior for every provider/model.
+- End-to-end generation against real user API keys in production.
+- Full accessibility/responsive browser audit.
+- Safe export adapters and executable-code isolation.
+
+### SECURITY / PRIVACY
+- No API keys are added to Design Intelligence state or persisted by the new feature.
+- Existing decrypted-key-in-memory boundary is reused.
+- AI responses are treated as untrusted text/JSON and are not executed.
+- Client-side vault protection does not eliminate active-XSS exposure while unlocked.
+
+### REGRESSION / FUNCTIONALITY / PERFORMANCE / DATA QUALITY / DOCUMENTATION
+- Deterministic fallback remains available.
+- No catalog inflation or fabricated records was introduced.
+- AI bridge is lazy: no provider request occurs unless the user explicitly invokes AI refinement.
+- Handover updated with exact verification boundaries.
