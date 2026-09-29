@@ -2,6 +2,10 @@ import { requireAdmin } from './_lib/firebase-admin.js'
 import { getBillingAnalytics, grantEntitlementByEmail } from './_lib/billing.js'
 
 export default async function handler(req, res) {
+  res.setHeader('Cache-Control','private, no-store, max-age=0')
+  res.setHeader('Pragma','no-cache')
+  res.setHeader('Vary','Authorization')
+  res.setHeader('X-Content-Type-Options','nosniff')
   if (!['GET','POST'].includes(req.method)) {
     return res.status(405).json({ error:'Method not allowed' })
   }
