@@ -551,3 +551,37 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Complete authenticated browser verification of all 7 routes.
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A with provenance-aware content ingestion/publication tooling and stronger compatibility rules. Do not begin large-scale content expansion yet.
+
+
+## 2026-09-29 — Phase A relationship index refinement milestone
+
+### IMPLEMENTED
+- Added a directional relationship index to the canonical relationship layer.
+- `hasRelationship()` can now use indexed O(1)-style lookup when source/target domains are supplied, while preserving the existing ID-only fallback for compatibility.
+- No new database, synthetic relationship records, or unrelated project changes were introduced.
+
+### UNVERIFIED
+- Vercel deployment/build for the current branch HEAD `48347b0fbdaf7a7cc5983d147a8d51d41ea7aeb1` is not yet available in the deployment list; the newest READY deployment observed is commit `584249c0d2a2a2930de5a6996be26f4948b69e53`.
+- Browser verification remains blocked by Vercel Authentication.
+- Full runtime/performance verification of the new index remains pending.
+
+### CHECKPOINT
+- Regression: UNVERIFIED pending current-head deployment.
+- Functionality: IMPLEMENTED / UNVERIFIED runtime.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secret or user-data handling.
+- Performance: IMPLEMENTED index improvement / UNVERIFIED in deployed runtime.
+- Data quality: no catalog records added or fabricated.
+- Build/test: UNVERIFIED for current HEAD.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Verify/deploy current branch HEAD through Vercel.
+2. Complete authenticated browser, accessibility and responsive verification.
+3. Continue provenance-aware content publication tooling and stronger compatibility rules.
+4. Do not begin 1,000+/10,000+ content expansion yet.
