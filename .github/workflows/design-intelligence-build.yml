@@ -26,7 +26,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,3 +42,155 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Install Playwright Chromium
+        run: npx --yes playwright@1.55.0 install --with-deps chromium
+
+      - name: Start Vite preview
+        shell: bash
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/motionzync-di-vite.log 2>&1 &
+          echo $! > /tmp/motionzync-di-vite.pid
+          for attempt in {1..30}; do
+            if curl --silent --show-error --fail http://127.0.0.1:4173/design-intelligence >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/motionzync-di-vite.log
+          exit 1
+
+      - name: Browser route, interaction and responsive smoke test
+        shell: bash
+        run: |
+          mkdir -p /tmp/di-browser-artifacts
+          cat > /tmp/di-browser-smoke.mjs <<'EOF'
+          import { chromium } from 'playwright'
+
+          const base = 'http://127.0.0.1:4173'
+          const routes = [
+            '/design-intelligence',
+            '/design-intelligence/explorer',
+            '/design-intelligence/generator',
+            '/design-intelligence/knowledge',
+            '/design-intelligence/stacks',
+            '/design-intelligence/docs',
+            '/design-intelligence/pricing',
+          ]
+
+          const browser = await chromium.launch({headless:true})
+          const page = await browser.newPage({viewport:{width:1440,height:900}})
+          const failures = []
+
+          page.on('pageerror', error => failures.push('pageerror: '+error.message))
+          page.on('console', message => {
+            if (message.type() === 'error') failures.push('console.error: '+message.text())
+          })
+
+          const assert = (condition, message) => {
+            if (!condition) throw new Error(message)
+          }
+
+          const checkAccessibleNames = async () => {
+            return page.evaluate(() => {
+              const problems = []
+              for (const element of document.querySelectorAll('button,a,input,textarea,select')) {
+                const style = getComputedStyle(element)
+                if (style.display === 'none' || style.visibility === 'hidden') continue
+                const labelledBy = element.getAttribute('aria-labelledby')
+                const ariaLabel = element.getAttribute('aria-label')
+                const text = (element.textContent || '').trim()
+                const placeholder = element.getAttribute('placeholder') || ''
+                if (!ariaLabel && !labelledBy && !text && !placeholder) {
+                  problems.push(element.outerHTML.slice(0,160))
+                }
+                if (element.matches('input,textarea,select') && !ariaLabel && !labelledBy) {
+                  const id = element.getAttribute('id')
+                  const label = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null
+                  if (!label) problems.push('unlabelled-form-control: '+element.outerHTML.slice(0,160))
+                }
+              }
+              return problems
+            })
+          }
+
+          for (const route of routes) {
+            await page.goto(base + route, {waitUntil:'networkidle'})
+            const text = await page.locator('body').innerText()
+            assert(text.includes('Design Intelligence'), route+' did not render Design Intelligence content')
+
+            const accessibilityProblems = await checkAccessibleNames()
+            assert(accessibilityProblems.length === 0, route+' accessibility-name issues: '+JSON.stringify(accessibilityProblems))
+
+            await page.screenshot({
+              path:'/tmp/di-browser-artifacts/'+route.split('/').filter(Boolean).join('-')+'.png',
+              fullPage:true,
+            })
+
+            if (route.endsWith('/explorer')) {
+              await page.locator('#di-search').fill('healthcare')
+              assert((await page.locator('.di-record').count()) > 0, 'Explorer search did not produce a healthcare result')
+              const stylesChip = page.getByRole('button', {name:'Styles', exact:true})
+              await stylesChip.click()
+              assert((await stylesChip.getAttribute('aria-pressed')) === 'true', 'Explorer domain button did not expose selected state')
+            }
+
+            if (route.endsWith('/generator')) {
+              await page.getByRole('button', {name:/Generate deterministic recipe/}).click()
+              assert((await page.locator('.di-preview').count()) === 1, 'Generator preview did not render')
+              const aiToggle = page.getByRole('button', {name:/AI-assisted refinement/})
+              await aiToggle.click()
+              assert((await aiToggle.getAttribute('aria-pressed')) === 'true', 'AI toggle did not expose pressed state')
+            }
+
+            if (route === '/design-intelligence/pricing') {
+              assert((await page.getByRole('button', {name:/Continue with Google/}).count()) === 1, 'Pricing Google login entry is missing')
+            }
+          }
+
+          for (const viewport of [
+            {width:390,height:844,name:'mobile'},
+            {width:768,height:1024,name:'tablet'},
+            {width:1440,height:900,name:'desktop'},
+          ]) {
+            await page.setViewportSize({width:viewport.width,height:viewport.height})
+            await page.goto(base+'/design-intelligence/generator', {waitUntil:'networkidle'})
+            const overflow = await page.evaluate(() => ({
+              width: document.documentElement.scrollWidth,
+              viewport: document.documentElement.clientWidth,
+            }))
+            assert(overflow.width <= overflow.viewport + 1, viewport.name+' horizontal overflow: '+JSON.stringify(overflow))
+            await page.screenshot({
+              path:'/tmp/di-browser-artifacts/generator-'+viewport.name+'.png',
+              fullPage:true,
+            })
+          }
+
+          await page.setViewportSize({width:1440,height:900})
+          await page.goto(base+'/design-intelligence/explorer', {waitUntil:'networkidle'})
+          await page.keyboard.press('Tab')
+          const focusVisible = await page.evaluate(() => {
+            const element = document.activeElement
+            if (!element) return false
+            const style = getComputedStyle(element)
+            return Number.parseFloat(style.outlineWidth) >= 2 || style.boxShadow !== 'none'
+          })
+          assert(focusVisible, 'Keyboard focus did not expose a visible outline or focus ring')
+
+          if (failures.length) {
+            throw new Error(failures.join('\n'))
+          }
+
+          await browser.close()
+          EOF
+          node /tmp/di-browser-smoke.mjs
+
+      - name: Upload browser screenshots and Vite log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-intelligence-browser-evidence
+          path: |
+            /tmp/di-browser-artifacts/
+            /tmp/motionzync-di-vite.log
+          if-no-files-found: ignore
