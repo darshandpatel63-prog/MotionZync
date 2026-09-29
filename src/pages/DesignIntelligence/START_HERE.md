@@ -41,11 +41,14 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 86%
 - continuation/common-instruction files
 
 ## FIRST UNFINISHED TASK
-1. Re-check Vercel when the build-rate-limit restriction clears or an authorized deployment path becomes available.
-2. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
-3. Run full accessibility/responsive and real-provider BYOK verification.
-4. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
-5. Do not begin the 1,000+/10,000+ content expansion yet.
+1. Verify the new Admin Billing tab through CI/browser and inspect responsive behaviour.
+2. Re-check Vercel when the build-rate-limit restriction clears or an authorized deployment path becomes available.
+3. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+4. Run full accessibility/responsive and real-provider BYOK verification.
+5. Implement provider-specific payment webhook signature verification and connect the selected gateway before exposing paid checkout.
+6. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
+7. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
+8. Do not begin the 1,000+/10,000+ content expansion yet.
 
 ## Existing AI / API-key integration context
 
