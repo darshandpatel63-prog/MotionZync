@@ -24,6 +24,7 @@
 
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
+import { getFirestore } from 'firebase-admin/firestore'
 
 function ensureAdminApp() {
   if (getApps().length) return getApps()[0]
@@ -45,6 +46,11 @@ function ensureAdminApp() {
  * Throws an Error with a `.status` (401/403/500) on any failure — the
  * route handler catches this and returns the matching HTTP response.
  */
+export function getAdminDb() {
+  ensureAdminApp()
+  return getFirestore()
+}
+
 export async function requireAdmin(req) {
   const header = req.headers.authorization || req.headers.Authorization || ''
   const idToken = header.startsWith('Bearer ') ? header.slice(7) : null
