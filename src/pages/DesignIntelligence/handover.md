@@ -2193,6 +2193,40 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — Special-effects API payload hardening
+
+### IMPLEMENTED
+- Added a 16KB maximum request payload guard to `api/di-effects.js` for POST requests.
+- The endpoint rejects an oversized declared Content-Length and also rejects oversized parsed JSON bodies with HTTP 413 before generating an effect.
+- Existing deterministic effect definitions, numeric option bounds, Ultra-only authentication, deny-by-default CORS and CSS-only output remain unchanged.
+- Corrected the Pricing page wording so the implemented effects capability is no longer described as a future implementation milestone; its deployed/runtime verification remains explicitly unverified.
+
+### VERIFIED
+- Source inspection confirms the new guard is confined to the special-effects API boundary and introduces no new database, frontend entitlement flag, fake key or fabricated catalog data.
+- Current branch remains `feature/design-intelligence`.
+- Vercel inventory currently has a READY deployment for the earlier effects commit `09f6278c1cd1752891835dda57257850bde5f305`, but current HEAD is newer and therefore that deployment is not used as current-HEAD verification.
+
+### UNVERIFIED
+- Current HEAD production deployment/build.
+- Production HTTP 413 behavior from the new request-size guard.
+- Real Ultra entitlement/API-key effects requests and production CORS allowlist behavior.
+- Full authenticated browser/accessibility/device verification.
+
+### CHECKPOINT
+- Regression: additive special-effects input hardening plus documentation correction only.
+- Functionality: request-size guard IMPLEMENTED; production behavior UNVERIFIED.
+- Accessibility: no interactive UI behavior changed; manual audit remains UNVERIFIED.
+- Privacy/security: request size is bounded; existing Ultra entitlement and API-key boundaries remain server-authoritative.
+- Performance: no additional database reads; bounded string-size validation is local and deterministic.
+- Data quality: no canonical records added or changed.
+- Build/test: current-head CI/Vercel verification is still pending; no successful current-head build is claimed.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
 1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication, Pricing API-key controls, security headers and the new Ultra-only effects API after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
