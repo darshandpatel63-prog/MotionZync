@@ -1215,3 +1215,46 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Phase A CI build verification milestone
+
+### IMPLEMENTED
+- Added a focused `.github/workflows/design-intelligence-build.yml` workflow scoped to the Design Intelligence feature and its minimum integration/build files.
+- CI installs dependencies with `npm install --no-audit --no-fund` because the current repository lockfile is not `npm ci`-clean; the workflow then runs the real `npm run build`.
+- Concurrency cancellation is enabled to avoid overlapping build runs for the same ref.
+
+### VERIFIED
+- GitHub Actions run `36530659532` for exact HEAD `3a6c8bddc58e5a945eac9e1ac50b17ada7850ae4` completed successfully.
+- `npm install` completed and `npm run build` completed successfully.
+- Vite transformed 117 modules and reported `built in 2.40s`.
+- No Design Intelligence source code changes were made in this milestone; the workflow is verification infrastructure.
+- Vercel project runtime-error aggregation for the selected 24-hour window reports no runtime errors.
+
+### UNVERIFIED
+- Vercel deployment for exact current HEAD; the Vercel check still reports `build-rate-limit` and the deployment list has no current-head deployment.
+- Authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+- Full keyboard/screen-reader/responsive audit.
+- Real-provider BYOK execution and provider-specific CORS/capability behavior.
+
+### CHECKPOINT
+- Regression: CI build passes; browser/live regression UNVERIFIED.
+- Functionality: build VERIFIED; runtime interaction UNVERIFIED.
+- Accessibility: source semantics improved; full audit UNVERIFIED.
+- Privacy/security: no new data store, auth system or API-key vault.
+- Performance: production build succeeds; browser profiling UNVERIFIED.
+- Data quality: no catalog expansion or fabricated records.
+- Build/test: GitHub Actions build VERIFIED; no unit-test script is exposed in `package.json`.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 83% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-check Vercel for exact current HEAD when the build-rate-limit restriction clears.
+2. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publish-workflow and deeper compatibility foundation.
+5. Keep 1,000+/10,000+ content expansion deferred.
