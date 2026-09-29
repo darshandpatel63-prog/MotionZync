@@ -147,13 +147,9 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Server-created Cashfree order is missing MotionZync plan metadata' })
     }
 
-    // Premium permanent is the only paid plan with a finalized price at this milestone.
-    // Ultra Premium+ remains unpriced/unexposed until the product owner finalizes it.
-    if (refreshedContext.plan === 'premium' && (orderCurrency !== 'INR' || orderAmount !== 500)) {
-      return res.status(422).json({ error: 'Cashfree premium order does not match the server-authorized ₹500 INR price' })
-    }
-    if (refreshedContext.plan === 'ultra-premium') {
-      return res.status(422).json({ error: 'Ultra Premium+ checkout is not enabled yet' })
+    // The paid product contract is fixed to Ultra Premium+ at ₹500 INR.
+    if (refreshedContext.plan !== 'ultra-premium' || orderCurrency !== 'INR' || orderAmount !== 500) {
+      return res.status(422).json({ error: 'Cashfree order does not match the server-authorized Ultra Premium+ ₹500 INR price' })
     }
 
     const status = getPaymentStatus(verifiedPayment)
