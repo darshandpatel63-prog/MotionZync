@@ -59,8 +59,23 @@ export function evaluateCompatibility(recipe){
   const category=recipe?.stack?.category
   const tokens=recipe?.request?.tokens||[]
   const ratio=contrastRatio(recipe?.palette?.text,recipe?.palette?.background)
-  const industry=String(recipe?.request?.industry||'').toLowerCase()
-  const suited=Array.isArray(recipe?.style?.suitedFor)?recipe.style.suitedFor.map(value=>String(value).toLowerCase()):[]
+  const industryAliases={
+    developer:'developer tools',
+    developers:'developer tools',
+    'developer-tools':'developer tools',
+    ai:'ai products',
+    'ai-product':'ai products',
+    'ai-products':'ai products',
+    ecommerce:'commerce',
+    commerce:'commerce',
+    healthcare:'healthcare',
+    health:'healthcare',
+  }
+  const rawIndustry=String(recipe?.request?.industry||'').toLowerCase().trim()
+  const industry=industryAliases[rawIndustry]||rawIndustry
+  const suited=Array.isArray(recipe?.style?.suitedFor)
+    ?recipe.style.suitedFor.map(value=>String(value).toLowerCase().trim()).map(value=>industryAliases[value]||value)
+    :[]
 
   if(platform==='ios'&&category!=='native-ios'&&category!=='cross-platform-mobile'){
     issues.push({severity:'incompatible',code:'ios-stack-mismatch',message:'iOS targets require SwiftUI or a verified cross-platform mobile stack.'})
@@ -76,7 +91,7 @@ export function evaluateCompatibility(recipe){
   if(platform==='web'&&(category==='native-ios'||category==='cross-platform-mobile')){
     issues.push({severity:'incompatible',code:'web-native-stack-mismatch',message:'The selected stack is not classified for the requested web target.'})
   }
-  if(industry&&suited.length&&!suited.includes(industry)){
+  if(industry&&industry!=='general'&&suited.length&&!suited.includes(industry)){
     issues.push({severity:'acceptable',code:'style-industry-mismatch',message:'The selected style is not explicitly classified for the requested industry; review the composition.'})
   }
   if(ratio!==null&&ratio<4.5){
