@@ -1530,3 +1530,25 @@ Do not edit other existing project files unless a future Design Intelligence mil
 6. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
 7. Continue Phase A publication/compatibility depth.
 8. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
+
+## 2026-09-29 — Billing admin verification boundary
+
+### VERIFIED
+- Vercel deployment `dpl_EGtV2mVERV7fhD6NZpj3hMZfrgMy` for commit `f72acb6b5292dade841afe741b6bc6a7fd8c95c3` reached READY.
+- That deployment contains the shared Firebase Admin Firestore access and canonical billing helper foundation.
+- Vercel project runtime-error aggregation currently reports no runtime errors in the selected 24-hour window.
+
+### UNVERIFIED
+- The later commits that add the Admin Billing UI (`DesignIntelligenceAdminBilling.jsx/.css`), Admin tab integration and documentation are newer than the READY `f72acb6...` deployment and therefore are not claimed Vercel/browser-verified yet.
+- The repository's focused Design Intelligence workflow is configured to run on pushes to feature/design-intelligence, but the available GitHub connector does not expose the push-triggered run listing needed to claim a CI result for the latest head.
+- Current Admin Billing browser/responsive verification remains UNVERIFIED.
+
+### CHECKPOINT
+- Regression: existing Admin tabs remain present in source; runtime verification of the newest Admin Billing integration remains pending.
+- Functionality: billing backend foundation VERIFIED at f72acb6; Admin Billing UI IMPLEMENTED / UNVERIFIED at current head.
+- Accessibility: Admin Billing controls/table/chart regions have semantic labels in source; full browser/screen-reader audit UNVERIFIED.
+- Privacy/security: admin endpoint uses server-side Firebase ID-token + ADMIN_EMAIL authorization; no raw payment credentials are stored.
+- Performance: analytics reads are bounded to 10,000 records per collection and 100 recent transactions; large-scale aggregation is future.
+- Data quality: no fake payment records or fabricated counters were added.
+- Build/test: current-head Admin Billing build/browser result UNVERIFIED.
+- Documentation: UPDATED.
