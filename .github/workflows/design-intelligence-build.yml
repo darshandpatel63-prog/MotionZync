@@ -92,7 +92,8 @@ jobs:
           ]
 
           const browser = await chromium.launch({headless:true})
-          const page = await browser.newPage({viewport:{width:1440,height:900}})
+          const context = await browser.newContext({viewport:{width:1440,height:900}})
+          const page = await context.newPage()
           await page.route('**/identitytoolkit.googleapis.com/**', async route => {
             const url = route.request().url()
             if (url.includes('/accounts:lookup')) {
