@@ -44,7 +44,7 @@ jobs:
         run: npm run build
 
       - name: Install Playwright Chromium
-        run: npx --yes playwright@1.55.0 install --with-deps chromium
+        run: npx --yes --package playwright@1.55.0 playwright install --with-deps chromium
 
       - name: Start Vite preview
         shell: bash
@@ -64,7 +64,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p /tmp/di-browser-artifacts
-          cat > /tmp/di-browser-smoke.mjs <<'EOF'
+          npx --yes --package playwright@1.55.0 node --input-type=module <<'EOF'
           import { chromium } from 'playwright'
 
           const base = 'http://127.0.0.1:4173'
@@ -91,28 +91,26 @@ jobs:
             if (!condition) throw new Error(message)
           }
 
-          const checkAccessibleNames = async () => {
-            return page.evaluate(() => {
-              const problems = []
-              for (const element of document.querySelectorAll('button,a,input,textarea,select')) {
-                const style = getComputedStyle(element)
-                if (style.display === 'none' || style.visibility === 'hidden') continue
-                const labelledBy = element.getAttribute('aria-labelledby')
-                const ariaLabel = element.getAttribute('aria-label')
-                const text = (element.textContent || '').trim()
-                const placeholder = element.getAttribute('placeholder') || ''
-                if (!ariaLabel && !labelledBy && !text && !placeholder) {
-                  problems.push(element.outerHTML.slice(0,160))
-                }
-                if (element.matches('input,textarea,select') && !ariaLabel && !labelledBy) {
-                  const id = element.getAttribute('id')
-                  const label = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null
-                  if (!label) problems.push('unlabelled-form-control: '+element.outerHTML.slice(0,160))
-                }
+          const checkAccessibleNames = async () => page.evaluate(() => {
+            const problems = []
+            for (const element of document.querySelectorAll('button,a,input,textarea,select')) {
+              const style = getComputedStyle(element)
+              if (style.display === 'none' || style.visibility === 'hidden') continue
+              const labelledBy = element.getAttribute('aria-labelledby')
+              const ariaLabel = element.getAttribute('aria-label')
+              const text = (element.textContent || '').trim()
+              const placeholder = element.getAttribute('placeholder') || ''
+              if (!ariaLabel && !labelledBy && !text && !placeholder) {
+                problems.push(element.outerHTML.slice(0,160))
               }
-              return problems
-            })
-          }
+              if (element.matches('input,textarea,select') && !ariaLabel && !labelledBy) {
+                const id = element.getAttribute('id')
+                const label = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null
+                if (!label) problems.push('unlabelled-form-control: '+element.outerHTML.slice(0,160))
+              }
+            }
+            return problems
+          })
 
           for (const route of routes) {
             await page.goto(base + route, {waitUntil:'networkidle'})
@@ -177,13 +175,9 @@ jobs:
           })
           assert(focusVisible, 'Keyboard focus did not expose a visible outline or focus ring')
 
-          if (failures.length) {
-            throw new Error(failures.join('\n'))
-          }
-
+          if (failures.length) throw new Error(failures.join('\\n'))
           await browser.close()
           EOF
-          node /tmp/di-browser-smoke.mjs
 
       - name: Upload browser screenshots and Vite log
         if: always()
