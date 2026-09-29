@@ -1258,3 +1258,45 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Phase A current-head CI verification checkpoint
+
+### IMPLEMENTED
+- The focused `.github/workflows/design-intelligence-build.yml` remains the branch's build verification workflow.
+- It is scoped to Design Intelligence and minimum integration/build files and runs dependency installation followed by `npm run build`.
+
+### VERIFIED
+- Current branch HEAD: `a85fc4694de65670db5ec2b584304a8f591f3a22`.
+- GitHub Actions run `36530768165` for this exact HEAD completed with `success`.
+- The workflow is present in `.github/workflows/` on the current branch.
+- The previous exact-head build log showed Vite production build success after dependency installation.
+- No runtime errors were found in the selected 24-hour Vercel project window.
+
+### UNVERIFIED
+- Vercel deployment for current exact HEAD; the Vercel check remains `build-rate-limit` and no exact-head deployment appears in the deployment list.
+- Authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+- Full keyboard/screen-reader/responsive audit.
+- Real-provider BYOK execution and provider-specific CORS/capability behavior.
+
+### CHECKPOINT
+- Regression: CI build passes; live/browser regression UNVERIFIED.
+- Functionality: production build VERIFIED; runtime interaction UNVERIFIED.
+- Accessibility: source semantics/focus safeguards IMPLEMENTED; full audit UNVERIFIED.
+- Privacy/security: no new database, auth system or API-key vault.
+- Performance: production build completes successfully; runtime profiling UNVERIFIED.
+- Data quality: no 1,000+/10,000+ expansion or fabricated records.
+- Build/test: current-head build VERIFIED; package.json has no unit-test script.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 84% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-check Vercel for current exact HEAD when the build-rate-limit restriction clears.
+2. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publish-workflow and deeper compatibility foundation.
+5. Keep 1,000+/10,000+ content expansion deferred.
