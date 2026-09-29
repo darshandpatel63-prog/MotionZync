@@ -442,7 +442,10 @@ Implemented:
 - seed catalog
 - deterministic search
 - basic recipe generation
+- canonical relationship foundation
+- canonical structural schema validation
 - token output
+- safe recipe/CSS-variable exports
 - access taxonomy
 - Google login entry
 - continuation docs
