@@ -41,13 +41,15 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 89%
 - continuation/common-instruction files
 
 ## FIRST UNFINISHED TASK
-1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
-2. Complete manual accessibility/responsive audit, including screen-reader/device checks; automated serious/critical axe gate is verified in CI.
-3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
-4. Verify the Cashfree deployment and, after merchant credentials are configured, run a real sandbox order/webhook/payment-status test.
-5. Complete server-authoritative Design Intelligence entitlement plus protected API-key issuance, rotation and revocation.
-6. Continue Phase A publication workflow and deeper compatibility foundation.
-7. Do not begin the 1,000+/10,000+ content expansion yet.
+1. Verify the latest combined Vercel deployment/build for Cashfree + API-key lifecycle + protected knowledge delivery.
+2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes once the current code is deployed.
+3. Complete manual accessibility/responsive audit, including screen-reader/device checks; automated serious/critical axe gate is verified in CI.
+4. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
+5. Exercise protected knowledge with a real Firebase Premium/Ultra entitlement and verify that unauthenticated/free requests do not receive protected records.
+6. Run a real Cashfree sandbox order/webhook/payment-status test after merchant credentials are configured.
+7. Integrate protected knowledge into Premium Explorer/Generator without shipping protected records in the public bundle.
+8. Continue Phase A publication workflow and deeper compatibility foundation.
+9. Do not begin the 1,000+/10,000+ content expansion yet.
 
 ## Existing AI / API-key integration context
 
@@ -184,6 +186,32 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 - Real API request authentication using a MotionZync-issued key.
 - Full server-side protection of Premium knowledge/data delivery.
 - Production browser, manual device/screen-reader and real BYOK verification.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-09-29 — Protected Design Intelligence knowledge delivery foundation
+
+### IMPLEMENTED
+- Premium/Ultra seed records were removed from the browser-shipped `catalog.js` and retained in server-only `api/_lib/di-protected-catalog.js`.
+- Added `api/di-knowledge.js` for entitlement-gated server delivery using the existing Firebase Admin + Firestore entitlement model.
+- Free/public records remain available without Premium.
+- Protected records are returned only after valid Firebase authentication + active Premium/Ultra entitlement.
+- Home/Pricing/Docs wording was synchronized so the UI does not falsely describe the new backend foundation as nonexistent.
+
+### VERIFIED
+- Source implementation exists on `feature/design-intelligence`.
+- No new filler catalog records were introduced.
+- No second Design Intelligence database was created.
+
+### UNVERIFIED
+- Latest Vercel deployment/build for the combined code.
+- Runtime protected/unprotected endpoint behavior with real Firebase credentials/entitlements.
+- Protected Explorer/Generator client integration.
+- Real payment, API-key usage, BYOK and manual device/screen-reader verification.
 
 ### PHASE STATUS
 - Phase A — Engine / System: **89% — IN PROGRESS**
