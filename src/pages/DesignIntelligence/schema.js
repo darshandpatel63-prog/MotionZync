@@ -27,6 +27,8 @@ export const PROVENANCE_STATUS=Object.freeze([
   'deprecated',
 ])
 
+export const PUBLISHABLE_PROVENANCE_STATUS='verified'
+
 const isObject=value=>value!==null&&typeof value==='object'&&!Array.isArray(value)
 const isString=value=>typeof value==='string'&&value.trim().length>0
 const isStringArray=value=>Array.isArray(value)&&value.every(item=>typeof item==='string'&&item.trim().length>0)
@@ -155,6 +157,31 @@ export function validateRecipeShape(recipe){
   if(!isStringArray(recipe.ux))errors.push('Recipe ux must be a string array.')
   if(recipe.tier!==undefined&&!DI_TIERS.includes(recipe.tier))errors.push('Recipe has invalid tier: '+recipe.tier)
   return{valid:errors.length===0,errors,warnings}
+}
+
+export function validatePublishableCatalog(catalogs){
+  const report=validateCatalog(catalogs,{requireProvenance:true})
+  const errors=[...report.errors]
+  const warnings=[...report.warnings]
+  for(const domain of DI_DOMAINS){
+    const records=Array.isArray(catalogs?.[domain])?catalogs[domain]:[]
+    for(const record of records){
+      const provenance=record?.provenance
+      if(provenance?.status!==PUBLISHABLE_PROVENANCE_STATUS){
+        errors.push(domain+' record '+(record?.id||'<unknown>')+' is not publishable; provenance status must be '+PUBLISHABLE_PROVENANCE_STATUS+'.')
+      }
+      if(!isString(provenance?.checkedAt)){
+        errors.push(domain+' record '+(record?.id||'<unknown>')+' is not publishable; provenance checkedAt is required.')
+      }
+    }
+  }
+  return{
+    ...report,
+    valid:errors.length===0,
+    errors,
+    warnings,
+    publishable:errors.length===0,
+  }
 }
 
 export function createCatalogManifest(catalogs,{requireProvenance=false}={}){
