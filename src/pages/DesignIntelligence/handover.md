@@ -2441,3 +2441,45 @@ These must be configured as server-side Vercel Environment Variables and never h
 8. Publish and externally install the package-ready canonical npm adapter.
 9. Continue Phase A publication workflow and deeper compatibility foundation.
 10. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Runtime deployment re-check
+
+### VERIFIED
+- Current feature branch HEAD is `a2c222a3febaf555e27452e6324d233c1d2e69f2`; the only commits after runtime commit `53fccb31069c32f99a762775134c7846c85ddccf` are handover-documentation commits.
+- READY Vercel deployment `dpl_BKumDxovPtH95mdpXvyPc7BVqSaD` is still available for runtime commit `53fccb31069c32f99a762775134c7846c85ddccf` on `feature/design-intelligence`.
+- Commit `53fccb...` is directly based on Cashfree alignment commit `37a75299...`; therefore the READY deployment contains the corrected Ultra Premium+ / ₹500 Cashfree contract and all runtime code present through that commit.
+- A fresh Vercel access/share URL was generated for the READY deployment, but the deployment fetch still returns HTTP 302 to Vercel Authentication/SSO.
+
+### UNVERIFIED
+- Authenticated browser/visual/interactivity verification of all 7 DI routes remains UNVERIFIED because deployment protection prevents page retrieval in the available authenticated fetch path.
+- Manual accessibility/device/screen-reader verification remains UNVERIFIED.
+- Real Firebase entitlement/API-key/BYOK/Cashfree sandbox runtime remains UNVERIFIED.
+- Current branch documentation HEAD has no newer application runtime code than the READY 53fccb deployment; no unnecessary redeploy was forced merely to deploy documentation-only commits.
+
+### CHECKPOINT
+- Regression: VERIFIED for branch/deployment lineage; browser regression UNVERIFIED.
+- Functionality: runtime code through 53fccb is deployed READY; live route/payment/API behavior UNVERIFIED.
+- Accessibility: automated foundation remains present; manual audit UNVERIFIED.
+- Privacy/security: no credentials added; Vercel deployment protection remains enabled.
+- Performance: no runtime change made during this checkpoint; profiling UNVERIFIED.
+- Data quality: no catalog/payment/API-key records fabricated.
+- Build/test: READY deployment VERIFIED; exact current branch HEAD has no application-code delta from that runtime deployment; current-head browser/CI result UNVERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes on the READY runtime deployment when a working authenticated browser path is available.
+2. Complete manual accessibility/responsive/device/screen-reader verification.
+3. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
+4. Exercise `/api/di-knowledge` with Free, real Firebase Premium, real Firebase Ultra and real Ultra MotionZync API-key callers; confirm Premium never receives Ultra-only records.
+5. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are intentionally supplied.
+6. Verify Ultra API-key issuance/rotation/revocation against a real Ultra entitlement.
+7. Verify the API-only special animation/effects capability in the deployed environment without bypassing Ultra entitlement.
+8. Publish and externally install the package-ready canonical npm adapter.
+9. Continue Phase A publication workflow and deeper compatibility foundation.
+10. Keep 1,000+/10,000+ content expansion deferred.
