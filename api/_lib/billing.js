@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import { getAdminDb } from './firebase-admin.js'
 import { getAuth } from 'firebase-admin/auth'
 
@@ -47,6 +48,174 @@ export function normalizePaymentRecord(input = {}) {
   return payment
 }
 
+
+const ENTITLED_TIERS = new Set(['premium', 'ultra-premium'])
+
+function keyDigest(value) {
+  return crypto.createHash('sha256').update(value, 'utf8').digest('hex')
+}
+
+function createApiSecret() {
+  return 'mz_live_' + crypto.randomBytes(32).toString('base64url')
+}
+
+async function getActiveApiKeyDocs(db, userId) {
+  const snapshot = await db.collection(BILLING_COLLECTIONS.apiKeys)
+    .where('userId', '==', userId)
+    .limit(50)
+    .get()
+  return snapshot.docs
+    .map(doc => ({ id: doc.id, ref: doc.ref, ...doc.data() }))
+    .filter(record => str(record.status || 'active').toLowerCase() === 'active' && !record.revokedAt)
+}
+
+export async function getServerEntitlement(userId) {
+  const cleanUserId = str(userId)
+  if (!cleanUserId) throw new Error('Firebase user ID is required')
+  const snapshot = await getAdminDb().collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
+  if (!snapshot.exists) {
+    return { tier: 'free', active: false, source: null, expiresAt: null }
+  }
+
+  const data = snapshot.data() || {}
+  const tier = str(data.entitlement || data.plan).toLowerCase()
+  const expiry = dateOf(data.entitlementExpiresAt)
+  const active = ENTITLED_TIERS.has(tier) && (!expiry || expiry.getTime() > Date.now())
+
+  return {
+    tier: active ? tier : 'free',
+    active,
+    source: str(data.entitlementSource).toLowerCase() || null,
+    expiresAt: iso(data.entitlementExpiresAt),
+  }
+}
+
+async function issueApiKeyForUser({ userId, plan, rotationOf = null } = {}) {
+  const cleanUserId = str(userId)
+  const cleanPlan = str(plan).toLowerCase()
+  if (!cleanUserId || !ENTITLED_TIERS.has(cleanPlan)) {
+    throw new Error('An active Premium entitlement is required')
+  }
+
+  const secret = createApiSecret()
+  const now = new Date().toISOString()
+  const prefix = secret.slice(0, 16)
+  const id = 'key_' + crypto.randomBytes(16).toString('hex')
+
+  await getAdminDb().collection(BILLING_COLLECTIONS.apiKeys).doc(id).set({
+    userId: cleanUserId,
+    plan: cleanPlan,
+    provider: 'motionzync',
+    keyHash: keyDigest(secret),
+    keyPrefix: prefix,
+    status: 'active',
+    createdAt: now,
+    updatedAt: now,
+    lastUsedAt: null,
+    revokedAt: null,
+    rotationOf: str(rotationOf) || null,
+  })
+
+  return {
+    id,
+    secret,
+    prefix,
+    plan: cleanPlan,
+    createdAt: now,
+  }
+}
+
+export async function getApiKeyStatusForUser(userId) {
+  const db = getAdminDb()
+  const entitlement = await getServerEntitlement(userId)
+  const keys = await getActiveApiKeyDocs(db, userId)
+
+  return {
+    entitlement,
+    activeKeyCount: keys.length,
+    active: keys.map(key => ({
+      id: key.id,
+      prefix: str(key.keyPrefix),
+      plan: str(key.plan).toLowerCase(),
+      createdAt: iso(key.createdAt),
+      updatedAt: iso(key.updatedAt),
+      lastUsedAt: iso(key.lastUsedAt),
+    })),
+  }
+}
+
+export async function issueApiKeyForEntitlement(userId) {
+  const entitlement = await getServerEntitlement(userId)
+  if (!entitlement.active) {
+    const error = new Error('Active Premium entitlement is required before an API key can be issued')
+    error.status = 403
+    throw error
+  }
+
+  const existing = await getActiveApiKeyDocs(getAdminDb(), userId)
+  if (existing.length) {
+    const error = new Error('An active MotionZync API key already exists. Rotate it to create a new secret.')
+    error.status = 409
+    throw error
+  }
+
+  return issueApiKeyForUser({
+    userId,
+    plan: entitlement.tier,
+  })
+}
+
+export async function rotateApiKeyForEntitlement(userId) {
+  const entitlement = await getServerEntitlement(userId)
+  if (!entitlement.active) {
+    const error = new Error('Active Premium entitlement is required before an API key can be rotated')
+    error.status = 403
+    throw error
+  }
+
+  const db = getAdminDb()
+  const existing = await getActiveApiKeyDocs(db, userId)
+  const now = new Date().toISOString()
+
+  for (const key of existing) {
+    await key.ref.set({
+      status: 'revoked',
+      revokedAt: now,
+      updatedAt: now,
+    }, { merge: true })
+  }
+
+  return issueApiKeyForUser({
+    userId,
+    plan: entitlement.tier,
+    rotationOf: existing[0]?.id || null,
+  })
+}
+
+export async function revokeApiKeysForUser(userId) {
+  const db = getAdminDb()
+  const existing = await getActiveApiKeyDocs(db, userId)
+  const now = new Date().toISOString()
+
+  for (const key of existing) {
+    await key.ref.set({
+      status: 'revoked',
+      revokedAt: now,
+      updatedAt: now,
+    }, { merge: true })
+  }
+
+  return {
+    revokedCount: existing.length,
+    revokedAt: now,
+  }
+}
+
+export function hashMotionZyncApiKey(secret) {
+  const cleanSecret = str(secret)
+  if (!cleanSecret) return ''
+  return keyDigest(cleanSecret)
+}
 export async function recordPendingOrder({
   userId,
   email,
