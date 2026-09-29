@@ -23,7 +23,7 @@ This folder contains the Design Intelligence + UI Generation feature only.
 - Update handover.md after every meaningful milestone.
 
 ## Current implementation
-Phase 1 foundation is implemented; current Phase A engine/system progress is 86%:
+Phase 1 foundation is implemented; current Phase A engine/system progress is 87%:
 - multipage route family under /design-intelligence/*
 - internal navigation
 - structured seed catalog
@@ -41,14 +41,13 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 86%
 - continuation/common-instruction files
 
 ## FIRST UNFINISHED TASK
-1. Verify the new Admin Billing tab through CI/browser and inspect responsive behaviour.
-2. Re-check Vercel when the build-rate-limit restriction clears or an authorized deployment path becomes available.
-3. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
-4. Run full accessibility/responsive and real-provider BYOK verification.
+1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
+2. Complete full accessibility/responsive audit, including screen-reader/device checks.
+3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
+4. Continue Phase A publication workflow and deeper compatibility foundation.
 5. Implement provider-specific payment webhook signature verification and connect the selected gateway before exposing paid checkout.
 6. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
-7. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
-8. Do not begin the 1,000+/10,000+ content expansion yet.
+7. Do not begin the 1,000+/10,000+ content expansion yet.
 
 ## Existing AI / API-key integration context
 
