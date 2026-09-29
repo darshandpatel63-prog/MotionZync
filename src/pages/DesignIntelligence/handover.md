@@ -1300,3 +1300,47 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Automated browser verification infrastructure milestone
+
+### IMPLEMENTED
+- Extended the existing Design Intelligence GitHub Actions build workflow with a browser smoke suite using Playwright Chromium.
+- The smoke suite covers all 7 /design-intelligence* routes, route rendering, accessible-name checks, Explorer search/filter interaction, Generator interaction, pricing Google-login entry presence, keyboard focus visibility, and 390/768/1440px horizontal-overflow checks.
+- Browser screenshots and the Vite log are uploaded as CI artifacts for visual evidence without adding a second application/test database.
+- The browser suite runs against the built repository locally in CI; it does not execute generated HTML/JavaScript.
+
+### VERIFIED
+- Current feature/design-intelligence HEAD is 70d5e4cf19bb7e6716526259a13a60985c686f52.
+- Vercel deployment dpl_35XP2VCdnB49MWW2iL7kKT5U9rUd for that exact HEAD is READY.
+- GitHub commit status for that exact HEAD reports Vercel success.
+- Vercel project runtime-error aggregation for the selected 24-hour window reports no runtime errors.
+- The workflow source is present on the exact HEAD and is scoped to the existing Design Intelligence build path.
+
+### UNVERIFIED
+- The new GitHub Actions Playwright run result for exact HEAD could not be independently retrieved through the available GitHub connector because its workflow-run fetch is limited to pull-request-triggered runs.
+- Authenticated production browser/visual/interactivity verification of all 7 routes remains blocked by Vercel Authentication in the available browser/fetch path.
+- Full screen-reader audit and device-level visual inspection remain unverified.
+- Real-provider BYOK execution and provider-specific CORS/model behavior remain unverified.
+
+### CHECKPOINT
+- Regression: Vercel exact-head READY; browser-level regression remains UNVERIFIED.
+- Functionality: source-level browser coverage IMPLEMENTED; CI execution result UNVERIFIED.
+- Accessibility: automated accessible-name/focus/overflow checks IMPLEMENTED; full audit UNVERIFIED.
+- Privacy/security: no second vault, database or secret path added; generated code remains non-executing.
+- Performance: CI browser check is bounded to 7 routes plus three responsive viewports; runtime profiling UNVERIFIED.
+- Data quality: no catalog expansion or fabricated records.
+- Build/test: exact-head Vercel build/deployment VERIFIED; Playwright CI execution UNVERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 84% — IN PROGRESS
+- Phase B — Publish: 0% — NOT STARTED
+- Phase C — Continuous Content Expansion: 0% — NOT STARTED
+
+## FIRST UNFINISHED TASK
+1. Verify the new Playwright GitHub Actions run when its push-triggered result is accessible; fix only evidence-backed failures.
+2. Complete authenticated production browser/visual/interactivity verification of all 7 routes when an authorized browser path is available.
+3. Run full accessibility/responsive verification and real-provider BYOK/CORS/model verification.
+4. Continue Phase A publish-workflow and deeper compatibility foundation.
+5. Keep the 1,000+/10,000+ content expansion deferred.
