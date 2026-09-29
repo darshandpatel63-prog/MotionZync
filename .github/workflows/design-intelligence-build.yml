@@ -104,25 +104,24 @@ jobs:
             }
             await route.continue()
           })
-          await page.route('http://127.0.0.1:4173/api/admin-billing**', async route => {
-            if (route.request().method() === 'GET') {
-              await route.fulfill({
-                status: 200,
-                contentType: 'application/json',
-                body: JSON.stringify({
-                  summary:{uniquePayers:0,successfulPayments:0,grossRevenue:0,refundedAmount:0,activeEntitlements:0,activeApiKeys:0,manualGrants:0,totalPaymentRecords:0},
-                  paymentStatus:[],planDistribution:[],entitlementSources:[],apiKeyStatus:[],monthly:[],recentTransactions:[],
-                  generatedAt:new Date().toISOString(),
-                  limits:{collectionsReadLimit:10000,recentTransactions:100},
-                }),
-              })
-              return
+          await page.addInitScript(() => {
+            const originalFetch = window.fetch.bind(window)
+            window.fetch = async (input, init) => {
+              const url = typeof input === 'string' ? input : input.url
+              if (url.endsWith('/api/admin-billing')) {
+                const method = init?.method || (typeof input !== 'string' ? input.method : 'GET')
+                const payload = method === 'POST'
+                  ? {result:{email:'ci-admin@example.invalid',tier:'premium'}}
+                  : {
+                      summary:{uniquePayers:0,successfulPayments:0,grossRevenue:0,refundedAmount:0,activeEntitlements:0,activeApiKeys:0,manualGrants:0,totalPaymentRecords:0},
+                      paymentStatus:[],planDistribution:[],entitlementSources:[],apiKeyStatus:[],monthly:[],recentTransactions:[],
+                      generatedAt:new Date().toISOString(),
+                      limits:{collectionsReadLimit:10000,recentTransactions:100},
+                    }
+                return new Response(JSON.stringify(payload), {status:200,headers:{'Content-Type':'application/json'}})
+              }
+              return originalFetch(input, init)
             }
-            await route.fulfill({
-              status: 200,
-              contentType: 'application/json',
-              body: JSON.stringify({result:{email:'ci-admin@example.invalid',tier:'premium'}}),
-            })
           })
           const failures = []
 
