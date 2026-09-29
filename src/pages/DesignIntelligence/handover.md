@@ -1173,3 +1173,45 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Verify real-provider BYOK and provider-specific capability/CORS behavior.
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Phase A accessibility semantics milestone
+
+### IMPLEMENTED
+- Explorer knowledge-domain filter buttons now expose their selected state through `aria-pressed`.
+- Existing visible focus treatment and 44px minimum interactive control sizing remain in place.
+- No visual design system, catalog, database or authentication architecture was changed.
+
+### VERIFIED
+- Updated file is committed on `feature/design-intelligence` as `76d78ba53639649bcb261eca5f151e288e0290cd`.
+- The branch still contains all 7 Design Intelligence routes and the existing Navbar integration.
+- Vercel project runtime-error aggregation for the selected 24-hour window reports no runtime errors.
+
+### UNVERIFIED
+- Vercel deployment for this exact accessibility commit has not appeared in the deployment list yet.
+- Browser/visual/interactivity verification of all 7 routes remains blocked by deployment authentication in the available connector.
+- Full keyboard, screen-reader and responsive audit remains unverified.
+- Local `npm run build` could not be executed because the clean checkout environment could not resolve `github.com`.
+- Real BYOK provider/CORS execution remains unverified.
+
+### CHECKPOINT
+- Regression: source-level safeguards preserved; current accessibility commit deployment UNVERIFIED.
+- Functionality: IMPLEMENTED at source level; browser interaction UNVERIFIED.
+- Accessibility: filter state semantics IMPLEMENTED; full audit UNVERIFIED.
+- Privacy/security: no new secret or persistence path.
+- Performance: negligible static attribute change; profiling UNVERIFIED.
+- Data quality: no catalog expansion/fabrication.
+- Build/test: exact commit build UNVERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 82% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-check Vercel for the exact current branch HEAD and verify its deployment state.
+2. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publish-workflow and deeper compatibility foundation.
+5. Keep 1,000+/10,000+ content expansion deferred.
