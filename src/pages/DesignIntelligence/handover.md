@@ -1604,3 +1604,43 @@ Do not edit other existing project files unless a future Design Intelligence mil
 5. Implement provider-specific payment webhook signature verification and connect the selected gateway before exposing paid checkout.
 6. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
 7. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
+
+
+## 2026-09-29 — Design Intelligence automated accessibility gate verified
+
+### VERIFIED
+- GitHub Actions run **36545396998** for exact tested head `52c97e572323db9c4adcdea4be92e06d2fb36926` completed **SUCCESS**.
+- Production-build-equivalent CI build completed successfully.
+- Playwright browser setup and Chromium installation completed successfully.
+- The existing seven-route Design Intelligence smoke coverage still passed.
+- Automated accessible-name checks passed across the seven Design Intelligence routes.
+- axe-core accessibility audit passed with **zero serious/critical violations inside `.di-shell`**.
+- The audit intentionally excludes the existing global MotionZync Navbar/Footer so unrelated styling is not treated as a Design Intelligence regression.
+- Explorer search/filter interaction, Generator deterministic preview + AI toggle, pricing identity state, 390/768/1440 responsive overflow checks, Admin DI Billing browser checks, and keyboard `:focus-visible` verification all passed in the same run.
+
+### IMPLEMENTED
+- CI now installs Playwright and axe together in one isolated step.
+- The axe runner uses a Playwright browser context as required by the accessibility integration.
+- The audit is scoped to the canonical Design Intelligence shell.
+
+### UNVERIFIED
+- Full screen-reader/manual assistive-technology audit.
+- Physical-device validation across Android/iOS/tablet hardware.
+- Authenticated production visual/interactivity verification of all seven routes.
+- Real BYOK provider execution and provider-specific CORS/model compatibility.
+
+### CHECKPOINT
+- Regression: **VERIFIED** for the CI browser path.
+- Functionality: **VERIFIED** for the existing seven-route smoke coverage plus Admin DI Billing checks.
+- Accessibility: automated accessible-name + serious/critical axe gate **VERIFIED**; manual screen-reader/device audit remains UNVERIFIED.
+- Privacy/security: no new secret path or production credential introduced.
+- Performance: bounded CI verification only; profiling remains UNVERIFIED.
+- Data quality: no catalog expansion or fabricated data.
+- Build/test: **VERIFIED** by GitHub Actions run 36545396998.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **88% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+- 1,000+/10,000+ content expansion remains deferred.
