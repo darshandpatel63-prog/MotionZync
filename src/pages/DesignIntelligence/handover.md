@@ -1130,3 +1130,46 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publication workflow and deeper compatibility rules without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Phase A deployment + compatibility milestone
+
+### IMPLEMENTED
+- Deterministic compatibility now normalizes common industry aliases before style-fit evaluation, reducing avoidable mismatch warnings for equivalent user wording.
+- Existing AI-assisted compatibility freshness fix remains in place after validated recipe refinement.
+
+### VERIFIED
+- Current `feature/design-intelligence` HEAD: `9b138dbda94ee3bfeef9f3208676ddcda4950b1a`.
+- Vercel deployment `dpl_FvC3NwUVc7KH9MWFd9WLzRyLcmLx` for that exact HEAD reached `READY`.
+- Deployment is Vite/Git sourced.
+- No runtime errors were found in the selected 24-hour project window.
+- No unrelated MotionZync files were changed by this milestone.
+
+### UNVERIFIED
+- Authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes; direct route fetch is still blocked by Vercel Authentication in the available connector.
+- Full accessibility/responsive browser audit.
+- Real-provider BYOK generation and provider-specific CORS/capability behavior.
+- Local unit/integration test execution; repository package scripts currently expose `dev`, `build` and `preview` only.
+- Executable-code isolation beyond the existing non-executing preview/export boundary.
+
+### CHECKPOINT
+- Regression: Vercel deployment READY; browser regression UNVERIFIED.
+- Functionality: source-level IMPLEMENTED; runtime interaction UNVERIFIED.
+- Accessibility: source safeguards IMPLEMENTED; full audit UNVERIFIED.
+- Privacy/security: no new persistence, auth store, database or API-key vault path.
+- Performance: compatibility normalization is bounded and deterministic; profiling UNVERIFIED.
+- Data quality: no content expansion or fabricated records.
+- Build/deploy: Vercel READY VERIFIED; local tests UNVERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 81% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+2. Run full accessibility/responsive verification.
+3. Verify real-provider BYOK and provider-specific capability/CORS behavior.
+4. Continue Phase A publish-workflow and deeper compatibility foundation.
+5. Keep 1,000+/10,000+ content expansion deferred.
