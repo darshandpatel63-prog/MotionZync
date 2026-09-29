@@ -75,7 +75,7 @@ export default function DesignIntelligenceAdminBilling() {
   const [loading,setLoading]=useState(true)
   const [error,setError]=useState('')
   const [grantEmail,setGrantEmail]=useState('')
-  const [grantTier,setGrantTier]=useState('premium')
+  const [grantTier,setGrantTier]=useState('ultra-premium')
   const [grantStatus,setGrantStatus]=useState('')
   const [granting,setGranting]=useState(false)
 
@@ -149,10 +149,10 @@ export default function DesignIntelligenceAdminBilling() {
     </div>
 
     <section className="di-admin-grant">
-      <div><span className="di-admin-kicker">OWNER ACCESS</span><h3>Grant Premium without payment</h3><p>This changes MotionZync entitlement for a Firebase/Google account. It does not modify the user's Gmail account and it does not create a fake transaction.</p></div>
+      <div><span className="di-admin-kicker">OWNER ACCESS</span><h3>Grant Ultra Premium+ without payment</h3><p>This changes MotionZync entitlement for a Firebase/Google account. It does not modify the user's Gmail account and it does not create a fake transaction.</p></div>
       <form onSubmit={grant}>
         <input aria-label="Google account email" type="email" placeholder="Google account email" value={grantEmail} onChange={event=>setGrantEmail(event.target.value)} required/>
-        <select aria-label="Entitlement tier" value={grantTier} onChange={event=>setGrantTier(event.target.value)}><option value="premium">Premium</option><option value="ultra-premium">Ultra Premium+</option></select>
+        <select aria-label="Entitlement tier" value={grantTier} onChange={event=>setGrantTier(event.target.value)}><option value="ultra-premium">Ultra Premium+</option></select>
         <button disabled={granting}>{granting?'Granting…':'Grant entitlement'}</button>
       </form>
       {grantStatus&&<div className="di-admin-grant-status" role="status">{grantStatus}</div>}
