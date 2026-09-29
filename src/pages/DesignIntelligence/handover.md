@@ -41,7 +41,7 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 - UUPM public reference was inspected for category/stack scope. Its current public page describes design styles, palettes, typography, charts, UX guidance and 8 tech stacks. It currently lists React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter and Tailwind.
 
 ## UNVERIFIED
-- Responsive-navigation fix commit `7bbf95983a76a7026460cdc564a666ce209036da` has a READY Vercel deployment; latest safe-export commits are tracked in separate Vercel deployments.
+- Responsive-navigation fix commit `7bbf95983a76a7026460cdc564a666ce209036da` has a READY Vercel deployment; safe-export code commit `a3c6a2b4b0ff38768be10b38b5d520dc4d38f979` also has a READY deployment.
 - Browser route verification for all Design Intelligence pages.
 - Full keyboard/screen-reader/mobile audit.
 - Real-provider BYOK execution and provider-specific CORS/model compatibility.
@@ -436,17 +436,17 @@ Do not edit other existing project files unless a future Design Intelligence mil
 
 ### UNVERIFIED
 - Browser download interaction and mobile file-save behavior.
-- Latest Vercel deployment for this export milestone.
 - Full accessibility/device verification.
+- Latest documentation-only commit deployment status.
 
 ### CHECKPOINT
-- Regression: UNVERIFIED pending export deployment; previous responsive code deployment is READY.
+- Regression: VERIFIED at Vercel READY + runtime-error level for the safe-export code deployment; browser regression UNVERIFIED.
 - Functionality: IMPLEMENTED / browser download interaction UNVERIFIED.
 - Accessibility: existing foundation retained; full browser audit UNVERIFIED.
 - Privacy/security: export is non-executable and contains no provider API key.
 - Performance: no large data load added.
 - Data quality: export is sourced from canonical recipe/tokens; no fabricated records.
-- Build/test: UNVERIFIED pending new deployment.
+- Build/test: VERIFIED for safe-export code commit `a3c6a2b4b0ff38768be10b38b5d520dc4d38f979` via READY Vercel deployment; local build remains unrun.
 - Documentation: UPDATED.
 
 ### PHASE STATUS
