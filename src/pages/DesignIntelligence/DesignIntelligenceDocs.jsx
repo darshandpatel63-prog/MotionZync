@@ -23,6 +23,13 @@ export default function DesignIntelligenceDocs(){return <div className="di-page"
   </section>
 
   <section className="di-surface">
+    <span className="di-kicker">SPECIAL ANIMATION + EFFECTS API</span>
+    <h2>Ultra Premium+ developer capability</h2>
+    <p>The API now exposes a bounded, server-authorized special-effects capability. A valid Ultra Premium+ MotionZync API key can list supported effects and request a safe CSS implementation for the selected effect. The service returns CSS only; it does not return or execute arbitrary JavaScript.</p>
+    <p className="di-muted">Current capability includes Shimmer, Float, Glow Pulse, Gradient Shift and Spin. Each effect includes a reduced-motion fallback. Cross-origin browser use is deny-by-default until an origin is explicitly configured in the server allowlist.</p>
+  </section>
+
+  <section className="di-surface">
     <span className="di-kicker">NPM</span>
     <h2>One core, one package direction</h2>
     <p>The target npm model is not a second dataset. Free/public records can be distributed locally, while authenticated Premium and Ultra integrations can use the same canonical core plus server-delivered protected knowledge. The package publication itself is still a separate release milestone and is not claimed as published in this source-only milestone.</p>
