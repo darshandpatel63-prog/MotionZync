@@ -17,6 +17,15 @@ const CATALOG_BY_DOMAIN=Object.freeze({
 const SEARCH_INDEXES=Object.freeze(
   Object.fromEntries(Object.entries(CATALOG_BY_DOMAIN).map(([domain,records])=>[domain,buildSearchIndex(records)]))
 )
+
+const catalogMap=(catalogs=CATALOG_BY_DOMAIN)=>({
+  styles:Array.isArray(catalogs?.styles)?catalogs.styles:DI_STYLES,
+  palettes:Array.isArray(catalogs?.palettes)?catalogs.palettes:DI_PALETTES,
+  typography:Array.isArray(catalogs?.typography)?catalogs.typography:DI_TYPOGRAPHY,
+  charts:Array.isArray(catalogs?.charts)?catalogs.charts:DI_CHARTS,
+  stacks:Array.isArray(catalogs?.stacks)?catalogs.stacks:DI_STACKS,
+  recipes:Array.isArray(catalogs?.recipes)?catalogs.recipes:DI_RECIPES,
+})
 const scoreRecord=(record,tokens)=>{
   const haystack=[record.name,record.description,record.mood,record.category,...(record.tags||[]),...(record.suitedFor||[]),...(record.focus||[]),record.layout,record.navigation,...(record.ux||[])].join(' ').toLowerCase()
   return tokens.reduce((score,token)=>score+(haystack.includes(token)?1:0),0)
@@ -132,7 +141,7 @@ export function evaluateCompatibility(recipe){
   }
 }
 
-export function validateRecipe(recipe,entitlementTier='free'){
+export function validateRecipe(recipe,entitlementTier='free',catalogs=CATALOG_BY_DOMAIN){
   const errors=[]
   const warnings=[]
   const structure=validateRecipeShape(recipe)
@@ -142,12 +151,13 @@ export function validateRecipe(recipe,entitlementTier='free'){
   const graph=getRelationshipIntegrity()
   if(!graph.valid)errors.push(...graph.errors.slice(0,10))
 
+  const catalog=catalogMap(catalogs)
   const refs=[
-    ['style',recipe?.style,DI_STYLES],
-    ['palette',recipe?.palette,DI_PALETTES],
-    ['typography',recipe?.typography,DI_TYPOGRAPHY],
-    ['stack',recipe?.stack,DI_STACKS],
-    ...(recipe?.chart?[['chart',recipe.chart,DI_CHARTS]]:[]),
+    ['style',recipe?.style,catalog.styles],
+    ['palette',recipe?.palette,catalog.palettes],
+    ['typography',recipe?.typography,catalog.typography],
+    ['stack',recipe?.stack,catalog.stacks],
+    ...(recipe?.chart?[['chart',recipe.chart,catalog.charts]]:[]),
   ]
   for(const [name,record,records] of refs){
     if(!record?.id){errors.push('Missing '+name+' record.');continue}
@@ -180,19 +190,20 @@ export function interpretRequest(prompt=''){
   }
 }
 
-export function buildRecipe(prompt='',entitlementTier='free'){
+export function buildRecipe(prompt='',entitlementTier='free',catalogs=CATALOG_BY_DOMAIN){
+  const catalog=catalogMap(catalogs)
   const request=interpretRequest(prompt)
   const tokens=request.tokens
-  const style=best(DI_STYLES,tokens,entitlementTier)
-  const palette=best(DI_PALETTES,[...tokens,request.industry],entitlementTier,0,[style.id])
-  const typography=best(DI_TYPOGRAPHY,[...tokens,request.industry],entitlementTier,0,[style.id,palette.id])
-  const chart=(request.product==='dashboard'||request.product==='analytics')?best(DI_CHARTS,tokens,entitlementTier,0,[style.id,palette.id,typography.id]):null
+  const style=best(catalog.styles,tokens,entitlementTier)
+  const palette=best(catalog.palettes,[...tokens,request.industry],entitlementTier,0,[style.id])
+  const typography=best(catalog.typography,[...tokens,request.industry],entitlementTier,0,[style.id,palette.id])
+  const chart=(request.product==='dashboard'||request.product==='analytics')?best(catalog.charts,tokens,entitlementTier,0,[style.id,palette.id,typography.id]):null
   const stack=request.platform==='mobile'||request.platform==='android'
-    ?(tokens.includes('flutter')?DI_STACKS.find(r=>r.id==='stack-flutter'):DI_STACKS.find(r=>r.id==='stack-react-native'))
+    ?(tokens.includes('flutter')?catalog.stacks.find(r=>r.id==='stack-flutter'):catalog.stacks.find(r=>r.id==='stack-react-native'))
     :(request.platform==='ios'
-      ?(DI_STACKS.find(r=>r.id==='stack-swiftui')||best(DI_STACKS,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
-      :best(DI_STACKS,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
-  const recipeMatch=best(DI_RECIPES,[...tokens,request.industry,style.id],entitlementTier,0,[style.id,palette.id,typography.id,chart?.id,stack?.id])
+      ?(catalog.stacks.find(r=>r.id==='stack-swiftui')||best(catalog.stacks,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
+      :best(catalog.stacks,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
+  const recipeMatch=best(catalog.recipes,[...tokens,request.industry,style.id],entitlementTier,0,[style.id,palette.id,typography.id,chart?.id,stack?.id])
   const compositionFamily=request.product==='dashboard'||request.product==='analytics'?'dashboard':request.product==='ecommerce'||request.product==='commerce'?'commerce':request.product==='landing'||request.product==='portfolio'?'editorial':request.product==='mobile'||request.product==='app'?'mobile':request.product==='healthcare'||request.product==='education'||request.product==='admin'?'workspace':'product'
   const candidate={
     request,
@@ -211,18 +222,19 @@ export function buildRecipe(prompt='',entitlementTier='free'){
   candidate.compatibility=compatibility
   const warnings=[]
   if(request.mode==='dark'&&palette.background==='#FFFBEB')warnings.push('The selected palette is light-first; review contrast before forcing dark mode.')
-  const validation=validateRecipe(candidate,entitlementTier)
+  const validation=validateRecipe(candidate,entitlementTier,catalog)
   warnings.push(...validation.warnings)
   return{...candidate,warnings,deterministic:true,aiRequired:false,valid:validation.valid,errors:validation.errors}
 }
 
-export function searchCatalog(query='',domain='all',entitlementTier='free'){
-  const domains=domain==='all'?Object.keys(CATALOG_BY_DOMAIN):[domain]
+export function searchCatalog(query='',domain='all',entitlementTier='free',catalogs=CATALOG_BY_DOMAIN){
+  const catalog=catalogMap(catalogs)
+  const domains=domain==='all'?Object.keys(catalog):[domain]
   const max=levelOf(entitlementTier)
   const results=[]
   for(const currentDomain of domains){
-    const records=CATALOG_BY_DOMAIN[currentDomain]
-    const index=SEARCH_INDEXES[currentDomain]
+    const records=catalog[currentDomain]
+    const index=catalogs===CATALOG_BY_DOMAIN?SEARCH_INDEXES[currentDomain]:buildSearchIndex(records)
     if(!records||!index)continue
     for(const record of searchIndex(index,query)){
       if(levelOf(record.tier)>max)continue
