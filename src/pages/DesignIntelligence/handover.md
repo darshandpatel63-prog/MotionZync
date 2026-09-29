@@ -2116,6 +2116,49 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — Ultra-only special animation/effects API capability
+
+### IMPLEMENTED
+- Added server-only `api/_lib/di-effects.js` containing five bounded deterministic effect capabilities: Shimmer, Float, Glow Pulse, Gradient Shift and Spin.
+- Added `api/di-effects.js` with GET/POST developer API operations authenticated through the existing server-issued MotionZync API-key verifier.
+- The endpoint therefore requires an active Ultra Premium+ entitlement and does not accept Premium-at-₹0 or arbitrary bearer values.
+- Effect requests return safe CSS only, with explicit reduced-motion fallbacks; arbitrary JavaScript generation/execution is not part of this API.
+- Cross-origin browser access is deny-by-default unless an origin is explicitly included in `MOTIONZYNC_API_ALLOWED_ORIGINS`.
+- Added `createSpecialEffectsClient` to the package-ready npm entry so npm/API consumers can call the same canonical server capability.
+- Updated in-product Docs and START_HERE to reflect the actual capability boundary.
+
+### VERIFIED
+- Source-level authentication path is server-authoritative and reuses the existing API-key/entitlement implementation.
+- No second database, special-effects catalog records, fake API keys or fabricated content were introduced.
+- Numeric effect options are bounded server-side and unknown effect IDs are rejected.
+- Responses are private/no-store, vary on Authorization/Origin and include security headers.
+- Reduced-motion fallbacks are present in every defined effect.
+- No plaintext API secret is logged or persisted by this endpoint.
+
+### UNVERIFIED
+- Current Vercel runtime for `/api/di-effects`.
+- Real Ultra entitlement + API-key request and key lifecycle exercise.
+- Production CORS request after configuring an explicit allowlist.
+- Full browser/device visual validation of every effect.
+- Manual screen-reader/accessibility audit.
+- Current HEAD still lacks a READY Vercel deployment.
+- GitHub Actions browser/Axe smoke currently needs the navigation-race fix; the previous source build itself passed.
+
+### CHECKPOINT
+- Regression: additive server-only DI capability, npm adapter and docs; unrelated MotionZync code not intentionally modified.
+- Functionality: API capability IMPLEMENTED; production runtime UNVERIFIED.
+- Accessibility: reduced-motion handling IMPLEMENTED; full audit UNVERIFIED.
+- Privacy/security: Ultra-only server auth, no wildcard CORS, no secret persistence, no executable JS output.
+- Performance: bounded in-memory effect generation; no database query; production profiling UNVERIFIED.
+- Data quality: five deterministic capabilities, no fabricated catalog rows.
+- Build/test: prior CI Build step passed; browser/Axe step failed on an execution-context/navigation race and remains to be fixed.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
 1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication and Pricing API-key controls after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
