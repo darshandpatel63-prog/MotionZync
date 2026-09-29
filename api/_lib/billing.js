@@ -154,7 +154,7 @@ export async function getApiKeyStatusForUser(userId) {
 
 export async function issueApiKeyForEntitlement(userId) {
   const entitlement = await getServerEntitlement(userId)
-  if (!entitlement.active) {
+  if (entitlement.tier !== 'ultra-premium') {
     const error = new Error('Ultra Premium+ entitlement is required before an API key can be issued')
     error.status = 403
     throw error
@@ -175,7 +175,7 @@ export async function issueApiKeyForEntitlement(userId) {
 
 export async function rotateApiKeyForEntitlement(userId) {
   const entitlement = await getServerEntitlement(userId)
-  if (!entitlement.active) {
+  if (entitlement.tier !== 'ultra-premium') {
     const error = new Error('Ultra Premium+ entitlement is required before an API key can be rotated')
     error.status = 403
     throw error
