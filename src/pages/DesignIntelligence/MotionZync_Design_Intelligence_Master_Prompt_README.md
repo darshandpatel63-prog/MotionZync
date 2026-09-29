@@ -1078,5 +1078,3 @@ The user's external provider API key is **not** the same thing as MotionZync Pre
 - Provider capability-aware generation and stronger provider-specific handling.
 - Safe preview/export adapters.
 - Server-authoritative entitlement enforcement for protected capabilities.
-
-- Add safe preview/export adapters.
