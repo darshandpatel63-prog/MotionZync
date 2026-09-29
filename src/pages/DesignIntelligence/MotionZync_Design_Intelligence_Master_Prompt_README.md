@@ -486,7 +486,6 @@ Never destroy existing MotionZync to build Design Intelligence.
 Never fabricate the dataset.
 Never create a second unrelated knowledge core.
 
-
 ## 29. EXPANDED DESIGN INTELLIGENCE TAXONOMY
 
 The owner requires Design Intelligence to grow beyond the initial UUPM-style reference categories. Existing sections and requirements must remain; this section expands them.
@@ -856,7 +855,6 @@ The sections above describe the target architecture and requirements unless sepa
 
 Current implementation remains Phase 1 as described in earlier sections. Expanded taxonomy, local npm execution, premium expiry enforcement, anti-template convergence, advanced animation/3D/game intelligence and universal orchestration are predominantly PLANNED / FUTURE until their implementation and verification milestones are completed.
 
-
 ## 38. GRANULAR 1000+ COVERAGE RULE
 
 The project's large-scale content goal is intentionally **recursive/granular**.
@@ -910,7 +908,6 @@ The objective is not to make every generated UI look "random" or "different" for
 The granular 1,000+ per meaningful sub-category rule, permanent-plan preference, conditional ₹250/10-project plan, and all-output anti-template scope are **PLANNED / FUTURE requirements** unless separately verified as implemented.
 
 They must not be represented as existing production capabilities until the corresponding data, entitlement, enforcement, generation and validation systems are actually implemented and verified.
-
 
 ## 41. USER-PROVIDED AI / BYOK GENERATION INTEGRATION
 
@@ -1069,17 +1066,17 @@ The user's external provider API key is **not** the same thing as MotionZync Pre
 
 **IMPLEMENTED**
 - Existing MotionZync API-key/vault infrastructure is already present and reusable.
-- Design Intelligence itself is not yet wired into that provider execution flow.
+- Design Intelligence Generator is wired to the existing `useAI()` / `generateText()` provider execution flow.
 
 **UNVERIFIED**
-- End-to-end Design Intelligence → selected provider → generated UI/code flow.
+- End-to-end Design Intelligence → selected provider → generated UI/code flow with real provider credentials remains unverified.
 - Security of every provider's direct-browser API/CORS behavior.
 - Safe execution/isolation of generated code or HTML.
 - Production server-authoritative entitlement enforcement.
 
 **PLANNED / FUTURE**
-- Wire the Design Intelligence Generator to the existing `useAI()` provider system.
-- Add structured Design Recipe context to provider prompts.
-- Add provider capability-aware generation.
-- Add validation of AI output against the canonical recipe/compatibility rules.
+- Provider capability-aware generation and stronger provider-specific handling.
+- Safe preview/export adapters.
+- Server-authoritative entitlement enforcement for protected capabilities.
+
 - Add safe preview/export adapters.
