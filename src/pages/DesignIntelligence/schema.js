@@ -28,11 +28,20 @@ export const PROVENANCE_STATUS=Object.freeze([
 ])
 
 export const PUBLISHABLE_PROVENANCE_STATUS='verified'
+export const PROVENANCE_SOURCE_TYPES=Object.freeze([
+  'original',
+  'official-docs',
+  'specification',
+  'public-reference',
+  'licensed-dataset',
+  'curated-review',
+])
 
 const isObject=value=>value!==null&&typeof value==='object'&&!Array.isArray(value)
 const isString=value=>typeof value==='string'&&value.trim().length>0
 const isStringArray=value=>Array.isArray(value)&&value.every(item=>typeof item==='string'&&item.trim().length>0)
 const isHex=value=>typeof value==='string'&&/^#[0-9a-f]{6}$/i.test(value)
+const isDateTime=value=>isString(value)&&!Number.isNaN(Date.parse(value))
 
 const DOMAIN_REQUIREMENTS=Object.freeze({
   styles:['id','name','tier','tags','description','suitedFor'],
@@ -48,8 +57,12 @@ function validateProvenance(provenance){
   if(!isObject(provenance)){errors.push('Provenance must be an object.');return{valid:false,errors}}
   if(!isString(provenance.source))errors.push('Provenance source is required.')
   if(provenance.status!==undefined&&!PROVENANCE_STATUS.includes(provenance.status))errors.push('Unknown provenance status: '+provenance.status)
-  if(provenance.sourceType!==undefined&&!isString(provenance.sourceType))errors.push('Provenance sourceType must be a non-empty string.')
-  if(provenance.checkedAt!==undefined&&!isString(provenance.checkedAt))errors.push('Provenance checkedAt must be a non-empty string.')
+  if(provenance.sourceType!==undefined&&(!isString(provenance.sourceType)||!PROVENANCE_SOURCE_TYPES.includes(provenance.sourceType)))errors.push('Provenance sourceType must be one of: '+PROVENANCE_SOURCE_TYPES.join(', ')+'.')
+  if(provenance.checkedAt!==undefined&&!isDateTime(provenance.checkedAt))errors.push('Provenance checkedAt must be a parseable date-time string.')
+  if(provenance.sourceUrl!==undefined){
+    if(!isString(provenance.sourceUrl)||!/^[a-z][a-z0-9+.-]*:\/\//i.test(provenance.sourceUrl))errors.push('Provenance sourceUrl must be an absolute URL when supplied.')
+  }
+  if(provenance.license!==undefined&&!isString(provenance.license))errors.push('Provenance license must be a non-empty string when supplied.')
   return{valid:errors.length===0,errors}
 }
 
@@ -215,8 +228,17 @@ export function validatePublishableCatalog(catalogs){
       if(provenance?.status!==PUBLISHABLE_PROVENANCE_STATUS){
         errors.push(domain+' record '+(record?.id||'<unknown>')+' is not publishable; provenance status must be '+PUBLISHABLE_PROVENANCE_STATUS+'.')
       }
-      if(!isString(provenance?.checkedAt)){
-        errors.push(domain+' record '+(record?.id||'<unknown>')+' is not publishable; provenance checkedAt is required.')
+      if(!PROVENANCE_SOURCE_TYPES.includes(provenance?.sourceType)){
+        errors.push(domain+' record '+(record?.id||'<unknown>')+' is not publishable; provenance sourceType is required and must be one of the supported source types.')
+      }
+      if(!isDateTime(provenance?.checkedAt)){
+        errors.push(domain+' record '+(record?.id||'<unknown>')+' is not publishable; provenance checkedAt must be a parseable date-time.')
+      }
+      if(provenance?.sourceType!=='original'&&!isString(provenance?.sourceUrl)){
+        errors.push(domain+' record '+(record?.id||'<unknown>')+' is not publishable; non-original provenance requires sourceUrl.')
+      }
+      if(provenance?.sourceType==='licensed-dataset'&&!isString(provenance?.license)){
+        errors.push(domain+' record '+(record?.id||'<unknown>')+' is not publishable; licensed-dataset provenance requires license metadata.')
       }
     }
   }
