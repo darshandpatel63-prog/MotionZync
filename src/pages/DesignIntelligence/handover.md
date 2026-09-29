@@ -1776,3 +1776,59 @@ Do not edit other existing project files unless a future Design Intelligence mil
 5. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
 6. Continue Phase A publication workflow and deeper compatibility foundation.
 7. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Server-authoritative API-key lifecycle foundation
+
+### IMPLEMENTED
+- Added server-side entitlement lookup from the existing Firestore `users` record.
+- Premium/Ultra Premium+ entitlement is checked server-side, including `entitlementExpiresAt` when present.
+- Added secure MotionZync API-key creation using high-entropy random secrets.
+- Only a SHA-256 hash plus a non-secret prefix/metadata is stored in the `apiKeys` collection; plaintext API secrets are never persisted.
+- Added authenticated `GET/POST /api/di-api-key` operations for:
+  - status
+  - issue
+  - rotate
+  - revoke
+- Issue/rotate returns the plaintext key exactly at issuance time and explicitly warns that it cannot be recovered later.
+- Rotation revokes existing active keys before issuing a new one.
+- Revocation marks active keys revoked server-side.
+- Existing Admin Billing analytics can now derive active API-key records from the same canonical Firestore collection.
+- No second database, fake frontend key or frontend-only entitlement proof was introduced.
+
+### VERIFIED
+- Server-side API-key operations are source-implemented on `feature/design-intelligence`.
+- The API endpoint uses the existing Firebase Admin authentication helper; no duplicate auth system was created.
+- Key storage logic intentionally excludes plaintext secrets from Firestore.
+
+### UNVERIFIED
+- Latest API-key lifecycle commits have not yet received a READY Vercel deployment result.
+- Local repository build could not be run because this environment could not resolve github.com.
+- No real Premium entitlement has been used to exercise key issuance against production Firestore.
+- No real API request has yet been authenticated using a MotionZync-issued key.
+- Premium knowledge/data delivery itself is still client-shipped; server-authoritative content protection requires a protected API/data delivery layer before claiming the catalog is fully server-enforced.
+- Authenticated production browser verification, manual screen-reader/device audit and real BYOK provider execution remain unverified.
+
+### CHECKPOINT
+- Regression: additive server/API work only; existing DI routes/features preserved.
+- Functionality: API-key lifecycle IMPLEMENTED; runtime/production exercise UNVERIFIED.
+- Accessibility: no new public UI added; manual audit UNVERIFIED.
+- Privacy/security: high-entropy secret + hash-only persistence IMPLEMENTED; plaintext is not logged/stored.
+- Performance: bounded user-specific key lookup/write; production latency UNVERIFIED.
+- Data quality: no fake key records or fabricated holders.
+- Build/test: source inspection completed; local build UNVERIFIED; deployment verification pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
+2. Complete manual accessibility/responsive audit, including screen-reader/device checks.
+3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
+4. Verify Cashfree deployment and run a real sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
+5. Verify the API-key lifecycle deployment, then add protected server/API data delivery so Premium knowledge itself is server-authoritatively enforced.
+6. Continue Phase A publication workflow and deeper compatibility foundation.
+7. Keep 1,000+/10,000+ content expansion deferred.
