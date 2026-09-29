@@ -22,6 +22,7 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 - Canonical Phase 1 seed catalog containing styles, palettes, typography, charts, technology stacks and recipes.
 - Deterministic search.
 - Deterministic interpretation and recipe generation.
+- Canonical relationship layer with relationship-aware deterministic tie-breaking and integrity validation.
 - Entitlement-aware filtering: default/free generator/search does not intentionally select premium or ultra-premium records.
 - Live visual preview.
 - Design-token output.
@@ -49,7 +50,7 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 - Real API-key issuance, rotation and revocation.
 - npm package / CLI.
 - MCP / AI-agent adapter.
-- Large content ingestion and relationship validation.
+- Large content ingestion and full relationship-graph expansion.
 
 ## ARCHITECTURALLY SUPPORTED
 - 1,000+ meaningful records and later 10,000+ through structured domain data and indexing.
