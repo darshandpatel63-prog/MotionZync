@@ -501,3 +501,53 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Complete authenticated browser verification of all 7 Design Intelligence routes when an authenticated path is available.
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A with indexed relationship lookup/performance and a real provenance publication gate. Do not start large-scale content expansion yet.
+
+
+## 2026-09-29 — Phase A relationship indexing + provenance publication gate
+
+### IMPLEMENTED
+- Upgraded the canonical relationship layer to schema version `1.1`.
+- Added indexed relationship lookup by canonical record key.
+- Added indexed co-occurrence neighbors for faster relationship scoring.
+- Preserved relationship derivation strictly from explicit recipe references; no synthetic compatibility records were added.
+- Added `validatePublishableCatalog()` to the canonical schema layer.
+- Publication validation now requires provenance metadata, `verified` provenance status, and `checkedAt` for every publishable record.
+- Current seed records are intentionally not marked externally verified, so the publication gate correctly blocks them.
+
+### VERIFIED
+- Current catalog: 38 records across 6 domains; structural validation passes.
+- Relationship integrity passes with the indexed relationship layer.
+- Deterministic recipe generation remains valid.
+- Relationship lookup/scoring executes through the index.
+- Publication gate correctly returns non-publishable for the current unverified seed catalog.
+- No new records or fabricated compatibility relationships were added.
+- No unrelated project files were changed.
+
+### UNVERIFIED
+- Vercel build/deployment for the latest relationship/schema code commits.
+- Browser route/interactivity verification.
+- Full keyboard/screen-reader/mobile accessibility audit.
+- Real-provider BYOK execution and provider-specific CORS/model compatibility.
+- External-source provenance verification for future content.
+
+### CHECKPOINT
+- Regression: VERIFIED by isolated core/runtime checks; browser regression UNVERIFIED.
+- Functionality: IMPLEMENTED / core runtime VERIFIED; production browser runtime UNVERIFIED.
+- Accessibility: existing foundation retained; full browser audit UNVERIFIED.
+- Privacy/security: no API-key vault/provider changes; browser threat-surface verification remains UNVERIFIED.
+- Performance: relationship reads/scoring now use indexes rather than scanning all relationships for each lookup.
+- Data quality: VERIFIED structurally; publication gate intentionally blocks unverified seed data.
+- Build/test: isolated V8 runtime checks PASSED; Vercel build UNVERIFIED for latest code.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 62% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+- 1,000+/10,000+ expansion remains deferred.
+
+### FIRST UNFINISHED TASK
+1. Verify Vercel build/deployment for the latest relationship/schema code.
+2. Complete authenticated browser verification of all 7 routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A with provenance-aware content ingestion/publication tooling and stronger compatibility rules. Do not begin large-scale content expansion yet.
