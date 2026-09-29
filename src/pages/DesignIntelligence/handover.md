@@ -1344,3 +1344,51 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive verification and real-provider BYOK/CORS/model verification.
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep the 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — CI browser verification milestone completed
+
+### IMPLEMENTED
+- Existing Design Intelligence build workflow now installs Playwright with --no-save for CI only, installs Chromium, runs the existing app locally, executes the seven Design Intelligence routes, captures route screenshots, checks accessibility naming, tests Explorer search/filter interaction, tests Generator interaction, checks pricing login entry, checks responsive horizontal overflow at 390/768/1440px, and verifies keyboard :focus-visible.
+- CI-only Firebase placeholders plus interception are used only to isolate the existing AuthContext during local browser verification. Production Firebase source/configuration is unchanged.
+
+### VERIFIED
+- Current feature/design-intelligence HEAD: b26f938e3e13da573d9fd445668a9bcf2cedde4f.
+- GitHub Actions run 36534184523 completed SUCCESS. Build, Playwright setup, Vite startup, browser route/interaction/responsive smoke test and artifact upload all completed successfully.
+- The browser smoke suite covered all 7 routes: overview, explorer, generator, knowledge, stacks, docs and pricing.
+- Automated accessible-name checks passed across those routes.
+- Explorer search/filter interaction passed.
+- Generator deterministic generation, preview rendering and AI-toggle state interaction passed.
+- Responsive horizontal-overflow checks passed at mobile/tablet/desktop widths.
+- Keyboard navigation reached an actual :focus-visible state.
+- CI screenshot artifact 11017753882 was downloaded and visually inspected; route screenshots and Generator responsive screenshots were produced as evidence.
+- Exact HEAD has Vercel deployment dpl_DF7sqaWbsYE8RrY9GUsPCPBfP89p and it is READY. GitHub commit status for the exact HEAD reports Vercel success.
+- Vercel selected 24-hour runtime-error aggregation reports no runtime errors.
+
+### UNVERIFIED
+- Authenticated production browser/visual/interactivity verification of all 7 routes is still blocked by Vercel Authentication in the available fetch/browser path.
+- Full screen-reader audit and device-level accessibility validation remain unverified.
+- Real BYOK provider execution, provider-specific CORS behavior and real model compatibility remain unverified.
+- Exact production behavior for provider calls remains unverified even though the local CI browser path is verified.
+
+### CHECKPOINT
+- Regression: CI route smoke and exact-head Vercel deployment VERIFIED; authenticated production regression UNVERIFIED.
+- Functionality: seven-route browser smoke + Explorer/Generator/pricing interactions VERIFIED in CI.
+- Accessibility: automated accessible-name, responsive overflow and keyboard focus checks VERIFIED; full screen-reader/device audit UNVERIFIED.
+- Privacy/security: no second DI database or second vault added; CI Firebase values are placeholders only; generated code remains non-executing; no real API key was committed.
+- Performance: browser smoke is bounded and produces artifacts; detailed profiling remains UNVERIFIED.
+- Data quality: no catalog expansion or fabricated records.
+- Build/test: npm install and npm run build plus browser smoke VERIFIED on exact HEAD.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 86% — IN PROGRESS
+- Phase B — Publish: 0% — NOT STARTED
+- Phase C — Continuous Content Expansion: 0% — NOT STARTED
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 routes when an authorized browser path is available.
+2. Complete full accessibility/responsive audit, including screen-reader/device checks.
+3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility with real user-configured providers; do not use fabricated credentials.
+4. Continue Phase A publication workflow and deeper compatibility foundation.
+5. Keep the 1,000+/10,000+ content expansion deferred until the foundation is ready.
