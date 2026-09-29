@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext.jsx'
 import './DesignIntelligenceAdminBilling.css'
 
 const EMPTY = {
-  summary:{uniquePayers:0,successfulPayments:0,grossRevenue:0,refundedAmount:0,activeEntitlements:0,activeApiKeys:0,manualGrants:0,totalPaymentRecords:0},
+  summary:{uniquePayers:0,successfulPayments:0,grossRevenue:0,refundedAmount:0,activeEntitlements:0,activeApiKeys:0,apiKeyHolders:0,activeApiKeyHolders:0,manualGrants:0,totalPaymentRecords:0},
   paymentStatus:[],planDistribution:[],entitlementSources:[],apiKeyStatus:[],monthly:[],recentTransactions:[]
 }
 
@@ -132,6 +132,8 @@ export default function DesignIntelligenceAdminBilling() {
         ['Gross revenue',money(s.grossRevenue)],
         ['Active entitlements',s.activeEntitlements],
         ['Active API keys',s.activeApiKeys],
+        ['API key holders',s.apiKeyHolders],
+        ['Active API key holders',s.activeApiKeyHolders],
         ['Manual grants',s.manualGrants],
         ['Refunded amount',money(s.refundedAmount)],
         ['Payment records',s.totalPaymentRecords],
