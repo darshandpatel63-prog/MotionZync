@@ -11,6 +11,10 @@ function sendError(res, error, fallback = 'API key operation failed') {
 }
 
 export default async function handler(req, res) {
+  res.setHeader('Cache-Control','private, no-store, max-age=0')
+  res.setHeader('Pragma','no-cache')
+  res.setHeader('Vary','Authorization')
+  res.setHeader('X-Content-Type-Options','nosniff')
   let user
   try {
     user = await requireAuthenticatedUser(req)
