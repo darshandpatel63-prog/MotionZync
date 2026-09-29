@@ -626,3 +626,46 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Complete authenticated browser verification of all 7 routes.
 3. Run accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A compatibility/provenance depth before Phase B and before any 1,000+/10,000+ expansion.
+
+
+## 2026-09-29 — Phase A schema-reference + indexed-search milestone
+
+### IMPLEMENTED
+- Strengthened canonical catalog validation with cross-domain recipe-reference integrity checks.
+- Recipe records are now checked for missing/unknown style, palette, typography, chart and stack references.
+- Recipe entitlement tier is checked against referenced protected component tiers.
+- Added `searchIndex.js` as a reusable deterministic lexical index for token → canonical record lookup.
+- Integrated indexed search into `searchCatalog()` while preserving entitlement filtering and deterministic score ordering.
+- No catalog expansion, second database, synthetic relationships or unrelated project edits were introduced.
+- Corrected a transient literal-newline syntax issue in `schema.js` before treating the milestone as complete.
+
+### VERIFIED
+- Static source audit of the changed Design Intelligence files shows the validation and search code is present on branch `feature/design-intelligence`.
+- Current branch remains ahead of the prior deployed relationship milestone without diverging from that base.
+
+### UNVERIFIED
+- No READY Vercel deployment is visible yet for the newer schema/reference/search commits.
+- Local build/test execution remains unavailable in the current environment.
+- Browser route/interactivity, accessibility/responsive, and real-provider BYOK verification remain unverified.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD pending deployment/browser verification.
+- Functionality: IMPLEMENTED / source-audited; runtime deployment UNVERIFIED.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no secret, auth, database or API-key storage changes.
+- Performance: indexed deterministic lookup IMPLEMENTED; real-world bundle/runtime impact UNVERIFIED.
+- Data quality: no new records; reference integrity now guarded structurally.
+- Build/test: UNVERIFIED for current HEAD.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 70% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Verify a READY Vercel deployment for current branch HEAD.
+2. Complete authenticated browser verification of all 7 routes.
+3. Run accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A with richer provenance metadata/rules and compatibility coverage before Phase B publish.
+5. Keep 1,000+/10,000+ expansion deferred.
