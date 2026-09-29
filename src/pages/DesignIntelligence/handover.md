@@ -2227,6 +2227,32 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — Current-head CI hardening verification
+
+### VERIFIED
+- Latest special-effects payload-hardening commit lineage completed successfully in GitHub Actions: run 36585747732 on commit ed734c17eba6932401550358ca02662b041aeccd.
+- The workflow completed dependency installation, production build, Playwright/Chromium setup, all configured Design Intelligence browser route/interaction/responsive smoke checks, and artifact upload successfully.
+- This verifies the current CI test harness after the 16KB effects-request hardening; it does not verify a production Vercel deployment or real entitlement/payment/provider credentials.
+
+### UNVERIFIED
+- Current HEAD after the documentation commits is not yet represented by a READY Vercel deployment in the deployment inventory.
+- Production /api/di-effects 413 behavior, real Ultra API-key calls, CORS allowlist behavior, Cashfree sandbox transaction, real Firebase entitlement and BYOK provider execution remain unverified.
+
+### CHECKPOINT
+- Regression: CI-only/source-level DI changes passed the configured automated checks; unrelated features were not modified.
+- Functionality: current CI build/browser smoke is VERIFIED; production runtime remains UNVERIFIED.
+- Accessibility: automated route/Axe gate is covered by CI; manual screen-reader/device audit remains UNVERIFIED.
+- Privacy/security: payload cap and existing server-authoritative entitlement boundaries remain in source; production exercise remains UNVERIFIED.
+- Performance: build and browser smoke passed; production profiling remains UNVERIFIED.
+- Data quality: no new catalog records or fake credentials introduced.
+- Build/test: VERIFIED for commit ed734c17... via GitHub Actions run 36585747732.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
 1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication, Pricing API-key controls, security headers and the new Ultra-only effects API after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
