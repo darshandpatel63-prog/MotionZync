@@ -76,7 +76,7 @@ export function validateRecordShape(record,domain,{requireProvenance=false}={}){
   }
   if(!isString(record.id))errors.push(domain+' record id must be a non-empty string.')
   if(!isString(record.name))errors.push(domain+' record '+(record.id||'<unknown>')+' name must be a non-empty string.')
-  if(!DI_TIERS.includes(record.tier))errors.push(domain+' record '+(record.id||'<unknown')+' has invalid tier: '+record.tier)
+  if(!DI_TIERS.includes(record.tier))errors.push(domain+' record '+(record.id||'<unknown>')+' has invalid tier: '+record.tier)
   if(record.tags!==undefined&&!isStringArray(record.tags))errors.push(domain+' record '+(record.id||'<unknown>')+' tags must be a string array.')
   if(record.description!==undefined&&!isString(record.description))errors.push(domain+' record '+(record.id||'<unknown>')+' description must be a string.')
   if(domain==='styles'&&record.suitedFor!==undefined&&!isStringArray(record.suitedFor))errors.push('Style '+record.id+' suitedFor must be a string array.')
