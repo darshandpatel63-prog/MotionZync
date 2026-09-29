@@ -585,3 +585,44 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Complete authenticated browser, accessibility and responsive verification.
 3. Continue provenance-aware content publication tooling and stronger compatibility rules.
 4. Do not begin 1,000+/10,000+ content expansion yet.
+
+
+## 2026-09-29 — Phase A provenance pipeline + structured compatibility milestone
+
+### IMPLEMENTED
+- Added `contentPipeline.js` for provenance-aware import validation, publishable-record filtering and publication reporting.
+- Import validation requires canonical schema compliance, provenance metadata and `verified` status, and rejects duplicate IDs plus IDs already present in the canonical catalog.
+- Added structured `evaluateCompatibility()` to the canonical engine with explicit `compatible` / `questionable` / `incompatible` outcomes.
+- Added platform/stack mismatch guards, style/industry review, contrast review, translucent-style contrast review, donut/many-category guidance and dark/light palette mismatch guidance.
+- Preserved existing canonical recipe-reference and entitlement validation.
+
+### VERIFIED
+- Vercel READY deployment exists for the immediately preceding relationship-index commit `0957c26500e60c1b5026c0ab829e1ccc111cae86`.
+- Current branch changes since that deployment are limited to Design Intelligence files: `contentPipeline.js`, `engine.js`, and documentation.
+- The current Vercel runtime-error scan reports 0 errors in the selected 24-hour range.
+
+### UNVERIFIED
+- Current branch HEAD `5a254b960d0984745f50922e0c89d1a98da25c8c` does not yet have a corresponding READY Vercel deployment.
+- Local Node runtime testing could not be completed because this environment cannot resolve external GitHub hosts, so current code remains runtime-unverified.
+- Browser visual/interactivity, accessibility and real-provider BYOK verification remain unverified.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD; previous deployed relationship milestone remained clean.
+- Functionality: IMPLEMENTED / UNVERIFIED for current HEAD.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secrets, vaults, databases or user-data paths introduced.
+- Performance: compatibility checks are local and bounded; content pipeline is offline/administrative rather than render-time.
+- Data quality: no catalog expansion and no fabricated records.
+- Build/test: current HEAD UNVERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 66% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Obtain/verify a READY Vercel deployment for current HEAD `5a254b960d0984745f50922e0c89d1a98da25c8c`.
+2. Complete authenticated browser verification of all 7 routes.
+3. Run accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A compatibility/provenance depth before Phase B and before any 1,000+/10,000+ expansion.
