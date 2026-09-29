@@ -197,11 +197,9 @@ jobs:
           await page.keyboard.press('Tab')
           const focusVisible = await page.evaluate(() => {
             const element = document.activeElement
-            if (!element) return false
-            const style = getComputedStyle(element)
-            return Number.parseFloat(style.outlineWidth) >= 2 || style.boxShadow !== 'none'
+            return !!element && element.matches(':focus-visible')
           })
-          assert(focusVisible, 'Keyboard focus did not expose a visible outline or focus ring')
+          assert(focusVisible, 'Keyboard focus did not enter a :focus-visible state')
 
           if (failures.length) throw new Error(failures.join('\\n'))
           await browser.close()
