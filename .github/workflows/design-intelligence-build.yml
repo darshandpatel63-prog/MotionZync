@@ -104,7 +104,7 @@ jobs:
             }
             await route.continue()
           })
-          await page.route('**/api/admin-billing', async route => {
+          await page.route('http://127.0.0.1:4173/api/admin-billing**', async route => {
             if (route.request().method() === 'GET') {
               await route.fulfill({
                 status: 200,
