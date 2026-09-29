@@ -1,20 +1,19 @@
 import {useMemo,useState} from 'react'
 import {useAI} from '../../ai/providers/AIProviderContext.jsx'
-import {buildRecipe,recipeToTokens} from './engine.js'
+import {buildRecipe,getAccessibleRecord,recipeToTokens,validateRecipe} from './engine.js'
 import {DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_STACKS,DI_RECIPES} from './catalog.js'
 import './DesignIntelligence.css'
 
 const EXAMPLES=['Build a dark analytics dashboard for developers with a technical, premium feel.','Create a friendly healthcare web product with clear forms and accessible charts.','Design a luxury ecommerce landing page with an editorial mood.']
-const byId=(records,id,fallback)=>records.find(record=>record.id===id)||fallback
 const extractJson=(text)=>{const raw=String(text||'').trim();const fenced=raw.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);const candidate=fenced?.[1]||raw;try{return JSON.parse(candidate)}catch{return null}}
 
-function buildDIContext(prompt,recipe){
+function buildDIContext(prompt,recipe,entitlementTier='free'){
   return JSON.stringify({
     system:'MotionZync Design Intelligence is the canonical design-knowledge and validation layer. It is not the visual authoring model.',
     rules:['Preserve usability, accessibility, responsive behavior and platform compatibility.','Do not invent catalog records, fonts, technologies or capabilities.','Avoid converging every interface to one recognizable AI/MotionZync template.','Use the provided catalog IDs when selecting known design knowledge.','Return only valid JSON; do not return executable HTML or JavaScript.'],
     request:prompt,
     deterministicRecipe:{styleId:recipe.style.id,paletteId:recipe.palette.id,typographyId:recipe.typography.id,stackId:recipe.stack?.id,layout:recipe.layout,navigation:recipe.navigation},
-    allowed:{styleIds:DI_STYLES.map(r=>r.id),paletteIds:DI_PALETTES.map(r=>r.id),typographyIds:DI_TYPOGRAPHY.map(r=>r.id),stackIds:DI_STACKS.map(r=>r.id),recipeIds:DI_RECIPES.map(r=>r.id)}
+    allowed:{styleIds:DI_STYLES.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id),paletteIds:DI_PALETTES.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id),typographyIds:DI_TYPOGRAPHY.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id),stackIds:DI_STACKS.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id),recipeIds:DI_RECIPES.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id)}
   })
 }
 
@@ -24,7 +23,9 @@ export default function DesignIntelligenceGenerator(){
   const deterministicRecipe=useMemo(()=>buildRecipe(submitted),[submitted])
   const recipe=useMemo(()=>{
     if(!aiOutput)return deterministicRecipe
-    return {...deterministicRecipe,style:byId(DI_STYLES,aiOutput.styleId,deterministicRecipe.style),palette:byId(DI_PALETTES,aiOutput.paletteId,deterministicRecipe.palette),typography:byId(DI_TYPOGRAPHY,aiOutput.typographyId,deterministicRecipe.typography),stack:byId(DI_STACKS,aiOutput.stackId,deterministicRecipe.stack),layout:typeof aiOutput.layout==='string'&&aiOutput.layout.trim()?aiOutput.layout:deterministicRecipe.layout,navigation:typeof aiOutput.navigation==='string'&&aiOutput.navigation.trim()?aiOutput.navigation:deterministicRecipe.navigation,warnings:[...deterministicRecipe.warnings,...(Array.isArray(aiOutput.warnings)?aiOutput.warnings.filter(v=>typeof v==='string').slice(0,5):[])],aiAssisted:true}
+    const candidate={...deterministicRecipe,style:getAccessibleRecord(DI_STYLES,aiOutput.styleId,'free')||deterministicRecipe.style,palette:getAccessibleRecord(DI_PALETTES,aiOutput.paletteId,'free')||deterministicRecipe.palette,typography:getAccessibleRecord(DI_TYPOGRAPHY,aiOutput.typographyId,'free')||deterministicRecipe.typography,stack:getAccessibleRecord(DI_STACKS,aiOutput.stackId,'free')||deterministicRecipe.stack,layout:typeof aiOutput.layout==='string'&&aiOutput.layout.trim()?aiOutput.layout:deterministicRecipe.layout,navigation:typeof aiOutput.navigation==='string'&&aiOutput.navigation.trim()?aiOutput.navigation:deterministicRecipe.navigation,warnings:[...deterministicRecipe.warnings,...(Array.isArray(aiOutput.warnings)?aiOutput.warnings.filter(v=>typeof v==='string').slice(0,5):[])],aiAssisted:true}
+    const validation=validateRecipe(candidate,'free')
+    return validation.valid?{...candidate,warnings:[...candidate.warnings,...validation.warnings]}:deterministicRecipe
   },[aiOutput,deterministicRecipe])
   const tokens=recipeToTokens(recipe)
   const previewStyle={background:recipe.palette.background,color:recipe.palette.text,'--di-accent':recipe.palette.accent,'--di-cta':recipe.palette.cta}
@@ -35,7 +36,7 @@ export default function DesignIntelligenceGenerator(){
     try{
       setAiStatus('AI is refining the deterministic Design Recipe…')
       const base=buildRecipe(prompt)
-      const text=await generateText(activeProvider,'You are the execution model connected to MotionZync Design Intelligence. The Design Intelligence layer supplies the canonical knowledge, constraints, relationships and allowed record IDs. Refine the recipe; do not invent records.\n\n'+buildDIContext(prompt,base)+'\n\nReturn JSON with only these optional fields: styleId, paletteId, typographyId, stackId, layout, navigation, warnings.')
+      const text=await generateText(activeProvider,'You are the execution model connected to MotionZync Design Intelligence. The Design Intelligence layer supplies the canonical knowledge, constraints, relationships and allowed record IDs. Refine the recipe; do not invent records.\n\n'+buildDIContext(prompt,base,'free')+'\n\nReturn JSON with only these optional fields: styleId, paletteId, typographyId, stackId, layout, navigation, warnings.')
       const parsed=extractJson(text)
       if(!parsed){setAiStatus('AI returned an invalid structure; the deterministic recipe remains active.');return}
       setAiOutput(parsed);setAiStatus('AI-assisted recipe applied. Unknown IDs were safely ignored; the preview is deterministic and non-executable.')
