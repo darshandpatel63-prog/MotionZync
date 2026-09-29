@@ -40,7 +40,7 @@ Phase 1 foundation is implemented:
 - continuation/common-instruction files
 
 ## FIRST UNFINISHED TASK
-1. Complete Vercel build verification for the latest schema code commit `41b04c6ca30554f2fbea3ac39f8f50e23d54ea65`.
+1. Complete Vercel build verification for the latest schema/relationship code commits on `feature/design-intelligence`.
 2. Browser/visual/interactivity verification of all 7 Design Intelligence routes remains blocked by Vercel Authentication in the available browser/fetch path; keep it UNVERIFIED until an authenticated session is available.
 3. Run full accessibility/responsive and real-provider BYOK verification when an authenticated/browser/provider test path is available.
 4. Continue Phase A engine/schema work with stronger relationship indexing and the provenance publication gate; do not begin the 1,000+/10,000+ content expansion yet.
