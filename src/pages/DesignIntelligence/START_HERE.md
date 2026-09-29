@@ -23,7 +23,7 @@ This folder contains the Design Intelligence + UI Generation feature only.
 - Update handover.md after every meaningful milestone.
 
 ## Current implementation
-Phase 1 foundation is implemented; current Phase A engine/system progress is 76%:
+Phase 1 foundation is implemented; current Phase A engine/system progress is 77%:
 - multipage route family under /design-intelligence/*
 - internal navigation
 - structured seed catalog
@@ -31,6 +31,7 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 76%
 - entitlement-aware deterministic recipe generation
 - canonical recipe relationship layer
 - relationship-aware deterministic selection
+- canonical recipe compatibility result
 - optional AI-assisted refinement through the existing BYOK provider bridge
 - visual preview
 - design-token output
