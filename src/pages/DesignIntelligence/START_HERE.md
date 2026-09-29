@@ -204,14 +204,14 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 89%
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
 ## FIRST UNFINISHED TASK
-1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication and Pricing API-key controls after the Vercel build-rate-limit restriction clears.
+1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication, Pricing API-key controls, security headers and the new Ultra-only effects API after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
 3. Complete manual accessibility/responsive audit, including screen-reader/device checks.
 4. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
 5. Exercise /api/di-knowledge with unauthenticated/free, real Firebase Premium, real Ultra Firebase entitlement, and real Ultra MotionZync API-key callers; confirm Premium never receives Ultra-only records.
 6. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
 7. Verify Ultra-only API-key issuance/rotation/revocation against a real entitlement.
-8. Implement and verify the actual API-only special animation/effects capability without fabricating records.
-9. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset.
+8. Verify the new API-only special animation/effects capability in the deployed environment without bypassing Ultra entitlement.
+9. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset and the remote special-effects client.
 10. Continue Phase A publication workflow and deeper compatibility foundation.
 11. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
