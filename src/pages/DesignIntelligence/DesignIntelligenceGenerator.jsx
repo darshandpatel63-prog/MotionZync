@@ -1,6 +1,6 @@
 import {useMemo,useState} from 'react'
 import {useAI} from '../../ai/providers/AIProviderContext.jsx'
-import {buildRecipe,getAccessibleRecord,recipeToTokens,recipeToExport,recipeToCSSVariables,validateRecipe} from './engine.js'
+import {buildRecipe,evaluateCompatibility,getAccessibleRecord,recipeToTokens,recipeToExport,recipeToCSSVariables,validateRecipe} from './engine.js'
 import {DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_STACKS,DI_RECIPES} from './catalog.js'
 import './DesignIntelligence.css'
 
@@ -34,8 +34,9 @@ export default function DesignIntelligenceGenerator(){
   const recipe=useMemo(()=>{
     if(!aiOutput)return deterministicRecipe
     const candidate={...deterministicRecipe,style:getAccessibleRecord(DI_STYLES,aiOutput.styleId,'free')||deterministicRecipe.style,palette:getAccessibleRecord(DI_PALETTES,aiOutput.paletteId,'free')||deterministicRecipe.palette,typography:getAccessibleRecord(DI_TYPOGRAPHY,aiOutput.typographyId,'free')||deterministicRecipe.typography,stack:getAccessibleRecord(DI_STACKS,aiOutput.stackId,'free')||deterministicRecipe.stack,layout:typeof aiOutput.layout==='string'&&aiOutput.layout.trim()?aiOutput.layout:deterministicRecipe.layout,navigation:typeof aiOutput.navigation==='string'&&aiOutput.navigation.trim()?aiOutput.navigation:deterministicRecipe.navigation,warnings:[...deterministicRecipe.warnings,...(Array.isArray(aiOutput.warnings)?aiOutput.warnings.filter(v=>typeof v==='string').slice(0,5):[])],aiAssisted:true}
-    const validation=validateRecipe(candidate,'free')
-    return validation.valid?{...candidate,warnings:[...candidate.warnings,...validation.warnings]}:deterministicRecipe
+    const compatibility=evaluateCompatibility(candidate)
+    const validation=validateRecipe({...candidate,compatibility},'free')
+    return validation.valid?{...candidate,compatibility,warnings:[...candidate.warnings,...validation.warnings]}:deterministicRecipe
   },[aiOutput,deterministicRecipe])
   const tokens=recipeToTokens(recipe)
   const previewStyle={background:recipe.palette.background,color:recipe.palette.text,'--di-accent':recipe.palette.accent,'--di-cta':recipe.palette.cta}
