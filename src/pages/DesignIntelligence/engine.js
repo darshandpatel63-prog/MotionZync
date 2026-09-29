@@ -134,3 +134,34 @@ export function recipeToTokens(recipe){
   const color=recipe.palette
   return{'--mz-primary':color.primary,'--mz-secondary':color.secondary,'--mz-accent':color.accent,'--mz-cta':color.cta,'--mz-background':color.background,'--mz-surface':color.surface,'--mz-text':color.text,'--mz-muted':color.muted,'--mz-radius':'16px','--mz-spacing':'8px','--mz-font-heading':recipe.typography.heading,'--mz-font-body':recipe.typography.body}
 }
+
+
+export function recipeToExport(recipe){
+  if(!recipe||typeof recipe!=='object')return null
+  return{
+    schemaVersion:'1.0',
+    type:'motionzync-design-recipe',
+    recipe:{
+      request:recipe.request,
+      styleId:recipe.style?.id||null,
+      paletteId:recipe.palette?.id||null,
+      typographyId:recipe.typography?.id||null,
+      chartId:recipe.chart?.id||null,
+      stackId:recipe.stack?.id||null,
+      layout:recipe.layout||'',
+      navigation:recipe.navigation||'',
+      ux:Array.isArray(recipe.ux)?recipe.ux:[],
+      compositionFamily:recipe.compositionFamily||'product',
+      tier:recipe.tier||'free',
+      deterministic:recipe.deterministic!==false,
+      aiAssisted:recipe.aiAssisted===true,
+      warnings:Array.isArray(recipe.warnings)?recipe.warnings:[],
+    },
+  }
+}
+
+export function recipeToCSSVariables(recipe){
+  if(!recipe?.palette||!recipe?.typography)return ''
+  const tokens=recipeToTokens(recipe)
+  return Object.entries(tokens).map(([name,value])=>'  '+name+': '+value+';').join('\n').concat('\n')
+}
