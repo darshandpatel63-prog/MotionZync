@@ -1,0 +1,44 @@
+name: Design Intelligence Build Check
+
+on:
+  push:
+    branches:
+      - feature/design-intelligence
+  pull_request:
+    branches:
+      - feature/design-intelligence
+    paths:
+      - "src/pages/DesignIntelligence/**"
+      - "src/App.jsx"
+      - "src/components/Navbar/Navbar.jsx"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.*"
+      - ".github/workflows/design-intelligence-build.yml"
+
+concurrency:
+  group: design-intelligence-build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
