@@ -1913,3 +1913,59 @@ Do not edit other existing project files unless a future Design Intelligence mil
 6. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
 7. Integrate the protected knowledge delivery into the Premium Explorer/Generator experience without putting protected records back into the public bundle.
 8. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Protected knowledge integrated into Explorer + Generator
+
+### IMPLEMENTED
+- Added `src/pages/DesignIntelligence/knowledgeClient.js` for entitlement-scoped canonical knowledge retrieval.
+- The client starts from the public/free catalog and merges server-delivered records by stable ID.
+- Explorer now requests `/api/di-knowledge` and searches the returned entitlement-scoped catalog.
+- Generator now requests the same knowledge service and passes the entitlement-scoped catalog into deterministic recipe generation and validation.
+- Generator AI context now exposes only record IDs present in the current entitlement-scoped catalog.
+- Extended the deterministic engine so `buildRecipe`, `validateRecipe` and `searchCatalog` can operate on a runtime catalog while retaining the existing canonical static catalog as the default.
+- Protected records therefore do not need to return to the public browser bundle.
+- Preserved deterministic/free behavior when the knowledge service is unavailable; the UI keeps using the free catalog rather than fabricating protected records.
+- Corrected a Generator regression during integration so the public chart catalog remains available.
+
+### VERIFIED
+- Current source files and all Design Intelligence files were re-inspected before this milestone.
+- Premium/Ultra records remain absent from client `catalog.js`.
+- Explorer and Generator now reference the server knowledge client rather than hard-coding protected records.
+- No new Design Intelligence database was created.
+- No new/filler records were fabricated.
+
+### UNVERIFIED
+- Current Vercel deployment/build for these latest source commits is not yet present in the deployment list.
+- Runtime Premium/Ultra knowledge response with a real Firebase entitlement.
+- Runtime proof that unauthenticated/free callers receive no protected records.
+- Full authenticated production browser verification of all 7 routes on this newest source.
+- Manual screen-reader/device audit.
+- Real BYOK provider/CORS/model verification.
+- Real Cashfree transaction/webhook/status lifecycle.
+
+### CHECKPOINT
+- Regression: public/free catalog remains available; protected records were not reintroduced into the bundle.
+- Functionality: entitlement-scoped Explorer/Generator integration IMPLEMENTED; runtime deployment UNVERIFIED.
+- Accessibility: existing semantic/focus safeguards retained; manual audit UNVERIFIED.
+- Privacy/security: protected records are obtained only through the server knowledge endpoint; no secret or payment data exposed.
+- Performance: one bounded knowledge request per Explorer/Generator mount; runtime profiling UNVERIFIED.
+- Data quality: stable-ID merge only; no fabricated records.
+- Build/test: source inspection complete; latest deployment/build pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## FIRST UNFINISHED TASK
+1. Verify a Vercel deployment containing the latest protected knowledge + Explorer/Generator integration.
+2. Exercise `/api/di-knowledge` with a real free/unauthenticated request and a real Premium/Ultra Firebase entitlement.
+3. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
+4. Complete manual accessibility/responsive audit, including screen-reader/device checks.
+5. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
+6. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
+7. Verify protected API-key issuance/rotation/revocation against a real entitlement.
+8. Continue Phase A publication workflow and deeper compatibility foundation.
+9. Keep 1,000+/10,000+ content expansion deferred.
