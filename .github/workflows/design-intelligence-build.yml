@@ -51,6 +51,13 @@ jobs:
 
       - name: Start Vite preview
         shell: bash
+        env:
+          VITE_FIREBASE_API_KEY: "AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          VITE_FIREBASE_AUTH_DOMAIN: "ci-browser-test.invalid"
+          VITE_FIREBASE_PROJECT_ID: "ci-browser-test"
+          VITE_FIREBASE_STORAGE_BUCKET: "ci-browser-test.appspot.com"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "000000000000"
+          VITE_FIREBASE_APP_ID: "1:000000000000:web:ci-browser-test"
         run: |
           npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/motionzync-di-vite.log 2>&1 &
           echo $! > /tmp/motionzync-di-vite.pid
@@ -83,6 +90,18 @@ jobs:
 
           const browser = await chromium.launch({headless:true})
           const page = await browser.newPage({viewport:{width:1440,height:900}})
+          await page.route('**/identitytoolkit.googleapis.com/**', async route => {
+            const url = route.request().url()
+            if (url.includes('/accounts:lookup')) {
+              await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ users: [] }),
+              })
+              return
+            }
+            await route.continue()
+          })
           const failures = []
 
           page.on('pageerror', error => failures.push('pageerror: '+error.message))
