@@ -206,6 +206,8 @@ Future adapters may support only formats that are actually implemented:
 - CSS variables
 - Markdown
 - HTML/CSS
+
+Current Phase A export implementation: canonical recipe JSON and CSS custom-property exports are implemented. HTML/JS executable export remains future.
 - React
 - Next.js
 - Vue
