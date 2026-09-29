@@ -1,5 +1,5 @@
 import { requireAuthenticatedUser } from './_lib/firebase-admin.js'
-import { getServerEntitlement } from './_lib/billing.js'
+import { authenticateMotionZyncApiKey, getServerEntitlement } from './_lib/billing.js'
 import {
   ALL_DI_PROTECTED_RECORDS,
   DI_PROTECTED_STYLES,
@@ -71,12 +71,19 @@ export default async function handler(req, res) {
   let tier = 'free'
   let authenticated = false
 
-  if (hasBearerToken(req)) {
+  const bearerToken = hasBearerToken(req)
+  if (bearerToken) {
     try {
-      const user = await requireAuthenticatedUser(req)
-      const entitlement = await getServerEntitlement(user.uid)
-      tier = entitlement.active ? entitlement.tier : 'free'
-      authenticated = true
+      if (bearerToken.startsWith('mz_live_')) {
+        const apiAccess = await authenticateMotionZyncApiKey(bearerToken)
+        tier = apiAccess.entitlement.tier
+        authenticated = true
+      } else {
+        const user = await requireAuthenticatedUser(req)
+        const entitlement = await getServerEntitlement(user.uid)
+        tier = entitlement.active ? entitlement.tier : 'free'
+        authenticated = true
+      }
     } catch (error) {
       return res.status(error.status || 401).json({ error: error.message || 'Authentication failed' })
     }
