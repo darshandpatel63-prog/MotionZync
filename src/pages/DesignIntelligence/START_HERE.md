@@ -217,3 +217,28 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 - Phase A — Engine / System: **89% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-09-29 — Protected knowledge integrated into Explorer + Generator
+
+### IMPLEMENTED
+- Explorer and Generator now consume the entitlement-scoped `/api/di-knowledge` service.
+- Premium/Ultra records remain server-only until an entitled response is received.
+- Deterministic engine supports runtime catalog overrides while keeping the public/free catalog as its default.
+- AI refinement receives only the currently allowed catalog IDs.
+- No fake or filler records were added.
+
+### VERIFIED
+- Source integration is present on `feature/design-intelligence`.
+- Premium/Ultra records remain absent from public client `catalog.js`.
+
+### UNVERIFIED
+- Latest Vercel deployment/build for these commits.
+- Real free vs Premium/Ultra API response with production Firebase entitlements.
+- Current production browser verification of all 7 routes.
+- Manual screen-reader/device audit, real BYOK provider execution and Cashfree E2E.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
