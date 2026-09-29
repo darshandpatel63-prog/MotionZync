@@ -2344,3 +2344,57 @@ Do not edit other existing project files unless a future Design Intelligence mil
 8. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset and the remote special-effects client.
 9. Continue Phase A publication workflow and deeper compatibility foundation.
 10. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Current HEAD / Cashfree deployment verification checkpoint
+
+### VERIFIED
+- Mandatory Start/Continue documentation and minimum integration files were inspected on feature/design-intelligence.
+- Current branch HEAD is 53fccb31069c32f99a762775134c7846c85ddccf, whose parent is the requested Cashfree alignment commit 37a75299d4df18226b08e431f9478f266df63fba.
+- Commit 37a75299d4df18226b08e431f9478f266df63fba is present and changes api/_lib/cashfree.js so Cashfree order creation accepts only ultra-premium at exactly ₹500 INR.
+- Current HEAD has a READY Vercel deployment: dpl_BKumDxovPtH95mdpXvyPc7BVqSaD, sourced from Git commit 53fccb31069c32f99a762775134c7846c85ddccf on feature/design-intelligence.
+- The immediately preceding Cashfree alignment commit also has a READY Vercel deployment: dpl_A8h1xmPjGZjMrUtZhNoepfzjooVa, sourced from 37a75299d4df18226b08e431f9478f266df63fba.
+- The latest READY deployment is a Vite project deployment; no main-branch work was performed.
+
+### UNVERIFIED
+- Authenticated browser/visual/interactivity verification of all 7 DI routes remains blocked in the available deployment-fetch path: even the generated Vercel share URL returns a 302 Vercel Authentication/SSO response.
+- Manual screen-reader/device/responsive verification remains unverified.
+- Real Firebase Premium/Ultra entitlement and MotionZync API-key calls remain unverified.
+- Real BYOK provider execution/CORS/model compatibility remains unverified.
+- Real Cashfree sandbox checkout, signed webhook, server-side payment reconciliation and entitlement activation remain unverified because merchant credentials/configuration have not been supplied.
+
+### CHECKPOINT
+- Regression: VERIFIED for source/deployment lineage; browser regression remains UNVERIFIED.
+- Functionality: Cashfree Ultra Premium+ ₹500 guard IMPLEMENTED and present in a READY deployment; real payment functionality remains UNVERIFIED.
+- Accessibility: source automation exists; manual production audit remains UNVERIFIED.
+- Privacy/security: Cashfree secrets remain out of source control; the server-side plan/amount guard is preserved; no frontend payment proof is treated as entitlement proof.
+- Performance: no runtime application change beyond the two-line Cashfree contract correction; production profiling remains UNVERIFIED.
+- Data quality: no catalog/payment records fabricated.
+- Build/test: current HEAD has a READY Vercel deployment; no claim is made that a new GitHub Actions run passed for this exact HEAD yet.
+- Documentation: UPDATED.
+
+### CASHFREE ENVIRONMENT SETUP — REQUIRED BEFORE REAL SANDBOX VERIFICATION
+Do not add credentials yet. When the real sandbox test becomes the next action, Vercel server-side Environment Variables required are:
+- CASHFREE_CLIENT_ID
+- CASHFREE_CLIENT_SECRET
+- CASHFREE_ENV=sandbox
+- MOTIONZYNC_PUBLIC_URL
+
+These must be configured as server-side Vercel Environment Variables and never hard-coded in GitHub/source/frontend code.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes on the current READY deployment when an authenticated browser path is available.
+2. Complete manual accessibility/responsive/device/screen-reader verification.
+3. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
+4. Exercise /api/di-knowledge with Free, real Firebase Premium, real Firebase Ultra and real Ultra MotionZync API-key callers; confirm Premium never receives Ultra-only records.
+5. Configure the required Cashfree Vercel environment variables only when credentials are intentionally supplied, then run a real sandbox order + Checkout + signed webhook + server-side payment-status test.
+6. Verify Ultra API-key issuance/rotation/revocation against a real Ultra entitlement.
+7. Verify the API-only special animation/effects capability in the deployed environment without bypassing Ultra entitlement.
+8. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset and the remote special-effects client.
+9. Continue Phase A publication workflow and deeper compatibility foundation.
+10. Keep 1,000+/10,000+ content expansion deferred.
