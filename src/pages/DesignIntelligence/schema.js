@@ -161,7 +161,8 @@ function validateCatalogReferences(catalogs){
   }
   return errors
 }
-\nexport function validateCatalog(catalogs,{requireProvenance=false}={}){
+
+export function validateCatalog(catalogs,{requireProvenance=false}={}){
   const errors=[]
   const warnings=[]
   const counts={}
