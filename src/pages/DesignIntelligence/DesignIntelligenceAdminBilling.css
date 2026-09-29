@@ -1,0 +1,55 @@
+.di-admin-billing{margin-top:1.25rem;padding:1.25rem;border:1px solid var(--border-color);border-radius:18px;background:var(--bg-card)}
+.di-admin-billing-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1rem}
+.di-admin-kicker{font-size:.68rem;letter-spacing:.14em;font-weight:800;color:#67e8f9}
+.di-admin-billing-header h2{margin:.25rem 0 .35rem;font-size:1.35rem}
+.di-admin-billing-header p,.di-admin-chart-head p,.di-admin-grant p{margin:0;color:var(--text-muted);font-size:.8rem;line-height:1.55}
+.di-admin-refresh,.di-admin-grant button{border:1px solid rgba(124,58,237,.35);background:rgba(124,58,237,.12);color:#c4b5fd;border-radius:10px;padding:.55rem .8rem;cursor:pointer;font-weight:700}
+.di-admin-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem;margin-bottom:1rem}
+.di-admin-kpi{padding:.85rem;border:1px solid var(--border-color);border-radius:12px;background:rgba(124,58,237,.035)}
+.di-admin-kpi span{display:block;color:var(--text-muted);font-size:.72rem}
+.di-admin-kpi strong{display:block;margin-top:.3rem;font-size:1.18rem;overflow-wrap:anywhere}
+.di-admin-chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.di-admin-chart,.di-admin-grant,.di-admin-transactions{border:1px solid var(--border-color);border-radius:14px;padding:1rem;background:rgba(255,255,255,.018)}
+.di-admin-chart-wide{grid-column:1/-1}
+.di-admin-chart-head{display:flex;justify-content:space-between;gap:1rem;margin-bottom:.85rem}
+.di-admin-chart-head h3,.di-admin-grant h3{margin:0 0 .25rem;font-size:.95rem}
+.di-admin-bars{display:grid;gap:.7rem}
+.di-admin-bar-row{display:grid;grid-template-columns:130px 1fr 42px;gap:.55rem;align-items:center;font-size:.75rem}
+.di-admin-bar-label{color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.di-admin-bar-track{height:10px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.di-admin-bar-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7c3aed,#06b6d4)}
+.di-admin-bar-row strong{text-align:right}
+.di-admin-donut-layout{display:grid;grid-template-columns:180px 1fr;align-items:center;gap:1rem}
+.di-admin-donut{width:170px;height:170px;border-radius:50%;display:grid;place-items:center}
+.di-admin-donut>div{width:105px;height:105px;border-radius:50%;display:grid;place-items:center;align-content:center;background:var(--bg-card);font-size:1.35rem;font-weight:800}
+.di-admin-donut small{display:block;font-size:.65rem;color:var(--text-muted);font-weight:500}
+.di-admin-legend{display:grid;gap:.55rem}
+.di-admin-legend>div{display:grid;grid-template-columns:10px 1fr auto;gap:.5rem;align-items:center;font-size:.75rem}
+.di-admin-legend-dot{width:9px;height:9px;border-radius:50%}
+.di-admin-legend span{color:var(--text-secondary)}
+.di-admin-line-wrap{overflow:auto}
+.di-admin-line-wrap svg{width:100%;min-width:520px;height:240px}
+.di-admin-axis{fill:#64748b;font-size:10px}
+.di-admin-line-values{display:flex;gap:1rem;flex-wrap:wrap;color:var(--text-muted);font-size:.7rem}
+.di-admin-empty-chart,.di-admin-loading{padding:2rem;text-align:center;color:var(--text-muted);font-size:.8rem}
+.di-admin-error{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;padding:1rem;border:1px solid rgba(239,68,68,.3);border-radius:12px;background:rgba(239,68,68,.06);color:#fca5a5}
+.di-admin-error span{flex:1 1 240px}
+.di-admin-error button{border:1px solid rgba(239,68,68,.3);background:transparent;color:#fca5a5;border-radius:8px;padding:.45rem .7rem;cursor:pointer}
+.di-admin-grant{margin-top:.8rem;display:grid;grid-template-columns:1fr 1.3fr;gap:1rem;align-items:center}
+.di-admin-grant form{display:grid;grid-template-columns:1.3fr .8fr auto;gap:.5rem}
+.di-admin-grant input,.di-admin-grant select{min-width:0;background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-color);border-radius:9px;padding:.62rem .7rem}
+.di-admin-grant button:disabled{opacity:.55;cursor:not-allowed}
+.di-admin-grant-status{grid-column:1/-1;padding:.65rem .75rem;border-radius:9px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#6ee7b7;font-size:.78rem}
+.di-admin-transactions{margin-top:.8rem}
+.di-admin-table-wrap{overflow:auto}
+.di-admin-table-wrap table{width:100%;border-collapse:collapse;min-width:1050px}
+.di-admin-table-wrap th,.di-admin-table-wrap td{padding:.65rem .55rem;border-bottom:1px solid var(--border-color);text-align:left;font-size:.72rem;white-space:nowrap}
+.di-admin-table-wrap th{color:var(--text-muted);font-weight:700}
+.di-admin-table-wrap td{color:var(--text-secondary)}
+.di-admin-table-wrap code{color:#c4b5fd;font-size:.68rem}
+.di-admin-status{display:inline-flex;padding:.2rem .45rem;border-radius:999px;border:1px solid var(--border-color)}
+.status-paid,.status-success,.status-successful,.status-captured,.status-completed{color:#86efac;background:rgba(34,197,94,.08)}
+.status-failed,.status-cancelled,.status-canceled{color:#fca5a5;background:rgba(239,68,68,.08)}
+.di-admin-footnote{margin:.75rem 0 0;color:var(--text-muted);font-size:.68rem}
+@media(max-width:900px){.di-admin-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.di-admin-chart-grid{grid-template-columns:1fr}.di-admin-chart-wide{grid-column:auto}.di-admin-grant{grid-template-columns:1fr}.di-admin-grant form{grid-template-columns:1fr}}
+@media(max-width:560px){.di-admin-billing{padding:.8rem}.di-admin-billing-header{flex-direction:column}.di-admin-kpis{grid-template-columns:1fr}.di-admin-donut-layout{grid-template-columns:1fr}.di-admin-donut{margin:auto}.di-admin-bar-row{grid-template-columns:95px 1fr 32px}}
