@@ -749,3 +749,47 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A compatibility/publish workflow wiring without treating unverified deployment as complete.
 5. Keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-09-29 — Phase A four-state compatibility milestone
+
+### IMPLEMENTED
+- Compatibility evaluation now distinguishes all four required states: `compatible`, `acceptable`, `questionable`, and `incompatible`.
+- A style/industry mismatch is treated as `acceptable` when the style remains usable but is not explicitly classified for that industry.
+- Stronger contrast, chart-purpose and platform-stack conflicts remain `questionable` or `incompatible` as appropriate.
+- Existing deterministic search, relationship indexing, schema/reference validation and provenance publication rules remain intact.
+
+### VERIFIED
+- Current HEAD commit: `5fb2693beb0f036f99f7c7b2e5b6322686fa5fb0`.
+- GitHub Vercel check is currently a **failure caused by the reported Vercel build-rate-limit restriction**; therefore no deployment verification claim is made for this HEAD.
+- Vercel runtime-error aggregation for the selected 24-hour window reports 0 runtime errors.
+- No fabricated records, second database, second API-key system, or unrelated MotionZync feature changes were introduced.
+
+### UNVERIFIED
+- Current-head Vercel build/deployment.
+- Browser verification of all 7 routes.
+- Full accessibility/responsive verification.
+- Real-provider BYOK execution.
+- Local full build/test execution.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD because deployment is blocked by build-rate-limit.
+- Functionality: IMPLEMENTED / source-audited.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secret storage or entitlement bypass.
+- Performance: indexed search/relationship layers preserved; browser profiling UNVERIFIED.
+- Data quality: no content expansion or fabricated records.
+- Build/test: Vercel status **FAILED (build-rate-limit)** for current HEAD; this is not a successful build.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 74% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-check Vercel when the build-rate-limit restriction clears or an authorized deployment path becomes available.
+2. Complete authenticated browser verification of all 7 routes.
+3. Run accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
+5. Keep 1,000+/10,000+ expansion deferred.
