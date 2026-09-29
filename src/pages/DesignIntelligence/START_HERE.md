@@ -41,3 +41,21 @@ Phase 1 foundation is implemented:
 2. Fix any import/runtime/responsive/accessibility errors discovered.
 3. Update handover.md with the actual verification result.
 4. Only after verification, expand content and compatibility rules.
+
+
+## Existing AI / API-key integration context
+
+MotionZync already has a reusable BYOK AI system and encrypted local API-key vault. Design Intelligence must reuse it; do not create a second provider/vault system.
+
+Relevant existing files:
+- src/ai/providers/AIProviderContext.jsx
+- src/ai/providers/keyVault.js
+- src/ai/providers/VaultContext.jsx
+- src/ai/settings/APIKeyManager.jsx
+
+Target flow:
+User prompt → Design Intelligence core → Design Recipe/constraints → existing selected AI provider/model → provider API → generated result → Design Intelligence validation/preview/export.
+
+AI-assisted generation is optional. Deterministic Design Intelligence must remain usable without an external AI key.
+
+Current status: **ARCHITECTURALLY SUPPORTED / UNVERIFIED** for the end-to-end connection. The existing API-key system is present; DesignIntelligenceGenerator is not yet wired to it.
