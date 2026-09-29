@@ -2,9 +2,7 @@
 // This file is imported only by Vercel/API code. Do not import it from client-side
 // React modules. Protected records must never be shipped in the public browser bundle.
 
-export const DI_PROTECTED_STYLES = [
-  { id:'style-premium-enterprise-depth', name:'Enterprise Depth', tier:'premium', tags:['enterprise','depth','high-signal'], description:'Structured enterprise visual language with strong information hierarchy and restrained depth.', suitedFor:['Fintech','Enterprise','Analytics'] },
-]
+export const DI_PROTECTED_STYLES = []
 
 export const DI_PROTECTED_PALETTES = [
   { id:'palette-royal-sapphire', name:'Royal Sapphire', tier:'premium', primary:'#1D4ED8', secondary:'#3730A3', accent:'#60A5FA', cta:'#2563EB', background:'#071225', surface:'#0F1D3A', text:'#EFF6FF', muted:'#93C5FD', semantic:{success:'#34D399',warning:'#FBBF24',error:'#FB7185'}, mood:'premium', tags:['fintech','enterprise','premium'] },
