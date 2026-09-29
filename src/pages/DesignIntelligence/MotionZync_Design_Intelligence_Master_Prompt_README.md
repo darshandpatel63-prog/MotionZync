@@ -72,16 +72,39 @@ styles, palettes, typography, charts, technologies, layouts, components, navigat
 
 Never place thousands of unrelated records in one React component.
 
-## 6. 1000+ / 10000+ TARGET
+## 6. 1000+ / 10000+ TARGET — PER MEANINGFUL SUB-CATEGORY
 
-1,000+ is a scalability target, not permission to fabricate records.
-10,000+ is a later expansion target.
+The 1,000+ target applies to **each meaningful design sub-category**, not merely to each top-level category.
+
+For example, if "UI Layout Systems" contains Sidebar, Top Navigation, Bottom Navigation, Dashboard Layout, Tabs, Split View, Master-Detail, Bento, Grid, Workspace, Mobile Layouts and other legitimate sub-categories, each meaningful sub-category is itself a future **1,000+ genuine pattern/record target**.
+
+The same rule applies across the entire canonical taxonomy:
+- layouts and layout sub-types
+- components and component sub-types
+- navigation patterns
+- UX/state patterns
+- animation/motion sub-types
+- live/interactive effects
+- 3D/graphics patterns
+- game UI sub-types
+- responsive/platform patterns
+- accessibility patterns
+- charts/data-visualization sub-types
+- product/industry patterns
+- design-system/token patterns
+- typography/color/style sub-types
+- and any other meaningful domain or sub-domain added later.
+
+This does **not** mean generating trivial permutations. A record counts only when it represents a genuinely meaningful and sufficiently distinct design pattern, structure, behavior, interaction, composition, or system. Changing only color, border radius, font size, spacing, icon, or another superficial property is not enough to create a new record.
+
+1,000+ per meaningful sub-category is a long-term content target, not permission to fabricate records.
+10,000+ is a later expansion target and may be far exceeded as the taxonomy grows.
 
 Never create Style001 / Style002 filler.
 Never make fake duplicates solely to hit a count.
-Prefer hierarchical taxonomies and meaningful combinations.
+Prefer hierarchical taxonomies, validated relationships and meaningful combinations.
 
-Current seed dataset is intentionally much smaller than 1,000.
+Current seed dataset is intentionally much smaller than these future targets.
 
 ## 7. TRUTH-FIRST CONTENT
 
@@ -281,15 +304,27 @@ No fake API key may be generated or stored as proof of entitlement.
 
 ## 19. PRICING MODEL REQUESTED
 
-Planned product pricing:
-- first month: ₹50
-- recurring month: ₹80/month
-- 2 months: ₹150
-- permanent: ₹200–₹250
+The preferred commercial model is **permanent access**, rather than a time-limited monthly or two-month Premium subscription, if time-limited entitlement/revocation cannot be implemented reliably.
+
+Primary planned permanent plan:
+- **₹500 — Permanent**
+- includes all entitled Premium/Ultra Premium+ features and knowledge available under the plan
+- includes a personal authorized API key for the purchaser
+- API usage is intended for the purchaser's own unlimited projects, subject to future abuse/rate/security controls
+
+Optional lower-cost plan, **only if technically enforceable**:
+- **₹250 — Permanent**
+- intended to allow the entitled UI/design capabilities permanently
+- API/design usage may be bound to a maximum of **10 registered projects**
+- this plan must not be offered unless reliable server-side project-count enforcement is actually implemented and verified
+
+If the 10-project restriction cannot be enforced reliably, do not offer the ₹250 plan; use the ₹500 permanent model instead.
+
+The previously discussed ₹50 first month, ₹80/month and ₹150/two-month options are superseded by this preferred permanent-access model unless a later verified architecture explicitly reintroduces time-limited plans.
 
 These are product-plan requirements, not proof that billing is currently connected.
 
-Real billing must later be implemented through a secure backend/payment provider and verified server-side.
+Real billing and entitlement must later be implemented through a secure backend/payment provider and verified server-side.
 
 ## 20. API KEY MODEL
 
@@ -820,3 +855,58 @@ Then update the canonical catalog and handover.
 The sections above describe the target architecture and requirements unless separately marked implemented in the repository.
 
 Current implementation remains Phase 1 as described in earlier sections. Expanded taxonomy, local npm execution, premium expiry enforcement, anti-template convergence, advanced animation/3D/game intelligence and universal orchestration are predominantly PLANNED / FUTURE until their implementation and verification milestones are completed.
+
+
+## 38. GRANULAR 1000+ COVERAGE RULE
+
+The project's large-scale content goal is intentionally **recursive/granular**.
+
+"1,000+" must be interpreted at the lowest meaningful catalog level, not only at the parent-category level. A parent category containing many sub-categories must not be counted as satisfying the target merely because its combined children total 1,000 records.
+
+Example:
+UI Layout Systems → Sidebar → 1,000+ genuinely distinct sidebar patterns.
+UI Layout Systems → Dashboard Layout → 1,000+ genuinely distinct dashboard patterns.
+UI Layout Systems → Tabs → 1,000+ genuinely distinct tab patterns.
+
+The same principle applies to every other domain and its meaningful descendants.
+
+Quality rule:
+- no cosmetic-only permutations
+- no duplicate records
+- no fabricated filler
+- no "same UI with one tiny change" counting
+- meaningful structural, behavioral, interaction, contextual, platform, accessibility, motion or composition differences are required where appropriate
+- records must remain compatible with the canonical schema and relationship graph
+
+This is a **knowledge/pattern coverage target**. It does not mean every record must be a standalone complete webpage. The generator should compose these validated building blocks into complete interfaces.
+
+The eventual catalog can therefore become much larger than 10,000 records as the taxonomy expands. The exact final count must be measured from real, validated records rather than invented in advance.
+
+## 39. OUTPUT DIVERSITY APPLIES TO ALL GENERATED UI
+
+The Human-Design / Anti-Template Convergence Principle applies to **every UI produced, recommended, composed or exported by Design Intelligence**, not only the Design Intelligence website itself.
+
+This includes future:
+- web UI
+- desktop UI
+- mobile/tablet UI
+- game UI
+- 3D/spatial UI
+- animated/live UI
+- component compositions
+- design-system outputs
+- code-generated interfaces
+- npm/local generated interfaces
+- API/MCP/AI-agent generated interfaces
+
+The system should provide the knowledge, constraints, relationships and compatible design directions. It should not force every user or external AI to place every component in one universal MotionZync pattern.
+
+Where placement/composition depends on product requirements, content, platform, brand and user/AI decisions, the system must preserve that flexibility while still validating usability, accessibility, performance and consistency.
+
+The objective is not to make every generated UI look "random" or "different" for its own sake. The objective is to prevent a recognizable fixed AI/MotionZync template while producing purposeful, context-appropriate design systems.
+
+## 40. STATUS OF THESE EXPANSIONS
+
+The granular 1,000+ per meaningful sub-category rule, permanent-plan preference, conditional ₹250/10-project plan, and all-output anti-template scope are **PLANNED / FUTURE requirements** unless separately verified as implemented.
+
+They must not be represented as existing production capabilities until the corresponding data, entitlement, enforcement, generation and validation systems are actually implemented and verified.
