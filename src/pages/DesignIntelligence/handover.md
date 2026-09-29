@@ -1422,3 +1422,55 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility with real user-configured providers; do not use fabricated credentials.
 4. Continue Phase A publication workflow and deeper compatibility foundation.
 5. Keep the 1,000+/10,000+ content expansion deferred until the foundation is ready.
+
+
+## 2026-09-29 — Premium billing / entitlement architecture requirement
+
+### USER REQUIREMENT RECORDED — PLANNED / FUTURE
+- Premium purchases must be processed by a real payment gateway and confirmed server-side.
+- Backend should associate each purchase with the authenticated Firebase user UID and retain the payment provider, provider order ID, provider transaction/payment ID, plan, amount, currency, status, timestamps and refund/cancellation state as needed for reconciliation.
+- Do not store raw card numbers, CVV, UPI PIN, bank credentials or other payment secrets in MotionZync.
+- Purchase counts should be derived from canonical payment records rather than trusting a frontend-maintained counter.
+- MotionZync Premium entitlement should be stored server-side and checked server-authoritatively; a successful client redirect must never itself grant Premium.
+- Premium API access, when implemented, should have a separate server-side API-key record. Store only a hash/identifier/prefix and metadata; never store or expose a plaintext secret after issuance.
+- The owner/developer account may be granted Premium/Ultra Premium+ by a server-authorized admin entitlement path without making a payment. This is a MotionZync entitlement decision, not a change to the user's Gmail account.
+
+### CURRENT REPOSITORY SUPPORT — ARCHITECTURALLY SUPPORTED
+- Existing Vercel serverless API routes and Firebase Admin SDK are already present and can be extended rather than creating a second backend.
+- Existing Google/Firebase authentication provides a stable Firebase UID that should be the primary user reference; email should be secondary metadata, not the entitlement primary key.
+- Existing `api/_lib/firebase-admin.js` demonstrates server-side Firebase ID-token verification and protected API-route patterns.
+
+### PAYMENT PROVIDER RESEARCH — VERIFIED EXTERNAL INFORMATION (2026-09-29)
+- Cashfree's official pricing page currently lists a standard domestic payment-gateway platform fee of 1.95%, with higher rates for some instruments; its 0% new-merchant offer has eligibility/campaign conditions, so the temporary offer must not be assumed for a new account today.
+- Cashfree states PCI-DSS Level 1 and RBI-authorized Payment Aggregator credentials on its official materials.
+- Razorpay's official pricing currently lists standard pricing at 2% plus applicable GST, with 3% for specified higher-cost instruments; Razorpay also states PCI-DSS Level 1 compliance.
+- PayU's official pricing currently lists 2% for specified domestic methods and 3% for specified EMI/Amex/Diners/international transactions, plus applicable GST.
+
+### RECOMMENDATION STATUS
+- For a small India-first MotionZync launch where lowest standard domestic gateway pricing is a priority, Cashfree is the first provider to evaluate because its published standard domestic rate is 1.95%. Security/compliance claims should be independently rechecked during merchant onboarding.
+- Razorpay is a strong alternative if its developer/dashboard ecosystem or operational fit is preferred; the published standard rate is slightly higher.
+- Final provider selection is PLANNED / FUTURE until merchant onboarding, exact commercial quote, settlement terms, supported business category, refund/dispute handling and required KYC are checked for MotionZync.
+
+### OWNER / DEVELOPER ACCESS
+- The developer's own Google account should be granted Premium/Ultra Premium+ through a server-authorized entitlement record or admin custom claim.
+- The frontend must not contain a hidden `isPremium=true` bypass.
+- The owner entitlement should be auditable and revocable server-side.
+- No payment is required for the owner's own entitlement if the product owner chooses to grant it.
+
+### SECURITY / REGRESSION CHECKPOINT
+- Regression: no payment code or payment dependency added in this milestone.
+- Functionality: billing architecture is PLANNED / FUTURE, not implemented.
+- Accessibility: no UI changes.
+- Privacy/security: payment-sensitive data is explicitly excluded from the MotionZync database design.
+- Performance: no runtime impact.
+- Data quality: transaction records are intended to be canonical; counters should be derived.
+- Build/test: no code change to test.
+- Documentation: UPDATED.
+
+### FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes when an authorized browser path is available.
+2. Complete full accessibility/responsive audit, including screen-reader/device checks.
+3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility with real user-configured providers.
+4. Continue Phase A publication workflow and deeper compatibility foundation.
+5. Design and implement the server-authoritative Premium entitlement + payment webhook architecture before exposing a real paid checkout.
+6. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
