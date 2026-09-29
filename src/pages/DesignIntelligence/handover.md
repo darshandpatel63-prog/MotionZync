@@ -714,3 +714,38 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A with deeper compatibility rules and publish workflow wiring.
 5. Keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-09-29 — Verification checkpoint: Vercel build-rate-limit
+
+### VERIFIED
+- GitHub commit status for the current Design Intelligence branch HEAD reports a Vercel check failure with target URL indicating the Vercel build-rate-limit restriction.
+- Therefore the current HEAD is not being treated as Vercel READY or production-verified.
+
+### UNVERIFIED
+- Current-head Vercel build completion.
+- Browser verification of all 7 Design Intelligence routes.
+- Full accessibility/responsive verification.
+- Real-provider BYOK execution.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD because Vercel build is blocked by the reported build-rate-limit failure.
+- Functionality: source-level IMPLEMENTED; deployed runtime UNVERIFIED.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secret storage or entitlement bypass introduced.
+- Performance: indexed search/relationship work remains source-level until deployment is available.
+- Data quality: no fabricated records or content expansion.
+- Build/test: VERIFIED as a **failed Vercel check due to build-rate-limit**; not a successful build.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 72% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-verify the current HEAD on Vercel once the build-rate-limit block clears or an authorized deployment path is available.
+2. Complete authenticated browser verification of all 7 routes.
+3. Run accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A compatibility/publish workflow wiring without treating unverified deployment as complete.
+5. Keep 1,000+/10,000+ expansion deferred.
