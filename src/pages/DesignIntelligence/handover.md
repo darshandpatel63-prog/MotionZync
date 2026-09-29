@@ -118,85 +118,49 @@ Do not edit other existing project files unless a future Design Intelligence mil
 ### UNVERIFIED
 - None of the newly documented future capabilities should be treated as runtime-verified merely because they are now documented.
 
-## FIRST UNFINISHED TASK
-Get a real build/preview verification of feature/design-intelligence and test:
-- /design-intelligence
-- /design-intelligence/explorer
-- /design-intelligence/generator
-- /design-intelligence/knowledge
-- /design-intelligence/stacks
-- /design-intelligence/docs
-- /design-intelligence/pricing
 
-Then record exact results here.
+## 2026-09-29 — Build / deployment verification milestone
 
-## Continuation rule
-When a new chat receives only Start, Continue or Start/Continue, read START_HERE.md, this handover, the master prompt and all current Design Intelligence files, then resume from FIRST UNFINISHED TASK. Never rebuild completed work.
-
-
-## 2026-09-29 — Blueprint granularity + permanent-plan clarification
-
-**IMPLEMENTED**
-- Updated the Master Design Intelligence blueprint so the 1,000+ target applies to every meaningful sub-category, not only top-level categories.
-- Explicitly prohibited cosmetic-only permutations, duplicate records and filler records from counting toward the target.
-- Added recursive/granular examples such as Sidebar → 1,000+ meaningful patterns, Dashboard Layout → 1,000+, Tabs → 1,000+.
-- Expanded the anti-template principle so it applies to every UI produced, recommended, composed or exported by Design Intelligence, including future web, desktop, mobile/tablet, game, 3D/spatial, animated/live, npm/local, API/MCP/AI-agent outputs.
-- Updated the preferred commercial model to permanent access: ₹500 permanent, with a ₹250 permanent / maximum 10 registered projects option only if reliable server-side enforcement can be implemented and verified.
-- Clarified that monthly/two-month plans are superseded unless a later verified architecture reintroduces them.
-
-**PLANNED / FUTURE**
-- Actual 1,000+ genuine records for each meaningful sub-category.
-- Server-authoritative permanent entitlement, API issuance and optional 10-project enforcement.
-- Generation/composition engine implementing the anti-template principle across all output interfaces.
-
-**UNVERIFIED**
-- No claim is made that these expanded datasets, billing controls, project limits or output-diversity engine are currently implemented or verified.
-
-
-## 2026-09-29 — Existing BYOK AI integration architecture
-
-### IMPLEMENTED
-- Confirmed the existing MotionZync AI provider/API-key infrastructure on feature/design-intelligence:
-  - src/ai/providers/AIProviderContext.jsx
-  - src/ai/providers/keyVault.js
-  - src/ai/providers/VaultContext.jsx
-  - src/ai/settings/APIKeyManager.jsx
-- Confirmed the existing vault uses browser-side encryption-at-rest and keeps decrypted keys in memory while unlocked.
-- Confirmed Design Intelligence requirements now explicitly call for reusing this existing AI system instead of creating a second API-key/vault/provider system.
-- Documented the intended AI-assisted Design Intelligence flow, non-AI direct mode, reference-based design input, npm/local user control and entitlement separation.
-
-### ARCHITECTURALLY SUPPORTED
-- Existing BYOK infrastructure can be the execution bridge for user-selected AI models.
-- Design Intelligence can prepare structured Design Recipe/context and send it to the selected provider.
-- AI-provider processing can occur on the provider's infrastructure when the user's own API key is used, subject to that provider's behavior and terms.
-- Direct deterministic Design Intelligence and AI-assisted generation can coexist.
-- One canonical core can serve web, npm/local, API and future MCP/agent interfaces.
+### VERIFIED
+- Vercel generated a **READY** deployment for `feature/design-intelligence` at commit `4f4f40e711bc0ba4d4f9956b8e902569228d33c4`.
+- Vercel identifies the project framework as Vite and the deployment source as Git.
+- The repository route definitions in `src/App.jsx` explicitly contain all 7 Design Intelligence routes:
+  - `/design-intelligence`
+  - `/design-intelligence/explorer`
+  - `/design-intelligence/generator`
+  - `/design-intelligence/knowledge`
+  - `/design-intelligence/stacks`
+  - `/design-intelligence/docs`
+  - `/design-intelligence/pricing`
+- Vercel runtime-error aggregation for the project returned **no runtime errors in the selected 24-hour window**.
 
 ### UNVERIFIED
-- End-to-end Design Intelligence → existing AI provider → generated UI/code.
-- Provider-specific CORS/direct-browser security for every supported provider.
-- Safe isolation of generated HTML/JS/code previews.
-- Server-authoritative Premium/Ultra entitlement enforcement.
+- Direct browser rendering/interactivity of all 7 routes could not be completed because the inspected Vercel preview is protected by Vercel Authentication for child routes.
+- Full keyboard/screen-reader/mobile accessibility audit.
+- Full responsive visual audit.
+- Local `npm run build` execution in this environment.
+- End-to-end Design Intelligence → existing BYOK provider generation.
+- Safe execution/isolation of generated HTML/JS/code.
 
-### PLANNED / FUTURE
-1. Wire DesignIntelligenceGenerator to existing useAI() context.
-2. Convert Design Recipe into a structured provider prompt/context.
-3. Add provider capability-aware generation.
-4. Validate returned UI/code against compatibility, accessibility and anti-template rules.
-5. Add safe preview/export adapters.
-6. Harden custom endpoint validation, request limits, timeouts/cancellation and generated-output isolation as needed.
+### SECURITY / PRIVACY CHECK
+- No new API-key vault or provider storage was introduced.
+- Existing BYOK vault architecture remains the source of truth.
+- No claim of absolute client-side key security is made.
+- Premium entitlement remains planned for server-authoritative enforcement.
 
-### SECURITY NOTE
-The existing vault is a meaningful local protection layer, but it is not an absolute defense against active XSS while decrypted keys are in memory. Do not claim stronger security than has been verified.
+### REGRESSION / FUNCTIONALITY CHECK
+- No unrelated files were intentionally changed in this milestone.
+- Existing Design Intelligence route declarations remain present.
+- Deployment reached READY and the selected runtime-error check returned no errors.
+- Browser-level regression remains UNVERIFIED because preview authentication prevented direct child-route inspection.
+
+### PERFORMANCE / DATA QUALITY / DOCUMENTATION
+- No large catalog expansion was performed.
+- No fabricated records were added.
+- Documentation/handover updated with exact verification boundaries.
 
 ## FIRST UNFINISHED TASK
-Get a real build/preview verification of feature/design-intelligence and test:
-- /design-intelligence
-- /design-intelligence/explorer
-- /design-intelligence/generator
-- /design-intelligence/knowledge
-- /design-intelligence/stacks
-- /design-intelligence/docs
-- /design-intelligence/pricing
-
-Then record exact results here.
+1. Obtain an authenticated browser/preview session and verify all 7 routes visually and interactively.
+2. Run accessibility/responsive checks.
+3. Then implement the actual Design Intelligence Generator connection to the existing `useAI()` / BYOK provider system.
+4. Verify provider capability handling, output validation and safe preview before expanding content/compatibility rules.
