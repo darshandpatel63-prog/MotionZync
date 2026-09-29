@@ -1,10 +1,22 @@
 import {DI_RECIPES,DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS} from './catalog.js'
 import {relationshipScore,getRelationshipIntegrity} from './relationships.js'
 import {validateRecipeShape} from './schema.js'
+import {buildSearchIndex,searchIndex,scoreSearchRecord} from './searchIndex.js'
 
 export const ENTITLEMENT_LEVELS={free:0,premium:1,'ultra-premium':2}
 const words=value=>String(value||'').toLowerCase().split(/[^a-z0-9+#.-]+/).filter(Boolean)
 const levelOf=tier=>ENTITLEMENT_LEVELS[tier||'free']??0
+const CATALOG_BY_DOMAIN=Object.freeze({
+  styles:DI_STYLES,
+  palettes:DI_PALETTES,
+  typography:DI_TYPOGRAPHY,
+  charts:DI_CHARTS,
+  stacks:DI_STACKS,
+  recipes:DI_RECIPES,
+})
+const SEARCH_INDEXES=Object.freeze(
+  Object.fromEntries(Object.entries(CATALOG_BY_DOMAIN).map(([domain,records])=>[domain,buildSearchIndex(records)]))
+)
 const scoreRecord=(record,tokens)=>{
   const haystack=[record.name,record.description,record.mood,record.category,...(record.tags||[]),...(record.suitedFor||[]),...(record.focus||[]),record.layout,record.navigation,...(record.ux||[])].join(' ').toLowerCase()
   return tokens.reduce((score,token)=>score+(haystack.includes(token)?1:0),0)
@@ -174,12 +186,20 @@ export function buildRecipe(prompt='',entitlementTier='free'){
 }
 
 export function searchCatalog(query='',domain='all',entitlementTier='free'){
-  const tokens=words(query)
-  const source=domain==='all'
-    ?[...DI_STYLES,...DI_PALETTES,...DI_TYPOGRAPHY,...DI_CHARTS,...DI_STACKS,...DI_RECIPES]
-    :{styles:DI_STYLES,palettes:DI_PALETTES,typography:DI_TYPOGRAPHY,charts:DI_CHARTS,stacks:DI_STACKS,recipes:DI_RECIPES}[domain]||[]
+  const domains=domain==='all'?Object.keys(CATALOG_BY_DOMAIN):[domain]
   const max=levelOf(entitlementTier)
-  return source.filter(record=>levelOf(record.tier)<=max).map(record=>({record,score:scoreRecord(record,tokens)})).filter(item=>!tokens.length||item.score>0).sort((a,b)=>b.score-a.score).map(item=>item.record)
+  const results=[]
+  for(const currentDomain of domains){
+    const records=CATALOG_BY_DOMAIN[currentDomain]
+    const index=SEARCH_INDEXES[currentDomain]
+    if(!records||!index)continue
+    for(const record of searchIndex(index,query)){
+      if(levelOf(record.tier)>max)continue
+      const score=scoreSearchRecord(record,query)
+      if(!query||score>0)results.push({record,score})
+    }
+  }
+  return results.sort((a,b)=>b.score-a.score||a.record.name.localeCompare(b.record.name)).map(item=>item.record)
 }
 
 export function recipeToTokens(recipe){
