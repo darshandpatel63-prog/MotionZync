@@ -2,13 +2,13 @@ import {useEffect,useMemo,useState} from 'react'
 import {useAI} from '../../ai/providers/AIProviderContext.jsx'
 import {useAuth} from '../../context/AuthContext.jsx'
 import {buildRecipe,evaluateCompatibility,getAccessibleRecord,recipeToTokens,recipeToExport,recipeToCSSVariables,validateRecipe} from './engine.js'
-import {DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_STACKS,DI_RECIPES} from './catalog.js'
+import {DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS,DI_RECIPES} from './catalog.js'
 import {accessLabel} from './access.js'
 import {fetchDesignIntelligenceKnowledge,mergeKnowledgeCatalog} from './knowledgeClient.js'
 import './DesignIntelligence.css'
 
 const EXAMPLES=['Build a dark analytics dashboard for developers with a technical, premium feel.','Create a friendly healthcare web product with clear forms and accessible charts.','Design a luxury ecommerce landing page with an editorial mood.']
-const PUBLIC_CATALOG={styles:DI_STYLES,palettes:DI_PALETTES,typography:DI_TYPOGRAPHY,charts:[],stacks:DI_STACKS,recipes:DI_RECIPES}
+const PUBLIC_CATALOG={styles:DI_STYLES,palettes:DI_PALETTES,typography:DI_TYPOGRAPHY,charts:DI_CHARTS,stacks:DI_STACKS,recipes:DI_RECIPES}
 const extractJson=(text)=>{const raw=String(text||'').trim();const fenced=raw.match(/\`\`\`(?:json)?\s*([\s\S]*?)\s*\`\`\`/i);const candidate=fenced?.[1]||raw;try{return JSON.parse(candidate)}catch{return null}}
 const downloadText=(filename,text,mime)=>{const blob=new Blob([text],{type:mime});const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=filename;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),0)}
 
