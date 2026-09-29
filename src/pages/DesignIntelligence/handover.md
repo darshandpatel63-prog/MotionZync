@@ -1474,3 +1474,59 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publication workflow and deeper compatibility foundation.
 5. Design and implement the server-authoritative Premium entitlement + payment webhook architecture before exposing a real paid checkout.
 6. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
+
+## 2026-09-29 — Admin billing analytics + server data foundation
+
+### IMPLEMENTED
+- Added shared server-side Firestore access through the existing Firebase Admin SDK; no second database was created.
+- Added api/_lib/billing.js as the canonical billing/entitlement data helper.
+- Added api/admin-billing.js, protected by the existing server-side requireAdmin() guard.
+- Canonical backend collections are now defined for users, payments and apiKeys.
+- users stores Firebase UID, email, plan/entitlement, entitlement source/timestamps and optional admin-grant metadata.
+- payments stores provider, order ID, transaction/payment ID, plan, amount, currency, status, purchase/verification timestamps and refund status.
+- apiKeys is reserved for future MotionZync API-key metadata; the analytics layer never expects plaintext secrets.
+- Added server-side verified-payment recording helper for a future provider webhook. A client redirect is not a payment confirmation path.
+- Added server-side owner/admin entitlement grant by Google/Firebase account email. This changes MotionZync entitlement only; it does not modify Gmail.
+- Added the existing /admin panel's new DI Billing tab using a new component inside the Design Intelligence folder.
+- Admin billing view now shows separate charts for payment status, paid-plan distribution, entitlement sources, API-key status and monthly revenue, plus KPI cards.
+- Admin billing view also includes a transaction reconciliation table with user email, provider, order ID, transaction ID, amount, status and refund state.
+- Admin billing view includes a server-authorized Premium / Ultra Premium+ manual-grant form.
+- Analytics are derived from backend records; no frontend-maintained payment counter or fabricated sample transactions were added.
+
+### SECURITY / PRIVACY
+- Raw card numbers, CVV, UPI PIN, bank credentials and payment-provider secrets are not accepted by the canonical payment-record helper.
+- Admin analytics and manual grants require the existing Firebase ID-token + ADMIN_EMAIL server authorization.
+- Transaction IDs are visible only inside the admin-protected reconciliation view.
+- Premium entitlement remains server-authoritative; no frontend isPremium=true bypass was introduced.
+
+### ARCHITECTURALLY SUPPORTED
+- Future Cashfree/Razorpay/PayU webhook handlers can call the canonical verified-payment helper after provider-specific signature verification.
+- The same backend entitlement record can later authorize protected Design Intelligence knowledge and MotionZync API-key issuance.
+- Purchase counts can be derived from the canonical payments collection rather than trusted frontend counters.
+
+### UNVERIFIED
+- No real payment gateway/webhook is connected yet.
+- No live payment transaction has been processed through MotionZync.
+- Firestore production data availability depends on the existing Firebase Admin environment variables being configured on the deployment.
+- Browser visual verification of the new Admin Billing tab has not yet been completed.
+- Latest build/CI result for these new commits is not yet claimed here.
+
+### CHECKPOINT
+- Regression: additive Admin tab + new protected API; existing animation/category/settings tabs were not intentionally rewritten.
+- Functionality: IMPLEMENTED / UNVERIFIED runtime.
+- Accessibility: component uses labelled controls and semantic table/chart regions; full browser/screen-reader audit remains UNVERIFIED.
+- Privacy/security: server authorization and sensitive-field exclusion IMPLEMENTED; production deployment verification UNVERIFIED.
+- Performance: bounded analytics reads (10,000 records per collection) and recent transaction display (100 records); deeper scaling/aggregation is future.
+- Data quality: no seed/fake payment records added.
+- Build/test: UNVERIFIED pending CI.
+- Documentation: UPDATED.
+
+### FIRST UNFINISHED TASK
+1. Verify the new Admin Billing tab through CI/browser and inspect responsive behaviour.
+2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
+3. Complete full accessibility/responsive audit, including screen-reader/device checks.
+4. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
+5. Implement provider-specific payment webhook signature verification and connect the selected gateway before exposing paid checkout.
+6. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
+7. Continue Phase A publication/compatibility depth.
+8. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
