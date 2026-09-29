@@ -104,7 +104,51 @@ export function validateRecordShape(record,domain,{requireProvenance=false}={}){
   return{valid:errors.length===0,errors,warnings}
 }
 
-export function validateCatalog(catalogs,{requireProvenance=false}={}){
+
+function buildCatalogIndexes(catalogs){
+  const indexes={}
+  for(const domain of DI_DOMAINS){
+    indexes[domain]=new Map((Array.isArray(catalogs?.[domain])?catalogs[domain]:[]).map(record=>[record?.id,record]))
+  }
+  return indexes
+}
+
+function validateCatalogReferences(catalogs){
+  const errors=[]
+  const indexes=buildCatalogIndexes(catalogs)
+  const recipes=Array.isArray(catalogs?.recipes)?catalogs.recipes:[]
+  const recipeRefs=[
+    ['styleId','styles',false],
+    ['paletteId','palettes',false],
+    ['typographyId','typography',false],
+  ]
+  for(const recipe of recipes){
+    for(const [field,domain] of recipeRefs){
+      const id=recipe?.[field]
+      if(isString(id)&&!indexes[domain].has(id))errors.push('Recipe '+(recipe.id||'<unknown>')+' references unknown '+domain+' ID: '+id+'.')
+    }
+    for(const [field,domain] of [['chartIds','charts'],['stackIds','stacks']]){
+      for(const id of Array.isArray(recipe?.[field])?recipe[field]:[]){
+        if(!indexes[domain].has(id))errors.push('Recipe '+(recipe.id||'<unknown>')+' references unknown '+domain+' ID: '+id+'.')
+      }
+    }
+    const componentIds=[
+      recipe?.styleId?['styles',recipe.styleId]:null,
+      recipe?.paletteId?['palettes',recipe.paletteId]:null,
+      recipe?.typographyId?['typography',recipe.typographyId]:null,
+      ...(Array.isArray(recipe?.chartIds)?recipe.chartIds.map(id=>['charts',id]):[]),
+      ...(Array.isArray(recipe?.stackIds)?recipe.stackIds.map(id=>['stacks',id]):[]),
+    ].filter(Boolean)
+    for(const [domain,id] of componentIds){
+      const component=indexes[domain].get(id)
+      if(component&&DI_TIERS.indexOf(recipe.tier)<DI_TIERS.indexOf(component.tier)){
+        errors.push('Recipe '+(recipe.id||'<unknown>')+' tier '+recipe.tier+' is below referenced '+domain+' '+id+' tier '+component.tier+'.')
+      }
+    }
+  }
+  return errors
+}
+\nexport function validateCatalog(catalogs,{requireProvenance=false}={}){
   const errors=[]
   const warnings=[]
   const counts={}
@@ -124,6 +168,7 @@ export function validateCatalog(catalogs,{requireProvenance=false}={}){
       }
     }
   }
+  errors.push(...validateCatalogReferences(catalogs))
   return{
     valid:errors.length===0,
     errors,
