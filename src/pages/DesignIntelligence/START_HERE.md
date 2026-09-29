@@ -74,24 +74,28 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 - The CI gate fails on **serious/critical** accessibility violations while keeping lower-severity findings visible for follow-up.
 - This audit is CI-only and does not add a runtime production dependency.
 
+### VERIFIED
+- The corrected axe audit CI execution completed successfully (GitHub Actions run 36545680689).
+- The audit reported zero serious/critical violations inside `.di-shell`.
+- Existing seven-route browser smoke, responsive checks, focus-visible checks and Admin DI Billing checks also passed in that run.
+
 ### UNVERIFIED
-- The axe audit has been added but its newest post-change CI execution is still pending.
 - Full screen-reader/device testing remains unverified.
 
 
 
 ### CI correction
 - The first axe-audit attempt exposed a CI-only dependency pruning issue; Playwright and axe are now installed together in one CI step.
-- Status: **IMPLEMENTED / UNVERIFIED** until the corrected workflow run completes.
+- Status: **VERIFIED** by GitHub Actions run 36545680689.
 
 
 
 ### Axe runner correction
 - The accessibility runner now creates a Playwright browser context before constructing the page required by axe-core.
-- Status: **IMPLEMENTED / UNVERIFIED** pending the corrected CI execution.
+- Status: **VERIFIED** by GitHub Actions run 36545680689.
 
 
 ### Accessibility audit scope correction
 - The CI axe gate is intentionally scoped to `.di-shell` so existing unrelated MotionZync Navbar/Footer styling is not reclassified as a Design Intelligence regression.
 - The previously observed serious `color-contrast` findings were outside the DI shell.
-- Status: **IMPLEMENTED / UNVERIFIED** pending the corrected CI run.
+- Status: **VERIFIED** by GitHub Actions run 36545680689.
