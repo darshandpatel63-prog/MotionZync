@@ -3,7 +3,7 @@ import {useAI} from '../../ai/providers/AIProviderContext.jsx'
 import {useAuth} from '../../context/AuthContext.jsx'
 import {buildRecipe,evaluateCompatibility,getAccessibleRecord,recipeToTokens,recipeToExport,recipeToCSSVariables,validateRecipe} from './engine.js'
 import {DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS,DI_RECIPES} from './catalog.js'
-import {accessLabel} from './access.js'
+import {accessLabel,hasEntitlement} from './access.js'
 import {fetchDesignIntelligenceKnowledge,mergeKnowledgeCatalog} from './knowledgeClient.js'
 import './DesignIntelligence.css'
 
@@ -19,11 +19,11 @@ function buildDIContext(prompt,recipe,catalogs,entitlementTier='free'){
     request:prompt,
     deterministicRecipe:{styleId:recipe.style.id,paletteId:recipe.palette.id,typographyId:recipe.typography.id,stackId:recipe.stack?.id,layout:recipe.layout,navigation:recipe.navigation},
     allowed:{
-      styleIds:catalogs.styles.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id),
-      paletteIds:catalogs.palettes.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id),
-      typographyIds:catalogs.typography.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id),
-      stackIds:catalogs.stacks.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id),
-      recipeIds:catalogs.recipes.filter(r=>r.tier==='free'||entitlementTier!=='free').map(r=>r.id)
+      styleIds:catalogs.styles.filter(r=>hasEntitlement(r.tier,entitlementTier)).map(r=>r.id),
+      paletteIds:catalogs.palettes.filter(r=>hasEntitlement(r.tier,entitlementTier)).map(r=>r.id),
+      typographyIds:catalogs.typography.filter(r=>hasEntitlement(r.tier,entitlementTier)).map(r=>r.id),
+      stackIds:catalogs.stacks.filter(r=>hasEntitlement(r.tier,entitlementTier)).map(r=>r.id),
+      recipeIds:catalogs.recipes.filter(r=>hasEntitlement(r.tier,entitlementTier)).map(r=>r.id)
     }
   })
 }
