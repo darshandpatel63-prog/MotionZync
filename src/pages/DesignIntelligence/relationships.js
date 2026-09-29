@@ -11,7 +11,7 @@ import {
   DI_STACKS,
 } from './catalog.js'
 
-export const RELATIONSHIP_SCHEMA_VERSION='1.0'
+export const RELATIONSHIP_SCHEMA_VERSION='1.1'
 
 export const RELATIONSHIP_TYPES=Object.freeze({
   uses:'uses',
@@ -81,6 +81,33 @@ for(const relation of explicitRelations){
 
 export const DI_RELATIONSHIPS=Object.freeze([...dedupe.values()])
 
+const addToIndex=(map,key,value)=>{
+  const current=map.get(key)
+  if(current)current.push(value)
+  else map.set(key,[value])
+}
+
+const relationKey=(domain,id)=>domain+'|'+id
+const byRecord=new Map()
+const coOccurrenceNeighbors=new Map()
+
+for(const relation of DI_RELATIONSHIPS){
+  const sourceKey=relationKey(relation.source.domain,relation.source.id)
+  const targetKey=relationKey(relation.target.domain,relation.target.id)
+  addToIndex(byRecord,sourceKey,relation)
+  addToIndex(byRecord,targetKey,relation)
+  if(relation.type===RELATIONSHIP_TYPES.coOccursWith){
+    addToIndex(coOccurrenceNeighbors,sourceKey,relation.target.id)
+    addToIndex(coOccurrenceNeighbors,targetKey,relation.source.id)
+  }
+}
+
+export const RELATIONSHIP_INDEX=Object.freeze({
+  byRecord,
+  coOccurrenceNeighbors,
+  relationshipCount:DI_RELATIONSHIPS.length,
+})
+
 export function getDomainRecords(domain){
   return DOMAIN_RECORDS[domain]||[]
 }
@@ -101,11 +128,8 @@ export function getRelationshipIntegrity(){
 }
 
 export function getRelationsForRecord(domain,id,type=null){
-  return DI_RELATIONSHIPS.filter(relation=>{
-    const sourceMatch=relation.source.domain===domain&&relation.source.id===id
-    const targetMatch=relation.target.domain===domain&&relation.target.id===id
-    return (sourceMatch||targetMatch)&&(!type||relation.type===type)
-  })
+  const relations=RELATIONSHIP_INDEX.byRecord.get(relationKey(domain,id))||[]
+  return type?relations.filter(relation=>relation.type===type):relations
 }
 
 export function hasRelationship(sourceId,targetId,type=RELATIONSHIP_TYPES.coOccursWith){
@@ -119,11 +143,10 @@ export function hasRelationship(sourceId,targetId,type=RELATIONSHIP_TYPES.coOccu
 export function relationshipScore(recordId,anchorIds=[]){
   const anchors=new Set((Array.isArray(anchorIds)?anchorIds:[]).filter(Boolean))
   if(!recordId||!anchors.size)return 0
-  return DI_RELATIONSHIPS.reduce((score,relation)=>{
-    if(relation.type!==RELATIONSHIP_TYPES.coOccursWith)return score
-    const touchesRecord=relation.source.id===recordId||relation.target.id===recordId
-    if(!touchesRecord)return score
-    const otherId=relation.source.id===recordId?relation.target.id:relation.source.id
-    return score+(anchors.has(otherId)?1:0)
-  },0)
+  const neighbors=RELATIONSHIP_INDEX.coOccurrenceNeighbors.get(
+    [...byRecord.keys()].find(key=>key.endsWith('|'+recordId))
+  )||[]
+  let score=0
+  for(const anchorId of anchors)if(neighbors.includes(anchorId))score++
+  return score
 }
