@@ -37,12 +37,19 @@ const PROTECTED_CATALOG = Object.freeze({
   recipes: DI_PROTECTED_RECIPES,
 })
 
-function combineCatalogs(includeProtected) {
+const TIER_LEVELS = Object.freeze({ free: 0, premium: 1, 'ultra-premium': 2 })
+
+function isTierAccessible(record, entitlementTier='free') {
+  return (TIER_LEVELS[String(record?.tier || 'free')] ?? 0) <= (TIER_LEVELS[entitlementTier] ?? 0)
+}
+
+function combineCatalogs(entitlementTier='free') {
   return Object.fromEntries(DI_DOMAINS.map(domain => [
     domain,
-    includeProtected
-      ? [...FREE_CATALOG[domain], ...PROTECTED_CATALOG[domain]]
-      : FREE_CATALOG[domain],
+    [
+      ...FREE_CATALOG[domain],
+      ...PROTECTED_CATALOG[domain].filter(record => isTierAccessible(record, entitlementTier)),
+    ],
   ]))
 }
 
@@ -75,8 +82,8 @@ export default async function handler(req, res) {
     }
   }
 
-  const includeProtected = tier !== 'free'
-  const catalog = combineCatalogs(includeProtected)
+  const catalog = combineCatalogs(tier)
+  const protectedIncludedRecords = ALL_DI_PROTECTED_RECORDS.filter(record => isTierAccessible(record, tier))
   const report = validateCatalog(catalog)
 
   if (!report.valid) {
@@ -93,10 +100,10 @@ export default async function handler(req, res) {
     entitlement: {
       tier,
       authenticated,
-      protectedIncluded: includeProtected,
+      protectedIncluded: protectedIncludedRecords.length > 0,
     },
     records,
     counts: Object.fromEntries(domains.map(domain => [domain, catalog[domain]?.length || 0])),
-    protectedRecordCount: includeProtected ? ALL_DI_PROTECTED_RECORDS.length : 0,
+    protectedRecordCount: protectedIncludedRecords.length,
   })
 }
