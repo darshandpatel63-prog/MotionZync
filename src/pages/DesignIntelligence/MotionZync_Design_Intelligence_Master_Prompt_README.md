@@ -910,3 +910,176 @@ The objective is not to make every generated UI look "random" or "different" for
 The granular 1,000+ per meaningful sub-category rule, permanent-plan preference, conditional ₹250/10-project plan, and all-output anti-template scope are **PLANNED / FUTURE requirements** unless separately verified as implemented.
 
 They must not be represented as existing production capabilities until the corresponding data, entitlement, enforcement, generation and validation systems are actually implemented and verified.
+
+
+## 41. USER-PROVIDED AI / BYOK GENERATION INTEGRATION
+
+The existing MotionZync AI provider/API-key system is the canonical starting point for Design Intelligence's future AI-assisted generation flow.
+
+Do **not** create a second API-key vault, second provider configuration system or duplicate AI settings UI.
+
+Existing reusable AI infrastructure currently includes:
+- `src/ai/providers/AIProviderContext.jsx`
+- `src/ai/providers/keyVault.js`
+- `src/ai/providers/VaultContext.jsx`
+- `src/ai/settings/APIKeyManager.jsx`
+
+The Design Intelligence generator should integrate with this existing system rather than inventing a new one.
+
+### Intended AI-assisted workflow
+
+User prompt
+→ Design Intelligence requirement interpretation
+→ canonical schema / relationships
+→ compatibility rules
+→ anti-template diversity constraints
+→ Design Recipe / structured generation context
+→ existing user-selected AI provider/model
+→ provider API
+→ generated design/UI/code result
+→ Design Intelligence validation/preview/export
+
+The selected AI is an **execution/generation model**, while Design Intelligence supplies the domain knowledge, constraints, compatible design directions and validation context.
+
+The user must be able to use the web feature without an AI API key. AI assistance is an enhancement, not a hard dependency for basic browsing/search/recipe generation.
+
+### BYOK privacy model
+
+The current MotionZync BYOK system is browser/local-first:
+- provider API keys are protected by the existing passphrase-based vault
+- keys are encrypted at rest with AES-GCM using a PBKDF2-derived key
+- decrypted keys are kept in memory while the vault is unlocked
+- direct provider requests currently originate from the browser
+- Ollama can run locally without a provider API key
+
+Do not weaken this protection or create duplicate storage.
+
+### Security hardening requirements
+
+The existing vault is a meaningful protection layer but is not equivalent to a server-side secret manager.
+
+Future hardening must consider:
+- strict Content Security Policy where compatible with MotionZync
+- XSS prevention and safe rendering of generated HTML/code
+- never place provider secrets in `NEXT_PUBLIC_*` or other public build variables
+- never log plaintext API keys, prompts containing secrets, authorization headers or provider responses that contain sensitive data
+- clear decrypted key material from memory when the vault locks or the user leaves the relevant session where practical
+- validate provider/model/endpoint configuration before requests
+- restrict custom endpoint handling to prevent unsafe request targets where applicable
+- apply request timeouts, cancellation and reasonable payload limits
+- do not execute generated code merely because an AI returned it
+- isolate generated previews from the application origin when HTML/script execution is ever introduced
+- preserve the existing delete-key and lock-vault controls
+- review third-party provider CORS/direct-browser requirements individually
+- prefer a server-side relay only when the product explicitly needs server-controlled provider credentials, entitlement enforcement, or other capabilities that cannot safely be client-side
+
+Important:
+The current browser vault protects keys **at rest** but cannot fully protect a decrypted key from an active XSS payload executing in the same page while the vault is unlocked. Do not describe client-only storage as absolute security.
+
+### AI-provider processing boundary
+
+When the user chooses their own provider API key, ordinary AI processing is intended to occur on the selected provider's infrastructure, subject to that provider's terms, retention, logging and privacy policies.
+
+MotionZync must not claim that prompts or generated content are automatically private from the selected provider.
+
+The Design Intelligence layer should send only the minimum structured context required for the requested generation and must avoid unnecessary transmission of private MotionZync data.
+
+### Non-AI direct design mode
+
+The user must also be able to use Design Intelligence without asking an external AI to generate the interface:
+- browse/search canonical knowledge
+- inspect patterns and relationships
+- build a Design Recipe
+- configure platform/layout/components
+- preview supported compositions
+- use supported exports when actually implemented
+
+This keeps Design Intelligence useful even when no provider API key is configured.
+
+## 42. REFERENCE-BASED DESIGN INPUT
+
+Design Intelligence should eventually accept a user's reference website/UI/image or structured description as **design evidence**, where technically and legally appropriate.
+
+The system should extract or represent useful characteristics such as:
+- information architecture
+- layout grammar
+- density
+- navigation model
+- typography direction
+- color relationships
+- component language
+- interaction/motion direction
+- responsive behavior
+
+It must not promise exact cloning of another product's protected visual identity.
+
+The reference becomes an input to the canonical recipe/compatibility system, not a command to copy the reference exactly.
+
+## 43. NPM / LOCAL USER CONTROL
+
+When the npm/CLI/local interface is implemented, users/developers should be able to configure the design themselves instead of being forced through one MotionZync template.
+
+The local interface should expose the canonical knowledge, schema, relationships, compatibility checks and generation/composition primitives so the developer can choose:
+- platform
+- layout
+- components
+- typography
+- palette
+- motion
+- 3D/effects
+- density
+- brand direction
+- accessibility constraints
+- output technology
+
+The same anti-template rules apply, but composition remains context-sensitive and user-controlled.
+
+Premium/Ultra Premium capabilities must be enforced according to the authoritative entitlement model. Do not rely on a frontend-only flag in the npm package.
+
+## 44. ACCESS / ENTITLEMENT FOR AI + LOCAL MODES
+
+Access control applies to both web and future developer interfaces.
+
+Free:
+- free canonical knowledge and free deterministic generation
+- no premium entitlement required
+
+Premium / Ultra Premium:
+- protected knowledge and protected generation capabilities only after authoritative entitlement verification
+- personal authorized API capability only where the paid plan explicitly includes it
+
+For a permanent ₹500 plan:
+- intended to include entitled Premium/Ultra Premium+ knowledge/features
+- intended personal API access
+- intended use across the purchaser's own projects, subject to rate/security/abuse controls
+
+For a possible permanent ₹250 plan:
+- offer only after server-side enforcement can reliably bind usage to a maximum of 10 registered projects
+- if reliable enforcement is not available, do not expose this plan as purchasable
+
+The user's external provider API key is **not** the same thing as MotionZync Premium entitlement. A user can supply a provider key and still require MotionZync entitlement for protected MotionZync knowledge/capabilities.
+
+## 45. STATUS OF BYOK / AI INTEGRATION REQUIREMENTS
+
+**ARCHITECTURALLY SUPPORTED**
+- Existing MotionZync BYOK infrastructure can be reused by Design Intelligence.
+- Design Intelligence can prepare structured generation context and pass it to a selected AI provider.
+- AI-assisted and non-AI direct design modes can coexist.
+- NPM/local interfaces can reuse the same canonical core.
+
+**IMPLEMENTED**
+- Existing MotionZync API-key/vault infrastructure is already present and reusable.
+- Design Intelligence itself is not yet wired into that provider execution flow.
+
+**UNVERIFIED**
+- End-to-end Design Intelligence → selected provider → generated UI/code flow.
+- Security of every provider's direct-browser API/CORS behavior.
+- Safe execution/isolation of generated code or HTML.
+- Production server-authoritative entitlement enforcement.
+
+**PLANNED / FUTURE**
+- Wire the Design Intelligence Generator to the existing `useAI()` provider system.
+- Add structured Design Recipe context to provider prompts.
+- Add provider capability-aware generation.
+- Add validation of AI output against the canonical recipe/compatibility rules.
+- Add safe preview/export adapters.
