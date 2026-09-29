@@ -223,3 +223,40 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Accessibility/responsive verification.
 3. Provider-specific BYOK verification and validation/safe-preview checks.
 4. Continue Phase A engine/system foundation before Phase B publish.
+
+
+## 2026-09-29 — Phase A validation / compatibility guard milestone
+
+### IMPLEMENTED
+- Added canonical recipe validation in `engine.js` for referenced style, palette, typography, chart and stack IDs.
+- Added entitlement checks so recipe validation rejects catalog records above the supplied entitlement tier.
+- Added contrast-review calculations and platform/stack compatibility warnings.
+- Updated AI-assisted Generator to resolve AI-selected catalog IDs only through entitlement-aware lookup; current Generator path passes free entitlement, so protected records cannot be selected through AI refinement.
+
+### VERIFIED
+- Updated files are committed on `feature/design-intelligence`.
+- No unrelated project files were changed in this milestone.
+- Existing deterministic fallback remains in place.
+- Latest pre-change/previous READY deployment and current project runtime-error check remain clean; the two new commits are still awaiting Vercel build completion.
+
+### UNVERIFIED
+- Vercel build result for commits `d73329b3bf4ab7a86dec0415d13a8ec72f3c6af7` / `d059e83af8df003d7b88f8415a0fbdab91e13c47`.
+- Browser route verification.
+- Real-provider BYOK generation.
+- Full accessibility/responsive verification.
+
+### CHECKPOINT
+- Regression: UNVERIFIED until new deployment completes.
+- Functionality: IMPLEMENTED / UNVERIFIED runtime.
+- Accessibility: UNVERIFIED.
+- Privacy/security: IMPLEMENTED at current client boundary; server entitlement remains future.
+- Performance: UNVERIFIED after deployment.
+- Data quality: IMPLEMENTED guard logic; catalog remains intentionally small.
+- Build/test: UNVERIFIED pending Vercel.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+- Do not start the 1,000+/10,000+ content expansion yet.
