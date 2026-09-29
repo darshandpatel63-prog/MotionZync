@@ -1,5 +1,5 @@
 // MotionZync Design Intelligence — canonical schema helpers.
-// Phase A foundation: structural validation only.
+// Phase A foundation: canonical shape, reference, provenance and publication-gate validation.
 // This module does not fetch external sources, invent records, or store data.
 
 export const DI_SCHEMA_VERSION='1.1'
