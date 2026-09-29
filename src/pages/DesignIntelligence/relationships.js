@@ -91,12 +91,14 @@ const relationKey=(domain,id)=>domain+'|'+id
 const byRecord=new Map()
 const coOccurrenceNeighbors=new Map()
 const coOccurrenceByRecordId=new Map()
+const directionalRelations=new Map()
 
 for(const relation of DI_RELATIONSHIPS){
   const sourceKey=relationKey(relation.source.domain,relation.source.id)
   const targetKey=relationKey(relation.target.domain,relation.target.id)
   addToIndex(byRecord,sourceKey,relation)
   addToIndex(byRecord,targetKey,relation)
+  addToIndex(directionalRelations,[relation.type,sourceKey,targetKey].join('|'),relation)
   if(relation.type===RELATIONSHIP_TYPES.coOccursWith){
     addToIndex(coOccurrenceNeighbors,sourceKey,relation.target.id)
     addToIndex(coOccurrenceNeighbors,targetKey,relation.source.id)
@@ -109,6 +111,7 @@ export const RELATIONSHIP_INDEX=Object.freeze({
   byRecord,
   coOccurrenceNeighbors,
   coOccurrenceByRecordId,
+  directionalRelations,
   relationshipCount:DI_RELATIONSHIPS.length,
 })
 
@@ -136,7 +139,11 @@ export function getRelationsForRecord(domain,id,type=null){
   return type?relations.filter(relation=>relation.type===type):relations
 }
 
-export function hasRelationship(sourceId,targetId,type=RELATIONSHIP_TYPES.coOccursWith){
+export function hasRelationship(sourceId,targetId,type=RELATIONSHIP_TYPES.coOccursWith,sourceDomain=null,targetDomain=null){
+  if(!sourceId||!targetId)return false
+  if(sourceDomain&&targetDomain){
+    return RELATIONSHIP_INDEX.directionalRelations.has([type,relationKey(sourceDomain,sourceId),relationKey(targetDomain,targetId)].join('|'))
+  }
   return DI_RELATIONSHIPS.some(relation=>
     relation.type===type &&
     relation.source.id===sourceId &&
