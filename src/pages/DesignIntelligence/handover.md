@@ -162,6 +162,34 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - No fabricated records were added.
 - Documentation/handover updated with exact verification boundaries.
 
+## 2026-09-29 — Current Vercel deployment verification milestone
+
+### IMPLEMENTED
+- Added a documentation-only alignment in `DesignIntelligenceDocs.jsx` stating that POST requests to the Ultra-only special-effects API are capped at 16 KB before effect generation.
+- This keeps the in-product documentation synchronized with the already-implemented `MAX_REQUEST_BYTES=16*1024` server guard.
+
+### VERIFIED
+- Source commit `64b44b9203b9d43e5b1a5cdd3fcc9f32efeee65d` on `feature/design-intelligence` received a READY Vercel deployment.
+- Deployment: `dpl_5kKtq5qPPWzmo3ZNX7woRHxLFyPL`
+- Deployment URL: `motion-zync-gkjjk8wzi-vaidyaguru-projects.vercel.app`
+- Deployment metadata points to the exact `64b44b9203b9d43e5b1a5cdd3fcc9f32efeee65d` commit.
+- The previous Vercel build-rate-limit restriction no longer prevented this source commit from reaching READY.
+
+### UNVERIFIED
+- Production page/API content and browser interactions remain unverified because the available Vercel fetch path is intercepted by Vercel Authentication and returns a 302 SSO response before application content.
+- Real Firebase Premium/Ultra authentication, real MotionZync API-key calls, production special-effects generation, Cashfree transaction/webhook/status, real BYOK provider execution and manual device/screen-reader audit remain unverified.
+- CI has no independent completed run recorded for `64b44b9`; the latest explicit successful Design Intelligence CI run remains `36585747732` on `ed734c17eba6932401550358ca02662b041aeccd`.
+
+### CHECKPOINT
+- Regression: documentation-only change; no unrelated MotionZync route or feature was modified.
+- Functionality: the documented 16 KB special-effects POST limit matches the implemented server guard; production execution remains UNVERIFIED.
+- Accessibility: no UI semantics changed; manual production audit remains UNVERIFIED.
+- Privacy/security: the documented bound reflects the existing server-side Ultra API-key boundary and bounded payload handling.
+- Performance: no runtime algorithm change; production profiling remains UNVERIFIED.
+- Data quality: no catalog/database records were added or fabricated.
+- Build/test: READY Vercel deployment verified for commit `64b44b9`; latest explicit CI success remains on `ed734c1`.
+- Documentation: UPDATED.
+
 ## FIRST UNFINISHED TASK
 1. Re-check Vercel for the current branch HEAD when the build-rate-limit restriction clears or an authorized deployment path becomes available.
 2. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
