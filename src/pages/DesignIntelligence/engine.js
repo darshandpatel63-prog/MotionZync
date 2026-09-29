@@ -172,7 +172,7 @@ export function buildRecipe(prompt='',entitlementTier='free'){
   const palette=best(DI_PALETTES,[...tokens,request.industry],entitlementTier,0,[style.id])
   const typography=best(DI_TYPOGRAPHY,[...tokens,request.industry],entitlementTier,0,[style.id,palette.id])
   const chart=(request.product==='dashboard'||request.product==='analytics')?best(DI_CHARTS,tokens,entitlementTier,0,[style.id,palette.id,typography.id]):null
-  const stack=request.platform==='mobile'
+  const stack=request.platform==='mobile'||request.platform==='android'
     ?(tokens.includes('flutter')?DI_STACKS.find(r=>r.id==='stack-flutter'):DI_STACKS.find(r=>r.id==='stack-react-native'))
     :(request.platform==='ios'
       ?(DI_STACKS.find(r=>r.id==='stack-swiftui')||best(DI_STACKS,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
