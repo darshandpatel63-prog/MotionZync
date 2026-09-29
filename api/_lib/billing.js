@@ -101,7 +101,7 @@ export async function getServerEntitlement(userId) {
 async function issueApiKeyForUser({ userId, plan, rotationOf = null } = {}) {
   const cleanUserId = str(userId)
   const cleanPlan = str(plan).toLowerCase()
-  if (!cleanUserId || !ENTITLED_TIERS.has(cleanPlan)) {
+  if (!cleanUserId || cleanPlan !== 'ultra-premium') {
     throw new Error('An active Ultra Premium+ entitlement is required')
   }
 
@@ -136,10 +136,13 @@ async function issueApiKeyForUser({ userId, plan, rotationOf = null } = {}) {
 export async function getApiKeyStatusForUser(userId) {
   const db = getAdminDb()
   const entitlement = await getServerEntitlement(userId)
-  const keys = await getActiveApiKeyDocs(db, userId)
+  const keys = entitlement.tier === 'ultra-premium'
+    ? await getActiveApiKeyDocs(db, userId)
+    : []
 
   return {
     entitlement,
+    apiEligible: entitlement.tier === 'ultra-premium',
     activeKeyCount: keys.length,
     active: keys.map(key => ({
       id: key.id,
