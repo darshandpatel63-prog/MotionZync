@@ -915,3 +915,47 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publish-workflow and deeper platform/compatibility rules without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Phase A platform compatibility refinement milestone
+
+### IMPLEMENTED
+- Android requests now select the existing React Native / Flutter cross-platform mobile stack path instead of falling through to web-oriented stack ranking.
+- The canonical compatibility evaluator therefore has a cleaner path for Android targets without adding an unverified native-Android catalog record.
+- Corrected a schema validation diagnostic typo found during the current full-folder audit.
+
+### VERIFIED
+- Current branch: `feature/design-intelligence`.
+- Full current Design Intelligence folder inventory reviewed: 19 files.
+- Minimum integration files `src/App.jsx` and `src/components/Navbar/Navbar.jsx` re-inspected and remain unchanged.
+- No catalog expansion, fabricated records, second database, second API-key vault, or unrelated feature edits introduced.
+- The existing four-state compatibility model remains intact.
+
+### UNVERIFIED
+- Current-head Vercel build/deployment is not READY; GitHub reports the Vercel check failure target `build-rate-limit`.
+- Browser/visual/interactivity verification of all 7 routes.
+- Full accessibility/responsive audit.
+- Real-provider BYOK execution and provider-specific CORS/model compatibility.
+- Local full build/test execution.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD pending successful deployment.
+- Functionality: IMPLEMENTED / source-audited.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secret or entitlement path.
+- Performance: bounded compatibility logic; browser profiling UNVERIFIED.
+- Data quality: no new records or fabricated provenance.
+- Build/test: Vercel check remains FAILED due to build-rate-limit.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 77% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-check Vercel for the current HEAD when the build-rate-limit restriction clears or an authorized deployment path becomes available.
+2. Complete authenticated browser/visual/interactivity verification of all 7 routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publish-workflow and deeper platform/compatibility rules without claiming deployment verification.
+5. Keep 1,000+/10,000+ content expansion deferred.
