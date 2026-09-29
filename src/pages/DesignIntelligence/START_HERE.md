@@ -203,6 +203,39 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 89%
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+
+## 2026-09-29 — Special-effects API payload hardening
+
+### IMPLEMENTED
+- Added a 16KB maximum request payload guard to `/api/di-effects` for POST effect requests.
+- The guard checks declared Content-Length when available and also validates the parsed JSON payload size before effect generation.
+- Oversized payloads return HTTP 413; effect options remain bounded by the existing per-effect numeric ranges.
+
+### VERIFIED
+- Source inspection confirms the limit is enforced inside the server-only effects endpoint and does not add frontend bypasses or a new data store.
+- Existing Ultra Premium+ API-key authentication, deny-by-default CORS and reduced-motion/CSS-only behavior remain unchanged.
+- Current branch remains `feature/design-intelligence`.
+
+### UNVERIFIED
+- Current HEAD still has no matching READY Vercel deployment.
+- The latest READY Vercel effects deployment points to the earlier effects commit, not this hardening commit.
+- Production 413 behavior, real Ultra API-key calls, production CORS and end-user visual acceptance remain unverified.
+
+### CHECKPOINT
+- Regression: additive API input hardening only; unrelated MotionZync features untouched.
+- Functionality: payload guard IMPLEMENTED; deployed runtime UNVERIFIED.
+- Accessibility: no UI behavior changed; manual audit remains UNVERIFIED.
+- Privacy/security: request-size bound reduces oversized-input exposure; no new secret storage or entitlement bypass.
+- Performance: constant-size validation; no database query added.
+- Data quality: no catalog records changed.
+- Build/test: source inspection only for this hardening; current-head workflow/deployment verification pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
 1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication, Pricing API-key controls, security headers and the new Ultra-only effects API after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
