@@ -669,3 +669,48 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A with richer provenance metadata/rules and compatibility coverage before Phase B publish.
 5. Keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-09-29 — Phase A provenance hardening + compatibility/search refinement milestone
+
+### IMPLEMENTED
+- Expanded provenance metadata validation with supported source-type taxonomy.
+- Publishable records now require `verified` status, a parseable `checkedAt`, supported `sourceType`, and `sourceUrl` for non-original sources.
+- Licensed-dataset provenance additionally requires license metadata.
+- Separated ingestion validation from publication validation: staging imports may use the canonical provenance lifecycle, while publication remains restricted to verified records.
+- Added chart-purpose compatibility checks against explicit `bestFor` / `avoidFor` metadata.
+- Preserved the deterministic search index, reference integrity checks, relationship indexing and entitlement guards.
+- Corrected a transient source-type gate mistake before closing the milestone.
+
+### VERIFIED
+- Static source audit of all current Design Intelligence files completed on `feature/design-intelligence`.
+- Changed source files contain no remaining literal-newline export token introduced by prior edits.
+- No catalog expansion or fabricated provenance/records were added.
+- Current branch HEAD is `6c9d03b6f2a693ff629348fa73e332660adc231a`.
+
+### UNVERIFIED
+- Vercel currently shows the latest observed READY deployment at commit `0957c26500e60c1b5026c0ab829e1ccc111cae86`; no newer READY deployment for the current HEAD is visible in the deployment listing.
+- Browser verification, full accessibility/responsive audit, local build/test and real-provider BYOK execution remain unverified.
+- Runtime behavior of the newly changed schema/content-pipeline/compatibility code is therefore not yet deployment-verified.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD.
+- Functionality: IMPLEMENTED / source-audited; runtime UNVERIFIED.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secret storage or API-key handling introduced.
+- Performance: search/relationship indexing preserved; new validation remains bounded and non-rendering.
+- Data quality: stronger provenance/reference guards; no fabricated records.
+- Build/test: UNVERIFIED for current HEAD.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 72% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Verify a READY Vercel deployment for current branch HEAD.
+2. Complete authenticated browser verification of all 7 routes.
+3. Run accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A with deeper compatibility rules and publish workflow wiring.
+5. Keep 1,000+/10,000+ expansion deferred.
