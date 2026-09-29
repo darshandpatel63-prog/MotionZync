@@ -1666,3 +1666,59 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Data quality: no content/catalog changes.
 - Build/test: existing CI verification remains **VERIFIED**.
 - Documentation: UPDATED.
+
+
+## 2026-09-29 — Cashfree webhook verification foundation
+
+### IMPLEMENTED
+- Added `api/_lib/cashfree.js` as the canonical Cashfree server integration helper.
+- Added raw-request HMAC-SHA256 webhook verification using `x-webhook-signature` and `x-webhook-timestamp`, with base64 digest comparison and a bounded timestamp-skew check.
+- Added server-side Cashfree order and payment-status fetch helpers using Cashfree API version `2025-01-01`.
+- Added `api/cashfree-webhook.js` with Vercel raw-body handling and signed webhook processing.
+- The webhook reconciles the Cashfree order/payment server-side before recording a payment.
+- Repeated verified events are idempotent at the existing payment-record level because `recordVerifiedPayment()` uses the provider + transaction/payment ID as the deterministic Firestore document key.
+- The webhook does not accept a browser redirect as proof of payment.
+- The webhook does not collect or store card numbers, CVV, UPI PIN or bank credentials.
+- Premium permanent is currently the only paid plan with a finalized amount in the product requirements; the webhook accepts only a server-authorized Premium order at INR 500. Ultra Premium+ checkout remains disabled until its price/checkout contract is finalized.
+- No paid checkout UI, client-side secret, fake API key or second billing database was added.
+
+### VERIFIED
+- The new Cashfree helper and webhook source passed Node syntax checking in an isolated local verification step.
+- HMAC verification test passed for a valid synthetic Cashfree-style signature and rejected a forged signature.
+- Branch remains `feature/design-intelligence`; no main-branch change was made.
+- Current Vercel deployment for code commit `45f401028b13744b7015f721b833960b08f3dbb2` is currently **BUILDING**, so production deployment verification is not yet claimed.
+
+### UNVERIFIED
+- No real Cashfree merchant credentials are configured/used in this verification step.
+- No real Cashfree sandbox or production transaction has been processed through MotionZync.
+- Provider-specific refund webhook lifecycle is not implemented yet.
+- The server-side order-creation/checkout flow that creates MotionZync-bound Cashfree orders is not implemented yet.
+- Production entitlement/API-key issuance remains separate future work.
+- Authenticated production browser verification of the seven DI routes remains blocked by Vercel Authentication.
+- Full screen-reader/device accessibility audit remains unverified.
+- Real BYOK provider execution/CORS/model compatibility remains unverified.
+
+### SECURITY / PRIVACY CHECKPOINT
+- Regression: no existing DI route or unrelated feature was intentionally removed; the new API routes are additive.
+- Functionality: webhook foundation is IMPLEMENTED; runtime/production behavior is UNVERIFIED until deployment and a real gateway test exist.
+- Accessibility: no DI UI change in this milestone; full audit remains UNVERIFIED.
+- Privacy/security: server-only Cashfree credentials are read from non-public environment variables; raw payment secrets are not persisted; signature verification occurs before payment processing.
+- Performance: webhook performs bounded server-side Cashfree lookups and a deterministic Firestore write; production latency remains UNVERIFIED.
+- Data quality: no fabricated payment records; reconciliation requires a server-side Cashfree order/payment match.
+- Build/test: helper/webhook syntax and HMAC unit-style check VERIFIED locally; Vercel build currently BUILDING.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+- 1,000+/10,000+ content expansion remains deferred.
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes when an authorized browser path is available.
+2. Complete full accessibility/responsive audit, including screen-reader/device checks.
+3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility with real user-configured providers.
+4. Verify the new Cashfree deployment and later run a real sandbox webhook/payment test after merchant credentials and server-side order creation are configured.
+5. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
+6. Continue Phase A publication workflow and deeper compatibility foundation.
+7. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
