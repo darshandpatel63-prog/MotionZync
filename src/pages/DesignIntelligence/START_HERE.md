@@ -159,6 +159,50 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 89%
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — Ultra-only special animation/effects API
+
+### IMPLEMENTED
+- Added server-only `api/_lib/di-effects.js` with bounded, deterministic special-effects definitions; these are capabilities, not fabricated catalog records.
+- Added `api/di-effects.js` as a developer API endpoint restricted to a valid server-issued Ultra Premium+ MotionZync API key.
+- The endpoint supports listing the supported effects and generating safe CSS implementations for a requested effect.
+- Current bounded effects: Shimmer, Float, Glow Pulse, Gradient Shift and Spin.
+- Every effect includes a `prefers-reduced-motion` fallback.
+- The endpoint returns CSS only and explicitly marks executable script as false; it does not generate or execute arbitrary JavaScript.
+- Cross-origin browser requests are deny-by-default and require an explicit `MOTIONZYNC_API_ALLOWED_ORIGINS` server allowlist.
+- The package-ready npm entry now exposes a remote special-effects client using the same server API key; no second dataset was created.
+- Documentation now describes the actual API capability and its security/access boundary.
+
+### VERIFIED
+- Source inspection confirms the endpoint authenticates through the existing server-side MotionZync API-key path, which requires Ultra Premium+.
+- No special-effects records were added to the canonical catalog and no frontend-only bypass was introduced.
+- Response headers use `private, no-store`, vary on Authorization/Origin and include basic response hardening.
+- Payload options are bounded by explicit numeric ranges; unknown effect IDs are rejected.
+- No plaintext API key is logged or persisted by the endpoint.
+
+### UNVERIFIED
+- Production/Vercel runtime of `/api/di-effects`.
+- Real Ultra entitlement + API-key request/rotation/revocation exercise.
+- Real cross-origin request after configuring a production origin allowlist.
+- End-user visual acceptance of every generated effect.
+- Full production browser/device/screen-reader audit.
+- Vercel deployment of this current HEAD remains pending.
+- GitHub Actions browser smoke fix remains pending after the previous Axe/navigation-race failure.
+
+### CHECKPOINT
+- Regression: additive server-only DI capability plus npm adapter/docs; no unrelated MotionZync routes/features modified.
+- Functionality: special-effects API IMPLEMENTED; production runtime UNVERIFIED.
+- Accessibility: reduced-motion fallbacks included; full manual audit remains UNVERIFIED.
+- Privacy/security: Ultra API-key authentication is server-authoritative; no catalog/secret duplication; CORS is allowlist-based rather than wildcard.
+- Performance: bounded computation with no database query; production profiling UNVERIFIED.
+- Data quality: no fabricated catalog rows; five deterministic effect capabilities with explicit schemas.
+- Build/test: build passed in the prior CI run before the browser/Axe failure; a new CI run for this milestone is now expected/pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
 1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication and Pricing API-key controls after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
