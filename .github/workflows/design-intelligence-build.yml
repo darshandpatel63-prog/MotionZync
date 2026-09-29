@@ -162,7 +162,8 @@ jobs:
             if (route.endsWith('/generator')) {
               await page.getByRole('button', {name:/Generate deterministic recipe/}).click()
               assert((await page.locator('.di-preview').count()) === 1, 'Generator preview did not render')
-              const aiToggle = page.getByRole('button', {name:/AI-assisted refinement/})
+              const aiToggle = page.locator('button').filter({hasText:'AI-assisted refinement'}).first()
+              await aiToggle.waitFor()
               await aiToggle.click()
               assert((await aiToggle.getAttribute('aria-pressed')) === 'true', 'AI toggle did not expose pressed state')
             }
