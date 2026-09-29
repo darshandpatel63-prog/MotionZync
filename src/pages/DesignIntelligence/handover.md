@@ -39,9 +39,10 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 - Branch was synchronized to the then-current main commit without writing to main.
 - Existing key architecture was inspected: package.json, App.jsx, main.jsx, vite.config.js, firebase.js, AuthContext, AIProviderContext, VaultContext, Navbar, Vercel config, service worker and existing Admin/API architecture.
 - UUPM public reference was inspected for category/stack scope. Its current public page describes design styles, palettes, typography, charts, UX guidance and 8 tech stacks. It currently lists React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter and Tailwind.
+- Responsive-navigation fix commit `7bbf95983a76a7026460cdc564a666ce209036da` has a READY Vercel deployment.
+- Safe-export code commit `a3c6a2b4b0ff38768be10b38b5d520dc4d38f979` has a READY Vercel deployment.
 
 ## UNVERIFIED
-- Responsive-navigation fix commit `7bbf95983a76a7026460cdc564a666ce209036da` has a READY Vercel deployment; safe-export code commit `a3c6a2b4b0ff38768be10b38b5d520dc4d38f979` also has a READY deployment.
 - Browser route verification for all Design Intelligence pages.
 - Full keyboard/screen-reader/mobile audit.
 - Real-provider BYOK execution and provider-specific CORS/model compatibility.
@@ -62,7 +63,7 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 ## PLANNED / FUTURE
 1. Real build and browser verification.
 2. Full compatibility/ranking engine.
-3. Validation schemas and provenance pipeline.
+3. Provenance publication pipeline.
 4. More verified content domains.
 5. Indexed search.
 6. Semantic search.
@@ -453,3 +454,50 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase A — Engine / System: IN PROGRESS
 - Phase B — Publish: 0%
 - Phase C — Continuous Content Expansion: 0%
+
+
+## 2026-09-29 — Phase A canonical schema foundation
+
+### IMPLEMENTED
+- Added `schema.js` as the canonical structural-validation layer for Design Intelligence records and recipes.
+- Added explicit schema versioning (`1.1`), canonical domains and entitlement tiers.
+- Added record-shape validation for styles, palettes, typography, charts, stacks and recipes.
+- Added catalog validation with duplicate-ID detection and an optional provenance-required publication gate.
+- Added recipe-shape validation and wired it into `engine.js` before entitlement/relationship/compatibility checks.
+- Added provenance-status validation without pretending the current internal seed records have external verification.
+
+### VERIFIED
+- Current seed catalog validates structurally: 38 records across 6 domains, with no schema errors.
+- Canonical relationship integrity passes.
+- Deterministic recipe generation passes schema + existing validation for a representative dashboard request.
+- A deliberately malformed recipe is rejected by the schema gate.
+- Safe recipe export remains machine-readable and non-executable.
+- No unrelated project files were changed for this milestone.
+
+### UNVERIFIED
+- Vercel build/deployment for latest schema commit `41b04c6ca30554f2fbea3ac39f8f50e23d54ea65`.
+- Browser route/interactivity verification and mobile/device accessibility audit.
+- Real-provider BYOK execution and provider-specific CORS/model compatibility.
+- External-source provenance review for future published records.
+
+### CHECKPOINT
+- Regression: VERIFIED by isolated core/runtime checks; browser regression UNVERIFIED.
+- Functionality: IMPLEMENTED / core runtime VERIFIED; production browser runtime UNVERIFIED.
+- Accessibility: unchanged foundation retained; full browser audit UNVERIFIED.
+- Privacy/security: no API-key or secret storage changes; UNVERIFIED for browser threat surface.
+- Performance: schema checks are local and proportional to the single recipe; large-catalog publication validation is an offline/admin concern, not a per-render scan.
+- Data quality: VERIFIED for current structural schema; provenance remains intentionally absent on seed records and is not treated as external verification.
+- Build/test: isolated V8 syntax/runtime checks PASSED; Vercel build UNVERIFIED for latest code commit because no newer deployment is currently visible.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 60% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+- 1,000+/10,000+ content expansion remains deferred until Phase A foundation and Phase B publish are sufficiently complete.
+
+### FIRST UNFINISHED TASK
+1. Verify Vercel build/deployment for `41b04c6ca30554f2fbea3ac39f8f50e23d54ea65`.
+2. Complete authenticated browser verification of all 7 Design Intelligence routes when an authenticated path is available.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A with indexed relationship lookup/performance and a real provenance publication gate. Do not start large-scale content expansion yet.
