@@ -1722,3 +1722,57 @@ Do not edit other existing project files unless a future Design Intelligence mil
 5. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
 6. Continue Phase A publication workflow and deeper compatibility foundation.
 7. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
+
+
+## 2026-09-29 — Cashfree authenticated order foundation
+
+### IMPLEMENTED
+- Added `requireAuthenticatedUser()` to the existing Firebase Admin server helper so payment-initiation APIs can validate Firebase ID tokens without creating another auth system.
+- Added `api/cashfree-create-order.js` for authenticated server-side Cashfree order creation.
+- The endpoint derives UID/email from the verified Firebase token and accepts only a validated customer phone from the request.
+- The final paid plan/price is server-authorized: Premium permanent, INR 500. The client cannot override the amount.
+- Added `createCashfreeOrder()` to `api/_lib/cashfree.js`.
+- Cashfree order metadata includes the MotionZync plan and Firebase UID for server-side webhook reconciliation.
+- Added a canonical `orders` collection to the existing Firestore billing data model and `recordPendingOrder()`.
+- The endpoint returns Cashfree `payment_session_id` but does not expose any merchant secret.
+- No paid checkout UI was enabled yet.
+
+### VERIFIED
+- Current branch remains `feature/design-intelligence`.
+- Existing DI files and the minimum integration files were re-inspected before this milestone.
+- Cashfree current public documentation confirms server-side order creation, `payment_session_id` checkout handoff and server-side payment-status retrieval. citeturn757663search0turn243644search9
+- Vercel has generated deployments for the new API commits. The latest documentation fix commit is still queue/build state, so the newest combined code+docs HEAD is not yet marked READY.
+
+### UNVERIFIED
+- The local repository clone/build could not run because this environment could not resolve github.com; no local build result is claimed.
+- Real Cashfree merchant credentials/configuration and real sandbox transaction.
+- Cashfree Checkout SDK browser execution and real webhook delivery.
+- Full payment/refund/retry lifecycle.
+- Authenticated production browser verification of all 7 DI routes.
+- Manual screen-reader/device audit.
+- Real BYOK provider/CORS/model verification.
+- Server-authoritative Premium entitlement/API-key issuance/rotation/revocation.
+
+### CHECKPOINT
+- Regression: additive server-side DI billing work only; existing routes/features preserved.
+- Functionality: authenticated order creation IMPLEMENTED; runtime/gateway integration UNVERIFIED.
+- Accessibility: no public checkout UI enabled; manual audit UNVERIFIED.
+- Privacy/security: Firebase ID-token verification + server-authorized price; no raw payment credentials stored.
+- Performance: bounded Cashfree request + Firestore write; production latency UNVERIFIED.
+- Data quality: no fabricated transactions; pending orders are real server-created records only.
+- Build/test: source re-inspection completed; local build UNVERIFIED due environment DNS; Vercel newest HEAD not yet READY.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
+2. Complete manual accessibility/responsive audit, including screen-reader/device checks.
+3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
+4. Verify the Cashfree deployment and then run a real sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
+5. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
+6. Continue Phase A publication workflow and deeper compatibility foundation.
+7. Keep 1,000+/10,000+ content expansion deferred.
