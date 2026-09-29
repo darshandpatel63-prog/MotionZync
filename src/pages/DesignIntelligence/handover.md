@@ -41,7 +41,7 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 - UUPM public reference was inspected for category/stack scope. Its current public page describes design styles, palettes, typography, charts, UX guidance and 8 tech stacks. It currently lists React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter and Tailwind.
 
 ## UNVERIFIED
-- Responsive-navigation fix commit `7bbf95983a76a7026460cdc564a666ce209036da` has a READY Vercel deployment; later commits are tracked separately.
+- Responsive-navigation fix commit `7bbf95983a76a7026460cdc564a666ce209036da` has a READY Vercel deployment; latest safe-export commits are tracked in separate Vercel deployments.
 - Browser route verification for all Design Intelligence pages.
 - Full keyboard/screen-reader/mobile audit.
 - Real-provider BYOK execution and provider-specific CORS/model compatibility.
@@ -202,7 +202,7 @@ Do not edit other existing project files unless a future Design Intelligence mil
 ## 2026-09-29 — Current continuation status
 
 ### VERIFIED
-- Latest Vercel deployment for `feature/design-intelligence` is READY at commit `5a220cd3a61f5f49847f1e987fb5e5383a1f957a`.
+- Latest relevant verified code deployment is READY; newer documentation/export commits require their own deployment verification.
 - Vercel identifies the deployment as Vite/Git-sourced.
 - Current project runtime-error check for the selected 24-hour window reports no runtime errors.
 
