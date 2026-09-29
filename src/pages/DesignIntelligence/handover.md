@@ -2078,6 +2078,44 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — Sensitive Design Intelligence API response cache hardening
+
+### IMPLEMENTED
+- Added explicit `private, no-store, max-age=0` response headers to `/api/di-knowledge`, `/api/di-api-key` and `/api/admin-billing`.
+- Added `Pragma: no-cache`, `Vary: Authorization` and `X-Content-Type-Options: nosniff` to these personalized/sensitive DI API responses.
+- This protects tier-scoped knowledge, one-time API-key plaintext responses and billing/admin analytics from intermediary/browser caching behaviour that could otherwise mismatch authenticated callers.
+- No new database, frontend entitlement flag, fake API key, fake payment or fabricated catalog records were introduced.
+
+### VERIFIED
+- Source inspection confirms the headers are applied at the API handler boundary for the affected endpoints.
+- Changes were committed only on `feature/design-intelligence`.
+- GitHub Actions `Design Intelligence Build Check` was triggered automatically for the new commits; at this checkpoint the latest runs are still `in_progress` / `pending`, so no build/test success is claimed yet.
+- Vercel deployment inventory still shows the newest READY deployment at commit `4854b6a07d33ab21c99cb16a865c6e2fcabd8109`; current source is newer, so production deployment of these changes remains UNVERIFIED.
+- Existing runtime-error history still contains the single older `DEP0169 url.parse()` warning on `/api/di-knowledge`; no new runtime-error conclusion is claimed for the new commits.
+
+### UNVERIFIED
+- Vercel READY deployment containing current branch HEAD and this hardening.
+- Authenticated browser verification of all 7 Design Intelligence routes.
+- Real Premium/Ultra Firebase entitlement calls and MotionZync API-key calls.
+- Real Cashfree transaction/webhook/payment-status lifecycle.
+- Real BYOK provider/CORS/model verification.
+- Actual API-only special animation/effects capability and published npm installation.
+
+### CHECKPOINT
+- Regression: additive DI API-header hardening only; unrelated MotionZync features were not modified.
+- Functionality: response-cache protection IMPLEMENTED; runtime behavior after deployment UNVERIFIED.
+- Accessibility: server-header-only change; manual UI/device audit remains UNVERIFIED.
+- Privacy/security: personalized and sensitive API responses now explicitly opt out of intermediary caching and vary on Authorization.
+- Performance: no data-query expansion; header overhead is constant and negligible, production profiling UNVERIFIED.
+- Data quality: no new records; no filler/fake data.
+- Build/test: GitHub Actions is running; final conclusion pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
 1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication and Pricing API-key controls after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
