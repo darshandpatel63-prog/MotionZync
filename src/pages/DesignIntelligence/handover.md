@@ -132,3 +132,22 @@ Then record exact results here.
 
 ## Continuation rule
 When a new chat receives only Start, Continue or Start/Continue, read START_HERE.md, this handover, the master prompt and all current Design Intelligence files, then resume from FIRST UNFINISHED TASK. Never rebuild completed work.
+
+
+## 2026-09-29 — Blueprint granularity + permanent-plan clarification
+
+**IMPLEMENTED**
+- Updated the Master Design Intelligence blueprint so the 1,000+ target applies to every meaningful sub-category, not only top-level categories.
+- Explicitly prohibited cosmetic-only permutations, duplicate records and filler records from counting toward the target.
+- Added recursive/granular examples such as Sidebar → 1,000+ meaningful patterns, Dashboard Layout → 1,000+, Tabs → 1,000+.
+- Expanded the anti-template principle so it applies to every UI produced, recommended, composed or exported by Design Intelligence, including future web, desktop, mobile/tablet, game, 3D/spatial, animated/live, npm/local, API/MCP/AI-agent outputs.
+- Updated the preferred commercial model to permanent access: ₹500 permanent, with a ₹250 permanent / maximum 10 registered projects option only if reliable server-side enforcement can be implemented and verified.
+- Clarified that monthly/two-month plans are superseded unless a later verified architecture reintroduces them.
+
+**PLANNED / FUTURE**
+- Actual 1,000+ genuine records for each meaningful sub-category.
+- Server-authoritative permanent entitlement, API issuance and optional 10-project enforcement.
+- Generation/composition engine implementing the anti-template principle across all output interfaces.
+
+**UNVERIFIED**
+- No claim is made that these expanded datasets, billing controls, project limits or output-diversity engine are currently implemented or verified.
