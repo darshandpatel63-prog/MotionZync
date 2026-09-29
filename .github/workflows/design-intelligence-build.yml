@@ -49,6 +49,9 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Install accessibility audit tooling
+        run: npm install --no-save --no-audit --no-fund @axe-core/playwright@4.10.2 axe-core@4.10.2
+
       - name: Start Vite preview
         shell: bash
         env:
@@ -78,6 +81,7 @@ jobs:
           mkdir -p /tmp/di-browser-artifacts
           node --input-type=module <<'EOF'
           import { chromium } from 'playwright'
+          import AxeBuilder from '@axe-core/playwright'
 
           const base = 'http://127.0.0.1:4173'
           const routes = [
@@ -166,6 +170,13 @@ jobs:
 
             const accessibilityProblems = await checkAccessibleNames()
             assert(accessibilityProblems.length === 0, route+' accessibility-name issues: '+JSON.stringify(accessibilityProblems))
+
+            const axeResults = await new AxeBuilder({page}).analyze()
+            const seriousViolations = axeResults.violations.filter(violation => ['critical','serious'].includes(violation.impact))
+            assert(
+              seriousViolations.length === 0,
+              route+' serious/critical axe violations: '+JSON.stringify(seriousViolations.map(({id,impact,help,nodes})=>({id,impact,help,nodes:nodes.map(node=>node.target)})))
+            )
 
             await page.screenshot({
               path:'/tmp/di-browser-artifacts/'+route.split('/').filter(Boolean).join('-')+'.png',
