@@ -192,6 +192,8 @@ export function buildRecipe(prompt='',entitlementTier='free'){
     compositionFamily,
     tier:[style,palette,typography,chart,stack,recipeMatch].filter(Boolean).reduce((tier,record)=>levelOf(record.tier)>levelOf(tier)?record.tier:tier,'free'),
   }
+  const compatibility=evaluateCompatibility(candidate)
+  candidate.compatibility=compatibility
   const warnings=[]
   if(request.mode==='dark'&&palette.background==='#FFFBEB')warnings.push('The selected palette is light-first; review contrast before forcing dark mode.')
   const validation=validateRecipe(candidate,entitlementTier)
@@ -239,6 +241,7 @@ export function recipeToExport(recipe){
       ux:Array.isArray(recipe.ux)?recipe.ux:[],
       compositionFamily:recipe.compositionFamily||'product',
       tier:recipe.tier||'free',
+      compatibility:recipe.compatibility||evaluateCompatibility(recipe),
       deterministic:recipe.deterministic!==false,
       aiAssisted:recipe.aiAssisted===true,
       warnings:Array.isArray(recipe.warnings)?recipe.warnings:[],
