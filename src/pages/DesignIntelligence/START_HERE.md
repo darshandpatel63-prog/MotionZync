@@ -23,7 +23,7 @@ This folder contains the Design Intelligence + UI Generation feature only.
 - Update handover.md after every meaningful milestone.
 
 ## Current implementation
-Phase 1 foundation is implemented; current Phase A engine/system progress is 88%:
+Phase 1 foundation is implemented; current Phase A engine/system progress is 89%:
 - multipage route family under /design-intelligence/*
 - internal navigation
 - structured seed catalog
@@ -42,11 +42,11 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 88%
 
 ## FIRST UNFINISHED TASK
 1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
-2. Complete manual accessibility/responsive audit, including screen-reader/device checks; automated serious/critical axe gate is now verified in CI.
+2. Complete manual accessibility/responsive audit, including screen-reader/device checks; automated serious/critical axe gate is verified in CI.
 3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
-4. Continue Phase A publication workflow and deeper compatibility foundation.
-5. Implement provider-specific payment webhook signature verification and connect the selected gateway before exposing paid checkout.
-6. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
+4. Verify the Cashfree deployment and, after merchant credentials are configured, run a real sandbox order/webhook/payment-status test.
+5. Complete server-authoritative Design Intelligence entitlement plus protected API-key issuance, rotation and revocation.
+6. Continue Phase A publication workflow and deeper compatibility foundation.
 7. Do not begin the 1,000+/10,000+ content expansion yet.
 
 ## Existing AI / API-key integration context
@@ -119,6 +119,45 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 - Real Cashfree sandbox/production credentials and transactions.
 - Real webhook delivery/retry/refund lifecycle.
 - Authenticated production browser verification, manual device/screen-reader audit and real BYOK provider execution remain unverified.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-09-29 — Cashfree authenticated order foundation
+
+### IMPLEMENTED
+- Added a shared authenticated Firebase-user verification helper for server-side payment initiation.
+- Added `api/cashfree-create-order.js`.
+- The endpoint derives the Firebase UID/email from the verified ID token and does not accept a client-supplied entitlement identity.
+- The paid amount is server-authorized at **₹500 INR for Premium permanent**; the browser cannot change the amount/plan.
+- Customer phone is validated server-side before order creation.
+- Cashfree order creation is server-side and returns only the Cashfree `payment_session_id` and non-secret order metadata to the caller.
+- MotionZync-specific plan and user metadata are attached to the Cashfree order for later webhook reconciliation.
+- Server-created pending orders are stored in the existing Firestore billing model; no second database is created.
+- Paid checkout UI remains unexposed until merchant configuration and end-to-end gateway verification are complete.
+
+### VERIFIED
+- Current source files were re-inspected on `feature/design-intelligence`.
+- Current Vercel deployments exist for the new API commits; the latest fix commit `0a048035fce7f5a316e05b1819f6a782cee8ce67` is currently queued, so the final order-flow deployment is not yet claimed READY.
+
+### UNVERIFIED
+- Local clone/build could not run because this environment could not resolve github.com; therefore no local build result is claimed for this milestone.
+- Real Cashfree credentials/merchant configuration are not present in this verification.
+- Real Cashfree sandbox order creation, Checkout SDK execution, webhook delivery/retry and payment-status reconciliation remain unverified.
+- Production browser verification, manual device/screen-reader audit and real BYOK provider execution remain unverified.
+
+### SECURITY / PRIVACY CHECKPOINT
+- Regression: additive server/API work only; no existing DI route or unrelated UI was removed.
+- Functionality: server-authoritative order contract IMPLEMENTED; runtime integration UNVERIFIED.
+- Accessibility: no new public UI was exposed; manual audit remains UNVERIFIED.
+- Privacy/security: Firebase identity is server-verified; Cashfree secret remains server-side; no raw payment credentials are stored.
+- Performance: order creation uses one Cashfree create-order request plus one bounded Firestore write; production latency UNVERIFIED.
+- Data quality: price/plan are server-authorized; no fabricated payment record is generated.
+- Build/test: source review completed; local build UNVERIFIED due environment DNS restriction; Vercel latest fix currently QUEUED.
+- Documentation: UPDATED.
 
 ### PHASE STATUS
 - Phase A — Engine / System: **89% — IN PROGRESS**
