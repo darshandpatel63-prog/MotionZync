@@ -26,3 +26,38 @@ export function createRemoteKnowledgeClient({
     },
   }
 }
+
+
+export function createSpecialEffectsClient({
+  baseUrl='',
+  apiKey='',
+  fetchImpl=globalThis.fetch,
+}={}){
+  if(typeof fetchImpl!=='function')throw new Error('A fetch implementation is required')
+  const root=String(baseUrl||'').replace(/\/$/,'')
+  const request=async(path,options={})=>{
+    if(!apiKey)throw new Error('A server-issued Ultra Premium+ MotionZync API key is required')
+    const response=await fetchImpl(root+path,{
+      ...options,
+      headers:{
+        'Content-Type':'application/json',
+        ...(options.headers||{}),
+        Authorization:'Bearer '+apiKey,
+      },
+    })
+    const body=await response.json().catch(()=>null)
+    if(!response.ok)throw new Error(body?.error||'MotionZync special-effects service is unavailable')
+    return body
+  }
+  return {
+    async listEffects(){
+      return request('/api/di-effects',{method:'GET',headers:{Accept:'application/json'}})
+    },
+    async createEffect(effectId,options={}){
+      return request('/api/di-effects',{
+        method:'POST',
+        body:JSON.stringify({effectId,options}),
+      })
+    },
+  }
+}
