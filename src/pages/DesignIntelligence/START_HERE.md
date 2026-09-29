@@ -78,3 +78,9 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 - The axe audit has been added but its newest post-change CI execution is still pending.
 - Full screen-reader/device testing remains unverified.
 
+
+
+### CI correction
+- The first axe-audit attempt exposed a CI-only dependency pruning issue; Playwright and axe are now installed together in one CI step.
+- Status: **IMPLEMENTED / UNVERIFIED** until the corrected workflow run completes.
+
