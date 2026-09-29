@@ -1392,3 +1392,33 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility with real user-configured providers; do not use fabricated credentials.
 4. Continue Phase A publication workflow and deeper compatibility foundation.
 5. Keep the 1,000+/10,000+ content expansion deferred until the foundation is ready.
+
+
+## 2026-09-29 — Documentation sync after CI browser verification
+
+### VERIFIED
+- START_HERE.md is synchronized to Phase A 86%.
+- Current branch HEAD is 08209ac8a4e2d77b718fc11fd8d3715943139688; the change after the verified CI browser milestone is documentation-only.
+- The verified runtime/source milestone remains b26f938e3e13da573d9fd445668a9bcf2cedde4f, whose exact Vercel deployment was READY and whose GitHub Actions browser suite passed.
+
+### UNVERIFIED
+- Vercel status for documentation-only HEAD 08209ac8a4e2d77b718fc11fd8d3715943139688 is currently build-rate-limit, so this exact newest documentation HEAD is not marked Vercel READY.
+- Authenticated production browser verification remains unavailable through the authorized browser/fetch path.
+- Real BYOK provider/CORS/model verification and full screen-reader/device audit remain unverified.
+
+### CHECKPOINT
+- Regression: verified CI runtime milestone b26f938 remains the reference; current documentation-only HEAD has Vercel rate-limit status.
+- Functionality: seven-route headless browser smoke VERIFIED at b26f938.
+- Accessibility: automated checks VERIFIED at b26f938; full audit UNVERIFIED.
+- Privacy/security: CI Firebase placeholder is test-only; no production credential or premium API key was committed; no second DI database/vault added.
+- Performance: no detailed profiling yet.
+- Data quality: no content expansion/fabrication.
+- Build/test: build + browser suite VERIFIED at b26f938.
+- Documentation: UPDATED.
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 routes when an authorized browser path is available.
+2. Complete full accessibility/responsive audit, including screen-reader/device checks.
+3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility with real user-configured providers; do not use fabricated credentials.
+4. Continue Phase A publication workflow and deeper compatibility foundation.
+5. Keep the 1,000+/10,000+ content expansion deferred until the foundation is ready.
