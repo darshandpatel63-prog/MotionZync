@@ -39,11 +39,11 @@ export function searchIndex(index,query=''){
   const tokens=[...new Set(tokenize(query))]
   if(!index?.byId)return[]
   if(!tokens.length)return[...index.byId.values()]
-  const sets=tokens.map(token=>index.byToken.get(token)).filter(Boolean)
-  if(!sets.length)return[]
-  sets.sort((a,b)=>a.size-b.size)
-  const ids=[...sets[0]].filter(id=>sets.every(set=>set.has(id)))
-  return ids.map(id=>index.byId.get(id)).filter(Boolean)
+  const ids=new Set()
+  for(const token of tokens)for(const id of index.byToken.get(token)||[])ids.add(id)
+  if(!ids.size)return[]
+  const ordered=[...ids]
+  return ordered.map(id=>index.byId.get(id)).filter(Boolean)
 }
 
 export function scoreSearchRecord(record,query=''){
