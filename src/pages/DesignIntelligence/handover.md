@@ -1861,3 +1861,55 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Data quality: counts derive from real records only.
 - Build/test: deployment pending.
 - Documentation: UPDATED.
+
+
+## 2026-09-29 — Protected Design Intelligence knowledge delivery foundation
+
+### IMPLEMENTED
+- Removed the existing Premium/Ultra seed records from the client-shipped `catalog.js` so protected records are no longer intentionally bundled into the public Design Intelligence browser catalog.
+- Preserved those existing protected records in the server-only `api/_lib/di-protected-catalog.js`; no new filler records were added.
+- Added `api/di-knowledge.js`.
+- The endpoint always serves the free canonical catalog and includes protected records only when the caller presents a valid Firebase ID token whose server-side entitlement is Premium or Ultra Premium+.
+- The endpoint validates the combined free + protected catalog with the same canonical schema before returning it.
+- No second design-knowledge database was introduced.
+- Premium/Ultra content is therefore no longer protected only by a frontend lock overlay; the protected delivery path is server-authoritative at the API boundary.
+- Updated Design Intelligence Home/Pricing/Docs copy so it no longer falsely claims that server entitlement/API-key foundations are still completely planned.
+
+### VERIFIED
+- Source changes are on `feature/design-intelligence`.
+- Existing protected seed records were moved rather than duplicated with new filler records.
+- The client-side canonical catalog now contains only the free/public seed records.
+
+### UNVERIFIED
+- Vercel deployment/build for the protected knowledge endpoint and latest combined HEAD.
+- Runtime request with a real Firebase user token and Premium/Ultra entitlement.
+- Production response inspection proving that unauthenticated callers cannot receive protected records.
+- Browser integration of protected knowledge into every search/generator surface is not yet complete.
+- Real payment, entitlement grant through a successful Cashfree transaction, API-key issuance exercise and real BYOK execution remain unverified.
+- Full manual screen-reader/device audit remains unverified.
+
+### SECURITY / PRIVACY CHECKPOINT
+- Regression: existing public/free browsing remains backed by the same catalog/schema; protected records were removed from the public bundle instead of changing unrelated MotionZync systems.
+- Functionality: server-gated knowledge endpoint IMPLEMENTED; runtime behavior UNVERIFIED.
+- Accessibility: no accessibility semantics were intentionally removed; manual audit remains UNVERIFIED.
+- Privacy/security: protected records require server-side Firebase identity + entitlement; no secret or payment credential is returned.
+- Performance: endpoint validates a small bounded Phase 1 catalog in memory; scaling strategy for large protected catalogs remains future work.
+- Data quality: no fabricated records; the moved records are the existing Premium/Ultra seed records.
+- Build/test: source re-inspection complete; latest deployment result pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+- 1,000+/10,000+ content expansion remains deferred.
+
+## FIRST UNFINISHED TASK
+1. Verify the latest combined Vercel deployment/build for Cashfree + API-key lifecycle + protected knowledge delivery.
+2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes once the current code is deployed.
+3. Complete manual accessibility/responsive audit, including screen-reader/device checks.
+4. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
+5. Exercise protected knowledge with a real Firebase Premium/Ultra entitlement and verify that unauthenticated/free requests do not receive protected records.
+6. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
+7. Integrate the protected knowledge delivery into the Premium Explorer/Generator experience without putting protected records back into the public bundle.
+8. Keep 1,000+/10,000+ content expansion deferred.
