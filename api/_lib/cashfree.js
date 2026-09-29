@@ -82,6 +82,109 @@ async function cashfreeRequest(path) {
   return response.json()
 }
 
+
+export async function createCashfreeOrder({
+  orderId,
+  amount,
+  currency = 'INR',
+  customerId,
+  customerEmail,
+  customerPhone,
+  customerName,
+  plan,
+  returnUrl,
+  notifyUrl,
+} = {}) {
+  const config = getCashfreeConfig()
+  const cleanOrderId = str(orderId)
+  const cleanCustomerId = str(customerId)
+  const cleanEmail = str(customerEmail).toLowerCase()
+  const cleanPhone = str(customerPhone)
+  const cleanPlan = normalizeCashfreePlan(plan)
+  const cleanCurrency = str(currency || 'INR').toUpperCase()
+  const numericAmount = Number(amount)
+
+  if (!cleanOrderId || !cleanCustomerId || !cleanEmail || !cleanPhone || !cleanPlan) {
+    throw new Error('Cashfree order is missing required server-authorized fields')
+  }
+  if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+    throw new Error('Cashfree order amount must be positive')
+  }
+  if (cleanCurrency !== 'INR') {
+    throw new Error('MotionZync Cashfree checkout currently supports INR only')
+  }
+  if (cleanPlan !== 'premium' || numericAmount !== 500) {
+    throw new Error('MotionZync Premium checkout is currently fixed at ₹500')
+  }
+  if (!/^\\+?[0-9 ()-]{8,20}$/.test(cleanPhone)) {
+    throw new Error('A valid customer phone number is required for Cashfree checkout')
+  }
+  if (!/^\\S+@\\S+\\.\\S+$/.test(cleanEmail)) {
+    throw new Error('A valid authenticated customer email is required')
+  }
+
+  const payload = {
+    order_amount: numericAmount,
+    order_currency: cleanCurrency,
+    order_id: cleanOrderId,
+    customer_details: {
+      customer_id: cleanCustomerId,
+      customer_name: str(customerName) || cleanEmail.split('@')[0],
+      customer_email: cleanEmail,
+      customer_phone: cleanPhone,
+    },
+    order_meta: {
+      return_url: str(returnUrl),
+      notify_url: str(notifyUrl),
+    },
+    order_tags: {
+      motionzync_plan: cleanPlan,
+      motionzync_user_id: cleanCustomerId,
+    },
+  }
+
+  if (!payload.order_meta.return_url || !payload.order_meta.notify_url) {
+    throw new Error('MotionZync public payment URLs are not configured')
+  }
+
+  const response = await fetch(config.baseUrl + '/orders', {
+    method: 'POST',
+    headers: {
+      'x-client-id': config.clientId,
+      'x-client-secret': config.clientSecret,
+      accept: 'application/json',
+      'content-type': 'application/json',
+      'x-api-version': CASHFREE_API_VERSION,
+    },
+    body: JSON.stringify(payload),
+  })
+
+  const body = await response.json().catch(() => null)
+  if (!response.ok) {
+    const error = new Error(
+      body?.message ||
+      body?.message?.message ||
+      ('Cashfree order creation failed with HTTP ' + response.status)
+    )
+    error.status = 502
+    throw error
+  }
+
+  if (!body?.payment_session_id) {
+    const error = new Error('Cashfree did not return a payment session')
+    error.status = 502
+    throw error
+  }
+
+  return {
+    ...body,
+    order_id: cleanOrderId,
+    motionzync_plan: cleanPlan,
+    order_amount: numericAmount,
+    order_currency: cleanCurrency,
+  }
+}
+
 export function fetchCashfreeOrder(orderId) {
   const cleanOrderId = str(orderId)
   if (!cleanOrderId) throw new Error('Cashfree order ID is required')
