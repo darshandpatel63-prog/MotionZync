@@ -5,6 +5,7 @@ export const BILLING_COLLECTIONS = Object.freeze({
   users: 'users',
   payments: 'payments',
   apiKeys: 'apiKeys',
+  orders: 'orders',
 })
 
 const SUCCESS = new Set(['paid', 'success', 'successful', 'captured', 'completed'])
@@ -44,6 +45,50 @@ export function normalizePaymentRecord(input = {}) {
   if (payment.amount < 0) throw new Error('Payment amount cannot be negative')
   if (!/^[A-Z]{3}$/.test(payment.currency)) throw new Error('Payment currency must be a 3-letter code')
   return payment
+}
+
+export async function recordPendingOrder({
+  userId,
+  email,
+  provider,
+  plan,
+  orderId,
+  amount,
+  currency = 'INR',
+} = {}) {
+  const cleanUserId = str(userId)
+  const cleanEmail = str(email).toLowerCase()
+  const cleanProvider = str(provider).toLowerCase()
+  const cleanPlan = str(plan).toLowerCase()
+  const cleanOrderId = str(orderId)
+  const numericAmount = num(amount)
+  const cleanCurrency = str(currency).toUpperCase()
+
+  if (!cleanUserId || !cleanEmail || !cleanProvider || !cleanPlan || !cleanOrderId) {
+    throw new Error('Pending order is missing required fields')
+  }
+  if (numericAmount <= 0) throw new Error('Pending order amount must be positive')
+  if (!/^[A-Z]{3}$/.test(cleanCurrency)) throw new Error('Pending order currency must be a 3-letter code')
+
+  const now = new Date().toISOString()
+  await getAdminDb().collection(BILLING_COLLECTIONS.orders).doc(cleanOrderId).set({
+    userId: cleanUserId,
+    email: cleanEmail,
+    provider: cleanProvider,
+    plan: cleanPlan,
+    orderId: cleanOrderId,
+    amount: numericAmount,
+    currency: cleanCurrency,
+    status: 'created',
+    createdAt: now,
+    updatedAt: now,
+  }, { merge: true })
+
+  return {
+    orderId: cleanOrderId,
+    status: 'created',
+    createdAt: now,
+  }
 }
 
 export async function recordVerifiedPayment(input = {}) {
