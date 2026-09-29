@@ -1004,3 +1004,46 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publication workflow and compatibility depth without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Phase A canonical publication-gate reuse milestone
+
+### IMPLEMENTED
+- `validateImportBatch(..., {requirePublishable:true})` now reuses the same canonical publication predicate as publishable-record filtering.
+- This closes a validation drift where an import could otherwise pass the publishable-import branch without all required `sourceType`, `checkedAt`, source URL, or licensed-dataset license constraints.
+- No actual content was published and no database write was added.
+
+### VERIFIED
+- Current branch remains `feature/design-intelligence`.
+- Updated file is only `src/pages/DesignIntelligence/contentPipeline.js`.
+- Existing seed catalog remains unchanged.
+- No second database, API-key vault, auth system, or unrelated feature changes were introduced.
+
+### UNVERIFIED
+- Current-head Vercel deployment/build.
+- Browser/visual/interactivity verification.
+- Full accessibility/responsive verification.
+- Real-provider BYOK execution.
+- Local full build/test execution.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD because latest changes are not on a successful READY deployment.
+- Functionality: IMPLEMENTED / source-audited.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new persistence or secret handling.
+- Performance: bounded validation over supplied import records; profiling UNVERIFIED.
+- Data quality: canonical publication gate strengthened; no fabricated content.
+- Build/test: current Vercel check remains rate-limited; no successful current-head build claimed.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 79% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-check Vercel for current HEAD when the build-rate-limit restriction clears or an authorized deployment path becomes available.
+2. Complete authenticated browser/visual/interactivity verification of all 7 routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publication workflow and deeper compatibility rules without claiming deployment verification.
+5. Keep 1,000+/10,000+ content expansion deferred.
