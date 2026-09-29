@@ -832,3 +832,42 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase A — Engine / System: 75% — IN PROGRESS
 - Phase B — Publish: 0%
 - Phase C — Continuous Content Expansion: 0%
+
+
+## 2026-09-29 — Phase A compatibility UI milestone
+
+### IMPLEMENTED
+- Generator recipe summary now displays the canonical compatibility status from the same Design Intelligence recipe object.
+- Compatibility status remains derived once by the core and is also available to export consumers; no parallel compatibility model was introduced.
+
+### VERIFIED
+- Updated file: `src/pages/DesignIntelligence/DesignIntelligenceGenerator.jsx`.
+- Change is limited to the Design Intelligence feature.
+- Current branch is `feature/design-intelligence`.
+- No catalog inflation, second database, second API-key vault, or unrelated feature change.
+
+### UNVERIFIED
+- Current-head Vercel build/deployment remains blocked by the reported build-rate-limit failure.
+- Browser visual/interactivity, accessibility/responsive, and real-provider BYOK remain unverified.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD pending deployment.
+- Functionality: IMPLEMENTED / source-audited.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secret handling.
+- Performance: one canonical compatibility result is reused; browser profiling UNVERIFIED.
+- Data quality: no new records.
+- Build/test: current-head Vercel check not successful; build-rate-limit failure remains.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 76% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-check Vercel for current HEAD when the build-rate-limit restriction clears or an authorized deployment path becomes available.
+2. Complete authenticated browser/visual/interactivity verification of all 7 routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
+5. Keep 1,000+/10,000+ expansion deferred.
