@@ -2293,3 +2293,48 @@ Do not edit other existing project files unless a future Design Intelligence mil
 9. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset and the remote special-effects client.
 10. Continue Phase A publication workflow and deeper compatibility foundation.
 11. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
+
+## 2026-09-29 — Current continuation verification checkpoint
+
+### IMPLEMENTED
+- Reconciled the current `feature/design-intelligence` branch against the mandatory Start/Continue read set and inspected all current files in `src/pages/DesignIntelligence/` plus the minimum integration files `src/App.jsx` and `src/components/Navbar/Navbar.jsx`.
+- Reconciled the current branch HEAD `06612992930c58e6e10cb356fafc7df5bf1ecc90` against the latest relevant READY Vercel runtime commit.
+
+### VERIFIED
+- Current branch HEAD is `06612992930c58e6e10cb356fafc7df5bf1ecc90`.
+- Vercel deployment `dpl_5kKtq5qPPWzmo3ZNX7woRHxLFyPL` is still **READY** and points to `64b44b9203b9d43e5b1a5cdd3fcc9f32efeee65d` on `feature/design-intelligence`.
+- Vercel deployment metadata identifies MotionZync as a Vite project sourced from Git.
+- GitHub compare confirms `64b44b9 → 0661299` changes only `src/pages/DesignIntelligence/handover.md`; therefore current runtime/application code is unchanged from the READY deployment.
+- GitHub compare confirms `ed734c1 → 64b44b9` changes only Design Intelligence documentation files (`DesignIntelligenceDocs.jsx`, `START_HERE.md`, `handover.md`), so the previously successful Design Intelligence CI/build verification on `ed734c1` remains applicable to the runtime code lineage.
+- The earlier special-effects API payload hardening and documentation alignment remain source-verified; no Firebase storage write is implied by the 16 KB request guard.
+
+### UNVERIFIED
+- Authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+- Manual accessibility/responsive/device/screen-reader audit.
+- Real BYOK provider execution and provider-specific CORS/model compatibility.
+- Real Firebase Premium/Ultra entitlement exercise, API-key lifecycle exercise and production special-effects calls.
+- Real Cashfree sandbox Checkout + signed webhook + server-side payment-status lifecycle.
+- External npm publication/installation.
+- Direct production browser access remains blocked in the available non-browser fetch path by Vercel Authentication; no false runtime verification is claimed.
+
+### CHECKPOINT
+- Regression: no application/runtime files changed in this continuation checkpoint.
+- Functionality: latest runtime code remains on an exact READY deployment; route-level browser behavior remains UNVERIFIED.
+- Accessibility: source focus-visible/reduced-motion/responsive safeguards remain present; manual/device audit UNVERIFIED.
+- Privacy/security: no new storage/auth bypass was introduced; API-key/effects boundaries remain server-authoritative in source.
+- Performance: no runtime code change; production profiling remains UNVERIFIED.
+- Data quality: no catalog expansion or fabricated records.
+- Build/test: the current HEAD has no independent workflow run because later commits are handover-only; the successful runtime CI lineage remains `36585747732` on `ed734c1`.
+- Documentation: UPDATED.
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes on the READY deployment containing the current runtime code.
+2. Complete manual accessibility/responsive/device/screen-reader verification.
+3. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
+4. Exercise `/api/di-knowledge` with Free, real Firebase Premium, real Firebase Ultra and real Ultra MotionZync API-key callers; confirm Premium never receives Ultra-only records.
+5. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
+6. Verify Ultra API-key issuance/rotation/revocation against a real Ultra entitlement.
+7. Verify the API-only special animation/effects capability in the deployed environment without bypassing Ultra entitlement.
+8. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset and the remote special-effects client.
+9. Continue Phase A publication workflow and deeper compatibility foundation.
+10. Keep 1,000+/10,000+ content expansion deferred.
