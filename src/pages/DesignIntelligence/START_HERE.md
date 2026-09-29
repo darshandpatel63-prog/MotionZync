@@ -84,14 +84,48 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 89%
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — Access contract hardening and Knowledge route alignment
+
+### IMPLEMENTED
+- Hardened API-key status/issuance so Premium-at-₹0 users cannot obtain or enumerate active developer API keys; Ultra Premium+ is required.
+- Hardened API-key record creation to accept only the Ultra Premium+ plan.
+- Updated the Design Intelligence Knowledge route to consume entitlement-scoped server knowledge instead of showing only the public seed bundle.
+- Current access semantics are now consistent across Pricing, Home, Docs, Explorer, Generator, Knowledge, billing, Cashfree and API-key foundations.
+
+### VERIFIED
+- Source inspection on feature/design-intelligence confirms the access checks are aligned across the touched layers.
+- No protected record was reintroduced into the browser-shipped public catalog.
+- No second database, fake payment, fake API key or filler record was introduced.
+
+### UNVERIFIED
+- The newest commits after the first access-contract deployment are not yet represented by a READY Vercel deployment.
+- Real Premium-login and Ultra-payment runtime responses remain unverified.
+- API-key use authentication, published npm installation and the actual API-only animation/effects implementation remain future/unverified.
+- Full production browser, device/screen-reader and real BYOK verification remain unverified.
+
+### CHECKPOINT
+- Regression: additive access-control/knowledge-route changes only.
+- Functionality: access contract hardening IMPLEMENTED; runtime UNVERIFIED.
+- Accessibility: existing DI semantics retained; manual audit UNVERIFIED.
+- Privacy/security: protected knowledge remains server-gated; API secrets remain hash-only; Premium cannot issue developer keys.
+- Performance: bounded entitlement/catalog filtering only; production profiling UNVERIFIED.
+- Data quality: no fabricated records.
+- Build/test: source-level verification complete; newest deployment/build pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
-1. Verify a Vercel deployment containing the new Free/Premium/Ultra access contract, tier-scoped protected knowledge and Ultra-only API-key enforcement.
-2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on the newest deployment.
+1. Verify a Vercel deployment containing all latest access-contract, tier-scoped knowledge, Knowledge-route and Ultra-only API-key changes.
+2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
 3. Complete manual accessibility/responsive audit, including screen-reader/device checks.
 4. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
-5. Exercise /api/di-knowledge with a real unauthenticated/free request, a real Firebase Premium login, and a real paid Ultra Premium+ entitlement; confirm Premium does not receive Ultra-only records.
+5. Exercise /api/di-knowledge with unauthenticated/free, real Firebase Premium, and real paid Ultra Premium+ callers; confirm Premium never receives Ultra-only records.
 6. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
-7. Verify Ultra-only API-key issuance/rotation/revocation against a real entitlement and later exercise the special-effects API contract.
-8. Publish the package-ready canonical npm adapter after package/release credentials are available; do not duplicate the canonical dataset.
+7. Verify Ultra-only API-key issuance/rotation/revocation with a real entitlement and later verify API-key-authenticated special animation/effects access.
+8. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset.
 9. Continue Phase A publication workflow and deeper compatibility foundation.
 10. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
