@@ -124,7 +124,7 @@ export default function DesignIntelligencePricing(){
         <div><b>Free / no login</b><span>Simple/public knowledge, recipes and normal web use.</span></div>
         <div><b>Premium / Google login</b><span>Premium protected knowledge and generation for ₹0; npm access uses the same canonical intelligence core.</span></div>
         <div><b>Ultra Premium+ / ₹500</b><span>All web-accessible knowledge plus server-authorized API access.</span></div>
-        <div><b>Special animation + effects</b><span>API-only capability; requires Ultra Premium+ and a valid server-issued API key. The actual special-effects API is still a future implementation milestone.</span></div>
+        <div><b>Special animation + effects</b><span>API-only capability; requires Ultra Premium+ and a valid server-issued API key. The bounded special-effects API is implemented; deployed runtime and real-entitlement exercise remain unverified.</span></div>
       </div>
     </section>
   </div>
