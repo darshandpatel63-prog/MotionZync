@@ -151,3 +151,52 @@ When a new chat receives only Start, Continue or Start/Continue, read START_HERE
 
 **UNVERIFIED**
 - No claim is made that these expanded datasets, billing controls, project limits or output-diversity engine are currently implemented or verified.
+
+
+## 2026-09-29 — Existing BYOK AI integration architecture
+
+### IMPLEMENTED
+- Confirmed the existing MotionZync AI provider/API-key infrastructure on feature/design-intelligence:
+  - src/ai/providers/AIProviderContext.jsx
+  - src/ai/providers/keyVault.js
+  - src/ai/providers/VaultContext.jsx
+  - src/ai/settings/APIKeyManager.jsx
+- Confirmed the existing vault uses browser-side encryption-at-rest and keeps decrypted keys in memory while unlocked.
+- Confirmed Design Intelligence requirements now explicitly call for reusing this existing AI system instead of creating a second API-key/vault/provider system.
+- Documented the intended AI-assisted Design Intelligence flow, non-AI direct mode, reference-based design input, npm/local user control and entitlement separation.
+
+### ARCHITECTURALLY SUPPORTED
+- Existing BYOK infrastructure can be the execution bridge for user-selected AI models.
+- Design Intelligence can prepare structured Design Recipe/context and send it to the selected provider.
+- AI-provider processing can occur on the provider's infrastructure when the user's own API key is used, subject to that provider's behavior and terms.
+- Direct deterministic Design Intelligence and AI-assisted generation can coexist.
+- One canonical core can serve web, npm/local, API and future MCP/agent interfaces.
+
+### UNVERIFIED
+- End-to-end Design Intelligence → existing AI provider → generated UI/code.
+- Provider-specific CORS/direct-browser security for every supported provider.
+- Safe isolation of generated HTML/JS/code previews.
+- Server-authoritative Premium/Ultra entitlement enforcement.
+
+### PLANNED / FUTURE
+1. Wire DesignIntelligenceGenerator to existing useAI() context.
+2. Convert Design Recipe into a structured provider prompt/context.
+3. Add provider capability-aware generation.
+4. Validate returned UI/code against compatibility, accessibility and anti-template rules.
+5. Add safe preview/export adapters.
+6. Harden custom endpoint validation, request limits, timeouts/cancellation and generated-output isolation as needed.
+
+### SECURITY NOTE
+The existing vault is a meaningful local protection layer, but it is not an absolute defense against active XSS while decrypted keys are in memory. Do not claim stronger security than has been verified.
+
+## FIRST UNFINISHED TASK
+Get a real build/preview verification of feature/design-intelligence and test:
+- /design-intelligence
+- /design-intelligence/explorer
+- /design-intelligence/generator
+- /design-intelligence/knowledge
+- /design-intelligence/stacks
+- /design-intelligence/docs
+- /design-intelligence/pricing
+
+Then record exact results here.
