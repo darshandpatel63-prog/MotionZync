@@ -33,13 +33,8 @@ export function validateImportBatch(domain,records=[],{requirePublishable=false}
     if(!PROVENANCE_STATUS.includes(record?.provenance?.status)){
       errors.push('Import record '+(record?.id||'<unknown>')+' has an invalid provenance status.')
     }
-    if(requirePublishable){
-      if(record?.provenance?.status!==PUBLISHABLE_PROVENANCE_STATUS){
-        errors.push('Import record '+(record?.id||'<unknown>')+' is not publishable; provenance status must be '+PUBLISHABLE_PROVENANCE_STATUS+'.')
-      }
-      if(record?.provenance?.sourceType!=='original'&&!record?.provenance?.sourceUrl){
-        errors.push('Publishable import record '+(record?.id||'<unknown>')+' requires sourceUrl for non-original provenance.')
-      }
+    if(requirePublishable&&!isPublishableRecord(record)){
+      errors.push('Import record '+(record?.id||'<unknown>')+' does not satisfy the canonical publication gate.')
     }
   }
 
