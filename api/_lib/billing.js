@@ -322,6 +322,8 @@ export async function getBillingAnalytics() {
     return !expiry || expiry.getTime() > now
   })
   const activeApiKeys = apiKeys.filter(key => str(key.status || 'active').toLowerCase() === 'active' && !key.revokedAt)
+  const apiKeyHolders = new Set(apiKeys.map(key => str(key.userId)).filter(Boolean))
+  const activeApiKeyHolders = new Set(activeApiKeys.map(key => str(key.userId)).filter(Boolean))
   const manualGrants = users.filter(user => str(user.entitlementSource).toLowerCase() === 'admin-grant')
   const uniquePayers = new Set(successful.map(p => p.userId).filter(Boolean))
 
@@ -363,6 +365,7 @@ export async function getBillingAnalytics() {
       grossRevenue:successful.reduce((sum,p) => sum + num(p.amount),0),
       refundedAmount:refunded.reduce((sum,p) => sum + num(p.amount),0),
       activeEntitlements:activeEntitlements.length, activeApiKeys:activeApiKeys.length,
+      apiKeyHolders:apiKeyHolders.size, activeApiKeyHolders:activeApiKeyHolders.size,
       manualGrants:manualGrants.length, totalPaymentRecords:payments.length,
     },
     paymentStatus:countMap(payments,'status'),
