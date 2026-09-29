@@ -2406,7 +2406,7 @@ These must be configured as server-side Vercel Environment Variables and never h
 - All current files inside src/pages/DesignIntelligence/ were inspected, plus src/App.jsx and src/components/Navbar/Navbar.jsx, as required by START_HERE.md and the project common instructions.
 - Current runtime application deployment dpl_BKumDxovPtH95mdpXvyPc7BVqSaD remains READY for commit 53fccb31069c32f99a762775134c7846c85ddccf on feature/design-intelligence.
 - Cashfree source contract remains aligned with Ultra Premium+ ₹500 INR: create-order uses ultra-premium/₹500 and the shared Cashfree helper rejects any other plan/amount.
-- Independent official Cashfree documentation checked on 2026-09-29 confirms the current Create Order and Get Payments examples use x-api-version 2025-01-01, sandbox.cashfree.com/pg, and the documented x-webhook-signature/x-webhook-timestamp headers; this matches the implemented integration boundary. citeturn251233search0turn251233search5
+- Independent official Cashfree documentation checked on 2026-09-29 confirms the current Create Order and Get Payments examples use x-api-version 2025-01-01, sandbox.cashfree.com/pg, and the documented x-webhook-signature/x-webhook-timestamp headers; this matches the implemented integration boundary.
 
 ### UNVERIFIED
 - Authenticated browser/visual/interactivity verification of all 7 DI routes remains blocked by Vercel Authentication/SSO in the available fetch/browser paths; no browser result is claimed.
