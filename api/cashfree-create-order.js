@@ -23,7 +23,7 @@ function cleanPhone(value) {
 }
 
 function createOrderId() {
-  return 'mz_prem_' + Date.now() + '_' + crypto.randomBytes(5).toString('hex')
+  return 'mz_ultra_' + Date.now() + '_' + crypto.randomBytes(5).toString('hex')
 }
 
 export default async function handler(req, res) {
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
       customerEmail: user.email,
       customerPhone: phone,
       customerName: user.name || user.email?.split('@')[0],
-      plan: 'premium',
+      plan: 'ultra-premium',
       returnUrl: baseUrl + '/design-intelligence/pricing?payment=returned&order_id={order_id}',
       notifyUrl: baseUrl + '/api/cashfree-webhook',
     })
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
       userId: user.uid,
       email: user.email,
       provider: 'cashfree',
-      plan: 'premium',
+      plan: 'ultra-premium',
       orderId,
       amount: 500,
       currency: 'INR',
@@ -75,7 +75,7 @@ export default async function handler(req, res) {
       ok: true,
       provider: 'cashfree',
       environment: String(process.env.CASHFREE_ENV || 'sandbox').toLowerCase(),
-      plan: 'premium',
+      plan: 'ultra-premium',
       amount: 500,
       currency: 'INR',
       orderId,
