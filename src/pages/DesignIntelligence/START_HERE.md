@@ -84,3 +84,8 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 - The first axe-audit attempt exposed a CI-only dependency pruning issue; Playwright and axe are now installed together in one CI step.
 - Status: **IMPLEMENTED / UNVERIFIED** until the corrected workflow run completes.
 
+
+
+### Axe runner correction
+- The accessibility runner now creates a Playwright browser context before constructing the page required by axe-core.
+- Status: **IMPLEMENTED / UNVERIFIED** pending the corrected CI execution.
