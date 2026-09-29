@@ -133,6 +133,52 @@ async function issueApiKeyForUser({ userId, plan, rotationOf = null } = {}) {
   }
 }
 
+export async function authenticateMotionZyncApiKey(secret) {
+  const cleanSecret = str(secret)
+  if (!cleanSecret.startsWith('mz_live_')) {
+    const error = new Error('Invalid MotionZync API key')
+    error.status = 401
+    throw error
+  }
+
+  const keyHash = keyDigest(cleanSecret)
+  const snapshot = await getAdminDb().collection(BILLING_COLLECTIONS.apiKeys)
+    .where('keyHash', '==', keyHash)
+    .limit(1)
+    .get()
+
+  if (snapshot.empty) {
+    const error = new Error('Invalid MotionZync API key')
+    error.status = 401
+    throw error
+  }
+
+  const document = snapshot.docs[0]
+  const record = { id: document.id, ...document.data() }
+  if (str(record.status || '').toLowerCase() !== 'active' || record.revokedAt) {
+    const error = new Error('MotionZync API key is revoked or inactive')
+    error.status = 401
+    throw error
+  }
+
+  const entitlement = await getServerEntitlement(record.userId)
+  if (entitlement.tier !== 'ultra-premium') {
+    const error = new Error('Ultra Premium+ entitlement is required for API access')
+    error.status = 403
+    throw error
+  }
+
+  const now = new Date().toISOString()
+  await document.ref.set({lastUsedAt: now, updatedAt: now}, {merge: true})
+
+  return {
+    userId: str(record.userId),
+    keyId: document.id,
+    plan: 'ultra-premium',
+    entitlement,
+  }
+}
+
 export async function getApiKeyStatusForUser(userId) {
   const db = getAdminDb()
   const entitlement = await getServerEntitlement(userId)
