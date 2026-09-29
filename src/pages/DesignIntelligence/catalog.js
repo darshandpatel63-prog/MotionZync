@@ -1,6 +1,7 @@
 // MotionZync Design Intelligence — canonical seed catalog.
-// Phase 1 stays intentionally small. The schema is designed to scale;
-// records must be meaningful and verified before they are added.
+// Phase 1 stays intentionally small. Free/public records are shipped to the browser;
+// protected Premium/Ultra records are served only by the server entitlement layer.
+// The schema remains canonical and records must be meaningful and verified before addition.
 
 export const DI_STYLES = [
   { id:'style-minimalism', name:'Minimalism', tier:'free', tags:['clarity','content-first','low-noise'], description:'Intentional reduction of visual noise with clear hierarchy, generous space and restrained decoration.', suitedFor:['SaaS','Productivity','Corporate','Developer Tools'] },
@@ -20,7 +21,6 @@ export const DI_PALETTES = [
   { id:'palette-violet-indigo', name:'Violet + Indigo', tier:'free', primary:'#6D28D9', secondary:'#4F46E5', accent:'#A78BFA', cta:'#7C3AED', background:'#080A12', surface:'#111827', text:'#F8FAFC', muted:'#9CA3AF', semantic:{success:'#22C55E',warning:'#F59E0B',error:'#F87171'}, mood:'creative', tags:['ai','saas','creative'] },
   { id:'palette-health-teal', name:'Healthcare Teal', tier:'free', primary:'#0F766E', secondary:'#0D9488', accent:'#2DD4BF', cta:'#0F766E', background:'#F8FAFC', surface:'#FFFFFF', text:'#134E4A', muted:'#64748B', semantic:{success:'#16A34A',warning:'#D97706',error:'#DC2626'}, mood:'calm', tags:['healthcare','trust','light'] },
   { id:'palette-warm-amber', name:'Warm Amber', tier:'free', primary:'#92400E', secondary:'#B45309', accent:'#F59E0B', cta:'#D97706', background:'#FFFBEB', surface:'#FFFFFF', text:'#451A03', muted:'#78716C', semantic:{success:'#15803D',warning:'#D97706',error:'#B91C1C'}, mood:'warm', tags:['commerce','food','hospitality'] },
-  { id:'palette-royal-sapphire', name:'Royal Sapphire', tier:'premium', primary:'#1D4ED8', secondary:'#3730A3', accent:'#60A5FA', cta:'#2563EB', background:'#071225', surface:'#0F1D3A', text:'#EFF6FF', muted:'#93C5FD', semantic:{success:'#34D399',warning:'#FBBF24',error:'#FB7185'}, mood:'premium', tags:['fintech','enterprise','premium'] },
 ];
 
 export const DI_TYPOGRAPHY = [
@@ -54,8 +54,6 @@ export const DI_STACKS = [
 export const DI_RECIPES = [
   { id:'recipe-free-saas-dashboard', name:'Focused SaaS Analytics Dashboard', tier:'free', styleId:'style-minimalism', paletteId:'palette-slate-cyan', typographyId:'type-inter-inter', chartIds:['chart-kpi-line','chart-grouped-bar'], stackIds:['stack-react','stack-tailwind'], layout:'Persistent sidebar + KPI row + primary analytics panel', navigation:'Persistent sidebar', ux:['progressive disclosure','clear loading states','keyboard-visible focus'] },
   { id:'recipe-free-ai-workspace', name:'AI Developer Workspace', tier:'free', styleId:'style-dark-ui', paletteId:'palette-violet-indigo', typographyId:'type-space-inter', chartIds:['chart-kpi-line'], stackIds:['stack-react','stack-nextjs'], layout:'Command sidebar + main workspace + inspector rail', navigation:'Collapsible sidebar + command palette', ux:['keyboard-first actions','non-blocking feedback','reduced-motion support'] },
-  { id:'recipe-premium-fintech', name:'Premium Fintech Intelligence Console', tier:'premium', styleId:'style-dark-ui', paletteId:'palette-royal-sapphire', typographyId:'type-space-inter', chartIds:['chart-kpi-line','chart-stacked-bar','chart-scatter'], stackIds:['stack-nextjs','stack-tailwind'], layout:'Data-dense split dashboard with persistent risk context', navigation:'Persistent sidebar + contextual sub-navigation', ux:['progressive disclosure','high-signal alerts','dense table ergonomics'] },
-  { id:'recipe-ultra-editorial-commerce', name:'Ultra Editorial Commerce', tier:'ultra-premium', styleId:'style-editorial', paletteId:'palette-royal-sapphire', typographyId:'type-playfair-inter', chartIds:[], stackIds:['stack-nextjs','stack-tailwind'], layout:'Editorial grid + immersive product story + conversion rail', navigation:'Minimal header + contextual section navigation', ux:['content-first hierarchy','controlled motion','high-intent CTA placement'] },
 ];
 
 export const ALL_DI_RECORDS = [
