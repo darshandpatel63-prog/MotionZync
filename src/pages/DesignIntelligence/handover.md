@@ -1832,3 +1832,32 @@ Do not edit other existing project files unless a future Design Intelligence mil
 5. Verify the API-key lifecycle deployment, then add protected server/API data delivery so Premium knowledge itself is server-authoritatively enforced.
 6. Continue Phase A publication workflow and deeper compatibility foundation.
 7. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — API-key holder analytics milestone
+
+### IMPLEMENTED
+- Admin Billing analytics now derives both total API-key holders and active API-key holders from the canonical `apiKeys` records.
+- Admin Billing KPI cards now show:
+  - API key holders
+  - Active API key holders
+- No frontend-maintained count or fabricated record was added.
+
+### VERIFIED
+- The dashboard continues to consume server-derived billing analytics through the existing protected `/api/admin-billing` route.
+- The analytics change is additive and reuses the existing billing collection.
+
+### UNVERIFIED
+- Latest API-key analytics deployment/build result is pending.
+- No real Premium/API-key users have been counted yet because no real production entitlement/key issuance transaction has been exercised.
+- Authenticated production browser verification and manual accessibility/device audit remain unverified.
+
+### CHECKPOINT
+- Regression: additive Admin Billing KPI change only.
+- Functionality: IMPLEMENTED / runtime UNVERIFIED.
+- Accessibility: existing semantic KPI structure preserved; full audit UNVERIFIED.
+- Privacy/security: derived from server-side records; no new secret exposure.
+- Performance: two in-memory Set calculations over the bounded API-key collection.
+- Data quality: counts derive from real records only.
+- Build/test: deployment pending.
+- Documentation: UPDATED.
