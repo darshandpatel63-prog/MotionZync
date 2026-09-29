@@ -1959,13 +1959,58 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — Access contract: Free / Premium login / Ultra Premium+ API
+
+### IMPLEMENTED
+- Guest/no-login users remain on the Free tier for simple/public Design Intelligence web use.
+- Google/Firebase-authenticated users now receive Premium web access at ₹0 through the server-authoritative entitlement path.
+- ₹500 one-time payment is now bound to the Ultra Premium+ plan in the Cashfree order and webhook contract.
+- Developer API key issue/rotate is restricted server-side to Ultra Premium+ only.
+- Protected knowledge delivery is tier-scoped: Premium receives Premium records; Ultra Premium+ receives Premium + Ultra records.
+- Generator AI context now passes only IDs accessible to the current entitlement tier.
+- Pricing, Home, Docs and Admin Billing wording were aligned with the new access model.
+- The Design Intelligence folder is now package-ready for a future npm publication through a local package.json + npm-entry.js adapter using the same canonical core.
+- Special animation/effects remain an API-only Ultra Premium+ capability in the product contract; no fake effect records or frontend bypass were added.
+
+### VERIFIED
+- Source changes are committed on feature/design-intelligence.
+- The public browser catalog still contains only Free records.
+- The existing protected records remain server-only; no duplicate database or filler catalog was introduced.
+- API-key lifecycle logic now rejects Premium-only sessions and requires Ultra Premium+.
+- Cashfree order metadata and webhook validation now agree on Ultra Premium+ / ₹500.
+
+### UNVERIFIED
+- Latest Vercel deployment/build for this access-contract milestone.
+- Real Firebase-authenticated Premium runtime response.
+- Real paid Ultra entitlement and Cashfree transaction/webhook/payment-status lifecycle.
+- Production API-key issuance/rotation/revocation using a real Ultra entitlement.
+- Published npm package and external npm installation.
+- Real special-animation/effects API endpoint and consumer integration.
+- Full browser, screen-reader/device and BYOK provider verification.
+
+### CHECKPOINT
+- Regression: additive Design Intelligence access changes only; unrelated MotionZync features were not intentionally changed.
+- Functionality: access contract IMPLEMENTED; production runtime UNVERIFIED.
+- Accessibility: copy-only/access-state changes; manual audit remains UNVERIFIED.
+- Privacy/security: Firebase token remains server-verified; protected records are tier-filtered server-side; API secrets remain hash-only in Firestore.
+- Performance: tier filtering is bounded Phase 1 in-memory work; production profiling UNVERIFIED.
+- Data quality: no fabricated 1,000+/10,000+ records; existing protected records were reused.
+- Build/test: source verification completed; newest deployment/test result pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
-1. Verify a Vercel deployment containing the latest protected knowledge + Explorer/Generator integration.
-2. Exercise `/api/di-knowledge` with a real free/unauthenticated request and a real Premium/Ultra Firebase entitlement.
-3. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
-4. Complete manual accessibility/responsive audit, including screen-reader/device checks.
-5. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
+1. Verify a Vercel deployment containing the new Free/Premium/Ultra access contract, tier-scoped protected knowledge and Ultra-only API-key enforcement.
+2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on the newest deployment.
+3. Complete manual accessibility/responsive audit, including screen-reader/device checks.
+4. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
+5. Exercise /api/di-knowledge with a real unauthenticated/free request, a real Firebase Premium login, and a real paid Ultra Premium+ entitlement; confirm Premium does not receive Ultra-only records.
 6. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
-7. Verify protected API-key issuance/rotation/revocation against a real entitlement.
-8. Continue Phase A publication workflow and deeper compatibility foundation.
-9. Keep 1,000+/10,000+ content expansion deferred.
+7. Verify Ultra-only API-key issuance/rotation/revocation against a real entitlement and later exercise the special-effects API contract.
+8. Publish the package-ready canonical npm adapter after package/release credentials are available; do not duplicate the canonical dataset.
+9. Continue Phase A publication workflow and deeper compatibility foundation.
+10. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
