@@ -1552,3 +1552,55 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Data quality: no fake payment records or fabricated counters were added.
 - Build/test: current-head Admin Billing build/browser result UNVERIFIED.
 - Documentation: UPDATED.
+
+
+## 2026-09-29 — Admin Billing browser verification milestone
+
+### IMPLEMENTED
+- Added an isolated CI-only authentication fixture in `src/context/AuthContext.jsx`.
+- The fixture activates only when Vite runs in `ci` mode and a dedicated `VITE_CI_ADMIN_EMAIL` is supplied; normal development/production authentication continues through Firebase `onAuthStateChanged`.
+- Extended the existing Design Intelligence GitHub Actions browser smoke test to enter the existing `/admin` route, select the existing **DI Billing** tab, and verify the billing dashboard sections, entitlement fields and real-data empty state.
+- The browser test uses an in-memory CI-only API response for `/api/admin-billing`; this is test isolation only and does not seed or alter production billing data.
+- Added responsive horizontal-overflow verification for the Admin Billing view.
+
+### VERIFIED
+- GitHub Actions run **36542784038** for exact HEAD `c3d3c657211bdbdaf7ef8a07dd1fe774c4dff99b` completed **SUCCESS**.
+- Build completed successfully.
+- Playwright Chromium setup completed successfully.
+- Existing seven Design Intelligence route smoke coverage still passed.
+- Existing Explorer search/filter, Generator deterministic preview/AI-toggle, responsive 390/768/1440 checks and keyboard focus-visible checks passed.
+- Existing Admin page was opened, **DI Billing** tab was selected successfully, billing analytics headings/sections were found, entitlement email/tier controls were found, and the no-fake-payment empty state was verified.
+- Admin Billing horizontal-overflow check passed at the tested desktop viewport.
+- The test-only auth/API fixtures did not introduce production billing records or fake payment data.
+
+### UNVERIFIED
+- Authenticated production browser verification remains blocked by the available Vercel Authentication path.
+- Full screen-reader/device accessibility audit remains unverified.
+- Real production `/api/admin-billing` Firestore data retrieval is not proven by the CI mock response.
+- Real payment gateway/webhook processing remains unverified.
+- Real BYOK provider execution/CORS/model compatibility remains unverified.
+
+### CHECKPOINT
+- Regression: VERIFIED for the CI browser path at exact HEAD; authenticated production regression remains UNVERIFIED.
+- Functionality: Admin Billing UI browser smoke VERIFIED with isolated test API; production data path UNVERIFIED.
+- Accessibility: automated accessible-name/responsive/focus checks VERIFIED; full screen-reader/device audit UNVERIFIED.
+- Privacy/security: CI auth/API fixtures are mode-gated and do not store real secrets; production entitlement/payment security remains server-side work.
+- Performance: bounded browser smoke VERIFIED; detailed profiling remains UNVERIFIED.
+- Data quality: no fake production records; CI uses an empty analytics dataset only.
+- Build/test: VERIFIED by GitHub Actions run 36542784038.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **87% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+- 1,000+/10,000+ content expansion remains deferred.
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes when an authorized browser path is available.
+2. Complete full accessibility/responsive audit, including screen-reader/device checks.
+3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility with real user-configured providers.
+4. Continue Phase A publication workflow and deeper compatibility foundation.
+5. Implement provider-specific payment webhook signature verification and connect the selected gateway before exposing paid checkout.
+6. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
+7. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
