@@ -99,3 +99,28 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 - The CI axe gate is intentionally scoped to `.di-shell` so existing unrelated MotionZync Navbar/Footer styling is not reclassified as a Design Intelligence regression.
 - The previously observed serious `color-contrast` findings were outside the DI shell.
 - Status: **VERIFIED** by GitHub Actions run 36545680689.
+
+
+## 2026-09-29 — Cashfree webhook verification foundation
+
+### IMPLEMENTED
+- Added a server-side Cashfree webhook verification foundation.
+- Signed webhook requests are verified from the raw request body with `x-webhook-signature` + `x-webhook-timestamp`.
+- Cashfree order/payment status is checked server-side before a verified payment can be recorded.
+- Premium permanent is currently constrained to the finalized INR 500 server-authorized order contract; Ultra Premium+ checkout remains disabled until its price is finalized.
+
+### VERIFIED
+- New Cashfree helper/webhook source passed Node syntax checking in an isolated local verification step.
+- Synthetic HMAC verification accepted a valid signature and rejected a forged signature.
+- No paid checkout, fake Premium key, second database or client-side payment secret was added.
+
+### UNVERIFIED
+- Current Vercel deployment for this code is still BUILDING.
+- Real Cashfree sandbox/production credentials and transactions.
+- Real webhook delivery/retry/refund lifecycle.
+- Authenticated production browser verification, manual device/screen-reader audit and real BYOK provider execution remain unverified.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
