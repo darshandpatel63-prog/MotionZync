@@ -40,7 +40,7 @@ Phase 1 foundation is implemented:
 - continuation/common-instruction files
 
 ## FIRST UNFINISHED TASK
-1. Complete Vercel verification for the latest safe-export commits.
+1. Complete Vercel verification for any newer code commits after the verified safe-export deployment.
 2. Browser/visual/interactivity verification of all 7 Design Intelligence routes remains blocked by Vercel Authentication in the available browser/fetch path; keep it UNVERIFIED until an authenticated session is available.
 3. Run full accessibility/responsive and real-provider BYOK verification when an authenticated/browser/provider test path is available.
 4. Continue Phase A engine/schema work; do not begin the 1,000+/10,000+ content expansion yet.
