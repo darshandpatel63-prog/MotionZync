@@ -77,7 +77,7 @@ export function evaluateCompatibility(recipe){
     issues.push({severity:'incompatible',code:'web-native-stack-mismatch',message:'The selected stack is not classified for the requested web target.'})
   }
   if(industry&&suited.length&&!suited.includes(industry)){
-    issues.push({severity:'questionable',code:'style-industry-mismatch',message:'The selected style is not explicitly classified for the requested industry; review the composition.'})
+    issues.push({severity:'acceptable',code:'style-industry-mismatch',message:'The selected style is not explicitly classified for the requested industry; review the composition.'})
   }
   if(ratio!==null&&ratio<4.5){
     issues.push({severity:'questionable',code:'text-background-contrast',message:'Text/background contrast is below 4.5:1 and needs review.'})
@@ -109,8 +109,10 @@ export function evaluateCompatibility(recipe){
   }
 
   const hasIncompatible=issues.some(issue=>issue.severity==='incompatible')
+  const hasQuestionable=issues.some(issue=>issue.severity==='questionable')
+  const hasAcceptable=issues.some(issue=>issue.severity==='acceptable')
   return{
-    status:hasIncompatible?'incompatible':issues.length?'questionable':'compatible',
+    status:hasIncompatible?'incompatible':hasQuestionable?'questionable':hasAcceptable?'acceptable':'compatible',
     issues,
   }
 }
