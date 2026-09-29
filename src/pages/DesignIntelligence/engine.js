@@ -1,5 +1,6 @@
 import {DI_RECIPES,DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS} from './catalog.js'
 import {relationshipScore,getRelationshipIntegrity} from './relationships.js'
+import {validateRecipeShape} from './schema.js'
 
 export const ENTITLEMENT_LEVELS={free:0,premium:1,'ultra-premium':2}
 const words=value=>String(value||'').toLowerCase().split(/[^a-z0-9+#.-]+/).filter(Boolean)
@@ -43,6 +44,9 @@ function contrastRatio(foreground,background){
 export function validateRecipe(recipe,entitlementTier='free'){
   const errors=[]
   const warnings=[]
+  const structure=validateRecipeShape(recipe)
+  errors.push(...structure.errors)
+  warnings.push(...structure.warnings)
   const graph=getRelationshipIntegrity()
   if(!graph.valid)errors.push(...graph.errors.slice(0,10))
   const refs=[
