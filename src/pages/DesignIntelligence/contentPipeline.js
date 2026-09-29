@@ -7,12 +7,13 @@ import {
   DI_DOMAINS,
   PUBLISHABLE_PROVENANCE_STATUS,
   validateRecordShape,
+  PROVENANCE_STATUS,
   validatePublishableCatalog,
 } from './schema.js'
 
 const existingIds=new Set(ALL_DI_RECORDS.map(record=>record.id))
 
-export function validateImportBatch(domain,records=[]){
+export function validateImportBatch(domain,records=[],{requirePublishable=false}={}){
   const errors=[]
   const warnings=[]
   if(!DI_DOMAINS.includes(domain))return{valid:false,domain,errors:['Unknown catalog domain: '+domain],warnings,records:[]}
@@ -28,8 +29,16 @@ export function validateImportBatch(domain,records=[]){
       seen.add(record.id)
       if(existingIds.has(record.id))errors.push('Import ID already exists in canonical catalog: '+record.id)
     }
-    if(record?.provenance?.status!==PUBLISHABLE_PROVENANCE_STATUS){
-      errors.push('Import record '+(record?.id||'<unknown>')+' is not publishable; provenance status must be '+PUBLISHABLE_PROVENANCE_STATUS+'.')
+    if(!PROVENANCE_STATUS.includes(record?.provenance?.status)){
+      errors.push('Import record '+(record?.id||'<unknown>')+' has an invalid provenance status.')
+    }
+    if(requirePublishable){
+      if(record?.provenance?.status!==PUBLISHABLE_PROVENANCE_STATUS){
+        errors.push('Import record '+(record?.id||'<unknown>')+' is not publishable; provenance status must be '+PUBLISHABLE_PROVENANCE_STATUS+'.')
+      }
+      if(record?.provenance?.status!=='original'&&!record?.provenance?.sourceUrl){
+        errors.push('Publishable import record '+(record?.id||'<unknown>')+' requires sourceUrl for non-original provenance.')
+      }
     }
   }
 
