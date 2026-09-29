@@ -1047,3 +1047,43 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publication workflow and deeper compatibility rules without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Phase A pricing UI consistency milestone
+
+### IMPLEMENTED
+- Corrected the Pricing page featured-plan condition to use the canonical `premium-permanent` plan ID.
+- No pricing amount, entitlement level, billing behavior, or authentication behavior was changed.
+
+### VERIFIED
+- Current branch: `feature/design-intelligence`.
+- Change is limited to `src/pages/DesignIntelligence/DesignIntelligencePricing.jsx`.
+- No catalog records, database, API-key vault, or unrelated MotionZync feature were changed.
+
+### UNVERIFIED
+- Current-head Vercel deployment/build.
+- Browser rendering/interactivity and full accessibility/responsive checks.
+- Real-provider BYOK execution.
+- Local full build/test.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD pending successful deployment.
+- Functionality: IMPLEMENTED / source-audited.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new data or secret handling.
+- Performance: no material runtime-path change expected; profiling UNVERIFIED.
+- Data quality: no content changes.
+- Build/test: current Vercel check remains affected by build-rate-limit; successful current-head build not claimed.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 79% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
+1. Re-check Vercel for current HEAD when the build-rate-limit restriction clears or an authorized deployment path becomes available.
+2. Complete authenticated browser/visual/interactivity verification of all 7 routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publication workflow and deeper compatibility rules without claiming deployment verification.
+5. Keep 1,000+/10,000+ content expansion deferred.
