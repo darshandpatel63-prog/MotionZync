@@ -118,14 +118,56 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 89%
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — Ultra Premium+ API-key access foundation
+
+### IMPLEMENTED
+- Added server-side MotionZync API-key authentication against the existing canonical Firestore apiKeys collection.
+- API-key access requires an active server-issued key plus an active Ultra Premium+ entitlement; Premium-at-₹0 cannot use the developer API.
+- /api/di-knowledge now accepts either a verified Firebase ID token for web/member access or a valid Ultra Premium+ MotionZync API key for developer/npm access.
+- API-key usage updates server-side lastUsedAt metadata without storing the plaintext secret.
+- Pricing page now reads server entitlement, shows the current access tier, and provides issue / rotate / revoke controls for Ultra Premium+ users.
+- Newly issued/rotated plaintext API secrets are shown only in the current UI state and are not persisted by the client.
+- NPM entry can use the same canonical knowledge API by passing the server-issued MotionZync API key as its bearer token.
+- Special animation/effects remain explicitly API-only and Ultra-only, but the actual special-effects capability endpoint is still a future implementation milestone; no fake effect records were added.
+
+### VERIFIED
+- Source inspection confirms the API-key bearer path is separated from Firebase ID-token authentication.
+- API-key status/issuance/rotation/revocation remains server-authoritative and hash-only in Firestore.
+- Protected records remain outside the public browser catalog.
+- No second database, fake API key, fake payment or filler content was introduced.
+
+### UNVERIFIED
+- Current Vercel deployment containing these latest API/pricing commits is blocked by the project's Vercel build-rate-limit status; therefore these latest changes are not claimed live.
+- Real Ultra entitlement + API-key issuance/rotation/revocation against production Firestore.
+- Real API-key-authenticated /api/di-knowledge request.
+- Published npm installation and external package registry publication.
+- Actual special animation/effects API endpoint/consumer integration.
+- Full browser, accessibility/device and BYOK provider verification.
+
+### CHECKPOINT
+- Regression: additive DI API and Pricing changes only.
+- Functionality: Ultra API access foundation IMPLEMENTED; production runtime UNVERIFIED.
+- Accessibility: Pricing controls retain semantic buttons/status regions; manual audit UNVERIFIED.
+- Privacy/security: API secrets are server-generated and hash-only at rest; bearer API access requires Ultra entitlement.
+- Performance: one bounded key lookup plus entitlement check per API request; production profiling UNVERIFIED.
+- Data quality: no fabricated API users/keys/effects/records.
+- Build/test: latest source is pushed; Vercel status remains build-rate-limit failure; no false READY claim.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
-1. Verify a Vercel deployment containing all latest access-contract, tier-scoped knowledge, Knowledge-route and Ultra-only API-key changes.
+1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication and Pricing API-key controls after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
 3. Complete manual accessibility/responsive audit, including screen-reader/device checks.
 4. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
-5. Exercise /api/di-knowledge with unauthenticated/free, real Firebase Premium, and real paid Ultra Premium+ callers; confirm Premium never receives Ultra-only records.
+5. Exercise /api/di-knowledge with unauthenticated/free, real Firebase Premium, real Ultra Firebase entitlement, and real Ultra MotionZync API-key callers; confirm Premium never receives Ultra-only records.
 6. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
-7. Verify Ultra-only API-key issuance/rotation/revocation with a real entitlement and later verify API-key-authenticated special animation/effects access.
-8. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset.
-9. Continue Phase A publication workflow and deeper compatibility foundation.
-10. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
+7. Verify Ultra-only API-key issuance/rotation/revocation against a real entitlement.
+8. Implement and verify the actual API-only special animation/effects capability without fabricating records.
+9. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset.
+10. Continue Phase A publication workflow and deeper compatibility foundation.
+11. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
