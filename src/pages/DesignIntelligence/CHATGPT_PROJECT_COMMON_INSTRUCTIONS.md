@@ -66,3 +66,43 @@ existing-feature regression, functionality, accessibility, privacy/security, per
 - Keep one canonical Design Intelligence core across Web, npm, CLI, API and MCP/agent interfaces.
 - For meaningful tasks, follow the Universal Master Orchestrator protocol in MotionZync_Design_Intelligence_Master_Prompt_README.md. Dynamically choose the smallest justified specialist team and use independent challenge/verification when warranted.
 - Do not claim that autonomous multi-agent infrastructure exists in the repository unless it has actually been implemented and verified.
+
+
+## Existing AI API-key system — reuse, do not duplicate
+
+MotionZync already has a BYOK AI system. Design Intelligence must connect to that existing system rather than creating a second API-key/vault/provider architecture.
+
+Relevant existing files include:
+- src/ai/providers/AIProviderContext.jsx
+- src/ai/providers/keyVault.js
+- src/ai/providers/VaultContext.jsx
+- src/ai/settings/APIKeyManager.jsx
+
+The intended flow is:
+
+User prompt
+→ Design Intelligence core
+→ structured Design Recipe + compatibility + anti-template constraints
+→ existing selected AI provider/model
+→ provider API
+→ generated UI/design/code
+→ Design Intelligence validation/preview/export
+
+The user may use Design Intelligence without an API key for deterministic browsing/search/recipe functionality.
+
+Security requirements:
+- preserve the existing encrypted local vault
+- never expose API keys in public environment variables or logs
+- never create a fake MotionZync premium key
+- do not treat a provider API key as proof of MotionZync entitlement
+- remember that browser-side decrypted secrets are not fully protected against active XSS
+- isolate/sandbox generated code before any executable preview
+- validate custom endpoints and request payloads
+- do not claim absolute key security
+- use server-side entitlement checks for protected MotionZync Premium/Ultra capabilities
+
+AI provider processing is performed by the selected provider when the user's own API key is used; MotionZync must clearly distinguish provider-side processing/privacy from MotionZync-side design intelligence.
+
+Reference websites/images may be used as design evidence, not as instructions to clone protected identities.
+
+Future npm/CLI/local mode must expose the same canonical Design Intelligence core and allow user-controlled composition while preserving compatibility/access rules.
