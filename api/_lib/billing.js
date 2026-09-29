@@ -72,21 +72,29 @@ async function getActiveApiKeyDocs(db, userId) {
 export async function getServerEntitlement(userId) {
   const cleanUserId = str(userId)
   if (!cleanUserId) throw new Error('Firebase user ID is required')
-  const snapshot = await getAdminDb().collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
-  if (!snapshot.exists) {
-    return { tier: 'free', active: false, source: null, expiresAt: null }
-  }
 
-  const data = snapshot.data() || {}
+  const snapshot = await getAdminDb().collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
+  const data = snapshot.exists ? (snapshot.data() || {}) : {}
   const tier = str(data.entitlement || data.plan).toLowerCase()
   const expiry = dateOf(data.entitlementExpiresAt)
-  const active = ENTITLED_TIERS.has(tier) && (!expiry || expiry.getTime() > Date.now())
+  const paidOrGrantedActive = ENTITLED_TIERS.has(tier) && (!expiry || expiry.getTime() > Date.now())
+
+  // Every Firebase-authenticated user receives Premium web access at ₹0.
+  // Only an active Ultra Premium+ entitlement unlocks the developer API.
+  if (paidOrGrantedActive) {
+    return {
+      tier,
+      active: true,
+      source: str(data.entitlementSource).toLowerCase() || 'server',
+      expiresAt: iso(data.entitlementExpiresAt),
+    }
+  }
 
   return {
-    tier: active ? tier : 'free',
-    active,
-    source: str(data.entitlementSource).toLowerCase() || null,
-    expiresAt: iso(data.entitlementExpiresAt),
+    tier: 'premium',
+    active: true,
+    source: 'authenticated-free',
+    expiresAt: null,
   }
 }
 
@@ -94,7 +102,7 @@ async function issueApiKeyForUser({ userId, plan, rotationOf = null } = {}) {
   const cleanUserId = str(userId)
   const cleanPlan = str(plan).toLowerCase()
   if (!cleanUserId || !ENTITLED_TIERS.has(cleanPlan)) {
-    throw new Error('An active Premium entitlement is required')
+    throw new Error('An active Ultra Premium+ entitlement is required')
   }
 
   const secret = createApiSecret()
@@ -147,7 +155,7 @@ export async function getApiKeyStatusForUser(userId) {
 export async function issueApiKeyForEntitlement(userId) {
   const entitlement = await getServerEntitlement(userId)
   if (!entitlement.active) {
-    const error = new Error('Active Premium entitlement is required before an API key can be issued')
+    const error = new Error('Ultra Premium+ entitlement is required before an API key can be issued')
     error.status = 403
     throw error
   }
@@ -168,7 +176,7 @@ export async function issueApiKeyForEntitlement(userId) {
 export async function rotateApiKeyForEntitlement(userId) {
   const entitlement = await getServerEntitlement(userId)
   if (!entitlement.active) {
-    const error = new Error('Active Premium entitlement is required before an API key can be rotated')
+    const error = new Error('Ultra Premium+ entitlement is required before an API key can be rotated')
     error.status = 403
     throw error
   }
