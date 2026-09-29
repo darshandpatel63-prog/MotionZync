@@ -8,6 +8,7 @@ import {
   PUBLISHABLE_PROVENANCE_STATUS,
   validateRecordShape,
   PROVENANCE_STATUS,
+  PROVENANCE_SOURCE_TYPES,
   validatePublishableCatalog,
 } from './schema.js'
 
@@ -45,10 +46,18 @@ export function validateImportBatch(domain,records=[],{requirePublishable=false}
   return{valid:errors.length===0,domain,errors,warnings,records:records.slice()}
 }
 
+const isPublishableRecord=record=>{
+  const provenance=record?.provenance
+  if(provenance?.status!==PUBLISHABLE_PROVENANCE_STATUS)return false
+  if(!PROVENANCE_SOURCE_TYPES.includes(provenance?.sourceType))return false
+  if(typeof provenance?.checkedAt!=='string'||!provenance.checkedAt.trim())return false
+  if(provenance.sourceType!=='original'&&(typeof provenance.sourceUrl!=='string'||!provenance.sourceUrl.trim()))return false
+  if(provenance.sourceType==='licensed-dataset'&&(typeof provenance.license!=='string'||!provenance.license.trim()))return false
+  return true
+}
+
 export function getPublishableRecords(records=[]){
-  return Array.isArray(records)
-    ?records.filter(record=>record?.provenance?.status===PUBLISHABLE_PROVENANCE_STATUS&&typeof record.provenance?.checkedAt==='string'&&record.provenance.checkedAt.trim())
-    :[]
+  return Array.isArray(records)?records.filter(isPublishableRecord):[]
 }
 
 export function buildPublicationReport(catalogs){
@@ -57,7 +66,7 @@ export function buildPublicationReport(catalogs){
     ...report,
     publishableDomains:DI_DOMAINS.filter(domain=>{
       const records=Array.isArray(catalogs?.[domain])?catalogs[domain]:[]
-      return records.length>0&&records.every(record=>record?.provenance?.status===PUBLISHABLE_PROVENANCE_STATUS&&typeof record.provenance?.checkedAt==='string'&&record.provenance.checkedAt.trim())
+      return records.length>0&&records.every(isPublishableRecord)&&!report.errors.some(error=>error.startsWith(domain+' record '))
     }),
   }
 }
