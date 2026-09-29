@@ -43,14 +43,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Install Playwright for CI verification
-        run: npm install --no-save --no-audit --no-fund playwright@1.55.0
+      - name: Install CI browser and accessibility tooling
+        run: npm install --no-save --no-audit --no-fund playwright@1.55.0 @axe-core/playwright@4.10.2 axe-core@4.10.2
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
-
-      - name: Install accessibility audit tooling
-        run: npm install --no-save --no-audit --no-fund @axe-core/playwright@4.10.2 axe-core@4.10.2
 
       - name: Start Vite preview
         shell: bash
