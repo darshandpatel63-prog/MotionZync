@@ -160,11 +160,171 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Documentation/handover updated with exact verification boundaries.
 
 ## FIRST UNFINISHED TASK
+1. Obtain an authenticated browser/preview session and verify all 7 routes visually and interactively.
+2. Run accessibility/responsive checks.
+3. Then implement the actual Design Intelligence Generator connection to the existing `useAI()` / BYOK provider system.
+4. Verify provider capability handling, output validation and safe preview before expanding content/compatibility rules.
+
+
+## 2026-09-29 — Phase A AI bridge milestone
+
+### IMPLEMENTED
+- Added optional `generateText()` to the existing BYOK `AIProviderContext`; no second API-key vault/provider system was created.
+- Design Intelligence Generator now supports deterministic mode plus explicit AI-assisted recipe refinement.
+- AI receives canonical Design Intelligence rules, known catalog IDs and anti-template constraints.
+- AI output is parsed and validated against existing catalog IDs before affecting the preview.
+- Generated HTML/JavaScript is not executed; the preview remains deterministic React markup driven by validated recipe data.
+
+### ARCHITECTURALLY SUPPORTED
+- User prompt → Design Intelligence → existing selected provider/model → structured recipe refinement → deterministic preview.
+- Direct deterministic generation remains available without an external AI key.
+
+### UNVERIFIED
+- Live provider CORS/capability behavior for every provider/model.
+- End-to-end generation against real user API keys in production.
+- Full accessibility/responsive browser audit.
+- Safe export adapters and executable-code isolation.
+
+### SECURITY / PRIVACY
+- No API keys are added to Design Intelligence state or persisted by the new feature.
+- Existing decrypted-key-in-memory boundary is reused.
+- AI responses are treated as untrusted text/JSON and are not executed.
+- Client-side vault protection does not eliminate active-XSS exposure while unlocked.
+
+### REGRESSION / FUNCTIONALITY / PERFORMANCE / DATA QUALITY / DOCUMENTATION
+- Deterministic fallback remains available.
+- No catalog inflation or fabricated records was introduced.
+- AI bridge is lazy: no provider request occurs unless the user explicitly invokes AI refinement.
+- Handover updated with exact verification boundaries.
+
+
+## 2026-09-29 — Current continuation status
+
+### VERIFIED
+- Latest Vercel deployment for `feature/design-intelligence` is READY at commit `5a220cd3a61f5f49847f1e987fb5e5383a1f957a`.
+- Vercel identifies the deployment as Vite/Git-sourced.
+- Current project runtime-error check for the selected 24-hour window reports no runtime errors.
+
+### UNVERIFIED
+- Authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+- Full accessibility/responsive audit.
+- Real-provider BYOK generation with user API keys.
+- Provider-specific capability/CORS coverage.
+- Generated-code/HTML executable isolation.
+
+### PHASE STATUS
+- Phase A — Engine / System: IN PROGRESS
+- Phase B — Publish: NOT STARTED
+- Phase C — Continuous Content Expansion: NOT STARTED
+- Phase C 1,000+/10,000+ content expansion is intentionally not started yet.
+
+### FIRST UNFINISHED TASK
+1. Authenticated browser/route verification.
+2. Accessibility/responsive verification.
+3. Provider-specific BYOK verification and validation/safe-preview checks.
+4. Continue Phase A engine/system foundation before Phase B publish.
+
+
+## 2026-09-29 — Phase A validation / compatibility guard milestone
+
+### IMPLEMENTED
+- Added canonical recipe validation in `engine.js` for referenced style, palette, typography, chart and stack IDs.
+- Added entitlement checks so recipe validation rejects catalog records above the supplied entitlement tier.
+- Added contrast-review calculations and platform/stack compatibility warnings.
+- Updated AI-assisted Generator to resolve AI-selected catalog IDs only through entitlement-aware lookup; current Generator path passes free entitlement, so protected records cannot be selected through AI refinement.
+
+### VERIFIED
+- Updated files are committed on `feature/design-intelligence`.
+- No unrelated project files were changed in this milestone.
+- Existing deterministic fallback remains in place.
+- Latest pre-change/previous READY deployment and current project runtime-error check remain clean; the two new commits are still awaiting Vercel build completion.
+
+### UNVERIFIED
+- Vercel build result for commits `d73329b3bf4ab7a86dec0415d13a8ec72f3c6af7` / `d059e83af8df003d7b88f8415a0fbdab91e13c47`.
+- Browser route verification.
+- Real-provider BYOK generation.
+- Full accessibility/responsive verification.
+
+### CHECKPOINT
+- Regression: UNVERIFIED until new deployment completes.
+- Functionality: IMPLEMENTED / UNVERIFIED runtime.
+- Accessibility: UNVERIFIED.
+- Privacy/security: IMPLEMENTED at current client boundary; server entitlement remains future.
+- Performance: UNVERIFIED after deployment.
+- Data quality: IMPLEMENTED guard logic; catalog remains intentionally small.
+- Build/test: UNVERIFIED pending Vercel.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+- Do not start the 1,000+/10,000+ content expansion yet.
+
+
+## 2026-09-29 — Phase A composition diversity milestone
+
+### IMPLEMENTED
+- Added deterministic `compositionFamily` selection in the canonical engine based on product context.
+- Generator preview now supports meaningful composition families for dashboard, commerce, editorial/landing, mobile/app, workspace, and general product contexts instead of always rendering one dashboard arrangement.
+- Preserved non-executable preview behavior and existing deterministic fallback.
+
+### VERIFIED
+- Vercel deployment for commit `07e4c6f4fa34c10675b985c433de0dd011fb5208` reached READY.
+- Latest 24-hour Vercel runtime-error check reports no runtime errors.
+- Updated files remain within Design Intelligence feature scope.
+
+### UNVERIFIED
+- Browser-level visual/interactivity verification of every composition and all 7 routes.
+- Full accessibility/responsive audit.
+- Real-provider BYOK execution.
+
+### CHECKPOINT
+- Regression: VERIFIED at deployment/runtime-error level; browser regression UNVERIFIED.
+- Functionality: IMPLEMENTED / runtime behavior UNVERIFIED for browser interactions.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secret storage; generated preview remains non-executable.
+- Performance: UNVERIFIED browser audit.
+- Data quality: no fabricated catalog records added.
+- Build/deployment: VERIFIED via READY Vercel deployment.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+- 1,000+/10,000+ content expansion remains deferred until Phase A foundation is sufficiently complete.
+
+
+## 2026-09-29 — Phase A accessibility foundation milestone
+
+### IMPLEMENTED
+- Added visible focus-visible treatment for Design Intelligence navigation, buttons and interactive controls.
+- Increased interactive control minimum height to 44px for touch/keyboard usability.
+- Added mobile-safe wrapping/overflow safeguards for generated preview and code output.
+- Preserved reduced-motion behavior.
+
+### VERIFIED
+- Composition-diversity deployment for the immediately preceding milestone reached READY.
+- Current Vercel project runtime-error check remains 0 errors for the selected 24-hour window.
+- Accessibility foundation changes are limited to DesignIntelligence.css.
+
+### UNVERIFIED
+- Full screen-reader audit.
+- Real keyboard traversal in a browser session.
+- Device-level responsive visual inspection.
+- Latest commit Vercel build completion and browser verification.
+
+### PHASE STATUS
+- Phase A — Engine / System: IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
+
+### FIRST UNFINISHED TASK
 1. Complete authenticated browser/route verification if an authenticated path becomes available.
 2. Run full accessibility/responsive verification.
 3. Verify real BYOK provider execution and provider capability handling.
 4. Continue Phase A with stronger schema/relationship rules and safe export foundations.
-
 
 
 ## 2026-09-29 — Phase A canonical relationship foundation
