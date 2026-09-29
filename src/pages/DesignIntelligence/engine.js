@@ -1,4 +1,4 @@
-import {DI_RECIPES,DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS} from './catalog.js'
+import {DI_RECIPES,DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS} from './catalog.js'\nimport {relationshipScore,getRelationshipIntegrity} from './relationships.js'
 
 export const ENTITLEMENT_LEVELS={free:0,premium:1,'ultra-premium':2}
 const words=value=>String(value||'').toLowerCase().split(/[^a-z0-9+#.-]+/).filter(Boolean)
