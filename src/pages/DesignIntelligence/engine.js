@@ -41,38 +41,64 @@ function contrastRatio(foreground,background){
   return (light+0.05)/(dark+0.05)
 }
 
-export function validateRecipe(recipe,entitlementTier='free'){
-  const errors=[]
-  const warnings=[]
-  const structure=validateRecipeShape(recipe)
-  errors.push(...structure.errors)
-  warnings.push(...structure.warnings)
-  const graph=getRelationshipIntegrity()
-  if(!graph.valid)errors.push(...graph.errors.slice(0,10))
-  const refs=[
-    ['style',recipe?.style,DI_STYLES],
-    ['palette',recipe?.palette,DI_PALETTES],
-    ['typography',recipe?.typography,DI_TYPOGRAPHY],
-    ['stack',recipe?.stack,DI_STACKS],
-    ...(recipe?.chart?[['chart',recipe.chart,DI_CHARTS]]:[]),
-  ]
-  for(const [name,record,records] of refs){
-    if(!record?.id){errors.push('Missing '+name+' record.');continue}
-    const canonical=records.find(item=>item.id===record.id)
-    if(!canonical){errors.push('Unknown '+name+' record: '+record.id);continue}
-    if(!isAccessible(canonical,entitlementTier))errors.push(canonical.name+' requires '+canonical.tier+' entitlement.')
-  }
-  const ratio=contrastRatio(recipe?.palette?.text,recipe?.palette?.background)
-  if(ratio!==null&&ratio<4.5)warnings.push('Text/background contrast needs review; the current ratio is below 4.5:1.')
-  const ctaRatio=contrastRatio(recipe?.palette?.text,recipe?.palette?.cta)
-  if(ctaRatio!==null&&ctaRatio<4.5)warnings.push('CTA text contrast needs review; the current ratio is below 4.5:1.')
+export function evaluateCompatibility(recipe){
+  const issues=[]
   const platform=recipe?.request?.platform
   const category=recipe?.stack?.category
-  if(platform==='mobile'&&category!=='cross-platform-mobile')warnings.push('Mobile target should use a cross-platform or native-mobile stack.')
-  if(platform==='ios'&&category!=='native-ios'&&category!=='cross-platform-mobile')warnings.push('iOS target should use SwiftUI or a verified cross-platform mobile stack.')
-  if(platform==='android'&&category!=='cross-platform-mobile')warnings.push('Android target should use a verified cross-platform mobile stack; native Android knowledge is not yet in the seed catalog.')
-  if(recipe?.style?.id==='style-glassmorphism'&&ratio!==null&&ratio<4.5)warnings.push('Translucent layered styles can amplify contrast problems; test surfaces at real opacity values.')
-  if(recipe?.chart?.family==='donut'&&((recipe?.request?.tokens||[]).includes('many')))warnings.push('Donut charts are not ideal for many categories; prefer a comparison-oriented chart.')
+  const tokens=recipe?.request?.tokens||[]
+  const ratio=contrastRatio(recipe?.palette?.text,recipe?.palette?.background)
+  const industry=String(recipe?.request?.industry||'').toLowerCase()
+  const suited=Array.isArray(recipe?.style?.suitedFor)?recipe.style.suitedFor.map(value=>String(value).toLowerCase()):[]
+
+  if(platform==='ios'&&category!=='native-ios'&&category!=='cross-platform-mobile'){
+    issues.push({severity:'incompatible',code:'ios-stack-mismatch',message:'iOS targets require SwiftUI or a verified cross-platform mobile stack.'})
+  }
+  if(platform==='android'&&category==='native-ios'){
+    issues.push({severity:'incompatible',code:'android-ios-stack-mismatch',message:'Android targets cannot use a native iOS-only stack.'})
+  }else if(platform==='android'&&category!=='cross-platform-mobile'){
+    issues.push({severity:'questionable',code:'android-stack-gap',message:'Android target is using a stack not classified as cross-platform mobile in the current catalog.'})
+  }
+  if(platform==='mobile'&&category!=='cross-platform-mobile'){
+    issues.push({severity:'incompatible',code:'mobile-stack-mismatch',message:'Mobile targets require a cross-platform mobile stack in the current catalog.'})
+  }
+  if(platform==='web'&&(category==='native-ios'||category==='cross-platform-mobile')){
+    issues.push({severity:'incompatible',code:'web-native-stack-mismatch',message:'The selected stack is not classified for the requested web target.'})
+  }
+  if(industry&&suited.length&&!suited.includes(industry)){
+    issues.push({severity:'questionable',code:'style-industry-mismatch',message:'The selected style is not explicitly classified for the requested industry; review the composition.'})
+  }
+  if(ratio!==null&&ratio<4.5){
+    issues.push({severity:'questionable',code:'text-background-contrast',message:'Text/background contrast is below 4.5:1 and needs review.'})
+  }
+  const ctaRatio=contrastRatio(recipe?.palette?.text,recipe?.palette?.cta)
+  if(ctaRatio!==null&&ctaRatio<4.5){
+    issues.push({severity:'questionable',code:'cta-contrast',message:'CTA text contrast is below 4.5:1 and needs review.'})
+  }
+  if(recipe?.style?.id==='style-glassmorphism'&&ratio!==null&&ratio<4.5){
+    issues.push({severity:'questionable',code:'glass-opacity-contrast',message:'Translucent layered styles can reduce real-world contrast at runtime opacity values.'})
+  }
+  if(recipe?.chart?.family==='donut'&&tokens.includes('many')){
+    issues.push({severity:'questionable',code:'donut-many-categories',message:'Donut charts are not ideal for many categories; consider a comparison-oriented chart.'})
+  }
+  if(recipe?.request?.mode==='dark'&&recipe?.palette?.background==='#FFFBEB'){
+    issues.push({severity:'questionable',code:'dark-light-palette-mismatch',message:'The selected palette is light-first while the request asks for dark mode.'})
+  }
+
+  const hasIncompatible=issues.some(issue=>issue.severity==='incompatible')
+  return{
+    status:hasIncompatible?'incompatible':issues.length?'questionable':'compatible',
+    issues,
+  }
+}
+
+export function validateRecipe(recipe,entitlementTier='free'){
+  const errors=[]
+  const compatibility=evaluateCompatibility(recipe)
+  for(const issue of compatibility.issues){
+    if(issue.severity==='incompatible')errors.push(issue.message)
+    else warnings.push(issue.message)
+  }
+
   return{valid:errors.length===0,errors,warnings}
 }
 
