@@ -1,0 +1,26 @@
+{
+  "name": "@motionzync/design-intelligence",
+  "version": "0.1.0",
+  "description": "MotionZync Design Intelligence canonical core for deterministic design knowledge, recipes, compatibility and access-aware search.",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./npm-entry.js",
+  "exports": {
+    ".": {
+      "import": "./npm-entry.js",
+      "default": "./npm-entry.js"
+    }
+  },
+  "files": [
+    "npm-entry.js",
+    "access.js",
+    "catalog.js",
+    "engine.js",
+    "relationships.js",
+    "schema.js",
+    "searchIndex.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
