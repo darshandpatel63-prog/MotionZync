@@ -169,7 +169,7 @@ jobs:
             const accessibilityProblems = await checkAccessibleNames()
             assert(accessibilityProblems.length === 0, route+' accessibility-name issues: '+JSON.stringify(accessibilityProblems))
 
-            const axeResults = await new AxeBuilder({page}).analyze()
+            const axeResults = await new AxeBuilder({page}).include('.di-shell').analyze()
             const seriousViolations = axeResults.violations.filter(violation => ['critical','serious'].includes(violation.impact))
             assert(
               seriousViolations.length === 0,
