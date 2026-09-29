@@ -41,10 +41,10 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 - UUPM public reference was inspected for category/stack scope. Its current public page describes design styles, palettes, typography, charts, UX guidance and 8 tech stacks. It currently lists React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter and Tailwind.
 
 ## UNVERIFIED
-- Full production build after the latest feature commits.
-- Live Vercel deployment containing the latest feature commits.
+- Latest Vercel build after the newest responsive-navigation fix (commit `7bbf95983a76a7026460cdc564a666ce209036da`) is pending.
 - Browser route verification for all Design Intelligence pages.
 - Full keyboard/screen-reader/mobile audit.
+- Real-provider BYOK execution and provider-specific CORS/model compatibility.
 - Actual payment processing.
 - Server-side premium entitlement storage.
 - Real API-key issuance, rotation and revocation.
@@ -322,9 +322,9 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase C — Continuous Content Expansion: 0%
 
 ### FIRST UNFINISHED TASK
-1. Complete authenticated browser/route verification if an authenticated path becomes available.
-2. Run full accessibility/responsive verification.
-3. Verify real BYOK provider execution and provider capability handling.
+1. Verify the newest Vercel deployment after the responsive-navigation fix.
+2. Complete authenticated browser/route verification if an authenticated path becomes available.
+3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A with stronger schema/relationship rules and safe export foundations.
 
 
@@ -363,3 +363,30 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: 0%
 - Phase C — Continuous Content Expansion: 0%
 - 1,000+/10,000+ content expansion remains deferred.
+
+
+## 2026-09-29 — Phase A responsive navigation audit/fix
+
+### IMPLEMENTED
+- Static responsive review identified that a later `overflow-x:hidden` rule unintentionally disabled horizontal scrolling for the Design Intelligence internal navigation.
+- Updated `DesignIntelligence.css` so the top bar keeps horizontal overflow contained while the DI navigation explicitly preserves horizontal scrolling on narrow screens.
+
+### VERIFIED
+- The issue was confirmed directly from the cascade in the current CSS.
+- The fix changes only `src/pages/DesignIntelligence/DesignIntelligence.css`.
+- Previous deployment/runtime checks were clean before this fix.
+
+### UNVERIFIED
+- Vercel build for commit `7bbf95983a76a7026460cdc564a666ce209036da`.
+- Browser/device visual verification and real touch/keyboard traversal.
+- Full screen-reader audit.
+
+### CHECKPOINT
+- Regression: UNVERIFIED pending new deployment.
+- Functionality: IMPLEMENTED / browser behavior UNVERIFIED.
+- Accessibility: foundation present; full browser audit UNVERIFIED.
+- Privacy/security: unchanged; no new secret or storage path.
+- Performance: UNVERIFIED browser audit.
+- Data quality: unchanged; no catalog expansion.
+- Build/test: UNVERIFIED pending new Vercel deployment.
+- Documentation: UPDATED.
