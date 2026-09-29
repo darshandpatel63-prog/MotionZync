@@ -39,6 +39,13 @@ const PROTECTED_CATALOG = Object.freeze({
 
 const TIER_LEVELS = Object.freeze({ free: 0, premium: 1, 'ultra-premium': 2 })
 
+function setPrivateJsonHeaders(res) {
+  res.setHeader('Cache-Control', 'private, no-store, max-age=0')
+  res.setHeader('Pragma', 'no-cache')
+  res.setHeader('Vary', 'Authorization')
+  res.setHeader('X-Content-Type-Options', 'nosniff')
+}
+
 function isTierAccessible(record, entitlementTier='free') {
   return (TIER_LEVELS[String(record?.tier || 'free')] ?? 0) <= (TIER_LEVELS[entitlementTier] ?? 0)
 }
@@ -59,6 +66,7 @@ function hasBearerToken(req) {
 }
 
 export default async function handler(req, res) {
+  setPrivateJsonHeaders(res)
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
