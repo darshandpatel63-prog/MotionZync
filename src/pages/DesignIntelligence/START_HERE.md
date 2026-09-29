@@ -65,3 +65,16 @@ User prompt → Design Intelligence core → Design Recipe/constraints → exist
 AI-assisted generation is optional. Deterministic Design Intelligence must remain usable without an external AI key.
 
 Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. DesignIntelligenceGenerator now calls the existing `useAI()` / `generateText()` bridge; real provider execution, CORS/model compatibility and browser verification remain unverified.
+
+
+## 2026-09-29 — Automated accessibility audit foundation
+
+### IMPLEMENTED
+- Design Intelligence CI browser verification now includes an axe-core audit on each of the 7 Design Intelligence routes.
+- The CI gate fails on **serious/critical** accessibility violations while keeping lower-severity findings visible for follow-up.
+- This audit is CI-only and does not add a runtime production dependency.
+
+### UNVERIFIED
+- The axe audit has been added but its newest post-change CI execution is still pending.
+- Full screen-reader/device testing remains unverified.
+
