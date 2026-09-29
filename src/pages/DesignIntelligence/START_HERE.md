@@ -163,3 +163,29 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 - Phase A — Engine / System: **89% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-09-29 — Server-authoritative API-key lifecycle foundation
+
+### IMPLEMENTED
+- Added server-side entitlement lookup from the existing Firestore `users` record.
+- Added secure MotionZync API-key issue/rotate/revoke/status operations through `/api/di-api-key`.
+- API secrets use high-entropy random generation; Firestore stores only a SHA-256 hash, non-secret prefix and metadata.
+- Plaintext API secrets are returned only at issue/rotation time and are not recoverable from the backend later.
+- Existing canonical `apiKeys` collection is reused; no second database or fake frontend key was introduced.
+
+### VERIFIED
+- Source implementation is committed on `feature/design-intelligence`.
+- Existing Firebase Admin auth is reused for the protected endpoint.
+
+### UNVERIFIED
+- Latest API-key lifecycle deployment/build result.
+- Real Premium entitlement + production Firestore exercise.
+- Real API request authentication using a MotionZync-issued key.
+- Full server-side protection of Premium knowledge/data delivery.
+- Production browser, manual device/screen-reader and real BYOK verification.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
