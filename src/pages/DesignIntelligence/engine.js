@@ -1,4 +1,5 @@
-import {DI_RECIPES,DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS} from './catalog.js'\nimport {relationshipScore,getRelationshipIntegrity} from './relationships.js'
+import {DI_RECIPES,DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS} from './catalog.js'
+import {relationshipScore,getRelationshipIntegrity} from './relationships.js'
 
 export const ENTITLEMENT_LEVELS={free:0,premium:1,'ultra-premium':2}
 const words=value=>String(value||'').toLowerCase().split(/[^a-z0-9+#.-]+/).filter(Boolean)
@@ -7,11 +8,11 @@ const scoreRecord=(record,tokens)=>{
   const haystack=[record.name,record.description,record.mood,record.category,...(record.tags||[]),...(record.suitedFor||[]),...(record.focus||[]),record.layout,record.navigation,...(record.ux||[])].join(' ').toLowerCase()
   return tokens.reduce((score,token)=>score+(haystack.includes(token)?1:0),0)
 }
-const best=(records,tokens,entitlementTier='free',fallback=0)=>{
+const best=(records,tokens,entitlementTier='free',fallback=0,anchorIds=[])=>{
   const max=levelOf(entitlementTier)
   const allowed=records.filter(record=>levelOf(record.tier)<=max)
   const pool=allowed.length?allowed:records.filter(record=>record.tier==='free')
-  const ranked=pool.map(record=>({record,score:scoreRecord(record,tokens)})).sort((a,b)=>b.score-a.score)
+  const ranked=pool.map(record=>({record,score:scoreRecord(record,tokens),relationshipScore:relationshipScore(record.id,anchorIds)})).sort((a,b)=>b.score-a.score||b.relationshipScore-a.relationshipScore)
   return (ranked[0]?.score||0)>fallback?ranked[0].record:pool[0]
 }
 
@@ -42,6 +43,8 @@ function contrastRatio(foreground,background){
 export function validateRecipe(recipe,entitlementTier='free'){
   const errors=[]
   const warnings=[]
+  const graph=getRelationshipIntegrity()
+  if(!graph.valid)errors.push(...graph.errors.slice(0,10))
   const refs=[
     ['style',recipe?.style,DI_STYLES],
     ['palette',recipe?.palette,DI_PALETTES],
@@ -88,15 +91,15 @@ export function buildRecipe(prompt='',entitlementTier='free'){
   const request=interpretRequest(prompt)
   const tokens=request.tokens
   const style=best(DI_STYLES,tokens,entitlementTier)
-  const palette=best(DI_PALETTES,[...tokens,request.industry],entitlementTier)
-  const typography=best(DI_TYPOGRAPHY,[...tokens,request.industry],entitlementTier)
-  const chart=(request.product==='dashboard'||request.product==='analytics')?best(DI_CHARTS,tokens,entitlementTier):null
+  const palette=best(DI_PALETTES,[...tokens,request.industry],entitlementTier,0,[style.id])
+  const typography=best(DI_TYPOGRAPHY,[...tokens,request.industry],entitlementTier,0,[style.id,palette.id])
+  const chart=(request.product==='dashboard'||request.product==='analytics')?best(DI_CHARTS,tokens,entitlementTier,0,[style.id,palette.id,typography.id]):null
   const stack=request.platform==='mobile'
     ?(tokens.includes('flutter')?DI_STACKS.find(r=>r.id==='stack-flutter'):DI_STACKS.find(r=>r.id==='stack-react-native'))
     :(request.platform==='ios'
-      ?(DI_STACKS.find(r=>r.id==='stack-swiftui')||best(DI_STACKS,tokens,entitlementTier))
-      :best(DI_STACKS,tokens,entitlementTier))
-  const recipeMatch=best(DI_RECIPES,[...tokens,request.industry,style.id],entitlementTier)
+      ?(DI_STACKS.find(r=>r.id==='stack-swiftui')||best(DI_STACKS,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
+      :best(DI_STACKS,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
+  const recipeMatch=best(DI_RECIPES,[...tokens,request.industry,style.id],entitlementTier,0,[style.id,palette.id,typography.id,chart?.id,stack?.id])
   const compositionFamily=request.product==='dashboard'||request.product==='analytics'?'dashboard':request.product==='ecommerce'||request.product==='commerce'?'commerce':request.product==='landing'||request.product==='portfolio'?'editorial':request.product==='mobile'||request.product==='app'?'mobile':request.product==='healthcare'||request.product==='education'||request.product==='admin'?'workspace':'product'
   const candidate={
     request,
