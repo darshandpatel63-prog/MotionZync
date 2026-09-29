@@ -88,7 +88,7 @@ export function getDomainRecords(domain){
 export function getRelationshipIntegrity(){
   const errors=[]
   for(const relation of DI_RELATIONSHIPS){
-    if(!RELATIONSHIP_TYPES[relation.type]||relation.type!==relation.type){
+    if(!Object.values(RELATIONSHIP_TYPES).includes(relation.type)){
       errors.push('Unknown relationship type: '+relation.type)
       continue
     }
