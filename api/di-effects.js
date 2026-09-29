@@ -1,6 +1,8 @@
 import { authenticateMotionZyncApiKey } from './_lib/billing.js'
 import { createSpecialEffect, listSpecialEffects, SPECIAL_EFFECTS_API_VERSION } from './_lib/di-effects.js'
 
+const MAX_REQUEST_BYTES=16*1024
+
 const setSecurityHeaders=(res)=>{
   res.setHeader('Cache-Control','private, no-store, max-age=0')
   res.setHeader('Pragma','no-cache')
@@ -26,6 +28,28 @@ const applyCors=(req,res)=>{
   res.setHeader('Access-Control-Allow-Headers','Authorization, Content-Type')
   res.setHeader('Access-Control-Allow-Methods','GET, POST, OPTIONS')
   return true
+}
+
+const assertRequestSize=(req,body)=>{
+  const declared=Number(req.headers['content-length']||req.headers['Content-Length'])
+  if(Number.isFinite(declared)&&declared>MAX_REQUEST_BYTES){
+    const error=new Error('Request payload is too large')
+    error.status=413
+    throw error
+  }
+  if(body!==undefined){
+    let encoded=''
+    try{encoded=JSON.stringify(body)}catch{
+      const error=new Error('Request payload is invalid')
+      error.status=400
+      throw error
+    }
+    if(encoded.length>MAX_REQUEST_BYTES){
+      const error=new Error('Request payload is too large')
+      error.status=413
+      throw error
+    }
+  }
 }
 
 const readBody=(body)=>{
@@ -64,6 +88,7 @@ export default async function handler(req,res){
     }
 
     const body=readBody(req.body)
+    assertRequestSize(req,body)
     const effect=createSpecialEffect(body.effectId,body.options)
     return res.status(200).json({
       ok:true,
