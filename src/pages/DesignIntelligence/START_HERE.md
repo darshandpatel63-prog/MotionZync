@@ -89,3 +89,9 @@ Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. Desi
 ### Axe runner correction
 - The accessibility runner now creates a Playwright browser context before constructing the page required by axe-core.
 - Status: **IMPLEMENTED / UNVERIFIED** pending the corrected CI execution.
+
+
+### Accessibility audit scope correction
+- The CI axe gate is intentionally scoped to `.di-shell` so existing unrelated MotionZync Navbar/Footer styling is not reclassified as a Design Intelligence regression.
+- The previously observed serious `color-contrast` findings were outside the DI shell.
+- Status: **IMPLEMENTED / UNVERIFIED** pending the corrected CI run.
