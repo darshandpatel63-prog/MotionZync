@@ -118,7 +118,11 @@ jobs:
           for (const route of routes) {
             await page.goto(base + route, {waitUntil:'networkidle'})
             const text = await page.locator('body').innerText()
-            assert(text.includes('Design Intelligence'), route+' did not render Design Intelligence content')
+            const shellCount = await page.locator('.di-shell').count()
+            assert(
+              shellCount === 1,
+              route+' did not mount the Design Intelligence shell. url='+await page.url()+' body='+JSON.stringify(text.slice(0,1200))+' errors='+JSON.stringify(failures)
+            )
 
             const accessibilityProblems = await checkAccessibleNames()
             assert(accessibilityProblems.length === 0, route+' accessibility-name issues: '+JSON.stringify(accessibilityProblems))
