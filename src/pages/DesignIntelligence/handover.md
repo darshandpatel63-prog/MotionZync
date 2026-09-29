@@ -1740,7 +1740,7 @@ Do not edit other existing project files unless a future Design Intelligence mil
 ### VERIFIED
 - Current branch remains `feature/design-intelligence`.
 - Existing DI files and the minimum integration files were re-inspected before this milestone.
-- Cashfree current public documentation confirms server-side order creation, `payment_session_id` checkout handoff and server-side payment-status retrieval. citeturn757663search0turn243644search9
+- Cashfree current public documentation confirms server-side order creation, `payment_session_id` checkout handoff and server-side payment-status retrieval.
 - Vercel has generated deployments for the new API commits. The latest documentation fix commit is still queue/build state, so the newest combined code+docs HEAD is not yet marked READY.
 
 ### UNVERIFIED
