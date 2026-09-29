@@ -2398,3 +2398,46 @@ These must be configured as server-side Vercel Environment Variables and never h
 8. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset and the remote special-effects client.
 9. Continue Phase A publication workflow and deeper compatibility foundation.
 10. Keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-09-29 — Start/Continue verification checkpoint
+
+### VERIFIED
+- All current files inside src/pages/DesignIntelligence/ were inspected, plus src/App.jsx and src/components/Navbar/Navbar.jsx, as required by START_HERE.md and the project common instructions.
+- Current runtime application deployment dpl_BKumDxovPtH95mdpXvyPc7BVqSaD remains READY for commit 53fccb31069c32f99a762775134c7846c85ddccf on feature/design-intelligence.
+- Cashfree source contract remains aligned with Ultra Premium+ ₹500 INR: create-order uses ultra-premium/₹500 and the shared Cashfree helper rejects any other plan/amount.
+- Independent official Cashfree documentation checked on 2026-09-29 confirms the current Create Order and Get Payments examples use x-api-version 2025-01-01, sandbox.cashfree.com/pg, and the documented x-webhook-signature/x-webhook-timestamp headers; this matches the implemented integration boundary. citeturn251233search0turn251233search5
+
+### UNVERIFIED
+- Authenticated browser/visual/interactivity verification of all 7 DI routes remains blocked by Vercel Authentication/SSO in the available fetch/browser paths; no browser result is claimed.
+- Manual screen-reader/device/responsive audit remains UNVERIFIED.
+- A local checkout/build attempt could not run because this execution environment could not resolve github.com; no local build pass is claimed.
+- GitHub Actions has no workflow run associated with the current runtime commit 53fccb... via the available commit-run query; no current-head CI pass is claimed.
+- Real Firebase Premium/Ultra entitlement, MotionZync API-key lifecycle, BYOK provider execution and Cashfree sandbox transaction remain UNVERIFIED.
+
+### CHECKPOINT
+- Regression: source/deployment lineage VERIFIED; browser regression UNVERIFIED.
+- Functionality: Cashfree contract IMPLEMENTED and deployed READY; runtime payment lifecycle UNVERIFIED.
+- Accessibility: automated test foundation exists in the repository; manual production audit UNVERIFIED.
+- Privacy/security: no credentials were added; Cashfree client secret remains server-only by architecture; protected DI/API access remains server-authoritative in source.
+- Performance: no application runtime code changed during this checkpoint; production profiling UNVERIFIED.
+- Data quality: no new records or fake credentials/payments introduced.
+- Build/test: current READY deployment VERIFIED; local build and exact-current-HEAD CI are UNVERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## FIRST UNFINISHED TASK
+1. Obtain an authenticated browser path for the current READY deployment and complete visual/interactivity verification of all 7 Design Intelligence routes.
+2. Complete manual accessibility/responsive/device/screen-reader verification.
+3. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
+4. Exercise /api/di-knowledge with Free, real Firebase Premium, real Firebase Ultra and real Ultra MotionZync API-key callers; confirm Premium never receives Ultra-only records.
+5. Add Cashfree Vercel environment variables only when credentials are intentionally supplied, then run a real sandbox order + Checkout + signed webhook + server-side payment-status test.
+6. Verify Ultra API-key issuance/rotation/revocation against a real Ultra entitlement.
+7. Verify the API-only special-effects capability in the deployed environment without bypassing Ultra entitlement.
+8. Publish and externally install the package-ready canonical npm adapter.
+9. Continue Phase A publication workflow and deeper compatibility foundation.
+10. Keep 1,000+/10,000+ content expansion deferred.
