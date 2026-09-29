@@ -43,10 +43,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'A valid customer phone number is required for Cashfree checkout' })
   }
 
-  const baseUrl = getPublicBaseUrl()
+  let baseUrl
   const orderId = createOrderId()
 
   try {
+    baseUrl = getPublicBaseUrl()
     const order = await createCashfreeOrder({
       orderId,
       amount: 500,
