@@ -40,10 +40,10 @@ Phase 1 foundation is implemented:
 - continuation/common-instruction files
 
 ## FIRST UNFINISHED TASK
-1. Verify a READY Vercel deployment for current branch HEAD after the latest schema/reference/search changes.
+1. Verify a READY Vercel deployment for current branch HEAD after the latest provenance/compatibility changes.
 2. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
 3. Run full accessibility/responsive and real-provider BYOK verification.
-4. Continue Phase A with richer provenance metadata/rules and compatibility coverage before Phase B publish.
+4. Continue Phase A with deeper compatibility rules and publish workflow wiring.
 5. Do not begin the 1,000+/10,000+ content expansion yet.
 
 ## Existing AI / API-key integration context
