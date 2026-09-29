@@ -25,6 +25,7 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 - Canonical relationship layer with relationship-aware deterministic tie-breaking and integrity validation.
 - Entitlement-aware filtering: default/free generator/search does not intentionally select premium or ultra-premium records.
 - Live visual preview.
+- Canonical recipe compatibility result (`compatible` / `acceptable` / `questionable` / `incompatible`).
 - Design-token output.
 - Free/Premium/Ultra Premium+ taxonomy.
 - Google-login entry reuses existing AuthContext.
@@ -79,7 +80,7 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 
 ## Current known limitations
 - The deterministic prompt interpreter is intentionally basic.
-- Compatibility is not yet a full graph/rules engine.
+- Compatibility is still a bounded rules layer, not the final graph/rules engine.
 - Premium/Ultra records exist as protected seed records but there is no backend entitlement system yet.
 - The catalog is intentionally far below 1,000.
 - Payment and API-key issuance are not live.
@@ -162,11 +163,11 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Documentation/handover updated with exact verification boundaries.
 
 ## FIRST UNFINISHED TASK
-1. Obtain an authenticated browser/preview session and verify all 7 routes visually and interactively.
-2. Run accessibility/responsive checks.
-3. Then implement the actual Design Intelligence Generator connection to the existing `useAI()` / BYOK provider system.
-4. Verify provider capability handling, output validation and safe preview before expanding content/compatibility rules.
-
+1. Re-check Vercel for the current branch HEAD when the build-rate-limit restriction clears or an authorized deployment path becomes available.
+2. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
+3. Run full accessibility/responsive and real-provider BYOK verification.
+4. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
+5. Do not begin the 1,000+/10,000+ content expansion yet.
 
 ## 2026-09-29 — Phase A AI bridge milestone
 
@@ -793,3 +794,41 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
 5. Keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-09-29 — Phase A compatibility exposure + handover synchronization milestone
+
+### IMPLEMENTED
+- Canonical recipes now retain their computed compatibility result so downstream Web/API/npm/CLI/MCP adapters can consume the same compatibility state instead of recomputing a second model.
+- Recipe JSON export includes compatibility information when present.
+- Schema module header now accurately describes shape, reference, provenance and publication-gate validation.
+- Top-level handover FIRST UNFINISHED TASK has been synchronized to the current checkpoint.
+
+### VERIFIED
+- Current branch remains `feature/design-intelligence`.
+- Current HEAD is `af0e92560e0545873220a8d1aafc6997d2e24653`.
+- GitHub Vercel check for this HEAD currently reports **failure: build-rate-limit**.
+- Vercel project runtime-error aggregation for the selected 24-hour window reports 0 runtime errors.
+- No catalog expansion, fabricated provenance, second database, second API-key system, or unrelated feature changes were introduced.
+
+### UNVERIFIED
+- Current-head Vercel deployment/build.
+- Browser rendering/interactivity of current HEAD.
+- Full accessibility/responsive audit.
+- Real-provider BYOK execution and provider-specific CORS/model behavior.
+- Local full build/test execution.
+
+### CHECKPOINT
+- Regression: UNVERIFIED for current HEAD because deployment/build is blocked by the reported Vercel build-rate-limit restriction.
+- Functionality: IMPLEMENTED / source-audited; deployed runtime UNVERIFIED.
+- Accessibility: UNVERIFIED.
+- Privacy/security: no new secret storage or API-key path introduced.
+- Performance: compatibility calculation remains bounded; browser profiling UNVERIFIED.
+- Data quality: IMPLEMENTED guards; catalog remains intentionally small.
+- Build/test: Vercel check FAILED because of build-rate-limit; successful build is not claimed.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: 75% — IN PROGRESS
+- Phase B — Publish: 0%
+- Phase C — Continuous Content Expansion: 0%
