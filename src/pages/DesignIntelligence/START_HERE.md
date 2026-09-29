@@ -23,7 +23,7 @@ This folder contains the Design Intelligence + UI Generation feature only.
 - Update handover.md after every meaningful milestone.
 
 ## Current implementation
-Phase 1 foundation is implemented; current Phase A engine/system progress is 87%:
+Phase 1 foundation is implemented; current Phase A engine/system progress is 88%:
 - multipage route family under /design-intelligence/*
 - internal navigation
 - structured seed catalog
@@ -42,7 +42,7 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 87%
 
 ## FIRST UNFINISHED TASK
 1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes.
-2. Complete full accessibility/responsive audit, including screen-reader/device checks.
+2. Complete manual accessibility/responsive audit, including screen-reader/device checks; automated serious/critical axe gate is now verified in CI.
 3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility.
 4. Continue Phase A publication workflow and deeper compatibility foundation.
 5. Implement provider-specific payment webhook signature verification and connect the selected gateway before exposing paid checkout.
