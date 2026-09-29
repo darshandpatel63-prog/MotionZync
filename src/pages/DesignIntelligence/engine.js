@@ -97,6 +97,7 @@ export function buildRecipe(prompt='',entitlementTier='free'){
       ?(DI_STACKS.find(r=>r.id==='stack-swiftui')||best(DI_STACKS,tokens,entitlementTier))
       :best(DI_STACKS,tokens,entitlementTier))
   const recipeMatch=best(DI_RECIPES,[...tokens,request.industry,style.id],entitlementTier)
+  const compositionFamily=request.product==='dashboard'||request.product==='analytics'?'dashboard':request.product==='ecommerce'||request.product==='commerce'?'commerce':request.product==='landing'||request.product==='portfolio'?'editorial':request.product==='mobile'||request.product==='app'?'mobile':request.product==='healthcare'||request.product==='education'||request.product==='admin'?'workspace':'product'
   const candidate={
     request,
     style,
@@ -107,6 +108,7 @@ export function buildRecipe(prompt='',entitlementTier='free'){
     layout:recipeMatch.layout,
     navigation:recipeMatch.navigation,
     ux:recipeMatch.ux,
+    compositionFamily,
     tier:[style,palette,typography,chart,stack,recipeMatch].filter(Boolean).reduce((tier,record)=>levelOf(record.tier)>levelOf(tier)?record.tier:tier,'free'),
   }
   const warnings=[]
