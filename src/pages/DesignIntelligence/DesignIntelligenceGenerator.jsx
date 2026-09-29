@@ -6,7 +6,7 @@ import './DesignIntelligence.css'
 
 const EXAMPLES=['Build a dark analytics dashboard for developers with a technical, premium feel.','Create a friendly healthcare web product with clear forms and accessible charts.','Design a luxury ecommerce landing page with an editorial mood.']
 const extractJson=(text)=>{const raw=String(text||'').trim();const fenced=raw.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);const candidate=fenced?.[1]||raw;try{return JSON.parse(candidate)}catch{return null}}
-const downloadText=(filename,text,mime)=>{const blob=new Blob([text],{type:mime});const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=filename;document.body.appendChild(anchor);anchor.click();anchor.remove();URL.revokeObjectURL(url)}
+const downloadText=(filename,text,mime)=>{const blob=new Blob([text],{type:mime});const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=filename;document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),0)}
 
 function buildDIContext(prompt,recipe,entitlementTier='free'){
   return JSON.stringify({
