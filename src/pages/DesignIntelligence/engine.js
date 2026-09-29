@@ -92,6 +92,18 @@ export function evaluateCompatibility(recipe){
   if(recipe?.chart?.family==='donut'&&tokens.includes('many')){
     issues.push({severity:'questionable',code:'donut-many-categories',message:'Donut charts are not ideal for many categories; consider a comparison-oriented chart.'})
   }
+  if(recipe?.chart){
+    const chartNeeds=['time-series','performance','growth','categorical','comparison','composition','category-comparison','part-to-whole','correlation','distribution','matrix','time-by-category']
+    const requestedNeeds=tokens.filter(token=>chartNeeds.includes(token))
+    for(const need of requestedNeeds){
+      if(Array.isArray(recipe.chart.avoidFor)&&recipe.chart.avoidFor.includes(need)){
+        issues.push({severity:'questionable',code:'chart-avoids-requested-need',message:'The selected chart is explicitly marked to avoid the requested data/purpose signal: '+need+'.'})
+      }else if(Array.isArray(recipe.chart.bestFor)&&recipe.chart.bestFor.length&&!recipe.chart.bestFor.includes(need)){
+        issues.push({severity:'questionable',code:'chart-needs-review',message:'The selected chart is not explicitly classified for requested data/purpose signal: '+need+'.'})
+      }
+    }
+  }
+
   if(recipe?.request?.mode==='dark'&&recipe?.palette?.background==='#FFFBEB'){
     issues.push({severity:'questionable',code:'dark-light-palette-mismatch',message:'The selected palette is light-first while the request asks for dark mode.'})
   }
