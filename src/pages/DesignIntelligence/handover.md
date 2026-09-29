@@ -92,8 +92,6 @@ The feature branch was initially 4 commits behind main with 0 commits ahead. It 
 
 Do not edit other existing project files unless a future Design Intelligence milestone proves it necessary.
 
-
-
 ## Documentation milestone — 2026-09-28
 
 ### IMPLEMENTED
@@ -120,7 +118,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 
 ### UNVERIFIED
 - None of the newly documented future capabilities should be treated as runtime-verified merely because they are now documented.
-
 
 ## 2026-09-29 — Build / deployment verification milestone
 
@@ -200,7 +197,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - AI bridge is lazy: no provider request occurs unless the user explicitly invokes AI refinement.
 - Handover updated with exact verification boundaries.
 
-
 ## 2026-09-29 — Current continuation status
 
 ### VERIFIED
@@ -226,7 +222,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Accessibility/responsive verification.
 3. Provider-specific BYOK verification and validation/safe-preview checks.
 4. Continue Phase A engine/system foundation before Phase B publish.
-
 
 ## 2026-09-29 — Phase A validation / compatibility guard milestone
 
@@ -264,7 +259,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase C — Continuous Content Expansion: 0%
 - Do not start the 1,000+/10,000+ content expansion yet.
 
-
 ## 2026-09-29 — Phase A composition diversity milestone
 
 ### IMPLEMENTED
@@ -298,7 +292,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase C — Continuous Content Expansion: 0%
 - 1,000+/10,000+ content expansion remains deferred until Phase A foundation is sufficiently complete.
 
-
 ## 2026-09-29 — Phase A accessibility foundation milestone
 
 ### IMPLEMENTED
@@ -328,7 +321,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Run full accessibility/responsive and real-provider BYOK verification.
 3. Continue Phase A with stronger schema/relationship/export foundations.
 4. Do not begin the 1,000+/10,000+ content expansion yet.
-
 
 ## 2026-09-29 — Phase A canonical relationship foundation
 
@@ -365,7 +357,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: 0%
 - Phase C — Continuous Content Expansion: 0%
 - 1,000+/10,000+ content expansion remains deferred.
-
 
 ## 2026-09-29 — Phase A responsive navigation audit/fix
 
@@ -456,7 +447,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: 0%
 - Phase C — Continuous Content Expansion: 0%
 
-
 ## 2026-09-29 — Phase A canonical schema foundation
 
 ### IMPLEMENTED
@@ -502,7 +492,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Complete authenticated browser verification of all 7 Design Intelligence routes when an authenticated path is available.
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A with indexed relationship lookup/performance and a real provenance publication gate. Do not start large-scale content expansion yet.
-
 
 ## 2026-09-29 — Phase A relationship indexing + provenance publication gate
 
@@ -553,7 +542,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A with provenance-aware content ingestion/publication tooling and stronger compatibility rules. Do not begin large-scale content expansion yet.
 
-
 ## 2026-09-29 — Phase A relationship index refinement milestone
 
 ### IMPLEMENTED
@@ -586,7 +574,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Complete authenticated browser, accessibility and responsive verification.
 3. Continue provenance-aware content publication tooling and stronger compatibility rules.
 4. Do not begin 1,000+/10,000+ content expansion yet.
-
 
 ## 2026-09-29 — Phase A provenance pipeline + structured compatibility milestone
 
@@ -627,7 +614,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 2. Complete authenticated browser verification of all 7 routes.
 3. Run accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A compatibility/provenance depth before Phase B and before any 1,000+/10,000+ expansion.
-
 
 ## 2026-09-29 — Phase A schema-reference + indexed-search milestone
 
@@ -670,7 +656,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A with richer provenance metadata/rules and compatibility coverage before Phase B publish.
 5. Keep 1,000+/10,000+ expansion deferred.
-
 
 ## 2026-09-29 — Phase A provenance hardening + compatibility/search refinement milestone
 
@@ -716,7 +701,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A with deeper compatibility rules and publish workflow wiring.
 5. Keep 1,000+/10,000+ expansion deferred.
 
-
 ## 2026-09-29 — Verification checkpoint: Vercel build-rate-limit
 
 ### VERIFIED
@@ -750,7 +734,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A compatibility/publish workflow wiring without treating unverified deployment as complete.
 5. Keep 1,000+/10,000+ expansion deferred.
-
 
 ## 2026-09-29 — Phase A four-state compatibility milestone
 
@@ -795,7 +778,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
 5. Keep 1,000+/10,000+ expansion deferred.
 
-
 ## 2026-09-29 — Phase A compatibility exposure + handover synchronization milestone
 
 ### IMPLEMENTED
@@ -832,7 +814,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase A — Engine / System: 75% — IN PROGRESS
 - Phase B — Publish: 0%
 - Phase C — Continuous Content Expansion: 0%
-
 
 ## 2026-09-29 — Phase A compatibility UI milestone
 
@@ -872,7 +853,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
 5. Keep 1,000+/10,000+ expansion deferred.
 
-
 ## 2026-09-29 — Phase A platform compatibility refinement milestone
 
 ### IMPLEMENTED
@@ -916,7 +896,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publish-workflow and deeper platform/compatibility rules without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
 
-
 ## 2026-09-29 — Phase A platform compatibility refinement milestone
 
 ### IMPLEMENTED
@@ -959,7 +938,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publish-workflow and deeper platform/compatibility rules without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
-
 
 ## 2026-09-29 — Phase A publication-gate consistency milestone
 
@@ -1005,7 +983,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publication workflow and compatibility depth without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
 
-
 ## 2026-09-29 — Phase A canonical publication-gate reuse milestone
 
 ### IMPLEMENTED
@@ -1048,7 +1025,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publication workflow and deeper compatibility rules without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
 
-
 ## 2026-09-29 — Phase A pricing UI consistency milestone
 
 ### IMPLEMENTED
@@ -1087,7 +1063,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publication workflow and deeper compatibility rules without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
-
 
 ## 2026-09-29 — Phase A AI compatibility freshness milestone
 
@@ -1131,7 +1106,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publication workflow and deeper compatibility rules without claiming deployment verification.
 5. Keep 1,000+/10,000+ content expansion deferred.
 
-
 ## 2026-09-29 — Phase A deployment + compatibility milestone
 
 ### IMPLEMENTED
@@ -1174,7 +1148,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep 1,000+/10,000+ content expansion deferred.
 
-
 ## 2026-09-29 — Phase A accessibility semantics milestone
 
 ### IMPLEMENTED
@@ -1215,7 +1188,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep 1,000+/10,000+ content expansion deferred.
-
 
 ## 2026-09-29 — Phase A CI build verification milestone
 
@@ -1259,7 +1231,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep 1,000+/10,000+ content expansion deferred.
 
-
 ## 2026-09-29 — Phase A current-head CI verification checkpoint
 
 ### IMPLEMENTED
@@ -1300,7 +1271,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive and real-provider BYOK verification.
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep 1,000+/10,000+ content expansion deferred.
-
 
 ## 2026-09-29 — Automated browser verification infrastructure milestone
 
@@ -1344,7 +1314,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Run full accessibility/responsive verification and real-provider BYOK/CORS/model verification.
 4. Continue Phase A publish-workflow and deeper compatibility foundation.
 5. Keep the 1,000+/10,000+ content expansion deferred.
-
 
 ## 2026-09-29 — CI browser verification milestone completed
 
@@ -1393,7 +1362,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 4. Continue Phase A publication workflow and deeper compatibility foundation.
 5. Keep the 1,000+/10,000+ content expansion deferred until the foundation is ready.
 
-
 ## 2026-09-29 — Documentation sync after CI browser verification
 
 ### VERIFIED
@@ -1422,7 +1390,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 3. Verify real BYOK provider execution, provider-specific CORS behavior and model compatibility with real user-configured providers; do not use fabricated credentials.
 4. Continue Phase A publication workflow and deeper compatibility foundation.
 5. Keep the 1,000+/10,000+ content expansion deferred until the foundation is ready.
-
 
 ## 2026-09-29 — Premium billing / entitlement architecture requirement
 
@@ -1553,7 +1520,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Build/test: current-head Admin Billing build/browser result UNVERIFIED.
 - Documentation: UPDATED.
 
-
 ## 2026-09-29 — Admin Billing browser verification milestone
 
 ### IMPLEMENTED
@@ -1605,7 +1571,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 6. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
 7. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
 
-
 ## 2026-09-29 — Design Intelligence automated accessibility gate verified
 
 ### VERIFIED
@@ -1645,7 +1610,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 - 1,000+/10,000+ content expansion remains deferred.
 
-
 ## 2026-09-29 — Production access re-check
 
 ### VERIFIED
@@ -1666,7 +1630,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Data quality: no content/catalog changes.
 - Build/test: existing CI verification remains **VERIFIED**.
 - Documentation: UPDATED.
-
 
 ## 2026-09-29 — Cashfree webhook verification foundation
 
@@ -1723,14 +1686,13 @@ Do not edit other existing project files unless a future Design Intelligence mil
 6. Continue Phase A publication workflow and deeper compatibility foundation.
 7. Keep 1,000+/10,000+ content expansion deferred until the foundation is ready.
 
-
 ## 2026-09-29 — Cashfree authenticated order foundation
 
 ### IMPLEMENTED
 - Added `requireAuthenticatedUser()` to the existing Firebase Admin server helper so payment-initiation APIs can validate Firebase ID tokens without creating another auth system.
 - Added `api/cashfree-create-order.js` for authenticated server-side Cashfree order creation.
 - The endpoint derives UID/email from the verified Firebase token and accepts only a validated customer phone from the request.
-- The final paid plan/price is server-authorized: Premium permanent, INR 500. The client cannot override the amount.
+- The final paid plan/price is server-authorized: Ultra Premium+ permanent, INR 500. The client cannot override the amount.
 - Added `createCashfreeOrder()` to `api/_lib/cashfree.js`.
 - Cashfree order metadata includes the MotionZync plan and Firebase UID for server-side webhook reconciliation.
 - Added a canonical `orders` collection to the existing Firestore billing data model and `recordPendingOrder()`.
@@ -1776,7 +1738,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 5. Add server-authoritative protected Design Intelligence entitlement/API-key issuance, rotation and revocation.
 6. Continue Phase A publication workflow and deeper compatibility foundation.
 7. Keep 1,000+/10,000+ content expansion deferred.
-
 
 ## 2026-09-29 — Server-authoritative API-key lifecycle foundation
 
@@ -1833,7 +1794,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 6. Continue Phase A publication workflow and deeper compatibility foundation.
 7. Keep 1,000+/10,000+ content expansion deferred.
 
-
 ## 2026-09-29 — API-key holder analytics milestone
 
 ### IMPLEMENTED
@@ -1861,7 +1821,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Data quality: counts derive from real records only.
 - Build/test: deployment pending.
 - Documentation: UPDATED.
-
 
 ## 2026-09-29 — Protected Design Intelligence knowledge delivery foundation
 
@@ -1913,7 +1872,6 @@ Do not edit other existing project files unless a future Design Intelligence mil
 6. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
 7. Integrate the protected knowledge delivery into the Premium Explorer/Generator experience without putting protected records back into the public bundle.
 8. Keep 1,000+/10,000+ content expansion deferred.
-
 
 ## 2026-09-29 — Protected knowledge integrated into Explorer + Generator
 
@@ -2326,6 +2284,54 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Data quality: no catalog expansion or fabricated records.
 - Build/test: the current HEAD has no independent workflow run because later commits are handover-only; the successful runtime CI lineage remains `36585747732` on `ed734c1`.
 - Documentation: UPDATED.
+
+## FIRST UNFINISHED TASK
+1. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes on the READY deployment containing the current runtime code.
+2. Complete manual accessibility/responsive/device/screen-reader verification.
+3. Verify real BYOK provider execution, provider-specific CORS behaviour and model compatibility.
+4. Exercise `/api/di-knowledge` with Free, real Firebase Premium, real Firebase Ultra and real Ultra MotionZync API-key callers; confirm Premium never receives Ultra-only records.
+5. Run a real Cashfree sandbox order + Checkout + signed webhook + server-side payment-status test after merchant credentials/configuration are available.
+6. Verify Ultra API-key issuance/rotation/revocation against a real Ultra entitlement.
+7. Verify the API-only special animation/effects capability in the deployed environment without bypassing Ultra entitlement.
+8. Publish and externally install the package-ready canonical npm adapter; keep one canonical dataset and the remote special-effects client.
+9. Continue Phase A publication workflow and deeper compatibility foundation.
+10. Keep 1,000+/10,000+ content expansion deferred.
+
+## 2026-09-29 — Cashfree plan-guard alignment
+
+### IMPLEMENTED
+- Corrected `api/_lib/cashfree.js` so server-side Cashfree order creation accepts only the `ultra-premium` plan at the fixed ₹500 INR amount.
+- This now matches `api/cashfree-create-order.js` (which requests `ultra-premium`) and `api/cashfree-webhook.js` (which validates `ultra-premium` + ₹500 INR before recording verified payment).
+- No Cashfree credentials or secrets were added to GitHub.
+
+### VERIFIED
+- Source-level cross-check confirmed the create-order → Cashfree order helper → webhook → billing entitlement chain now uses the same Ultra Premium+ / ₹500 contract.
+- Required Vercel server environment variable names are documented for the later credential-configuration step:
+  - `CASHFREE_CLIENT_ID`
+  - `CASHFREE_CLIENT_SECRET`
+  - `CASHFREE_ENV` (`sandbox` first; production only after separate verification)
+  - `MOTIONZYNC_PUBLIC_URL`
+- These values must be added later in Vercel Environment Variables, not committed to the repository or exposed as frontend/public variables.
+
+### UNVERIFIED
+- Real Cashfree sandbox credentials, Checkout transaction, signed webhook delivery and server-side payment-status reconciliation.
+- Production Vercel runtime of the corrected Cashfree plan guard.
+- Real Firebase entitlement activation after a successful Cashfree payment.
+
+### CHECKPOINT
+- Regression: one server-side Cashfree validation mismatch fixed; no unrelated MotionZync feature changed.
+- Functionality: Ultra Premium+ ₹500 Cashfree plan guard IMPLEMENTED; real payment flow UNVERIFIED.
+- Accessibility: no UI change; manual audit remains UNVERIFIED.
+- Privacy/security: merchant credentials remain out of source control; server-side verification boundary preserved.
+- Performance: one constant-time plan/amount validation; production profiling UNVERIFIED.
+- Data quality: no payment/catalog records fabricated.
+- Build/test: source re-read after commit; no independent current-head CI result available through the connector yet.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
 ## FIRST UNFINISHED TASK
 1. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes on the READY deployment containing the current runtime code.
