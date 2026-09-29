@@ -90,6 +90,7 @@ const addToIndex=(map,key,value)=>{
 const relationKey=(domain,id)=>domain+'|'+id
 const byRecord=new Map()
 const coOccurrenceNeighbors=new Map()
+const coOccurrenceByRecordId=new Map()
 
 for(const relation of DI_RELATIONSHIPS){
   const sourceKey=relationKey(relation.source.domain,relation.source.id)
@@ -99,12 +100,15 @@ for(const relation of DI_RELATIONSHIPS){
   if(relation.type===RELATIONSHIP_TYPES.coOccursWith){
     addToIndex(coOccurrenceNeighbors,sourceKey,relation.target.id)
     addToIndex(coOccurrenceNeighbors,targetKey,relation.source.id)
+    addToIndex(coOccurrenceByRecordId,relation.source.id,relation.target.id)
+    addToIndex(coOccurrenceByRecordId,relation.target.id,relation.source.id)
   }
 }
 
 export const RELATIONSHIP_INDEX=Object.freeze({
   byRecord,
   coOccurrenceNeighbors,
+  coOccurrenceByRecordId,
   relationshipCount:DI_RELATIONSHIPS.length,
 })
 
@@ -143,9 +147,7 @@ export function hasRelationship(sourceId,targetId,type=RELATIONSHIP_TYPES.coOccu
 export function relationshipScore(recordId,anchorIds=[]){
   const anchors=new Set((Array.isArray(anchorIds)?anchorIds:[]).filter(Boolean))
   if(!recordId||!anchors.size)return 0
-  const neighbors=RELATIONSHIP_INDEX.coOccurrenceNeighbors.get(
-    [...byRecord.keys()].find(key=>key.endsWith('|'+recordId))
-  )||[]
+  const neighbors=RELATIONSHIP_INDEX.coOccurrenceByRecordId.get(recordId)||[]
   let score=0
   for(const anchorId of anchors)if(neighbors.includes(anchorId))score++
   return score
