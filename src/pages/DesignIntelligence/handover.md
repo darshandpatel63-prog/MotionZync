@@ -2159,6 +2159,40 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
+## 2026-09-29 — CI browser/Axe navigation-race hardening
+
+### IMPLEMENTED
+- Hardened the Design Intelligence GitHub Actions browser smoke test against transient page-navigation races during Axe analysis.
+- Route checks now wait for the Design Intelligence shell and use a bounded retry that reopens the route when Playwright reports an execution-context/navigation interruption.
+- The previous CI failure was isolated to the browser/Axe phase; the same run's npm run build step completed successfully.
+- No production application route, component or data model was changed for this CI hardening.
+
+### VERIFIED
+- The failing run 36567384821 showed dependency installation, production build and Playwright/Chromium setup all succeeding.
+- The browser/Axe step failed specifically at AxeBuilder.analyze() with "Execution context was destroyed, most likely because of a navigation".
+- The workflow now contains a route-stability wait and bounded Axe retry.
+- Changes remain on feature/design-intelligence only.
+
+### UNVERIFIED
+- New workflow run for commit 45d749a2c445e1b0650697ccace9cb356992b4d2 has not completed yet.
+- Vercel current-HEAD deployment remains unavailable/UNVERIFIED.
+- Production browser/accessibility, real entitlement/API-key calls, Cashfree E2E, BYOK provider execution and effect API runtime remain unverified.
+
+### CHECKPOINT
+- Regression: CI-only test harness change; application behaviour unchanged.
+- Functionality: browser/Axe stabilization IMPLEMENTED; verification pending.
+- Accessibility: automated Axe gate remains enabled; manual audit UNVERIFIED.
+- Privacy/security: no runtime security boundary changed.
+- Performance: only test-side waits/retry added; production performance unaffected.
+- Data quality: no records changed.
+- Build/test: prior source build passed; new CI conclusion pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
 ## FIRST UNFINISHED TASK
 1. Verify a Vercel deployment containing the latest access contract, tier-scoped knowledge, Ultra API-key authentication and Pricing API-key controls after the Vercel build-rate-limit restriction clears.
 2. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on that newest deployment.
