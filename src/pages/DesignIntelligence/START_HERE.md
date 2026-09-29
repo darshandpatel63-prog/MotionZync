@@ -29,6 +29,9 @@ Phase 1 foundation is implemented:
 - structured seed catalog
 - deterministic search
 - entitlement-aware deterministic recipe generation
+- canonical recipe relationship layer
+- relationship-aware deterministic selection
+- optional AI-assisted refinement through the existing BYOK provider bridge
 - visual preview
 - design-token output
 - Free/Premium/Ultra Premium+ access taxonomy
