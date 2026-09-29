@@ -58,4 +58,4 @@ User prompt → Design Intelligence core → Design Recipe/constraints → exist
 
 AI-assisted generation is optional. Deterministic Design Intelligence must remain usable without an external AI key.
 
-Current status: **ARCHITECTURALLY SUPPORTED / UNVERIFIED** for the end-to-end connection. The existing API-key system is present; DesignIntelligenceGenerator is not yet wired to it.
+Current status: **IMPLEMENTED / UNVERIFIED** for the end-to-end connection. DesignIntelligenceGenerator now calls the existing `useAI()` / `generateText()` bridge; real provider execution, CORS/model compatibility and browser verification remain unverified.
