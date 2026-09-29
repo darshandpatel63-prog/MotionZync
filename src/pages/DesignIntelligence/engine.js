@@ -93,6 +93,28 @@ export function evaluateCompatibility(recipe){
 
 export function validateRecipe(recipe,entitlementTier='free'){
   const errors=[]
+  const warnings=[]
+  const structure=validateRecipeShape(recipe)
+  errors.push(...structure.errors)
+  warnings.push(...structure.warnings)
+
+  const graph=getRelationshipIntegrity()
+  if(!graph.valid)errors.push(...graph.errors.slice(0,10))
+
+  const refs=[
+    ['style',recipe?.style,DI_STYLES],
+    ['palette',recipe?.palette,DI_PALETTES],
+    ['typography',recipe?.typography,DI_TYPOGRAPHY],
+    ['stack',recipe?.stack,DI_STACKS],
+    ...(recipe?.chart?[['chart',recipe.chart,DI_CHARTS]]:[]),
+  ]
+  for(const [name,record,records] of refs){
+    if(!record?.id){errors.push('Missing '+name+' record.');continue}
+    const canonical=records.find(item=>item.id===record.id)
+    if(!canonical){errors.push('Unknown '+name+' record: '+record.id);continue}
+    if(!isAccessible(canonical,entitlementTier))errors.push(canonical.name+' requires '+canonical.tier+' entitlement.')
+  }
+
   const compatibility=evaluateCompatibility(recipe)
   for(const issue of compatibility.issues){
     if(issue.severity==='incompatible')errors.push(issue.message)
