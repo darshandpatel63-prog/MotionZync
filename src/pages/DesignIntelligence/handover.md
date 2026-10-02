@@ -2737,7 +2737,7 @@ These must be configured as server-side Vercel Environment Variables and never h
 - Documentation: UPDATED.
 
 ### PHASE STATUS
-- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase A — Engine / System: **94% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
@@ -2776,4 +2776,39 @@ These must be configured as server-side Vercel Environment Variables and never h
 - Performance: API-key and entitlement lookups are bounded; production profiling UNVERIFIED.
 - Data quality: no new records or duplicate catalog added.
 - Build/test: preceding package/browser verification remains VERIFIED; this milestone is source-review based.
+- Documentation: UPDATED.
+
+## 2026-10-02 — Phase-A progress recalibration
+
+### VERIFIED
+- The previous **89%** label was a carried-forward checkpoint value, not a recalculated completion measurement.
+- Since that checkpoint, the following additional milestones are now verified: exact-head CI/browser/accessibility automation, canonical npm tarball + clean-project installation, publish-facing package metadata/README, server entitlement/payment boundary review, and a READY Vercel deployment for the latest branch HEAD.
+- Current latest branch HEAD is `ba6449af5392e79273b584f8e713dd7a58d8a073`.
+- Latest Vercel deployment `dpl_B8WFeC3o3WMjE3NShZGqaLmtYgvV` for that HEAD is **READY**.
+
+### IMPLEMENTED
+- Phase-A engineering foundation is substantially complete across routes, deterministic core, relationships, preview/tokens, access taxonomy, server-authoritative billing/API foundations, special-effects capability, CI verification and package adapter.
+
+### UNVERIFIED
+The remaining Phase-A work is now concentrated in live/external validation:
+- authenticated production browser/manual accessibility/device verification
+- real Firebase Free/Premium/Ultra entitlement and API-key lifecycle exercise
+- real BYOK provider execution/CORS/model compatibility
+- Cashfree Sandbox end-to-end checkout/webhook/payment reconciliation after credentials are configured in Vercel Environment Variables
+- deployed Ultra-only effects API exercise with a real entitlement
+- npm registry publication and registry-backed clean installation
+
+### PROGRESS RULE
+- **94% — IN PROGRESS** is the current engineering completion estimate for Phase A.
+- This percentage is not a count of tests passed; it measures completion of the Phase-A engineering scope while reserving the remaining percentage for the six live/external validation gates above.
+- It must be recalculated when one of those gates is genuinely verified, rather than being carried forward unchanged.
+
+### CHECKPOINT
+- Regression: latest READY Vercel deployment and exact-head CI/package/browser verification are VERIFIED.
+- Functionality: core implementation is VERIFIED by CI/source review; live external integrations remain UNVERIFIED.
+- Accessibility: automated checks VERIFIED; manual production/device audit UNVERIFIED.
+- Privacy/security: server entitlement/API-key/Cashfree boundary review VERIFIED; live credentialed exercise UNVERIFIED.
+- Performance: browser overflow/build checks VERIFIED; production profiling UNVERIFIED.
+- Data quality: canonical bounded seed/protected dataset preserved; no fabricated large catalog.
+- Build/test: CI package + browser suite VERIFIED; latest HEAD deployment READY.
 - Documentation: UPDATED.
