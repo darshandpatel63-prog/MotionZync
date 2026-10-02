@@ -2987,3 +2987,28 @@ FIRST UNFINISHED TASK remains:
 - Build/test: Vercel READY verified; latest directly retrievable full CI pass remains the parent commit's green run.
 - Documentation: UPDATED.
 
+## 2026-10-02 — Latest HEAD/deployment and runtime-log checkpoint
+
+### VERIFIED
+- Current feature-branch HEAD is `f26f8d36408469774c0a169c310c74416379bb40`.
+- Current HEAD deployment `dpl_B35ZHD3YZ66SWdEFc8pzcgLwk9y6` is **READY**.
+- The compare from code-fix commit `0b0db240baa31a4502dc1a02019e03cbb67062f4` to current HEAD shows only `src/pages/DesignIntelligence/handover.md` changes. Therefore the deployed application code remains the same as the READY `0b0db24` build.
+- Runtime-error inspection for the `0b0db24` deployment over the last 24 hours found no runtime error logs for that deployment.
+- Project-level runtime history contains one Node `DEP0169` deprecation warning associated with `/api/di-knowledge`; this is a warning rather than a verified application failure, and the source of the warning is not yet isolated.
+
+### UNVERIFIED
+- No live route request was generated during the runtime-log check, so an empty log set is not proof that the application routes/API work end-to-end.
+- Authenticated browser access to the protected Vercel deployment still redirects to Vercel SSO from the available connector/browser path.
+- Manual production accessibility/device/screen-reader verification therefore remains unverified.
+- Real Firebase entitlement/API-key, BYOK, Cashfree ₹200, deployed effects and npm registry verification remain unverified.
+
+### CHECKPOINT
+- Regression: current HEAD is documentation-only relative to the verified application-code commit.
+- Functionality: READY deployment and no observed runtime errors on the checked deployment; live interaction remains UNVERIFIED.
+- Accessibility: nested-main fix remains deployed; manual production audit UNVERIFIED.
+- Privacy/security: no security or entitlement logic changed in this checkpoint.
+- Performance: no runtime code changed; production profiling UNVERIFIED.
+- Data quality: no catalog changes.
+- Build/test: Vercel READY VERIFIED; no new automated browser suite claimed for `0b0db24`.
+- Documentation: UPDATED.
+
