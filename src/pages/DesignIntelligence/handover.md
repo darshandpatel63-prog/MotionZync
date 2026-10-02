@@ -1,6 +1,6 @@
 # MotionZync Design Intelligence — Handover
 
-Last updated: 2026-09-29
+Last updated: 2026-10-02
 
 ## Branch
 feature/design-intelligence
@@ -2811,4 +2811,29 @@ The remaining Phase-A work is now concentrated in live/external validation:
 - Performance: browser overflow/build checks VERIFIED; production profiling UNVERIFIED.
 - Data quality: canonical bounded seed/protected dataset preserved; no fabricated large catalog.
 - Build/test: CI package + browser suite VERIFIED; latest HEAD deployment READY.
+- Documentation: UPDATED.
+
+## 2026-10-02 — Production access-path verification
+
+### VERIFIED
+- Latest feature/design-intelligence Vercel deployment before this documentation checkpoint reached READY.
+- The latest feature deployment hostname remains protected by Vercel Authentication/SSO; the available Vercel authenticated-fetch path returned HTTP 302 to Vercel SSO for the deployment route.
+- The public production alias `https://motion-zync.vercel.app/design-intelligence` is reachable with HTTP 200, but direct requests to `/api/di-knowledge`, `/api/di-effects` and `/api/di-api-key` return HTTP 404.
+- Therefore the public production alias is not evidence that the current `feature/design-intelligence` server/API runtime is deployed there; its live runtime must not be used to claim Phase-A feature verification.
+- The authenticated-production-browser gate is therefore still genuinely **UNVERIFIED**, rather than falsely promoted based on the public alias.
+- Automated CI/preview verification remains the authoritative browser verification already recorded in the previous milestone.
+
+### UNVERIFIED
+- Interactive Chromium verification against the current protected feature deployment.
+- Manual screen-reader/device audit.
+- Credentialed Firebase/BYOK/Cashfree/Ultra API-key/effects testing.
+
+### CHECKPOINT
+- Regression: no application code changed in this milestone; only live access-path verification and documentation.
+- Functionality: feature deployment is READY; interactive production access remains blocked by deployment protection.
+- Accessibility: automated CI coverage remains VERIFIED; manual audit UNVERIFIED.
+- Privacy/security: no deployment-protection bypass or production setting change was made.
+- Performance: no runtime code changed; production profiling UNVERIFIED.
+- Data quality: no data changes.
+- Build/test: prior exact-head CI/package/browser verification remains VERIFIED.
 - Documentation: UPDATED.
