@@ -2953,16 +2953,15 @@ The remaining Phase-A work is now concentrated in live/external validation:
 
 ## CURRENT CHECKPOINT AFTER 2026-10-02 CONTINUATION
 FIRST UNFINISHED TASK remains:
-1. Verify the new Vercel deployment for `0b0db240` reaches READY and then rerun the production/browser route verification path.
-2. Complete authenticated browser/visual/interactivity verification for all 7 Design Intelligence routes on the newest deployment.
-3. Complete manual accessibility/responsive/device and screen-reader audit.
-4. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
-5. Exercise server-authoritative Free/Premium/Ultra knowledge boundaries and MotionZync API-key access with real Firebase identities.
-6. Run the real Cashfree Sandbox flow at the current **₹200** price after merchant credentials/configuration are available in Vercel Environment Variables.
-7. Verify Ultra API-key issue/rotate/revoke with a real Ultra entitlement.
-8. Verify deployed special-effects API behavior with real Ultra entitlement and allowlisted origin.
-9. Publish the package to npm and verify an external registry installation.
-10. Continue final Phase A publication/compatibility work; keep large 1,000+/10,000+ content expansion deferred.
+1. Complete authenticated production browser/visual/interactivity verification of all 7 Design Intelligence routes on the READY feature deployment.
+2. Complete manual accessibility/responsive/device and screen-reader audit.
+3. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+4. Exercise server-authoritative Free/Premium/Ultra knowledge boundaries and MotionZync API-key access with real Firebase identities.
+5. Run the real Cashfree Sandbox flow at the current **₹200** price after merchant credentials/configuration are available in Vercel Environment Variables.
+6. Verify Ultra API-key issue/rotate/revoke with a real Ultra entitlement.
+7. Verify deployed special-effects API behavior with real Ultra entitlement and allowlisted origin.
+8. Publish the package to npm and verify an external registry installation.
+9. Continue final Phase A publication/compatibility work; keep large 1,000+/10,000+ content expansion deferred.
 
 ## 2026-10-02 — READY deployment verification completed
 
@@ -3011,4 +3010,53 @@ FIRST UNFINISHED TASK remains:
 - Data quality: no catalog changes.
 - Build/test: Vercel READY VERIFIED; no new automated browser suite claimed for `0b0db24`.
 - Documentation: UPDATED.
+
+## 2026-10-02 — Current-HEAD CI/browser verification closed
+
+### VERIFIED
+- GitHub Actions run `36974971210` for current HEAD `dcbdeb7a50bcb0442a563f9e141de85e21c9c5d1` completed with **success**.
+- The exact current workflow job `110736708640` passed:
+  - application build
+  - shared ₹200 frontend/backend price-contract assertion
+  - canonical npm tarball + clean-project local installation
+  - Playwright + Chromium setup
+  - production Vite preview startup
+  - all 7 Design Intelligence route smoke checks
+  - Explorer search/domain interaction
+  - Generator recipe/AI-toggle interaction
+  - Pricing CI identity
+  - Admin DI Billing checks
+  - mobile/tablet/desktop horizontal-overflow checks
+  - keyboard `:focus-visible` check
+  - accessible-name checks
+  - serious/critical Axe accessibility checks
+  - browser screenshots/evidence upload
+- Current feature-branch Vercel deployment `dpl_B35ZHD3YZ66SWdEFc8pzcgLwk9y6` is **READY** and maps to current documentation HEAD; the deployed application code remains the verified `0b0db24` landmark fix because intervening commits only changed documentation.
+
+### IMPLEMENTED
+- The automated current-head browser/accessibility gate is now closed; the remaining browser work is specifically authenticated production/manual validation, not a missing CI smoke suite.
+
+### UNVERIFIED
+- Authenticated live production browser interaction remains blocked by Vercel Authentication/SSO on the available browser/fetch path.
+- Manual screen-reader/device audit remains unverified.
+- Real Firebase Premium/Ultra entitlement/API-key lifecycle, real BYOK provider execution/CORS/model compatibility, Cashfree ₹200 Sandbox end-to-end, deployed Ultra effects API with real entitlement, and npm registry publication remain unverified.
+
+### CHECKPOINT
+- Regression: current-head automated suite VERIFIED.
+- Functionality: all automated route/interactivity checks VERIFIED; live external integration UNVERIFIED.
+- Accessibility: automated accessible-name/Axe/focus-visible checks VERIFIED; manual device/screen-reader audit UNVERIFIED.
+- Privacy/security: no secrets added; CI uses synthetic test identity/config only.
+- Performance: responsive overflow checks passed; production profiling UNVERIFIED.
+- Data quality: no catalog expansion/fabrication.
+- Build/test: exact current-head CI run VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **95% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### PROGRESS RATIONALE
+- Phase A moved from **94% → 95%** because the remaining automated browser/accessibility gate is now verified on the current branch HEAD, not merely on an earlier parent commit.
+- The remaining 5% is reserved for live/manual/external gates: authenticated production browser/device verification, real Firebase entitlement/API-key lifecycle, real BYOK compatibility, real Cashfree transaction/webhook reconciliation at ₹200, deployed Ultra effects exercise, and npm registry publication.
 
