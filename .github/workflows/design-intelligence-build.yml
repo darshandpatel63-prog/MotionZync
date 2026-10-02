@@ -57,6 +57,17 @@ jobs:
       - name: Verify Cashfree server order contract
         run: node scripts/di-cashfree-contract.mjs
 
+      - name: Verify OpenAI BYOK model registry
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -q "o1-preview\|o1-mini" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-5.6" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-5.6-sol" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-5.6-terra" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-5.6-luna" src/ai/providers/AIProviderContext.jsx
+          echo "OpenAI BYOK model registry: current GPT-5.6 entries present; retired o1-preview/o1-mini absent"
+
       - name: Verify shared Ultra Premium+ price contract
         shell: bash
         run: |
