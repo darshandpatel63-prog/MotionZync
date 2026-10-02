@@ -50,7 +50,7 @@ jobs:
           VITE_FIREBASE_APP_ID: "1:000000000000:web:ci-browser-test"
           VITE_CI_ADMIN_EMAIL: "ci-admin@example.invalid"
           VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
-        run: npm run build
+        run: npm run build -- --mode ci
 
       - name: Install CI browser and accessibility tooling
         run: npm install --no-save --no-audit --no-fund playwright@1.55.0 @axe-core/playwright@4.10.2 axe-core@4.10.2
