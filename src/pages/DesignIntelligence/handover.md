@@ -218,12 +218,15 @@ Do not edit other existing project files unless a future Design Intelligence mil
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 
 ## FIRST UNFINISHED TASK
-1. Re-check Vercel for the current branch HEAD when the build-rate-limit restriction clears or an authorized deployment path becomes available.
-2. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes.
-3. Run full accessibility/responsive and real-provider BYOK verification.
-4. Continue Phase A publish-workflow/compatibility depth without claiming deployment verification.
-5. Do not begin the 1,000+/10,000+ content expansion yet.
-
+1. Complete authenticated browser/visual/interactivity verification of all 7 Design Intelligence routes on the READY Vercel deployment for commit `0b0db240baa31a4502dc1a02019e03cbb67062f4`.
+2. Complete manual accessibility/responsive/device and screen-reader audit.
+3. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+4. Exercise server-authoritative Free/Premium/Ultra knowledge boundaries and MotionZync API-key access with real Firebase identities.
+5. Run the real Cashfree Sandbox order + Checkout + signed webhook + server-side payment-status flow at the current **₹200** price after merchant credentials/configuration are available in Vercel Environment Variables.
+6. Verify Ultra API-key issue/rotate/revoke with a real Ultra entitlement.
+7. Verify deployed special-effects API behavior with real Ultra entitlement and an allowlisted origin.
+8. Publish the package to npm and verify an external registry installation.
+9. Continue final Phase A publication/compatibility workflow while keeping large 1,000+/10,000+ content expansion deferred.
 ## 2026-09-29 — Phase A AI bridge milestone
 
 ### IMPLEMENTED
@@ -2960,4 +2963,27 @@ FIRST UNFINISHED TASK remains:
 8. Verify deployed special-effects API behavior with real Ultra entitlement and allowlisted origin.
 9. Publish the package to npm and verify an external registry installation.
 10. Continue final Phase A publication/compatibility work; keep large 1,000+/10,000+ content expansion deferred.
+
+## 2026-10-02 — READY deployment verification completed
+
+### VERIFIED
+- Vercel deployment `dpl_AzGtvPeneTxYrtpr8nuzYUmj1Q2G` for commit `0b0db240baa31a4502dc1a02019e03cbb67062f4` is **READY**.
+- The deployment maps to the intended branch `feature/design-intelligence`, Vercel project `motion-zync`, and commit message `fix(di): avoid nested main landmark in Design Intelligence layout`.
+- GitHub combined status for commit `0b0db24` reports the Vercel check as **success**.
+- Therefore the accessibility landmark fix is deployed in a READY feature-branch Vercel deployment.
+
+### UNVERIFIED
+- READY deployment status is not the same as an authenticated end-user browser/session test. The deployment remains behind Vercel Authentication/SSO on the available verification path.
+- All 7 live routes, interactive states, manual device sizes and screen-reader behavior on this latest deployment still require authenticated browser verification.
+- The previous full CI suite (run `36973499882`) was green for the parent app-code commit `854ae03`; a directly retrievable workflow result for `0b0db24` is not exposed by the currently available GitHub workflow-run read path, so no new CI pass is claimed here.
+
+### CHECKPOINT
+- Regression: nested DI `main` landmark removed; route composition unchanged.
+- Functionality: Vercel deployment is READY; live browser behavior remains unverified.
+- Accessibility: semantic landmark issue fixed; manual audit and latest full automated Axe run remain unverified.
+- Privacy/security: no security boundary changes in this milestone.
+- Performance: no new runtime cost identified from the landmark change.
+- Data quality: no catalog records changed.
+- Build/test: Vercel READY verified; latest directly retrievable full CI pass remains the parent commit's green run.
+- Documentation: UPDATED.
 
