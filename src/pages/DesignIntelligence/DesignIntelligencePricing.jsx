@@ -4,6 +4,31 @@ import {PLAN_OFFERS,canUseDeveloperApi,accessLabel,ULTRA_PREMIUM_PRICE_INR} from
 import {fetchDesignIntelligenceKnowledge} from './knowledgeClient.js'
 import './DesignIntelligence.css'
 
+let cashfreeSdkPromise=null
+function loadCashfree(mode='sandbox'){
+  if(typeof window==='undefined')return Promise.reject(new Error('Cashfree checkout is only available in a browser.'))
+  if(typeof window.Cashfree==='function')return Promise.resolve(window.Cashfree({mode}))
+  if(cashfreeSdkPromise)return cashfreeSdkPromise
+  cashfreeSdkPromise=new Promise((resolve,reject)=>{
+    const existing=document.querySelector('script[data-motionzync-cashfree]')
+    if(existing){
+      existing.addEventListener('load',()=>resolve(window.Cashfree({mode})),{once:true})
+      existing.addEventListener('error',()=>reject(new Error('Cashfree Checkout SDK could not be loaded.')),{once:true})
+      return
+    }
+    const script=document.createElement('script')
+    script.src='https://sdk.cashfree.com/js/v3/cashfree.js'
+    script.async=true
+    script.dataset.motionzyncCashfree='true'
+    script.onload=()=>typeof window.Cashfree==='function'
+      ?resolve(window.Cashfree({mode}))
+      :reject(new Error('Cashfree Checkout SDK loaded without the expected API.'))
+    script.onerror=()=>reject(new Error('Cashfree Checkout SDK could not be loaded.'))
+    document.head.appendChild(script)
+  })
+  return cashfreeSdkPromise
+}
+
 export default function DesignIntelligencePricing(){
   const {user,login}=useAuth()
   const [entitlementTier,setEntitlementTier]=useState('free')
@@ -12,6 +37,9 @@ export default function DesignIntelligencePricing(){
   const [apiSecret,setApiSecret]=useState('')
   const [apiStatus,setApiStatus]=useState('')
   const [apiBusy,setApiBusy]=useState(false)
+  const [phone,setPhone]=useState('')
+  const [checkoutBusy,setCheckoutBusy]=useState(false)
+  const [checkoutStatus,setCheckoutStatus]=useState('')
 
   useEffect(()=>{
     let active=true
@@ -48,6 +76,37 @@ export default function DesignIntelligencePricing(){
       .catch(error=>{if(active)setApiStatus(error?.message||'API-key status unavailable')})
     return()=>{active=false}
   },[user,entitlementTier])
+
+
+  const runCheckout=async()=>{
+    if(!user){setCheckoutStatus('Sign in with Google before starting the ₹'+ULTRA_PREMIUM_PRICE_INR+' checkout.');return}
+    const cleanPhone=phone.trim()
+    if(!/^\+?[0-9 ()-]{8,20}$/.test(cleanPhone)){
+      setCheckoutStatus('Enter a valid customer phone number before continuing.')
+      return
+    }
+    setCheckoutBusy(true)
+    setCheckoutStatus('Creating a server-authorized Cashfree order…')
+    try{
+      const token=await user.getIdToken()
+      const response=await fetch('/api/cashfree-create-order',{
+        method:'POST',
+        headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},
+        body:JSON.stringify({phone:cleanPhone})
+      })
+      const json=await response.json().catch(()=>null)
+      if(!response.ok)throw new Error(json?.error||'Cashfree order creation failed')
+      if(!json?.paymentSessionId)throw new Error('Cashfree did not return a payment session')
+      setCheckoutStatus('Opening Cashfree Checkout…')
+      const cashfree=await loadCashfree(json.environment==='production'?'production':'sandbox')
+      const result=await cashfree.checkout({paymentSessionId:json.paymentSessionId,redirectTarget:'_self'})
+      if(result?.error)setCheckoutStatus(result.error.message||'Cashfree checkout reported an error. Payment status must be checked server-side.')
+    }catch(error){
+      setCheckoutStatus(error?.message||'Unable to start Cashfree checkout.')
+    }finally{
+      setCheckoutBusy(false)
+    }
+  }
 
   const runApiAction=async(action)=>{
     if(!user)return
