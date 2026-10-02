@@ -3060,3 +3060,42 @@ FIRST UNFINISHED TASK remains:
 - Phase A moved from **94% → 95%** because the remaining automated browser/accessibility gate is now verified on the current branch HEAD, not merely on an earlier parent commit.
 - The remaining 5% is reserved for live/manual/external gates: authenticated production browser/device verification, real Firebase entitlement/API-key lifecycle, real BYOK compatibility, real Cashfree transaction/webhook reconciliation at ₹200, deployed Ultra effects exercise, and npm registry publication.
 
+## 2026-10-02 — Cashfree checkout launch UI milestone
+
+### IMPLEMENTED
+- Added a real Pricing-page Ultra Premium+ checkout launch flow backed by the existing server endpoint `/api/cashfree-create-order`.
+- The user must be authenticated with the existing Google/Firebase identity before an order can be created.
+- Added a customer phone field with accessible labeling and frontend format validation.
+- The frontend never selects the payment amount or entitlement; it sends only the phone to the authenticated server endpoint.
+- The server-returned Payment Session ID is handed to the current Cashfree Web JS SDK using the documented `cashfree.checkout({ paymentSessionId, redirectTarget: '_self' })` flow. citeturn480773search0turn480773search5
+- Checkout loads the Cashfree SDK dynamically from Cashfree's official v3 SDK URL; no Cashfree secret or client credential is placed in frontend code.
+- A return-from-checkout state explicitly treats the return URL as non-authoritative. The UI does not claim payment success from the redirect alone and can refresh the server entitlement.
+- Added responsive checkout styling and a current CI assertion for the phone field and ₹200 payment button.
+
+### VERIFIED
+- Source inspection confirms the checkout UI is present in `DesignIntelligencePricing.jsx`.
+- The frontend amount is displayed from the shared `ULTRA_PREMIUM_PRICE_INR` constant, and the actual server order endpoint remains authoritative for the paid amount and identity.
+- Current backend Cashfree order creation already requires authenticated Firebase identity, server-side customer identity, phone validation, INR and the exact shared ₹200 Ultra Premium+ amount.
+
+### UNVERIFIED
+- Current exact-head CI run `36975258848` for commit `2961daf` is still **IN PROGRESS** at this checkpoint.
+- Real Cashfree Sandbox checkout, payment completion, signed webhook and server-side reconciliation at ₹200 remain unverified until Cashfree merchant credentials/configuration are intentionally present in Vercel Environment Variables.
+- The deployed Pricing-page checkout interaction is also unverified until the new deployment becomes READY and an authenticated browser path is available.
+
+### CHECKPOINT
+- Regression: additive Pricing-page checkout UI only; existing auth/API-key logic unchanged.
+- Functionality: checkout launch flow IMPLEMENTED; live gateway flow UNVERIFIED.
+- Accessibility: phone field has an explicit label; responsive styles added; automated CI verification pending for the exact checkout commit.
+- Privacy/security: no payment secrets or API credentials exposed client-side; return URL is not treated as proof of payment.
+- Performance: SDK is loaded only when checkout is actually opened.
+- Data quality: no catalog records changed.
+- Build/test: current exact-head CI pending; earlier current-head suite remains VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **95% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### NEXT PROGRESS GATE
+- Move Phase A to **96%** only after the exact checkout commit passes build + browser/accessibility CI and receives a READY Vercel deployment.
