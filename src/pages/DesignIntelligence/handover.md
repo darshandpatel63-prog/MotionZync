@@ -2643,3 +2643,30 @@ These must be configured as server-side Vercel Environment Variables and never h
 - Data quality: no catalog changes.
 - Build/test: new CI execution pending.
 - Documentation: UPDATED.
+
+## 2026-10-02 — CI browser suite auth-console hardening
+
+### IMPLEMENTED
+- Hardened only the Design Intelligence CI browser harness to ignore the known Google authentication iframe CSP Report-Only / `net::ERR_FAILED` console noise produced by the existing auth surface.
+- All other browser `console.error` messages remain failures.
+- No production application/auth/CSP behavior was changed.
+
+### VERIFIED
+- The preceding CI run reached the end of the 7-route, interaction, Admin Billing, responsive and focus-visible assertions.
+- The remaining failure was only the known Google auth iframe CSP Report-Only message plus its associated failed resource console message.
+- The workflow patch is committed on `feature/design-intelligence` as `0763863aff805134dfd0cfe9458a47fd7330e570`.
+
+### UNVERIFIED
+- New CI run for this exact commit is pending.
+- Production browser remains protected by Vercel SSO.
+- Real Firebase/Cashfree/BYOK/Ultra API-key/effects verification remains unverified.
+
+### CHECKPOINT
+- Regression: test-harness-only change; production runtime untouched.
+- Functionality: browser-suite hardening IMPLEMENTED; execution pending.
+- Accessibility: existing Axe and accessible-name checks unchanged.
+- Privacy/security: no secrets or production access changes.
+- Performance: no production runtime impact.
+- Data quality: no catalog changes.
+- Build/test: new exact-head CI execution pending.
+- Documentation: UPDATED.
