@@ -78,6 +78,20 @@ export default function DesignIntelligencePricing(){
   },[user,entitlementTier])
 
 
+  useEffect(()=>{
+    const params=new URLSearchParams(window.location.search)
+    const orderId=params.get('order_id')
+    if(params.get('payment')!=='returned'||!orderId)return
+    setCheckoutStatus('Cashfree returned for order '+orderId+'. Server-side webhook verification remains authoritative; no payment success is assumed from the return URL.')
+    if(user){
+      fetchDesignIntelligenceKnowledge(user).then(result=>{
+        if(result?.entitlementTier==='ultra-premium'){
+          setCheckoutStatus('Ultra Premium+ entitlement is now verified server-side for the returned Cashfree order.')
+        }
+      }).catch(()=>{})
+    }
+  },[user])
+
   const runCheckout=async()=>{
     if(!user){setCheckoutStatus('Sign in with Google before starting the ₹'+ULTRA_PREMIUM_PRICE_INR+' checkout.');return}
     const cleanPhone=phone.trim()
@@ -148,7 +162,7 @@ export default function DesignIntelligencePricing(){
         <p>{plan.access}</p>
         <p className="di-muted"><b>npm:</b> {plan.npmAccess}</p>
         {plan.specialAccess&&<p className="di-warning"><b>Special effects:</b> {plan.specialAccess}</p>}
-        <span className="di-plan-action">{plan.id==='guest-free'?'Available now':plan.id==='member-premium'?(user?'Premium active on this login':'Login to activate'):`₹${ULTRA_PREMIUM_PRICE_INR} checkout is server-authorized; live gateway UI remains pending merchant verification`}</span>
+        <span className="di-plan-action">{plan.id==='guest-free'?'Available now':plan.id==='member-premium'?(user?'Premium active on this login':'Login to activate'):`₹${ULTRA_PREMIUM_PRICE_INR} server-authorized one-time checkout`}</span>
       </article>)}
     </section>
 
