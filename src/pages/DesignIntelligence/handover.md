@@ -3099,3 +3099,55 @@ FIRST UNFINISHED TASK remains:
 
 ### NEXT PROGRESS GATE
 - Move Phase A to **96%** only after the exact checkout commit passes build + browser/accessibility CI and receives a READY Vercel deployment.
+
+
+## 2026-10-02 — Cashfree checkout CI/deployment gate closed
+
+### VERIFIED
+- GitHub Actions rerun `36975287343` (attempt 2) for commit `d25c9f643754a04f1e90e5ff7ac7e9c1cd2593c7` completed successfully.
+- The exact job `110759535866` passed the full Design Intelligence gate: build, shared ₹200 price contract, canonical npm tarball/local installation, Playwright/Chromium setup, all 7 route smoke checks, Explorer interaction, Generator interaction, Pricing authenticated CI identity plus Cashfree phone/₹200 checkout controls, Admin DI Billing, responsive overflow checks, keyboard `:focus-visible`, accessible-name checks, serious/critical Axe checks and evidence upload.
+- The checkout implementation commit `2961daf2e02afea1bdbf8d7f0bda46def5e464df` is included in the verified docs commit above; the follow-up handover-only commit did not change application code.
+- Vercel deployment `dpl_5cj2n61Bx4vuypBXg4CkYVAw3ryC` for `d25c9f643754a04f1e90e5ff7ac7e9c1cd2593c7` is **READY**.
+- Therefore the specific automated gate required for the Cashfree checkout UI milestone is closed.
+
+### IMPLEMENTED
+- Checkout remains a server-authorized ₹200 one-time flow using the existing authenticated Firebase identity and backend order endpoint.
+- No payment credential, API secret or frontend entitlement bypass was added.
+
+### UNVERIFIED
+- Real Cashfree Sandbox checkout/payment completion/signed-webhook/payment-status reconciliation at ₹200.
+- Authenticated production browser/manual device/screen-reader verification on the protected Vercel deployment.
+- Real Firebase Free/Premium/Ultra entitlement and API-key lifecycle.
+- Real BYOK provider execution/CORS/model compatibility.
+- Deployed Ultra-only effects exercise.
+- npm registry publication and clean registry-backed installation.
+
+### CHECKPOINT
+- Regression: automated current checkout gate VERIFIED; unrelated MotionZync features unchanged.
+- Functionality: checkout launch controls VERIFIED in CI; real gateway transaction UNVERIFIED.
+- Accessibility: automated accessible-name, focus-visible and serious/critical Axe checks VERIFIED; manual audit UNVERIFIED.
+- Privacy/security: client does not control amount or entitlement; payment secrets remain server-side.
+- Performance: Cashfree SDK loads on checkout demand; browser overflow checks passed.
+- Data quality: no catalog expansion or fabricated records.
+- Build/test: exact checkout-related CI gate VERIFIED; Vercel deployment READY.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **96% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### PROGRESS RATIONALE
+- Phase A moved from **95% → 96%** because the previously pending Cashfree checkout UI gate now has both a successful exact CI/browser/accessibility run and a READY Vercel deployment.
+- The remaining Phase-A percentage is reserved for live/manual/external validation rather than additional speculative implementation.
+
+### NEXT FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 routes on the READY feature deployment.
+2. Complete manual accessibility/responsive/device and screen-reader audit.
+3. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+4. Exercise real Firebase Free/Premium/Ultra entitlement and MotionZync API-key boundaries.
+5. Run the real Cashfree Sandbox flow at the current **₹200** price after merchant credentials/configuration are available in Vercel Environment Variables.
+6. Verify Ultra API-key issue/rotate/revoke with a real Ultra entitlement.
+7. Verify deployed special-effects API behavior with real Ultra entitlement and allowlisted origin.
+8. Publish `@motionzync/design-intelligence` to npm and verify a registry-backed clean installation.
+9. Continue final Phase-A publication/compatibility work; keep 1,000+/10,000+ content expansion deferred.
