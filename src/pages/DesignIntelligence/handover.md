@@ -3198,3 +3198,57 @@ FIRST UNFINISHED TASK remains:
 - Data quality: no catalog changes.
 - Build/test: replacement CI run pending.
 - Documentation: UPDATED.
+
+
+## 2026-10-02 — Cashfree client orchestration CI VERIFIED
+
+### VERIFIED
+- GitHub Actions run `36984968392` for commit `d97ff11329fbf7837da1bae83d4e0b3a67df88dd` completed successfully.
+- The complete Design Intelligence CI gate passed: application build, shared ₹200 price contract, canonical npm tarball + clean installation, Playwright/Chromium setup, all 7 route checks, Explorer interaction, Generator interaction, Pricing authenticated CI identity, Cashfree checkout orchestration, Admin DI Billing, responsive overflow, keyboard focus-visible, accessible-name and serious/critical Axe checks.
+- The Cashfree-specific browser assertion verified:
+  - frontend sends only `{ phone: '+919876543210' }` to the order request;
+  - the checkout consumes the server-returned `paymentSessionId`;
+  - sandbox mode is selected from the server-returned environment;
+  - redirect target is `_self`.
+- This is a deterministic CI mock of the external gateway boundary; it does not perform a real transaction or grant an entitlement.
+- The corresponding Vercel application deployment for the tested application code is available as READY; the test-harness-only changes do not alter production Cashfree code.
+
+### IMPLEMENTED
+- Cashfree checkout orchestration is now covered by a stable browser regression test without placing secrets or payment credentials in CI.
+
+### UNVERIFIED
+- Real Cashfree Sandbox payment completion, signed webhook and server-side payment-status reconciliation at ₹200.
+- Authenticated production browser/manual device/screen-reader verification.
+- Real Firebase Free/Premium/Ultra entitlement and API-key lifecycle.
+- Real BYOK provider execution/CORS/model compatibility.
+- Deployed Ultra-only effects exercise.
+- npm registry publication and registry-backed installation.
+
+### CHECKPOINT
+- Regression: full current Design Intelligence automated suite VERIFIED.
+- Functionality: checkout orchestration contract VERIFIED in CI; real gateway UNVERIFIED.
+- Accessibility: automated route/Axe/focus/accessible-name checks VERIFIED; manual audit UNVERIFIED.
+- Privacy/security: client does not control amount/entitlement; no secret added to test or frontend.
+- Performance: responsive checks passed; Cashfree script remains demand-loaded in production code.
+- Data quality: no new catalog records.
+- Build/test: exact orchestration CI run VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **96% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### PROGRESS RATIONALE
+- Phase A remains **96%** because this milestone closes automated client-orchestration coverage, but the remaining work is still dominated by live/manual/external validation gates rather than missing CI coverage.
+
+### NEXT FIRST UNFINISHED TASK
+1. Complete authenticated production browser/visual/interactivity verification of all 7 routes on the READY feature deployment.
+2. Complete manual accessibility/responsive/device and screen-reader audit.
+3. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+4. Exercise real Firebase Free/Premium/Ultra entitlement and MotionZync API-key boundaries.
+5. Run the real Cashfree Sandbox flow at the current **₹200** price after merchant credentials/configuration are available in Vercel Environment Variables.
+6. Verify Ultra API-key issue/rotate/revoke with a real Ultra entitlement.
+7. Verify deployed special-effects API behavior with real Ultra entitlement and allowlisted origin.
+8. Publish `@motionzync/design-intelligence` to npm and verify a registry-backed clean installation.
+9. Continue final Phase-A publication/compatibility work; keep 1,000+/10,000+ content expansion deferred.
