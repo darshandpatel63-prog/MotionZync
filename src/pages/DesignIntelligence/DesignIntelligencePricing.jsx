@@ -77,7 +77,7 @@ export default function DesignIntelligencePricing(){
     <section className="di-page-intro">
       <span className="di-kicker">ACCESS MODEL</span>
       <h1>Free · Premium · Ultra Premium+ API</h1>
-      <p>Simple/public designs stay available without login. Google login unlocks Premium access for free. A verified ₹${ULTRA_PREMIUM_PRICE_INR} payment upgrades the account to Ultra Premium+ and server-authorizes the developer API.</p>
+      <p>Simple/public designs stay available without login. Google login unlocks Premium access for free. A verified ₹{ULTRA_PREMIUM_PRICE_INR} payment upgrades the account to Ultra Premium+ and server-authorizes the developer API.</p>
       <div className="di-note" role="status">{identityStatus} · Current tier: {accessLabel(entitlementTier)}</div>
     </section>
 
