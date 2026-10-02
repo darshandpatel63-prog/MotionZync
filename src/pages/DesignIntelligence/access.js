@@ -1,3 +1,4 @@
+export const ULTRA_PREMIUM_PRICE_INR=200
 export const PLAN_OFFERS=[
   {
     id:'guest-free',
@@ -18,7 +19,7 @@ export const PLAN_OFFERS=[
   {
     id:'ultra-premium-api',
     name:'Ultra Premium+ API',
-    price:'₹500',
+    price:'₹200',
     cadence:'one-time',
     access:'All web-accessible Design Intelligence knowledge plus the server-authorized developer API.',
     npmAccess:'Ultra npm/API integrations can use the same canonical core with server-authorized API access.',
