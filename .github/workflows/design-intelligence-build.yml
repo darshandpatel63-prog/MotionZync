@@ -52,6 +52,12 @@ jobs:
           VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
         run: npm run build -- --mode ci
 
+      - name: Verify shared Ultra Premium+ price contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module -e "import { ULTRA_PREMIUM_PRICE_INR as UI_PRICE } from './src/pages/DesignIntelligence/access.js'; import { ULTRA_PREMIUM_PRICE_INR as SERVER_PRICE } from './api/_lib/cashfree.js'; if (UI_PRICE !== 200 || SERVER_PRICE !== 200 || UI_PRICE !== SERVER_PRICE) throw new Error('Ultra Premium+ price contract mismatch'); console.log('Ultra Premium+ price contract: ₹200')"
+
       - name: Verify canonical npm package tarball and local installation
         shell: bash
         run: |
