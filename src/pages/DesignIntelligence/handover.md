@@ -3476,3 +3476,55 @@ FIRST UNFINISHED TASK remains:
 5. Complete manual browser/accessibility/device verification.
 6. Publish and registry-install `@motionzync/design-intelligence`.
 7. Then close remaining Phase-A publication/compatibility gates before starting large content expansion.
+
+
+## 2026-10-02 — Backend regression CI + latest HEAD READY gate
+
+### IMPLEMENTED
+- Added `scripts/di-cashfree-contract.mjs` as a deterministic server-side Cashfree order contract regression test.
+- The regression test verifies valid ₹200 Ultra Premium+ order construction, customer phone/email acceptance, expected server payload fields, and rejection of invalid phone/email before any provider request.
+- Updated `.github/workflows/design-intelligence-build.yml` so DI PR path coverage includes `api/**` and the Cashfree regression script.
+- Existing full DI browser/accessibility smoke suite remains unchanged and continues to run after the backend contract gate.
+
+### VERIFIED
+- Current branch remains `feature/design-intelligence`.
+- Current HEAD `a065f1c9940b06affc03bd0c7153d9faedf26e91` completed Design Intelligence CI run `36987328277` with **success**.
+- CI passed: build, Cashfree server order contract, shared ₹200 price contract, canonical npm tarball/local installation, Playwright/Chromium setup, all 7 DI routes, Explorer interaction, Generator deterministic/AI-toggle interaction, Pricing ₹200 Cashfree orchestration, Admin DI Billing, responsive overflow, focus-visible, accessible-name checks and serious/critical Axe checks.
+- Latest Vercel deployment `dpl_6UWkD7UTwd8Zsr1P3SdcwXG31RUj` for the same HEAD is **READY**.
+- Current READY deployment returned HTTP 200 for all seven DI route paths.
+- Current READY deployment unauthenticated `GET /api/di-knowledge` returned HTTP 200 with `tier=free`, `authenticated=false`, `protectedIncluded=false`, and the public/free catalog only.
+- Current READY deployment `GET /api/cashfree-create-order` returned HTTP 405 as expected for the POST-only endpoint.
+- Runtime logs on the current READY deployment show the expected unauthenticated `/api/di-effects` 401 boundary and Cashfree GET 405 boundary. The existing Node `DEP0169 url.parse()` deprecation warning on `/api/di-knowledge` remains a dependency/runtime warning and is not currently a confirmed application failure.
+
+### UNVERIFIED
+- Real authenticated Firebase Premium/Ultra entitlement.
+- Real MotionZync API-key issue/rotate/revoke against production Firestore.
+- Real Cashfree Sandbox POST order creation, Checkout, signed webhook and server-side payment-status reconciliation at ₹200 with real merchant credentials.
+- Real deployed Ultra effects API request using a valid Ultra key and configured production origin allowlist.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual physical-device/screen-reader audit.
+- npm registry publication and registry-backed external installation.
+
+### CHECKPOINT
+- Regression: additive backend regression test + CI path coverage only; unrelated MotionZync features untouched.
+- Functionality: Cashfree server contract and full automated DI gate VERIFIED; credentialed payment/entitlement/effects integrations remain UNVERIFIED.
+- Accessibility: automated route/name/Axe/focus/responsive CI gate VERIFIED; manual production audit UNVERIFIED.
+- Privacy/security: no credentials, plaintext API keys, fake entitlements or duplicate databases introduced.
+- Performance: existing bounded catalog/effects design unchanged; production profiling remains UNVERIFIED.
+- Data quality: no fabricated 1,000+/10,000+ records; expansion remains deferred.
+- Build/test: current HEAD full CI VERIFIED; Vercel current HEAD READY VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **97% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Credentialed Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + payment-status reconciliation.
+3. Real Ultra API-key issue/rotate/revoke and deployed effects API exercise.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
+7. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
