@@ -3343,3 +3343,43 @@ FIRST UNFINISHED TASK remains:
 6. Verify deployed Ultra-only effects API with a real Ultra entitlement and allowlisted origin.
 7. Publish `@motionzync/design-intelligence` to npm and verify a registry-backed clean install.
 8. Continue final Phase-A publication/compatibility work; keep 1,000+/10,000+ expansion deferred.
+
+## 2026-10-02 — Continuation source/runtime boundary re-audit
+
+### VERIFIED
+- Mandatory Start/Continue documentation was re-read and the full current Design Intelligence folder inventory was re-enumerated; 26 current files are present under `src/pages/DesignIntelligence/`.
+- Minimum integration files `src/App.jsx` and `src/components/Navbar/Navbar.jsx` were re-inspected and no unrelated integration change was introduced.
+- Current Phase A engineering status remains **96% — IN PROGRESS**.
+- Canonical package metadata still targets `@motionzync/design-intelligence@0.1.0` with public publish configuration; registry publication remains a separate gate.
+- The canonical BYOK bridge remains the existing MotionZync `AIProviderContext`; Design Intelligence does not create a second provider/key-vault system.
+
+### UNVERIFIED
+- A new attempt to fetch backend endpoints through the older protected Vercel share path was blocked after a Vercel Authentication/SSO redirect, so no new authenticated API runtime claim is made.
+- Manual production browser/device/screen-reader validation remains unverified.
+- Real Firebase entitlement/API-key lifecycle, BYOK execution/CORS/model compatibility, Cashfree ₹200 Sandbox, deployed Ultra effects execution and npm registry publication remain unverified.
+
+### CHECKPOINT
+- Regression: source/documentation re-audit only; no unrelated MotionZync runtime feature changed.
+- Functionality: previously verified CI/route-delivery evidence remains valid; no new live integration evidence claimed.
+- Accessibility: automated CI evidence remains VERIFIED; manual audit remains UNVERIFIED.
+- Privacy/security: no secrets or production credentials added; no fake entitlement/API key or duplicate database introduced.
+- Performance: no runtime code changed.
+- Data quality: no catalog expansion or fabricated 1,000+/10,000+ records.
+- Build/test: no new application test result claimed from this documentation-only checkpoint.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **96% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### NEXT FIRST UNFINISHED TASK
+1. Authenticated production browser/visual/interactivity verification of all 7 routes.
+2. Manual accessibility/responsive/device/screen-reader verification.
+3. Real BYOK provider execution/CORS/model compatibility.
+4. Real Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise.
+5. Cashfree Sandbox end-to-end at **₹200** after intentional Vercel environment configuration.
+6. Ultra API-key issue/rotate/revoke with a real Ultra entitlement.
+7. Deployed Ultra effects API exercise with a real Ultra entitlement and allowlisted origin.
+8. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
+9. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
