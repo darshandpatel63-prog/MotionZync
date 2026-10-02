@@ -52,6 +52,23 @@ jobs:
           VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
         run: npm run build -- --mode ci
 
+      - name: Verify canonical npm package tarball and local installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd src/pages/DesignIntelligence
+          npm pack --dry-run --json > /tmp/di-pack-dry-run.json
+          npm pack --json > /tmp/di-pack.json
+          TARBALL="$(node --input-type=commonjs -e "const fs=require('fs'); const x=JSON.parse(fs.readFileSync('/tmp/di-pack.json','utf8')); process.stdout.write(x[0].filename)")"
+          test -f "$TARBALL"
+          cd /tmp
+          rm -rf motionzync-di-npm-install
+          mkdir motionzync-di-npm-install
+          cd motionzync-di-npm-install
+          npm init -y >/dev/null 2>&1
+          npm install "$GITHUB_WORKSPACE/src/pages/DesignIntelligence/$TARBALL" --no-audit --no-fund
+          node --input-type=module -e "const di=await import('@motionzync/design-intelligence'); if(typeof di.buildRecipe!=='function'||typeof di.searchCatalog!=='function'||typeof di.createRemoteKnowledgeClient!=='function'||typeof di.createSpecialEffectsClient!=='function') throw new Error('Canonical npm exports are incomplete'); if(!Array.isArray(di.DI_STYLES)||di.DI_STYLES.length===0) throw new Error('Canonical catalog is empty'); console.log('NPM package install smoke passed')"
+
       - name: Install CI browser and accessibility tooling
         run: npm install --no-save --no-audit --no-fund playwright@1.55.0 @axe-core/playwright@4.10.2 axe-core@4.10.2
 
