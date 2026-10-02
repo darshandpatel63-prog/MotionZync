@@ -15,6 +15,8 @@ on:
       - "package-lock.json"
       - "vite.config.*"
       - ".github/workflows/design-intelligence-build.yml"
+      - "api/**"
+      - "scripts/di-cashfree-contract.mjs"
 
 concurrency:
   group: design-intelligence-build-${{ github.ref }}
@@ -51,6 +53,9 @@ jobs:
           VITE_CI_ADMIN_EMAIL: "ci-admin@example.invalid"
           VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
         run: npm run build -- --mode ci
+
+      - name: Verify Cashfree server order contract
+        run: node scripts/di-cashfree-contract.mjs
 
       - name: Verify shared Ultra Premium+ price contract
         shell: bash
