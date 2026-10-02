@@ -309,7 +309,7 @@ No fake API key may be generated or stored as proof of entitlement.
 The preferred commercial model is **permanent access**, rather than a time-limited monthly or two-month Premium subscription, if time-limited entitlement/revocation cannot be implemented reliably.
 
 Primary planned permanent plan:
-- **₹500 — Permanent**
+- **₹200 — Permanent**
 - includes all entitled Premium/Ultra Premium+ features and knowledge available under the plan
 - includes a personal authorized API key for the purchaser
 - API usage is intended for the purchaser's own unlimited projects, subject to future abuse/rate/security controls
@@ -320,11 +320,11 @@ Optional lower-cost plan, **only if technically enforceable**:
 - API/design usage may be bound to a maximum of **10 registered projects**
 - this plan must not be offered unless reliable server-side project-count enforcement is actually implemented and verified
 
-If the 10-project restriction cannot be enforced reliably, do not offer the ₹250 plan; use the ₹500 permanent model instead.
+If the 10-project restriction cannot be enforced reliably, do not offer the ₹250 plan; use the ₹200 permanent model instead.
 
 The previously discussed ₹50 first month, ₹80/month and ₹150/two-month options are superseded by this preferred permanent-access model unless a later verified architecture explicitly reintroduces time-limited plans.
 
-These are product-plan requirements, not proof that billing is currently connected.
+The current superseding paid price is ₹200 permanent. These are product-plan requirements, not proof that billing is currently connected.
 
 Real billing and entitlement must later be implemented through a secure backend/payment provider and verified server-side.
 
@@ -1050,7 +1050,7 @@ Premium / Ultra Premium:
 - protected knowledge and protected generation capabilities only after authoritative entitlement verification
 - personal authorized API capability only where the paid plan explicitly includes it
 
-For a permanent ₹500 plan:
+For a permanent ₹200 plan:
 - intended to include entitled Premium/Ultra Premium+ knowledge/features
 - intended personal API access
 - intended use across the purchaser's own projects, subject to rate/security/abuse controls
