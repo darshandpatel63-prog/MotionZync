@@ -3,6 +3,7 @@ import {
   fetchCashfreeOrderPayments,
   getCashfreeConfig,
   getCashfreeWebhookContext,
+  ULTRA_PREMIUM_PRICE_INR,
   verifyCashfreeWebhookSignature,
 } from './_lib/cashfree.js'
 import { recordVerifiedPayment } from './_lib/billing.js'
@@ -147,9 +148,9 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Server-created Cashfree order is missing MotionZync plan metadata' })
     }
 
-    // The paid product contract is fixed to Ultra Premium+ at ₹500 INR.
-    if (refreshedContext.plan !== 'ultra-premium' || orderCurrency !== 'INR' || orderAmount !== 500) {
-      return res.status(422).json({ error: 'Cashfree order does not match the server-authorized Ultra Premium+ ₹500 INR price' })
+    // The paid product contract is fixed to Ultra Premium+ at the shared INR price.
+    if (refreshedContext.plan !== 'ultra-premium' || orderCurrency !== 'INR' || orderAmount !== ULTRA_PREMIUM_PRICE_INR) {
+      return res.status(422).json({ error: 'Cashfree order does not match the server-authorized Ultra Premium+ configured INR price' })
     }
 
     const status = getPaymentStatus(verifiedPayment)
