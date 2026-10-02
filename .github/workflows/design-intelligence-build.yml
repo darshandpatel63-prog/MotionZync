@@ -41,6 +41,15 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Build
+        env:
+          VITE_FIREBASE_API_KEY: "AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          VITE_FIREBASE_AUTH_DOMAIN: "ci-browser-test.invalid"
+          VITE_FIREBASE_PROJECT_ID: "ci-browser-test"
+          VITE_FIREBASE_STORAGE_BUCKET: "ci-browser-test.appspot.com"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "000000000000"
+          VITE_FIREBASE_APP_ID: "1:000000000000:web:ci-browser-test"
+          VITE_CI_ADMIN_EMAIL: "ci-admin@example.invalid"
+          VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
         run: npm run build
 
       - name: Install CI browser and accessibility tooling
@@ -49,7 +58,7 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Start Vite preview
+      - name: Start production Vite preview
         shell: bash
         env:
           VITE_FIREBASE_API_KEY: "AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
@@ -61,7 +70,7 @@ jobs:
           VITE_CI_ADMIN_EMAIL: "ci-admin@example.invalid"
           VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
         run: |
-          npm run dev -- --mode ci --host 127.0.0.1 --port 4173 > /tmp/motionzync-di-vite.log 2>&1 &
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/motionzync-di-vite.log 2>&1 &
           echo $! > /tmp/motionzync-di-vite.pid
           for attempt in {1..30}; do
             if curl --silent --show-error --fail http://127.0.0.1:4173/design-intelligence >/dev/null; then
