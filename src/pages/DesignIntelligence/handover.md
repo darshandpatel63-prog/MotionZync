@@ -2703,3 +2703,49 @@ These must be configured as server-side Vercel Environment Variables and never h
 - Data quality: no catalog changes/fabrication.
 - Build/test: exact-head CI VERIFIED.
 - Documentation: UPDATED.
+
+## 2026-10-02 — Canonical npm package publish-readiness milestone
+
+### IMPLEMENTED
+- Added publish-facing metadata to `src/pages/DesignIntelligence/package.json`: keywords, canonical GitHub repository metadata, project homepage and public scoped-package publish access configuration.
+- Added the package-root `README.md` with installation, canonical-core usage, protected knowledge/API usage boundaries and current publication status.
+- Added CI verification that packs the package, installs the generated tarball into a clean temporary project and imports the public package exports.
+- The package remains backed by the same canonical Design Intelligence source files; no second dataset or fabricated records were introduced.
+
+### VERIFIED
+- CI run `36972337248`, rerun job `110729200342`, completed successfully after a transient first browser-suite failure.
+- Canonical npm package tarball creation and clean-project local installation passed.
+- Canonical package exports `buildRecipe`, `searchCatalog`, `createRemoteKnowledgeClient` and `createSpecialEffectsClient` were verified after installation.
+- Canonical seed catalog was verified non-empty.
+- Full existing Design Intelligence build/browser/accessibility suite passed in the same successful rerun: 7 DI routes, Explorer, Generator, Pricing CI identity, Admin DI Billing, responsive overflow, focus-visible, accessible-name checks and serious/critical Axe checks.
+- Vercel deployment `dpl_48LXoPDpAiwxgVgXFZ7NN68fvRfF` for the package verification commit `b3b1975442f1f4aa4f0cfff00e74307fedc6548d` reached READY.
+
+### UNVERIFIED
+- The package has not been published to the npm registry.
+- A registry-backed `npm install @motionzync/design-intelligence` has not been verified.
+- Production browser access remains blocked by Vercel Authentication/SSO.
+- Real Firebase Premium/Ultra entitlement, Cashfree sandbox, real MotionZync API-key lifecycle, BYOK provider execution/CORS/model compatibility and deployed Ultra effects runtime remain unverified.
+
+### CHECKPOINT
+- Regression: exact package-local-install and existing DI browser suite VERIFIED.
+- Functionality: canonical package installation/import VERIFIED locally through CI; registry publication UNVERIFIED.
+- Accessibility: automated CI coverage VERIFIED; manual screen-reader/device audit UNVERIFIED.
+- Privacy/security: README explicitly keeps server-issued MotionZync API keys server-authoritative; no secrets embedded.
+- Performance: package tarball/local-install path verified; production profiling UNVERIFIED.
+- Data quality: no catalog inflation; seed data remains canonical.
+- Build/test: successful exact package verification rerun VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### NEXT FIRST UNFINISHED TASK
+1. Production authenticated browser/manual accessibility verification where access permits.
+2. Real Firebase Free/Premium/Ultra entitlement and MotionZync API-key boundary exercise.
+3. Real BYOK provider execution/CORS/model compatibility.
+4. Cashfree sandbox order → Checkout → signed webhook → server payment-status reconciliation after credentials are configured in Vercel Environment Variables.
+5. Deployed Ultra-only effects API exercise with real entitlement.
+6. Publish `@motionzync/design-intelligence` to npm and verify a registry-backed clean install.
+7. Then begin Phase B formally.
