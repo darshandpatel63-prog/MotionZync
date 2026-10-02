@@ -3539,7 +3539,7 @@ FIRST UNFINISHED TASK remains:
 - Added a CI guard that fails when the retired OpenAI IDs return and requires the GPT-5.6 entries to remain present.
 
 ### VERIFIED
-- Current official Anthropic documentation lists Claude Fable 5, Claude Opus 5, Claude Sonnet 5 and Claude Haiku 4.5; the existing registry entries for Fable 5, Sonnet 5, Haiku 4.5 and Opus 4.8 are not evidence of a second provider architecture. citeturn407446view0
+- Current official Anthropic documentation checked during this milestone lists Claude Fable 5, Claude Opus 5, Claude Sonnet 5 and Claude Haiku 4.5, and separately documents Claude Opus 4.8.
 - Current official Google Gemini documentation lists `gemini-3.5-flash` and `gemini-3.1-flash-lite` as available stable endpoints, matching the existing registry entries. (official Google Gemini model documentation checked on 2026-10-02)
 - Current official OpenAI documentation shows `gpt-5.6`, `gpt-5.6-sol`, `gpt-5.6-terra` and `gpt-5.6-luna`; the GPT-5.6 models support Chat Completions as well as Responses. (official OpenAI model documentation checked on 2026-10-02)
 - OpenAI's deprecation documentation states `o1-preview` shut down on 2025-07-28 and `o1-mini` on 2025-10-27, confirming those old registry entries were no longer valid on the current date. (official OpenAI deprecation documentation checked on 2026-10-02)
@@ -3573,3 +3573,48 @@ FIRST UNFINISHED TASK remains:
 6. Complete manual production browser/device/screen-reader audit.
 7. Publish `@motionzync/design-intelligence` and verify registry-backed installation.
 8. Close remaining Phase-A publication/compatibility gates; keep large 1,000+/10,000+ expansion deferred.
+
+
+## 2026-10-02 — BYOK registry hardening fully verified
+
+### VERIFIED
+- The full Design Intelligence CI run `36988536404` completed successfully after the BYOK model-registry change was present on the branch.
+- The successful CI run passed the new OpenAI BYOK registry guard, build, Cashfree server contract, ₹200 price contract, canonical npm package/local install, Playwright browser setup, all seven DI routes, Explorer interaction, Generator deterministic/AI toggle, Pricing Cashfree orchestration, Admin DI Billing, responsive overflow, focus-visible, accessible-name and serious/critical Axe checks.
+- Current READY Vercel deployment `dpl_93c6uDUPFFZyTPAAfcua3ndZ7EtL` contains the latest branch HEAD and returned HTTP 200 for all seven Design Intelligence routes.
+- The same READY deployment returned HTTP 200 for unauthenticated `GET /api/di-knowledge` and HTTP 405 for `GET /api/cashfree-create-order`.
+- Runtime logs show the expected public knowledge delivery and POST-only Cashfree boundary. The pre-existing Node `DEP0169 url.parse()` warning is still a dependency/runtime warning and has not been demonstrated to be an application failure.
+
+### IMPLEMENTED
+- OpenAI retired-model registry cleanup and CI regression guard are now part of the verified branch state.
+
+### UNVERIFIED
+- Real provider calls with user API credentials and provider-specific CORS/model entitlement.
+- Real Firebase Premium/Ultra entitlement and server API-key lifecycle.
+- Real Cashfree Sandbox ₹200 payment + signed webhook + reconciliation.
+- Real Ultra Effects API call with a valid Ultra key and configured origin.
+- Manual physical-device/screen-reader production audit.
+- npm registry publication and registry-backed external installation.
+
+### CHECKPOINT
+- Regression: only BYOK registry metadata/guard and documentation changed; unrelated MotionZync features untouched.
+- Functionality: BYOK registry compatibility gate VERIFIED; real provider execution UNVERIFIED.
+- Accessibility: automated CI route/name/Axe/focus/responsive gate VERIFIED; manual audit UNVERIFIED.
+- Privacy/security: no plaintext provider credentials or MotionZync API secrets introduced.
+- Performance: no runtime architecture change.
+- Data quality: no fabricated Design Intelligence records or provider models.
+- Build/test: full post-change CI VERIFIED; latest Vercel deployment READY VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + server-side reconciliation.
+3. Real Ultra API-key issue/rotate/revoke and deployed Effects API exercise.
+4. Real BYOK provider execution/CORS/model compatibility with valid provider credentials.
+5. Manual production browser/device/screen-reader audit.
+6. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
+7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
