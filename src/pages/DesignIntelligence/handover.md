@@ -3662,3 +3662,54 @@ FIRST UNFINISHED TASK remains:
 5. Manual production browser/device/screen-reader audit.
 6. Publish `@motionzync/design-intelligence` and verify registry-backed installation.
 7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-10-02 — OpenAI API model registry refresh
+
+### IMPLEMENTED
+- Refreshed the shared MotionZync BYOK OpenAI model suggestions in `src/ai/providers/AIProviderContext.jsx`.
+- Added current OpenAI API models surfaced by the official current pricing/model documentation: `gpt-6-astra`, `gpt-6-sol`, `gpt-6-luna`, plus current GPT-5.6 specialized models `gpt-5.6-sol` and `gpt-5.6-cyber`.
+- Removed stale `gpt-5.6-terra` and `gpt-5.6-luna` suggestions from the API-key UI because they are no longer present on the current OpenAI API pricing/model surface.
+- Kept the existing OpenAI Chat Completions bridge, vault and provider architecture unchanged; this milestone only refreshes model suggestions.
+- Updated the CI registry guard so stale retired/stale IDs fail the check and the current model suggestions are required.
+
+### VERIFIED
+- The latest corrected CI run `37005709051` has passed: build, Cashfree server contract, OpenAI BYOK registry guard, shared ₹200 contract, canonical npm tarball/local install, and browser/accessibility tooling setup.
+- Previous full DI CI run `36991331265` on the preceding verified code state passed the complete browser, responsive, accessibility and Pricing orchestration suite.
+- Latest Vercel deployment for the corrected guard commit is currently building; the preceding code commit deployment `dpl_2ZfDqMnqta5J1Wpu3brCrcgU33gN` is READY.
+- Current live READY deployment boundary remains verified: seven DI routes 200, unauthenticated knowledge 200/free-only, Cashfree GET 405, Effects GET 401.
+- Official current OpenAI API pricing/model documentation was checked: GPT-6 Astra/Sol/Luna are listed as current flagship models, while GPT-5.6 Sol/Cyber remain listed under current specialized cyber models. citeturn431563search0
+
+### UNVERIFIED
+- Final browser route/responsive/Axe completion for the newest corrected commit is still running.
+- Real OpenAI/Gemini/Anthropic provider API calls, provider CORS behavior and model/account entitlement remain unverified.
+- Real Firebase Premium/Ultra entitlement and MotionZync API-key lifecycle.
+- Real Cashfree Sandbox ₹200 checkout, signed webhook and reconciliation.
+- Real Ultra Effects API call with a valid key/origin.
+- Manual physical-device/screen-reader audit.
+- npm registry publication and registry-backed external installation.
+
+### CHECKPOINT
+- Regression: provider registry metadata + CI guard only; no second provider/vault system and no unrelated MotionZync feature changes.
+- Functionality: current model suggestions IMPLEMENTED; automated registry guard VERIFIED; real provider execution UNVERIFIED.
+- Accessibility: no new UI structure change; prior automated accessibility gate remains verified on the preceding code state; newest full suite still running.
+- Privacy/security: no provider credentials modified or exposed.
+- Performance: no runtime architecture change.
+- Data quality: no fabricated provider models; current model list sourced from official OpenAI documentation.
+- Build/test: corrected backend/registry/package gates VERIFIED; full newest browser suite still pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Finish the newest corrected CI/Vercel browser verification gate.
+2. Real Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise.
+3. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + reconciliation.
+4. Real Ultra API-key lifecycle and deployed Effects API exercise.
+5. Real BYOK provider execution/CORS/model compatibility with valid credentials.
+6. Manual production browser/device/screen-reader audit.
+7. Publish `@motionzync/design-intelligence` and verify registry-backed installation.
+8. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
