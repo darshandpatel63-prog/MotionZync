@@ -3151,3 +3151,25 @@ FIRST UNFINISHED TASK remains:
 7. Verify deployed special-effects API behavior with real Ultra entitlement and allowlisted origin.
 8. Publish `@motionzync/design-intelligence` to npm and verify a registry-backed clean installation.
 9. Continue final Phase-A publication/compatibility work; keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-10-02 — Cashfree client orchestration CI hardening
+
+### IMPLEMENTED
+- Extended the Design Intelligence browser CI harness to mock the authenticated `/api/cashfree-create-order` response and the Cashfree SDK only inside the test environment.
+- The test now verifies that the Pricing UI sends only the customer phone to the order endpoint, does not send a client-controlled amount, consumes the server-returned Payment Session ID, uses sandbox mode for the sandbox response and requests the documented `_self` redirect target.
+- This test does not perform a real payment and cannot grant an entitlement.
+
+### UNVERIFIED
+- The new CI run for commit `7092023bf28f379b2ff2713fa656c2215c42085e` is pending at this checkpoint.
+- Real Cashfree Sandbox payment, signed webhook and server-side reconciliation remain unverified.
+
+### CHECKPOINT
+- Regression: test-harness-only change; production application/payment code unchanged.
+- Functionality: client orchestration coverage IMPLEMENTED; execution pending.
+- Accessibility: existing route/Axe/focus checks unchanged.
+- Privacy/security: the mock confirms no amount or secret is accepted from frontend checkout state.
+- Performance: no production runtime cost added.
+- Data quality: no catalog changes.
+- Build/test: new CI verification pending.
+- Documentation: UPDATED.
