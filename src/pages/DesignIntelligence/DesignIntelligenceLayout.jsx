@@ -7,6 +7,6 @@ export default function DesignIntelligenceLayout(){
   return <div className="di-shell">
     <header className="di-topbar"><Link className="di-brand" to="/design-intelligence"><span className="di-brand-mark">✦</span><span>MotionZync <b>Design Intelligence</b></span></Link><div className="di-breadcrumb" aria-label="Current section">{current?.label||'Design Intelligence'}</div></header>
     <nav className="di-nav" aria-label="Design Intelligence navigation">{NAV.map(item=><NavLink key={item.to} to={item.to} end={item.end} className={({isActive})=>'di-nav-link '+(isActive?'active':'')}>{item.label}</NavLink>)}</nav>
-    <main className="di-main"><Outlet/></main>
+    <section className="di-main"><Outlet/></section>
   </div>
 }
