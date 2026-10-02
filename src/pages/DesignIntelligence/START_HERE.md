@@ -40,6 +40,9 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 94%
 - in-product workflow/help documentation
 - continuation/common-instruction files
 
+### CURRENT COMMERCIAL PRICE
+- Ultra Premium+ is currently **₹200 permanent (one-time)**. Historical ₹500 entries below describe the superseded contract and are retained only as changelog history.
+
 ## 2026-09-29 — Access contract: Free / Premium login / Ultra Premium+ API
 
 ### IMPLEMENTED
