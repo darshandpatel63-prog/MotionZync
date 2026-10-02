@@ -37,7 +37,7 @@ const PROTECTED_CATALOG = Object.freeze({
   recipes: DI_PROTECTED_RECIPES,
 })
 
-const TIER_LEVELS = Object.freeze({ free: 0, premium: 1, 'ultra-premium': 2 })
+export const TIER_LEVELS = Object.freeze({ free: 0, premium: 1, 'ultra-premium': 2 })
 
 function setPrivateJsonHeaders(res) {
   res.setHeader('Cache-Control', 'private, no-store, max-age=0')
@@ -46,11 +46,11 @@ function setPrivateJsonHeaders(res) {
   res.setHeader('X-Content-Type-Options', 'nosniff')
 }
 
-function isTierAccessible(record, entitlementTier='free') {
+export function isTierAccessible(record, entitlementTier='free') {
   return (TIER_LEVELS[String(record?.tier || 'free')] ?? 0) <= (TIER_LEVELS[entitlementTier] ?? 0)
 }
 
-function combineCatalogs(entitlementTier='free') {
+export function combineCatalogs(entitlementTier='free') {
   return Object.fromEntries(DI_DOMAINS.map(domain => [
     domain,
     [

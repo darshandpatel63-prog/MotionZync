@@ -69,15 +69,11 @@ async function getActiveApiKeyDocs(db, userId) {
     .filter(record => str(record.status || 'active').toLowerCase() === 'active' && !record.revokedAt)
 }
 
-export async function getServerEntitlement(userId) {
-  const cleanUserId = str(userId)
-  if (!cleanUserId) throw new Error('Firebase user ID is required')
-
-  const snapshot = await getAdminDb().collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
-  const data = snapshot.exists ? (snapshot.data() || {}) : {}
-  const tier = str(data.entitlement || data.plan).toLowerCase()
-  const expiry = dateOf(data.entitlementExpiresAt)
-  const paidOrGrantedActive = ENTITLED_TIERS.has(tier) && (!expiry || expiry.getTime() > Date.now())
+export function resolveServerEntitlement(data = {}, nowMs = Date.now()) {
+  const record = data && typeof data === 'object' ? data : {}
+  const tier = str(record.entitlement || record.plan).toLowerCase()
+  const expiry = dateOf(record.entitlementExpiresAt)
+  const paidOrGrantedActive = ENTITLED_TIERS.has(tier) && (!expiry || expiry.getTime() > nowMs)
 
   // Every Firebase-authenticated user receives Premium web access at ₹0.
   // Only an active Ultra Premium+ entitlement unlocks the developer API.
@@ -85,8 +81,8 @@ export async function getServerEntitlement(userId) {
     return {
       tier,
       active: true,
-      source: str(data.entitlementSource).toLowerCase() || 'server',
-      expiresAt: iso(data.entitlementExpiresAt),
+      source: str(record.entitlementSource).toLowerCase() || 'server',
+      expiresAt: iso(record.entitlementExpiresAt),
     }
   }
 
@@ -96,6 +92,15 @@ export async function getServerEntitlement(userId) {
     source: 'authenticated-free',
     expiresAt: null,
   }
+}
+
+export async function getServerEntitlement(userId) {
+  const cleanUserId = str(userId)
+  if (!cleanUserId) throw new Error('Firebase user ID is required')
+
+  const snapshot = await getAdminDb().collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
+  const data = snapshot.exists ? (snapshot.data() || {}) : {}
+  return resolveServerEntitlement(data)
 }
 
 async function issueApiKeyForUser({ userId, plan, rotationOf = null } = {}) {
