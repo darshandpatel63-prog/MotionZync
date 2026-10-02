@@ -3540,9 +3540,9 @@ FIRST UNFINISHED TASK remains:
 
 ### VERIFIED
 - Current official Anthropic documentation lists Claude Fable 5, Claude Opus 5, Claude Sonnet 5 and Claude Haiku 4.5; the existing registry entries for Fable 5, Sonnet 5, Haiku 4.5 and Opus 4.8 are not evidence of a second provider architecture. citeturn407446view0
-- Current official Google Gemini documentation lists `gemini-3.5-flash` and `gemini-3.1-flash-lite` as available stable endpoints, matching the existing registry entries. citeturn593154search0turn593154search1
-- Current official OpenAI documentation shows `gpt-5.6`, `gpt-5.6-sol`, `gpt-5.6-terra` and `gpt-5.6-luna`; the GPT-5.6 models support Chat Completions as well as Responses. citeturn271723view0turn576086search6turn576086search8turn576086search9
-- OpenAI's deprecation documentation states `o1-preview` shut down on 2025-07-28 and `o1-mini` on 2025-10-27, confirming those old registry entries were no longer valid on the current date. citeturn788670view0turn788670view2
+- Current official Google Gemini documentation lists `gemini-3.5-flash` and `gemini-3.1-flash-lite` as available stable endpoints, matching the existing registry entries. (official Google Gemini model documentation checked on 2026-10-02)
+- Current official OpenAI documentation shows `gpt-5.6`, `gpt-5.6-sol`, `gpt-5.6-terra` and `gpt-5.6-luna`; the GPT-5.6 models support Chat Completions as well as Responses. (official OpenAI model documentation checked on 2026-10-02)
+- OpenAI's deprecation documentation states `o1-preview` shut down on 2025-07-28 and `o1-mini` on 2025-10-27, confirming those old registry entries were no longer valid on the current date. (official OpenAI deprecation documentation checked on 2026-10-02)
 
 ### UNVERIFIED
 - The new registry-change commit has a CI run currently in progress and a matching Vercel deployment currently building; therefore post-change full-suite verification is not yet claimed.
