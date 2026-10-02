@@ -393,3 +393,41 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 96%
 5. Manual production browser/device/screen-reader audit.
 6. Publish `@motionzync/design-intelligence` and verify registry installation.
 7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-10-02 — OpenAI API model registry refresh
+
+### IMPLEMENTED
+- Shared BYOK OpenAI model suggestions now include current API model IDs `gpt-6-astra`, `gpt-6-sol`, `gpt-6-luna`, `gpt-5.6-sol`, and `gpt-5.6-cyber`.
+- Stale `gpt-5.6-terra` and `gpt-5.6-luna` suggestions were removed.
+- Existing BYOK provider/vault architecture was preserved.
+- CI guard was updated accordingly.
+
+### VERIFIED
+- Corrected CI run `37005709051`: build, Cashfree server contract, OpenAI registry guard, ₹200 contract and canonical npm package/local install all passed.
+- Latest full browser/accessibility portion of that run is still in progress.
+- Prior full DI CI run `36991331265` remains the verified baseline for the complete browser/accessibility suite.
+- Current READY production boundary remains verified on the preceding READY deployment.
+
+### UNVERIFIED
+- Real provider calls/CORS/model-account compatibility.
+- Credentialed Firebase/Ultra/API-key lifecycle.
+- Cashfree Sandbox ₹200 end-to-end.
+- Ultra Effects API execution.
+- Manual device/screen-reader audit.
+- npm registry publication and external installation.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Finish newest corrected CI/Vercel verification.
+2. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+3. Real Cashfree Sandbox ₹200 end-to-end.
+4. Real Ultra API-key lifecycle + Effects API.
+5. Real BYOK provider execution/CORS/model compatibility.
+6. Manual browser/device/screen-reader audit.
+7. Publish `@motionzync/design-intelligence` and verify registry install.
+8. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
