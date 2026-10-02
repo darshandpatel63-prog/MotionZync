@@ -2868,3 +2868,48 @@ The remaining Phase-A work is now concentrated in live/external validation:
 - Data quality: no catalog records changed.
 - Build/test: latest CI/build verification for the price change is pending.
 - Documentation: UPDATED.
+
+## 2026-10-02 — ₹200 price contract fully verified
+
+### VERIFIED
+- Shared commercial price is `ULTRA_PREMIUM_PRICE_INR = 200`.
+- Frontend plan metadata and visible Pricing/Home/Docs copy resolve to ₹200.
+- Cashfree order creation uses the shared ₹200 constant for order amount, pending-order storage and response.
+- Cashfree order validation rejects any Ultra Premium+ amount other than the shared ₹200 value.
+- Cashfree webhook reconciliation requires the same shared ₹200 amount before recording the verified payment entitlement.
+- CI run `36973499882` for commit `854ae0398e7111ae5a645d758cb080a350d9c7f6` passed completely:
+  - build
+  - shared frontend/backend price-contract assertion
+  - canonical npm tarball creation and clean-project installation
+  - Design Intelligence browser route/interaction suite
+  - responsive checks
+  - accessibility checks
+  - evidence upload
+- Latest Vercel deployment `dpl_3LoyCzLt4CSzTnSsSqLAqvS2rTRE` for the same price-contract fix commit is **READY**.
+
+### IMPLEMENTED
+- The previous ₹500 plan price is superseded by ₹200 permanent one-time access.
+- Historical ₹500 references remain only in older handover/changelog entries and do not represent the current commercial contract.
+
+### UNVERIFIED
+- Real Cashfree Sandbox order/Checkout/signed-webhook/payment-status flow at ₹200.
+- Real Firebase Ultra entitlement/API-key lifecycle.
+- Manual production browser/device/screen-reader audit.
+- Real BYOK provider execution and provider-specific compatibility.
+- npm registry publication and registry-backed installation.
+- Deployed Ultra-only effects API exercise with a real Ultra entitlement.
+
+### CHECKPOINT
+- Regression: price contract change and shared-constant refactor verified; unrelated MotionZync behavior untouched.
+- Functionality: ₹200 contract VERIFIED by CI/source review; live payment gateway remains UNVERIFIED.
+- Accessibility: automated CI verification VERIFIED; manual device/screen-reader audit UNVERIFIED.
+- Privacy/security: no credential handling or entitlement architecture weakened.
+- Performance: build/browser checks passed; production profiling UNVERIFIED.
+- Data quality: no catalog changes or fabricated records.
+- Build/test: exact latest price-contract CI run VERIFIED.
+- Documentation: UPDATED.
+
+### CURRENT PHASE STATUS
+- Phase A — Engine / System: **94% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
