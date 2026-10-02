@@ -115,7 +115,7 @@ export async function createCashfreeOrder({
     throw new Error('MotionZync Cashfree checkout currently supports INR only')
   }
   if (cleanPlan !== 'ultra-premium' || numericAmount !== ULTRA_PREMIUM_PRICE_INR) {
-    throw new Error('MotionZync Ultra Premium+ checkout is currently fixed at ₹${ULTRA_PREMIUM_PRICE_INR}')
+    throw new Error(`MotionZync Ultra Premium+ checkout is currently fixed at ₹${ULTRA_PREMIUM_PRICE_INR}`)
   }
   if (!/^\\+?[0-9 ()-]{8,20}$/.test(cleanPhone)) {
     throw new Error('A valid customer phone number is required for Cashfree checkout')
