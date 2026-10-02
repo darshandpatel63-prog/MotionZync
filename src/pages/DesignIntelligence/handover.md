@@ -2749,3 +2749,31 @@ These must be configured as server-side Vercel Environment Variables and never h
 5. Deployed Ultra-only effects API exercise with real entitlement.
 6. Publish `@motionzync/design-intelligence` to npm and verify a registry-backed clean install.
 7. Then begin Phase B formally.
+
+## 2026-10-02 — Server entitlement/payment boundary static review
+
+### VERIFIED
+- `/api/di-knowledge` serves the free browser catalog plus only protected records whose tier is accessible to the server-derived entitlement.
+- Firebase-authenticated users receive the documented Premium-at-₹0 web entitlement, while developer/API-key access is separately restricted to an exact `ultra-premium` entitlement.
+- MotionZync API-key authentication hashes the presented secret, requires an active key, checks the owner's current server entitlement, and records last-use metadata without storing plaintext.
+- `/api/di-effects` independently requires the same server-issued Ultra Premium+ API-key path and rejects non-Ultra callers.
+- Protected Design Intelligence records remain in a server-only catalog file and are not imported by the browser package.
+- Cashfree order creation is server-authenticated and fixed to Ultra Premium+ / ₹500 / INR.
+- Cashfree webhook handling requires a valid signed webhook, re-fetches order/payment data server-side, reconciles amount/currency, checks server-created customer/plan metadata and only then records the payment/entitlement.
+- No clear entitlement bypass was identified during this source-level boundary review.
+
+### UNVERIFIED
+- The review cannot replace a real Firebase identity/Firestore exercise.
+- Real Cashfree Sandbox checkout, signed webhook and payment-status reconciliation remain unverified until merchant credentials are configured in Vercel Environment Variables.
+- Real API-key issue/rotate/revoke and authenticated developer requests remain unverified.
+- Production browser/manual accessibility and real BYOK provider tests remain unverified.
+
+### CHECKPOINT
+- Regression: source-level boundary review found no obvious entitlement bypass; runtime regression remains dependent on real environment testing.
+- Functionality: server enforcement paths are IMPLEMENTED; live enforcement exercise UNVERIFIED.
+- Accessibility: no UI changed; existing automated coverage remains VERIFIED.
+- Privacy/security: protected records remain server-only; API secrets remain hash-only; Cashfree client secrets remain server-side by architecture.
+- Performance: API-key and entitlement lookups are bounded; production profiling UNVERIFIED.
+- Data quality: no new records or duplicate catalog added.
+- Build/test: preceding package/browser verification remains VERIFIED; this milestone is source-review based.
+- Documentation: UPDATED.
