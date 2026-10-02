@@ -2837,3 +2837,34 @@ The remaining Phase-A work is now concentrated in live/external validation:
 - Data quality: no data changes.
 - Build/test: prior exact-head CI/package/browser verification remains VERIFIED.
 - Documentation: UPDATED.
+
+## 2026-10-02 — Ultra Premium+ price reduced to ₹200
+
+### IMPLEMENTED
+- Superseded the previous Ultra Premium+ ₹500 commercial price with **₹200 permanent (one-time)**.
+- Centralized the current price as `ULTRA_PREMIUM_PRICE_INR = 200` in `src/pages/DesignIntelligence/access.js`.
+- Pricing/Home/Docs UI now reads the shared price instead of hard-coding ₹500.
+- Cashfree order creation and webhook reconciliation now use the same shared server-visible price constant.
+- The product master prompt now records ₹200 as the current permanent paid plan.
+
+### VERIFIED
+- The current frontend and backend price contract were source-cross-checked to use ₹200.
+- Cashfree order creation still remains fixed to Ultra Premium+ and INR; only the authorized amount changed from ₹500 to ₹200.
+- No fake payment, fake entitlement, fake API key or second billing system was introduced.
+- Historical ₹500 entries in this handover remain as changelog history; the latest contract is ₹200.
+
+### UNVERIFIED
+- Real Cashfree Sandbox checkout/payment/webhook reconciliation at ₹200.
+- Production Firebase Ultra entitlement and API-key lifecycle.
+- npm registry publication.
+- Manual production accessibility/device audit and real BYOK provider execution remain unverified.
+
+### CHECKPOINT
+- Regression: price-only contract change plus shared-constant refactor; unrelated MotionZync features untouched.
+- Functionality: ₹200 price contract IMPLEMENTED; runtime payment behavior UNVERIFIED.
+- Accessibility: no interaction semantics intentionally changed; automated/manual validation pending on latest commit.
+- Privacy/security: no credential handling changed; server-side payment/entitlement boundaries preserved.
+- Performance: no meaningful runtime complexity added; production profiling UNVERIFIED.
+- Data quality: no catalog records changed.
+- Build/test: latest CI/build verification for the price change is pending.
+- Documentation: UPDATED.
