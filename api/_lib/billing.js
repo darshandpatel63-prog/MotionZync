@@ -94,6 +94,30 @@ export function resolveServerEntitlement(data = {}, nowMs = Date.now()) {
   }
 }
 
+export function resolveServerEntitlement(data = {}, now = Date.now()) {
+  const tier = str(data.entitlement || data.plan).toLowerCase()
+  const expiry = dateOf(data.entitlementExpiresAt)
+  const paidOrGrantedActive = ENTITLED_TIERS.has(tier) && (!expiry || expiry.getTime() > now)
+
+  // Every Firebase-authenticated user receives Premium web access at ₹0.
+  // Only an active Ultra Premium+ entitlement unlocks the developer API.
+  if (paidOrGrantedActive) {
+    return {
+      tier,
+      active: true,
+      source: str(data.entitlementSource).toLowerCase() || 'server',
+      expiresAt: iso(data.entitlementExpiresAt),
+    }
+  }
+
+  return {
+    tier: 'premium',
+    active: true,
+    source: 'authenticated-free',
+    expiresAt: null,
+  }
+}
+
 export async function getServerEntitlement(userId) {
   const cleanUserId = str(userId)
   if (!cleanUserId) throw new Error('Firebase user ID is required')
