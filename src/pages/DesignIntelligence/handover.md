@@ -3173,3 +3173,28 @@ FIRST UNFINISHED TASK remains:
 - Data quality: no catalog changes.
 - Build/test: new CI verification pending.
 - Documentation: UPDATED.
+
+
+## 2026-10-02 — Cashfree CI mock execution fix
+
+### VERIFIED
+- CI run `36983917707` for the prior orchestration-test commit reached the browser suite and failed specifically at the synthetic Cashfree SDK-call wait with a 30-second `page.waitForFunction` timeout.
+- Build, price contract, local npm package installation and the earlier browser/a11y checks all passed before that timeout.
+
+### IMPLEMENTED
+- Moved the Cashfree SDK mock installation into Playwright `addInitScript`, so `window.Cashfree` is defined before application scripts and the production loader logic can deterministically reuse the mock.
+- No production application code, Cashfree backend, entitlement logic or pricing was changed.
+
+### UNVERIFIED
+- The replacement CI run for commit `a5cdfef39919e2ac018fb962bc94531c0a891319` is pending.
+- Real Cashfree Sandbox checkout, signed webhook and server-side reconciliation remain unverified.
+
+### CHECKPOINT
+- Regression: CI-only test harness change.
+- Functionality: test orchestration implementation corrected; execution pending.
+- Accessibility: existing route/Axe/focus checks unchanged.
+- Privacy/security: no production secret or entitlement path changed.
+- Performance: no production runtime impact.
+- Data quality: no catalog changes.
+- Build/test: replacement CI run pending.
+- Documentation: UPDATED.
