@@ -324,3 +324,38 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 96%
 5. Manual production browser/device/screen-reader audit.
 6. Publish `@motionzync/design-intelligence` and verify registry-backed installation.
 7. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-10-02 — BYOK registry hardening fully verified
+
+### VERIFIED
+- Full Design Intelligence CI run `36988536404` completed successfully with the BYOK model-registry guard included.
+- Current READY Vercel deployment `dpl_93c6uDUPFFZyTPAAfcua3ndZ7EtL` serves all seven Design Intelligence routes with HTTP 200.
+- Unauthenticated `GET /api/di-knowledge` returns HTTP 200 with free-only knowledge; `GET /api/cashfree-create-order` returns HTTP 405.
+- The automated gate covers the OpenAI retired-model regression, but real provider credentials and real external API execution remain separate verification gates.
+
+### IMPLEMENTED
+- Retired OpenAI `o1-preview` and `o1-mini` removed from the shared MotionZync BYOK registry.
+- GPT-5.6 model entries and the CI guard remain in the current branch state.
+
+### UNVERIFIED
+- Real Firebase Premium/Ultra entitlement and API-key lifecycle.
+- Real Cashfree Sandbox ₹200 end-to-end.
+- Real Ultra Effects API execution.
+- Real BYOK provider calls/CORS/model compatibility with user credentials.
+- Manual production device/screen-reader audit.
+- npm registry publication and registry-backed external installation.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + reconciliation.
+3. Real Ultra API-key lifecycle and Effects API exercise.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish `@motionzync/design-intelligence` and verify registry installation.
+7. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
