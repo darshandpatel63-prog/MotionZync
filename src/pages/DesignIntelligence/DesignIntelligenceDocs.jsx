@@ -1,3 +1,4 @@
+import {ULTRA_PREMIUM_PRICE_INR} from './access.js'
 import './DesignIntelligence.css'
 export default function DesignIntelligenceDocs(){return <div className="di-page">
   <section className="di-page-intro"><span className="di-kicker">HOW TO USE</span><h1>Design Intelligence workflow</h1><p>This page is the in-product explanation a new user should be able to read before touching the generator.</p></section>
@@ -17,7 +18,7 @@ export default function DesignIntelligenceDocs(){return <div className="di-page"
     <div className="di-table">
       <div><b>Free · no login</b><span>Simple/public knowledge and free recipes can be used immediately.</span></div>
       <div><b>Premium · Google login · ₹0</b><span>Verified Firebase identity unlocks Premium protected knowledge server-side and keeps the same canonical core available for npm/local usage.</span></div>
-      <div><b>Ultra Premium+ · ₹500</b><span>Paid server-authorized tier with all web-accessible knowledge and developer API access.</span></div>
+      <div><b>Ultra Premium+ · ₹{ULTRA_PREMIUM_PRICE_INR}</b><span>Paid server-authorized tier with all web-accessible knowledge and developer API access.</span></div>
       <div><b>Special animation + effects</b><span>API-only; requires Ultra Premium+ and a valid server-issued API key.</span></div>
     </div>
   </section>
@@ -38,6 +39,6 @@ export default function DesignIntelligenceDocs(){return <div className="di-page"
   <section className="di-surface">
     <span className="di-kicker">IMPORTANT</span>
     <h2>What is not live yet</h2>
-    <p>Live ₹500 Cashfree checkout, production API-key usage, published npm package, MCP service, large-scale content ingestion and final accessibility/performance automation remain verification/release milestones. The access contract and server-side enforcement foundation are being aligned now; no fake API key or fake payment is created.</p>
+    <p>Live ₹{ULTRA_PREMIUM_PRICE_INR} Cashfree checkout, production API-key usage, published npm package, MCP service, large-scale content ingestion and final accessibility/performance automation remain verification/release milestones. The access contract and server-side enforcement foundation are being aligned now; no fake API key or fake payment is created.</p>
   </section>
 </div>}
