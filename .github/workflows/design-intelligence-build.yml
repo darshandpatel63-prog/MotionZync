@@ -270,8 +270,6 @@ jobs:
               const checkoutButton = page.getByRole('button', {name:'Pay ₹200'})
               assert((await checkoutButton.count()) === 1, 'Cashfree ₹200 checkout button is missing')
               await page.route('**/api/cashfree-create-order', async routeRequest => {
-                const body = routeRequest.postDataJSON()
-                assert(JSON.stringify(body) === JSON.stringify({phone:'+919876543210'}), 'Cashfree order request sent unexpected fields: '+JSON.stringify(body))
                 await routeRequest.fulfill({
                   status: 200,
                   contentType: 'application/json',
@@ -285,7 +283,11 @@ jobs:
                 })
               })
               await page.getByLabel('Customer phone').fill('+919876543210')
+              const orderRequestPromise = page.waitForRequest(request => request.url().endsWith('/api/cashfree-create-order'))
               await checkoutButton.click()
+              const orderRequest = await orderRequestPromise
+              const orderBody = orderRequest.postDataJSON()
+              assert(JSON.stringify(orderBody) === JSON.stringify({phone:'+919876543210'}), 'Cashfree order request sent unexpected fields: '+JSON.stringify(orderBody))
               await page.waitForFunction(() => window.__motionzyncCashfreeCalls?.length === 1)
               const checkoutCall = await page.evaluate(() => window.__motionzyncCashfreeCalls[0])
               assert(checkoutCall.mode === 'sandbox', 'Cashfree CI checkout did not use sandbox mode')
