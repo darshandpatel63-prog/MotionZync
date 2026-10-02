@@ -2913,3 +2913,51 @@ The remaining Phase-A work is now concentrated in live/external validation:
 - Phase A — Engine / System: **94% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## 2026-10-02 — Continuation verification + accessibility hardening
+
+### IMPLEMENTED
+- Re-inspected the complete current Design Intelligence source folder plus the required integration files `src/App.jsx` and `src/components/Navbar/Navbar.jsx`.
+- Re-verified the canonical ₹200 Ultra Premium+ source contract and the server-side Cashfree/API-key/entitlement architecture from the current feature branch.
+- Identified and fixed a semantic accessibility issue in `DesignIntelligenceLayout.jsx`: the DI page was rendering a nested `<main>` inside MotionZync's existing App-level `<main>`. The inner DI landmark is now a `<section>`, preserving the existing route/layout while avoiding nested main landmarks.
+- No unrelated MotionZync feature, route, auth, Firebase or data system was intentionally modified.
+
+### VERIFIED
+- The latest READY Vercel deployment before this fix was `dpl_9RcaeFrfMjwwDiUtyeUUrnJEm1L1`, commit `b13cd4ce5c95a59a069b364b5ba2324880f7a8af`.
+- Commit `b13cd4c` is exactly one docs-only commit ahead of verified app-code commit `854ae0398e7111ae5a645d758cb080a350d9c7f6`; the GitHub compare shows only `handover.md` changed. Therefore the READY deployment contained the verified ₹200 application code.
+- GitHub Actions run `36973499882` for commit `854ae0398e7111ae5a645d758cb080a350d9c7f6` completed successfully, including build, shared ₹200 price-contract assertion, canonical npm tarball creation/install, browser route/interaction/responsive checks, accessibility checks and evidence capture.
+
+### UNVERIFIED
+- The new Vercel deployment for accessibility fix commit `0b0db240baa31a4502dc1a02019e03cbb67062f4` was still **BUILDING** at the time of this handover update; do not call it READY until Vercel reports READY.
+- Protected feature deployment routes/API endpoints are currently behind Vercel Authentication/SSO, so live runtime/browser interaction for the latest deployment could not be completed from this verification path.
+- Manual physical device/screen-reader audit remains unverified.
+- Real Firebase Premium/Ultra entitlement/API-key lifecycle, real BYOK provider execution, real Cashfree Sandbox order/webhook/status flow at ₹200, deployed Ultra effects calls, and npm registry publication remain unverified.
+
+### CHECKPOINT
+- Regression: accessibility-only semantic landmark change inside the DI layout; integration surface unchanged.
+- Functionality: route structure unchanged; the section still hosts the same DI `Outlet`.
+- Accessibility: nested main landmark issue fixed; automated CI verification is pending for commit `0b0db24`.
+- Privacy/security: no auth, secret, entitlement or API-key storage logic changed.
+- Performance: no runtime data/query path changed.
+- Data quality: no records added or fabricated.
+- Build/test: previous source commit was fully green; new commit's Vercel/CI verification is pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **94% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## CURRENT CHECKPOINT AFTER 2026-10-02 CONTINUATION
+FIRST UNFINISHED TASK remains:
+1. Verify the new Vercel deployment for `0b0db240` reaches READY and then rerun the production/browser route verification path.
+2. Complete authenticated browser/visual/interactivity verification for all 7 Design Intelligence routes on the newest deployment.
+3. Complete manual accessibility/responsive/device and screen-reader audit.
+4. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+5. Exercise server-authoritative Free/Premium/Ultra knowledge boundaries and MotionZync API-key access with real Firebase identities.
+6. Run the real Cashfree Sandbox flow at the current **₹200** price after merchant credentials/configuration are available in Vercel Environment Variables.
+7. Verify Ultra API-key issue/rotate/revoke with a real Ultra entitlement.
+8. Verify deployed special-effects API behavior with real Ultra entitlement and allowlisted origin.
+9. Publish the package to npm and verify an external registry installation.
+10. Continue final Phase A publication/compatibility work; keep large 1,000+/10,000+ content expansion deferred.
+
