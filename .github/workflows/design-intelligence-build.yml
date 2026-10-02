@@ -258,7 +258,39 @@ jobs:
             if (route === '/design-intelligence/pricing') {
               assert((await page.getByText(/Signed in as ci-admin@example\.invalid\./).count()) === 1, 'Pricing CI authenticated identity state is missing')
               assert((await page.getByLabel('Customer phone').count()) === 1, 'Cashfree customer phone field is missing')
-              assert((await page.getByRole('button', {name:'Pay ₹200'}).count()) === 1, 'Cashfree ₹200 checkout button is missing')
+              const checkoutButton = page.getByRole('button', {name:'Pay ₹200'})
+              assert((await checkoutButton.count()) === 1, 'Cashfree ₹200 checkout button is missing')
+              await page.route('**/api/cashfree-create-order', async routeRequest => {
+                const body = routeRequest.postDataJSON()
+                assert(JSON.stringify(body) === JSON.stringify({phone:'+919876543210'}), 'Cashfree order request sent unexpected fields: '+JSON.stringify(body))
+                await routeRequest.fulfill({
+                  status: 200,
+                  contentType: 'application/json',
+                  body: JSON.stringify({
+                    paymentSessionId:'ci-payment-session',
+                    environment:'sandbox',
+                    plan:'ultra-premium',
+                    amount:200,
+                    orderId:'ci-order',
+                  }),
+                })
+              })
+              await page.evaluate(() => {
+                window.__motionzyncCashfreeCalls = []
+                window.Cashfree = ({mode}) => ({
+                  checkout: async options => {
+                    window.__motionzyncCashfreeCalls.push({mode, ...options})
+                    return {}
+                  },
+                })
+              })
+              await page.getByLabel('Customer phone').fill('+919876543210')
+              await checkoutButton.click()
+              await page.waitForFunction(() => window.__motionzyncCashfreeCalls?.length === 1)
+              const checkoutCall = await page.evaluate(() => window.__motionzyncCashfreeCalls[0])
+              assert(checkoutCall.mode === 'sandbox', 'Cashfree CI checkout did not use sandbox mode')
+              assert(checkoutCall.paymentSessionId === 'ci-payment-session', 'Cashfree CI checkout did not use the server-returned payment session')
+              assert(checkoutCall.redirectTarget === '_self', 'Cashfree CI checkout did not use _self redirect')
             }
           }
 
