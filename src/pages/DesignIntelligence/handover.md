@@ -3425,3 +3425,54 @@ FIRST UNFINISHED TASK remains:
 6. Ultra API-key issue/rotate/revoke and deployed effects API exercise with a real Ultra entitlement.
 7. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
 8. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-10-02 — Cashfree server validation bug audit + READY deployment
+
+### IMPLEMENTED
+- Audited the previously listed unfinished access/payment/runtime gates against the actual current source rather than treating source presence as runtime verification.
+- Confirmed the following are implemented in the repository: server-authoritative entitlement lookup, Firebase-authenticated knowledge delivery, Ultra-only API-key issue/rotate/revoke, Ultra-only effects endpoint, Cashfree order creation/webhook reconciliation, ₹200 one-time contract, existing BYOK generator bridge, and package-ready npm adapter.
+- Found and fixed a real Cashfree server bug in `api/_lib/cashfree.js`: customer phone/email validation regexes were double-escaped, which rejected normal values such as `+919876543210` and `test@example.com`.
+- The corrected validation now accepts the expected phone/email forms.
+
+### VERIFIED
+- Fix committed on `feature/design-intelligence` as `958f0837fc59294286d1b01ab4bb384c0c5897b4`.
+- Local JavaScript regex behavior check: valid Indian-style phone and normal email both return true after the fix.
+- Vercel deployment `dpl_CXbwmREgHcBXLjTbYZC9X3Q9rmaT` for the fix commit reached **READY**.
+- Current deployment `/design-intelligence` returned HTTP 200.
+- Current deployment unauthenticated `GET /api/di-knowledge` returned HTTP 200 with `tier=free`, `authenticated=false`, `protectedIncluded=false`, and only public/free catalog records.
+- Current deployment `GET /api/cashfree-create-order` returned the expected HTTP 405 for the POST-only endpoint.
+- No credentials or payment secrets were added to source.
+
+### UNVERIFIED
+- Real authenticated Firebase Premium/Ultra runtime.
+- Real MotionZync API-key issue/rotate/revoke against production Firestore.
+- Real Cashfree Sandbox POST order creation, Checkout, signed webhook and payment-status reconciliation at ₹200; merchant credentials/configuration are still required.
+- Real deployed Ultra effects API request with a valid Ultra key and configured origin.
+- Real BYOK provider execution/CORS/model compatibility.
+- Browser visual/manual accessibility/device/screen-reader audit.
+- npm registry publication and registry-backed clean installation.
+
+### CHECKPOINT
+- Regression: source audit + targeted Cashfree validation fix only; unrelated MotionZync features untouched.
+- Functionality: Cashfree input-validation bug FIXED; public/live unauthenticated boundaries VERIFIED; credentialed/payment runtime remains UNVERIFIED.
+- Accessibility: existing automated CI evidence retained; manual audit remains UNVERIFIED.
+- Privacy/security: server-authoritative entitlement/API-key design retained; no plaintext API key storage or payment credential exposure.
+- Performance: no new runtime-heavy work introduced.
+- Data quality: no fabricated catalog records; 1,000+/10,000+ expansion remains deferred.
+- Build/test: fix deployment reached READY; targeted regex behavior verified. Full post-fix CI suite is not yet attached to this commit.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **96% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Obtain intentional Vercel Firebase/Cashfree configuration and exercise credentialed Premium/Ultra + ₹200 payment lifecycle.
+2. Verify Ultra API-key lifecycle against the real entitlement.
+3. Verify deployed Ultra effects API with a real key/allowlisted origin.
+4. Verify real BYOK provider execution and compatibility.
+5. Complete manual browser/accessibility/device verification.
+6. Publish and registry-install `@motionzync/design-intelligence`.
+7. Then close remaining Phase-A publication/compatibility gates before starting large content expansion.
