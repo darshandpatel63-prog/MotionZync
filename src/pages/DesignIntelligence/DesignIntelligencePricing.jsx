@@ -166,6 +166,27 @@ export default function DesignIntelligencePricing(){
       </article>)}
     </section>
 
+    <section className="di-surface">
+      <span className="di-kicker">ULTRA PREMIUM+ CHECKOUT</span>
+      <h2>{ultra?'Ultra Premium+ already active':'Unlock Ultra Premium+ for ₹'+ULTRA_PREMIUM_PRICE_INR}</h2>
+      {ultra
+        ?<p>Your server-authorized account is already entitled to Ultra Premium+. No new payment is requested.</p>
+        :<>
+          <p>Orders are created only by the authenticated server endpoint. The frontend does not choose the amount, customer identity or entitlement.</p>
+          <div className="di-checkout-row">
+            <div>
+              <label className="di-label" htmlFor="di-cashfree-phone">Customer phone</label>
+              <input id="di-cashfree-phone" className="di-input" type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={event=>setPhone(event.target.value)} placeholder="+91 9876543210" disabled={checkoutBusy}/>
+            </div>
+            <button className="di-btn di-btn-primary" type="button" onClick={runCheckout} disabled={checkoutBusy||!user}>
+              {checkoutBusy?'Opening…':'Pay ₹'+ULTRA_PREMIUM_PRICE_INR}
+            </button>
+          </div>
+          {!user&&<p className="di-muted">Google login is required before a server-authorized Cashfree order can be created.</p>}
+        </>}
+      {checkoutStatus&&<div className="di-note" role="status">{checkoutStatus}</div>}
+    </section>
+
     <section className="di-grid-2">
       <article className="di-surface">
         <span className="di-kicker">IDENTITY</span>
