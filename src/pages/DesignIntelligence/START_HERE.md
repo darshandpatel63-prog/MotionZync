@@ -289,3 +289,38 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 96%
 7. Deployed Ultra effects API exercise with a real Ultra entitlement and allowlisted origin.
 8. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
 9. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-10-02 — Backend regression CI + latest HEAD READY gate
+
+### VERIFIED
+- Current HEAD `a065f1c9940b06affc03bd0c7153d9faedf26e91` completed Design Intelligence CI successfully.
+- The new server-side Cashfree contract regression passed, along with the full existing browser/accessibility/package/price suite.
+- The same HEAD has a READY Vercel deployment `dpl_6UWkD7UTwd8Zsr1P3SdcwXG31RUj`.
+- Seven DI route deliveries plus unauthenticated knowledge/Cashfree method boundaries are verified on that deployment.
+- The automated gate does not replace real credentialed Firebase/Cashfree/API-key/effects/BYOK/manual device verification.
+
+### IMPLEMENTED
+- DI CI now explicitly watches `api/**` changes and runs the Cashfree server order contract regression before the rest of the suite.
+
+### UNVERIFIED
+- Real Firebase Premium/Ultra entitlement and API-key lifecycle.
+- Real Cashfree Sandbox ₹200 end-to-end.
+- Real Ultra effects API execution.
+- Real BYOK provider/CORS/model execution.
+- Manual production device/screen-reader audit.
+- npm registry publication and external installation.
+
+### PHASE STATUS
+- Phase A — Engine / System: **97% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Credentialed Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + payment-status reconciliation.
+3. Real Ultra API-key issue/rotate/revoke and deployed effects API exercise.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish `@motionzync/design-intelligence` and verify registry-backed installation.
+7. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
