@@ -1,6 +1,8 @@
 import { ULTRA_PREMIUM_PRICE_INR } from '../../src/pages/DesignIntelligence/access.js'
 import crypto from 'node:crypto'
 
+export { ULTRA_PREMIUM_PRICE_INR }
+
 export const CASHFREE_API_VERSION = '2025-01-01'
 const CASHFREE_BASE_URLS = Object.freeze({
   sandbox: 'https://sandbox.cashfree.com/pg',
