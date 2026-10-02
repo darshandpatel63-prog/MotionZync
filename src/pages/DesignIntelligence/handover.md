@@ -2541,3 +2541,37 @@ These must be configured as server-side Vercel Environment Variables and never h
 8. Publish and externally install the package-ready canonical npm adapter.
 9. Continue Phase A publication workflow and deeper compatibility foundation.
 10. Keep 1,000+/10,000+ content expansion deferred.
+
+## 2026-10-02 — CI browser verification hardening
+
+### IMPLEMENTED
+- Updated .github/workflows/design-intelligence-build.yml so the Design Intelligence browser smoke test runs against the built production bundle through vite preview, instead of the Vite development server.
+- Added the existing CI-only Firebase placeholder environment values to the build step so the production bundle has the same safe test configuration expected by the browser smoke test.
+- Existing browser coverage remains: all 7 Design Intelligence routes, interaction checks, Admin DI Billing smoke, responsive overflow checks, focus-visible check and serious/critical Axe gate.
+
+### VERIFIED
+- The workflow file change is committed on feature/design-intelligence.
+- No production credentials, real Firebase secrets, Cashfree credentials, payment data or fake API keys were introduced.
+- Existing Design Intelligence source/runtime behavior was not intentionally changed by this milestone.
+
+### UNVERIFIED
+- GitHub Actions result for commit f01a35fcfea2c5ce1324fe8dc949b205f54f478e is not available through the current workflow-run connector path.
+- Vercel deployment for this commit is currently BUILDING; READY/failed result has not yet been verified.
+- Local repository build/test execution is unavailable because the current execution environment cannot resolve github.com.
+- Production browser/visual verification remains blocked by Vercel Authentication/SSO.
+- Manual accessibility/device/screen-reader verification remains unverified.
+
+### CHECKPOINT
+- Regression: IMPLEMENTED at test-workflow level; unrelated MotionZync runtime code not intentionally changed.
+- Functionality: production-bundle smoke coverage improved; actual CI result UNVERIFIED.
+- Accessibility: existing automated Axe/focus checks preserved; manual audit UNVERIFIED.
+- Privacy/security: CI uses non-production placeholder Firebase values; no secrets added.
+- Performance: browser smoke now exercises the production bundle rather than dev transforms; runtime profiling UNVERIFIED.
+- Data quality: no catalog records or knowledge data changed.
+- Build/test: workflow change committed; external CI result pending/unverified.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
