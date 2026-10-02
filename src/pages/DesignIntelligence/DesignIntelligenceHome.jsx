@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom'
 import {DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS} from './catalog.js'
+import {ULTRA_PREMIUM_PRICE_INR} from './access.js'
 import './DesignIntelligence.css'
 const Stat=({value,label})=><div className="di-stat"><strong>{value}</strong><span>{label}</span></div>
 export default function DesignIntelligenceHome(){
@@ -25,7 +26,7 @@ export default function DesignIntelligenceHome(){
       <div className="di-table">
         <div><b>Free · no login</b><span>Simple/public designs and normal web use.</span></div>
         <div><b>Premium · Google login · ₹0</b><span>Premium protected knowledge and generation, plus the same canonical core for npm use.</span></div>
-        <div><b>Ultra Premium+ · ₹500</b><span>All web-accessible Design Intelligence knowledge and the developer API.</span></div>
+        <div><b>Ultra Premium+ · ₹{ULTRA_PREMIUM_PRICE_INR}</b><span>All web-accessible Design Intelligence knowledge and the developer API.</span></div>
         <div><b>Special animation + effects</b><span>Only through the Ultra Premium+ API; not a free/premium browser-only feature.</span></div>
       </div>
       <Link to="/design-intelligence/pricing">See the full access model →</Link>
