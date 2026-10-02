@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
 import { requireAuthenticatedUser } from './_lib/firebase-admin.js'
-import { createCashfreeOrder } from './_lib/cashfree.js'
+import { createCashfreeOrder, ULTRA_PREMIUM_PRICE_INR } from './_lib/cashfree.js'
 import { recordPendingOrder } from './_lib/billing.js'
 
 function getPublicBaseUrl() {
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     baseUrl = getPublicBaseUrl()
     const order = await createCashfreeOrder({
       orderId,
-      amount: 500,
+      amount: ULTRA_PREMIUM_PRICE_INR,
       currency: 'INR',
       customerId: user.uid,
       customerEmail: user.email,
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
       provider: 'cashfree',
       plan: 'ultra-premium',
       orderId,
-      amount: 500,
+      amount: ULTRA_PREMIUM_PRICE_INR,
       currency: 'INR',
     })
 
@@ -76,7 +76,7 @@ export default async function handler(req, res) {
       provider: 'cashfree',
       environment: String(process.env.CASHFREE_ENV || 'sandbox').toLowerCase(),
       plan: 'ultra-premium',
-      amount: 500,
+      amount: ULTRA_PREMIUM_PRICE_INR,
       currency: 'INR',
       orderId,
       paymentSessionId: order.payment_session_id,
