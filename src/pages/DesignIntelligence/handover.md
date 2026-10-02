@@ -2616,3 +2616,30 @@ These must be configured as server-side Vercel Environment Variables and never h
 6. Verify deployed Ultra-only effects API without bypass.
 7. Complete npm package publication and external installation verification.
 8. Then move Phase A to its final publish-ready state and start Phase B formally.
+
+## 2026-10-02 — CI authenticated-preview identity fix
+
+### IMPLEMENTED
+- Updated only the Design Intelligence GitHub Actions workflow so its Vite production-preview build runs with Vite `ci` mode.
+- This matches the existing AuthContext CI identity branch (`import.meta.env.MODE === 'ci'`) and makes the intended `VITE_CI_ADMIN_EMAIL` deterministic test identity available to the Pricing/Admin browser smoke suite.
+- No application runtime UI/auth/payment logic was changed.
+
+### VERIFIED
+- The previous current-head CI run reached Build successfully and failed only at the Pricing authenticated-identity assertion.
+- The failure was traced to the CI build using the default Vite mode while AuthContext intentionally creates the CI identity only in `ci` mode.
+- The workflow patch is committed on `feature/design-intelligence` as `24d6e32a8742b0d4349c10f31302d3edc0c90e51`.
+
+### UNVERIFIED
+- The new workflow run for this commit has not completed yet.
+- Production browser verification remains blocked by Vercel Authentication/SSO.
+- Real Firebase/Cashfree/BYOK/Ultra API-key/effects runtime verification remains unverified.
+
+### CHECKPOINT
+- Regression: workflow-only change; application runtime untouched.
+- Functionality: CI identity contract alignment IMPLEMENTED; execution pending.
+- Accessibility: existing automated gates unchanged.
+- Privacy/security: no credentials or production secrets added.
+- Performance: no runtime performance change.
+- Data quality: no catalog changes.
+- Build/test: new CI execution pending.
+- Documentation: UPDATED.
