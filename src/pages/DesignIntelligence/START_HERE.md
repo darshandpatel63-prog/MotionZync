@@ -431,3 +431,33 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 96%
 6. Manual browser/device/screen-reader audit.
 7. Publish `@motionzync/design-intelligence` and verify registry install.
 8. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-10-02 — Current HEAD CI/Vercel re-verification
+
+### VERIFIED
+- Current branch HEAD is `62f7e977487f7213b5461a13060e36ccaab1fbd0`.
+- Corrected CI run `37005842908` completed successfully. The workflow includes build, Cashfree contract, OpenAI BYOK registry guard, ₹200 contract, canonical npm tarball/local installation, Playwright/Chromium, all 7 DI routes, Explorer/Generator/Pricing/Admin interactions, responsive overflow, focus-visible, accessible-name checks and serious/critical Axe checks.
+- Matching Vercel deployment `dpl_7qnXjS83SUX9XNLodXHzpREaFnez` is **READY**.
+- The BYOK registry hardening is therefore VERIFIED at the repository CI/build boundary; real provider calls remain unverified.
+
+### IMPLEMENTED
+- Added a deterministic server entitlement/catalog boundary contract so the next credentialed Firebase gate has a regression guard for Free/Premium/Ultra tier semantics.
+
+### UNVERIFIED
+- Real Firebase credentialed entitlement boundary and production Firestore state.
+- Real MotionZync `mz_live_` API-key issue/rotate/revoke and revoked-key rejection.
+- Real Cashfree Sandbox ₹200 Checkout/webhook/reconciliation.
+- Real Ultra Effects API execution and production CORS allowlist behavior.
+- Real BYOK provider calls/CORS/model-account compatibility.
+- Manual physical-device/screen-reader audit.
+- npm registry publication and external registry-backed installation.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + server-side reconciliation.
+3. Real Ultra API-key lifecycle + deployed Effects API exercise.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish `@motionzync/design-intelligence` and verify a clean registry-backed installation.
+7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.

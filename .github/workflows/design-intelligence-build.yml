@@ -70,6 +70,9 @@ jobs:
           grep -q "gpt-5.6-cyber" src/ai/providers/AIProviderContext.jsx
           echo "OpenAI BYOK model registry: current GPT-6 suggestions + current GPT-5.6 specialized models present; retired IDs absent"
 
+      - name: Verify Firebase entitlement and protected catalog boundary
+        run: node scripts/di-entitlement-contract.mjs
+
       - name: Verify shared Ultra Premium+ price contract
         shell: bash
         run: |

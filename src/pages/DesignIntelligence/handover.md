@@ -3713,3 +3713,37 @@ FIRST UNFINISHED TASK remains:
 6. Manual production browser/device/screen-reader audit.
 7. Publish `@motionzync/design-intelligence` and verify registry-backed installation.
 8. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
+
+
+## 2026-10-02 — Current HEAD CI/Vercel re-verification + entitlement regression guard
+
+### VERIFIED
+- Current branch HEAD: `62f7e977487f7213b5461a13060e36ccaab1fbd0`.
+- CI run `37005842908` completed successfully, including the browser/accessibility stage after the OpenAI BYOK registry guard. This supersedes the earlier cancelled intermediate registry-only run as the current full automated evidence.
+- Matching Vercel deployment `dpl_7qnXjS83SUX9XNLodXHzpREaFnez` is **READY**.
+- OpenAI BYOK registry hardening is VERIFIED at the code + CI guard + Vercel build boundary. This does not verify real provider execution, CORS, account/model availability, or user-key behavior.
+- Added `scripts/di-entitlement-contract.mjs` and wired it into DI CI. The contract verifies authenticated-server entitlement semantics, Free/Premium/Ultra catalog filtering, Premium exclusion of Ultra-only records, and canonical catalog validation without any real credentials.
+
+### IMPLEMENTED
+- `resolveServerEntitlement()` is now a pure deterministic helper used by the existing server entitlement reader; no entitlement policy was changed.
+- `api/di-knowledge.js` now exports the existing tier filter helpers for deterministic regression testing; runtime behavior remains unchanged.
+
+### CHECKPOINT
+- Regression: existing full CI still covers build/browser/accessibility/payment orchestration, plus the new entitlement/catalog contract. **VERIFIED** once the new commit's CI run succeeds.
+- Functionality: deterministic entitlement semantics are covered. **VERIFIED** once the new commit's CI run succeeds; credentialed Firebase/Firestore remains **UNVERIFIED**.
+- Accessibility: no UI/runtime markup changes in this milestone; existing automated Axe/focus/name/responsive coverage remains **VERIFIED**.
+- Privacy/security: no credentials or secrets added; no frontend entitlement authority introduced. **VERIFIED**.
+- Performance: no new runtime dependency or data-store introduced; static test-only contract. **VERIFIED** once CI succeeds.
+- Data quality: no catalog records added; protected dataset remains small and controlled. **VERIFIED**.
+- Documentation: UPDATED.
+- Phase A remains **98% — IN PROGRESS** pending real credentialed/runtime/manual/publication gates.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Run the new CI on the milestone commit and confirm the entitlement contract passes.
+2. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise with supplied credentials.
+3. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + server-side reconciliation.
+4. Real Ultra API-key issue/rotate/revoke + Effects API exercise.
+5. Real BYOK provider execution/CORS/model compatibility.
+6. Manual production browser/device/screen-reader audit.
+7. Publish `@motionzync/design-intelligence` and verify registry-backed clean installation.
+8. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
