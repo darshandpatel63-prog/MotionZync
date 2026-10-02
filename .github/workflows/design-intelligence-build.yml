@@ -257,6 +257,8 @@ jobs:
 
             if (route === '/design-intelligence/pricing') {
               assert((await page.getByText(/Signed in as ci-admin@example\.invalid\./).count()) === 1, 'Pricing CI authenticated identity state is missing')
+              assert((await page.getByLabel('Customer phone').count()) === 1, 'Cashfree customer phone field is missing')
+              assert((await page.getByRole('button', {name:'Pay ₹200'}).count()) === 1, 'Cashfree ₹200 checkout button is missing')
             }
           }
 
