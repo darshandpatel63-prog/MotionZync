@@ -3528,3 +3528,48 @@ FIRST UNFINISHED TASK remains:
 5. Manual production browser/device/screen-reader audit.
 6. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
 7. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-10-02 — BYOK OpenAI model registry compatibility hardening
+
+### IMPLEMENTED
+- Audited the shared existing MotionZync BYOK provider registry against current official provider documentation.
+- Removed retired OpenAI `o1-preview` and `o1-mini` entries from `src/ai/providers/AIProviderContext.jsx`.
+- Added current OpenAI GPT-5.6 aliases/models (`gpt-5.6`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`) without creating a second provider system or changing the canonical BYOK architecture.
+- Added a CI guard that fails when the retired OpenAI IDs return and requires the GPT-5.6 entries to remain present.
+
+### VERIFIED
+- Current official Anthropic documentation lists Claude Fable 5, Claude Opus 5, Claude Sonnet 5 and Claude Haiku 4.5; the existing registry entries for Fable 5, Sonnet 5, Haiku 4.5 and Opus 4.8 are not evidence of a second provider architecture. citeturn407446view0
+- Current official Google Gemini documentation lists `gemini-3.5-flash` and `gemini-3.1-flash-lite` as available stable endpoints, matching the existing registry entries. citeturn593154search0turn593154search1
+- Current official OpenAI documentation shows `gpt-5.6`, `gpt-5.6-sol`, `gpt-5.6-terra` and `gpt-5.6-luna`; the GPT-5.6 models support Chat Completions as well as Responses. citeturn271723view0turn576086search6turn576086search8turn576086search9
+- OpenAI's deprecation documentation states `o1-preview` shut down on 2025-07-28 and `o1-mini` on 2025-10-27, confirming those old registry entries were no longer valid on the current date. citeturn788670view0turn788670view2
+
+### UNVERIFIED
+- The new registry-change commit has a CI run currently in progress and a matching Vercel deployment currently building; therefore post-change full-suite verification is not yet claimed.
+- Real BYOK provider calls with user-supplied credentials, provider CORS behavior, model entitlement/availability and generated-response compatibility remain unverified.
+- OpenAI `gpt-4o` alias remains in the registry for backward compatibility; this milestone does not claim it as the preferred current model.
+
+### CHECKPOINT
+- Regression: shared BYOK registry entries only; no new provider, vault or credential system introduced.
+- Functionality: retired-model cleanup IMPLEMENTED; automated verification pending.
+- Accessibility: no UI structure changed; existing automated/manual status retained.
+- Privacy/security: no API key data changed or exposed.
+- Performance: no runtime architecture change.
+- Data quality: provider model metadata refreshed from official current documentation; no fabricated models added.
+- Build/test: CI guard added; current post-change full suite pending.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **97% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete the post-change CI/Vercel verification for the BYOK registry hardening.
+2. Exercise real Firebase Free/Premium/Ultra and MotionZync API-key boundaries.
+3. Run real Cashfree Sandbox ₹200 order + Checkout + signed webhook + payment-status reconciliation.
+4. Verify deployed Ultra effects API with a real Ultra entitlement.
+5. Perform real BYOK provider execution/CORS/model compatibility tests with valid provider credentials.
+6. Complete manual production browser/device/screen-reader audit.
+7. Publish `@motionzync/design-intelligence` and verify registry-backed installation.
+8. Close remaining Phase-A publication/compatibility gates; keep large 1,000+/10,000+ expansion deferred.
