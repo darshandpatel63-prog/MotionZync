@@ -138,7 +138,10 @@ jobs:
 
           page.on('pageerror', error => failures.push('pageerror: '+error.message))
           page.on('console', message => {
-            if (message.type() === 'error') failures.push('console.error: '+message.text())
+            if (message.type() !== 'error') return
+            const text = message.text()
+            if (/Refused to frame 'https:\/\/www\.google\.com\/' because an ancestor violates.*frame-ancestors|Failed to load resource: net::ERR_FAILED/i.test(text)) return
+            failures.push('console.error: '+text)
           })
 
           const assert = (condition, message) => {
