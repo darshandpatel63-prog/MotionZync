@@ -3383,3 +3383,45 @@ FIRST UNFINISHED TASK remains:
 7. Deployed Ultra effects API exercise with a real Ultra entitlement and allowlisted origin.
 8. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
 9. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
+
+## 2026-10-02 — Latest READY deployment live boundary re-verification
+
+### VERIFIED
+- Current branch HEAD `e68d1232f36b3dc5fc98b07cf69ab62b4e84ef85` now has READY Vercel deployment `dpl_BC4zBxAGb5TwUX9MuHRAy8PMHiCR`.
+- All 7 Design Intelligence route documents on that READY deployment returned HTTP 200 through the authorized Vercel share path.
+- Unauthenticated `GET /api/di-knowledge` on the same READY deployment returned HTTP 200 with server-derived `tier: free`, `authenticated: false`, `protectedIncluded: false`; the returned catalog is the public/free seed set and does not expose protected records.
+- Unauthenticated `GET /api/cashfree-create-order` returned HTTP 405 `Method not allowed`, confirming the order-creation route is not a permissive GET endpoint. The response also exposed baseline security headers including HSTS, `X-Content-Type-Options: nosniff` and `X-Frame-Options: DENY`.
+- This closes the current unauthenticated/free production access-path boundary check for the deployed knowledge and Cashfree method boundary; it does not replace credentialed entitlement/payment/browser testing.
+
+### UNVERIFIED
+- Credentialed Firebase Premium/Ultra entitlement and MotionZync API-key requests.
+- Production Chromium visual/interactivity and manual screen-reader/device validation.
+- Real BYOK provider/CORS/model execution.
+- Real Cashfree Sandbox checkout, signed webhook and server-side reconciliation at ₹200.
+- Real Ultra effects API request/CORS allowlist exercise.
+- npm registry publication and registry-backed installation.
+
+### CHECKPOINT
+- Regression: no application code changed during this verification.
+- Functionality: route delivery plus unauthenticated knowledge/Cashfree boundaries VERIFIED; credentialed interactions remain UNVERIFIED.
+- Accessibility: automated CI evidence remains VERIFIED; manual production audit UNVERIFIED.
+- Privacy/security: free knowledge response excludes protected records; Cashfree order creation is not reachable by GET; no credentials were added.
+- Performance: no profiling claim; the single observed project runtime log is a Node `DEP0169 url.parse()` deprecation warning on `/api/di-knowledge`, not a confirmed application failure.
+- Data quality: no catalog expansion or fabricated records.
+- Build/test: current HEAD Vercel deployment READY; no new CI result claimed in this milestone.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **96% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### NEXT FIRST UNFINISHED TASK
+1. Authenticated production browser/visual/interactivity verification of all 7 routes.
+2. Manual accessibility/responsive/device/screen-reader verification.
+3. Real Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Cashfree Sandbox end-to-end at **₹200** after intentional Vercel environment configuration.
+6. Ultra API-key issue/rotate/revoke and deployed effects API exercise with a real Ultra entitlement.
+7. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
+8. Final Phase-A publication/compatibility gates; keep 1,000+/10,000+ expansion deferred.
