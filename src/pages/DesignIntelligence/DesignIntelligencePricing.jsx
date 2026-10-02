@@ -1,6 +1,6 @@
 import {useEffect,useState} from 'react'
 import {useAuth} from '../../context/AuthContext.jsx'
-import {PLAN_OFFERS,canUseDeveloperApi,accessLabel} from './access.js'
+import {PLAN_OFFERS,canUseDeveloperApi,accessLabel,ULTRA_PREMIUM_PRICE_INR} from './access.js'
 import {fetchDesignIntelligenceKnowledge} from './knowledgeClient.js'
 import './DesignIntelligence.css'
 
@@ -77,7 +77,7 @@ export default function DesignIntelligencePricing(){
     <section className="di-page-intro">
       <span className="di-kicker">ACCESS MODEL</span>
       <h1>Free · Premium · Ultra Premium+ API</h1>
-      <p>Simple/public designs stay available without login. Google login unlocks Premium access for free. A verified ₹500 payment upgrades the account to Ultra Premium+ and server-authorizes the developer API.</p>
+      <p>Simple/public designs stay available without login. Google login unlocks Premium access for free. A verified ₹${ULTRA_PREMIUM_PRICE_INR} payment upgrades the account to Ultra Premium+ and server-authorizes the developer API.</p>
       <div className="di-note" role="status">{identityStatus} · Current tier: {accessLabel(entitlementTier)}</div>
     </section>
 
@@ -89,7 +89,7 @@ export default function DesignIntelligencePricing(){
         <p>{plan.access}</p>
         <p className="di-muted"><b>npm:</b> {plan.npmAccess}</p>
         {plan.specialAccess&&<p className="di-warning"><b>Special effects:</b> {plan.specialAccess}</p>}
-        <span className="di-plan-action">{plan.id==='guest-free'?'Available now':plan.id==='member-premium'?(user?'Premium active on this login':'Login to activate'):'₹500 checkout is server-authorized; live gateway UI remains pending merchant verification'}</span>
+        <span className="di-plan-action">{plan.id==='guest-free'?'Available now':plan.id==='member-premium'?(user?'Premium active on this login':'Login to activate'):`₹${ULTRA_PREMIUM_PRICE_INR} checkout is server-authorized; live gateway UI remains pending merchant verification`}</span>
       </article>)}
     </section>
 
@@ -123,7 +123,7 @@ export default function DesignIntelligencePricing(){
       <div className="di-table">
         <div><b>Free / no login</b><span>Simple/public knowledge, recipes and normal web use.</span></div>
         <div><b>Premium / Google login</b><span>Premium protected knowledge and generation for ₹0; npm access uses the same canonical intelligence core.</span></div>
-        <div><b>Ultra Premium+ / ₹500</b><span>All web-accessible knowledge plus server-authorized API access.</span></div>
+        <div><b>Ultra Premium+ / ₹{ULTRA_PREMIUM_PRICE_INR}</b><span>All web-accessible knowledge plus server-authorized API access.</span></div>
         <div><b>Special animation + effects</b><span>API-only capability; requires Ultra Premium+ and a valid server-issued API key. The bounded special-effects API is implemented; deployed runtime and real-entitlement exercise remain unverified.</span></div>
       </div>
     </section>
