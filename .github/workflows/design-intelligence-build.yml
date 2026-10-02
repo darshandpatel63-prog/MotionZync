@@ -126,6 +126,15 @@ jobs:
           const browser = await chromium.launch({headless:true})
           const context = await browser.newContext({viewport:{width:1440,height:900}})
           const page = await context.newPage()
+          await page.addInitScript(() => {
+            window.__motionzyncCashfreeCalls = []
+            window.Cashfree = ({mode}) => ({
+              checkout: async options => {
+                window.__motionzyncCashfreeCalls.push({mode, ...options})
+                return {}
+              },
+            })
+          })
           await page.route('**/identitytoolkit.googleapis.com/**', async route => {
             const url = route.request().url()
             if (url.includes('/accounts:lookup')) {
@@ -273,15 +282,6 @@ jobs:
                     amount:200,
                     orderId:'ci-order',
                   }),
-                })
-              })
-              await page.evaluate(() => {
-                window.__motionzyncCashfreeCalls = []
-                window.Cashfree = ({mode}) => ({
-                  checkout: async options => {
-                    window.__motionzyncCashfreeCalls.push({mode, ...options})
-                    return {}
-                  },
                 })
               })
               await page.getByLabel('Customer phone').fill('+919876543210')
