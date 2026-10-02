@@ -163,6 +163,16 @@ jobs:
                     }
                 return new Response(JSON.stringify(payload), {status:200,headers:{'Content-Type':'application/json'}})
               }
+              if (url.endsWith('/api/cashfree-create-order')) {
+                window.__motionzyncCashfreeOrderBody = init?.body || null
+                return new Response(JSON.stringify({
+                  paymentSessionId:'ci-payment-session',
+                  environment:'sandbox',
+                  plan:'ultra-premium',
+                  amount:200,
+                  orderId:'ci-order',
+                }), {status:200,headers:{'Content-Type':'application/json'}})
+              }
               return originalFetch(input, init)
             }
           })
@@ -269,24 +279,11 @@ jobs:
               assert((await page.getByLabel('Customer phone').count()) === 1, 'Cashfree customer phone field is missing')
               const checkoutButton = page.getByRole('button', {name:'Pay ₹200'})
               assert((await checkoutButton.count()) === 1, 'Cashfree ₹200 checkout button is missing')
-              await page.route('**/api/cashfree-create-order', async routeRequest => {
-                await routeRequest.fulfill({
-                  status: 200,
-                  contentType: 'application/json',
-                  body: JSON.stringify({
-                    paymentSessionId:'ci-payment-session',
-                    environment:'sandbox',
-                    plan:'ultra-premium',
-                    amount:200,
-                    orderId:'ci-order',
-                  }),
-                })
-              })
               await page.getByLabel('Customer phone').fill('+919876543210')
-              const orderRequestPromise = page.waitForRequest(request => request.url().endsWith('/api/cashfree-create-order'))
+              assert(await page.evaluate(() => typeof window.Cashfree === 'function'), 'Cashfree CI SDK mock is missing before checkout')
               await checkoutButton.click()
-              const orderRequest = await orderRequestPromise
-              const orderBody = orderRequest.postDataJSON()
+              await page.waitForFunction(() => window.__motionzyncCashfreeOrderBody !== null)
+              const orderBody = await page.evaluate(() => JSON.parse(window.__motionzyncCashfreeOrderBody || 'null'))
               assert(JSON.stringify(orderBody) === JSON.stringify({phone:'+919876543210'}), 'Cashfree order request sent unexpected fields: '+JSON.stringify(orderBody))
               await page.waitForFunction(() => window.__motionzyncCashfreeCalls?.length === 1)
               const checkoutCall = await page.evaluate(() => window.__motionzyncCashfreeCalls[0])
