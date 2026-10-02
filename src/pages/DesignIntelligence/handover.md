@@ -2575,3 +2575,44 @@ These must be configured as server-side Vercel Environment Variables and never h
 - Phase A — Engine / System: **89% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+## 2026-10-02 — Current production-preview hardening checkpoint
+
+### VERIFIED
+- Current `feature/design-intelligence` branch HEAD is `56e78dc8afd994e627e2ce81d29dcdb9d586b9a8`.
+- Vercel deployment `dpl_74stwETdeF32oeonnrbg1yV8k9Kq` is **READY** and is sourced from the exact current branch HEAD.
+- GitHub combined status for the current HEAD reports Vercel **success**.
+- Vercel project runtime-error scan for the selected 24-hour window returned no runtime errors.
+- The current Design Intelligence CI workflow contains production-preview browser smoke coverage for all 7 DI routes, Explorer interaction, Generator interaction, Pricing identity, Admin DI Billing, responsive overflow and focus-visible checks, plus serious/critical Axe gating.
+
+### UNVERIFIED
+- GitHub Actions workflow execution for the exact current HEAD is not returned by the available commit workflow-run query, so CI execution is not claimed as passed.
+- Authenticated production browser/visual/interactivity verification remains blocked by Vercel Authentication/SSO; the fresh deployment share URL returns HTTP 302 before application content.
+- Manual screen-reader, device and full accessibility verification remains UNVERIFIED.
+- Real Firebase Premium/Ultra entitlement, real MotionZync API-key lifecycle, real BYOK provider execution/CORS/model compatibility, Cashfree sandbox transaction/webhook lifecycle and deployed Ultra-only effects API exercise remain UNVERIFIED.
+- External npm publication and installation remain UNVERIFIED.
+
+### CHECKPOINT
+- Regression: Vercel READY lineage and runtime-error scan VERIFIED; browser regression UNVERIFIED.
+- Functionality: current deployment is READY; live application interaction remains UNVERIFIED because deployment protection blocks browser retrieval.
+- Accessibility: automated checks are present in CI; actual execution/manual audit UNVERIFIED.
+- Privacy/security: no credentials or payment data were added; current access-control architecture remains server-authoritative where implemented.
+- Performance: no new runtime feature was introduced by this checkpoint; production profiling UNVERIFIED.
+- Data quality: no fabricated catalog records or duplicate database introduced.
+- Build/test: Vercel deployment VERIFIED; exact-head GitHub Actions execution UNVERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **89% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### FIRST UNFINISHED TASK
+1. Obtain a working authenticated browser path and execute the existing 7-route production-preview smoke/a11y suite.
+2. Complete manual accessibility/responsive/device verification.
+3. Verify real BYOK provider execution and provider-specific compatibility.
+4. Exercise real Firebase Free/Premium/Ultra and MotionZync API-key access boundaries.
+5. Run Cashfree sandbox end-to-end after credentials are intentionally configured in Vercel Environment Variables.
+6. Verify deployed Ultra-only effects API without bypass.
+7. Complete npm package publication and external installation verification.
+8. Then move Phase A to its final publish-ready state and start Phase B formally.
