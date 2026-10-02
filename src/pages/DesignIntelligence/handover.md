@@ -2670,3 +2670,36 @@ These must be configured as server-side Vercel Environment Variables and never h
 - Data quality: no catalog changes.
 - Build/test: new exact-head CI execution pending.
 - Documentation: UPDATED.
+
+## 2026-10-02 — Exact-head CI browser verification passed
+
+### VERIFIED
+- Exact current workflow run `36972109705` for commit `f65a8fa0a3e21bee95894bf1befdacc5e1811203` completed successfully.
+- Build passed.
+- Production Vite preview started successfully.
+- All 7 Design Intelligence routes passed browser mounting/route smoke checks.
+- Explorer search/domain interaction passed.
+- Generator deterministic-preview and AI-toggle interaction passed.
+- Pricing CI authenticated identity check passed using Vite `ci` mode.
+- Admin DI Billing sections and empty-state checks passed.
+- Mobile/tablet/desktop horizontal-overflow checks passed.
+- Keyboard `:focus-visible` check passed.
+- Accessible-name checks and serious/critical Axe checks passed.
+- Browser screenshots/evidence artifact was uploaded by the workflow.
+- The known Google auth iframe console noise was excluded only from the CI console-error gate; other console errors remain failures.
+
+### UNVERIFIED
+- This is CI/preview verification, not manual production browser verification.
+- Vercel production-preview browser access remains subject to deployment authentication/SSO.
+- Manual screen-reader/device audit remains unverified.
+- Real Firebase Premium/Ultra, Cashfree sandbox, real MotionZync API-key lifecycle, BYOK provider execution/CORS/model compatibility and deployed Ultra effects API remain unverified.
+
+### CHECKPOINT
+- Regression: exact-head automated regression/smoke suite VERIFIED.
+- Functionality: route/interactivity smoke VERIFIED in CI.
+- Accessibility: automated accessible-name + Axe serious/critical + focus-visible VERIFIED; manual audit UNVERIFIED.
+- Privacy/security: CI uses synthetic test identity values only; no production secrets added.
+- Performance: responsive overflow checks passed; production profiling UNVERIFIED.
+- Data quality: no catalog changes/fabrication.
+- Build/test: exact-head CI VERIFIED.
+- Documentation: UPDATED.
