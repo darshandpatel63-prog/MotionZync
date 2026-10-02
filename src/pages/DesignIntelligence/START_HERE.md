@@ -461,3 +461,41 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 96%
 5. Manual production browser/device/screen-reader audit.
 6. Publish `@motionzync/design-intelligence` and verify a clean registry-backed installation.
 7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-10-02 — CURRENT VERIFIED CONTINUATION CHECKPOINT
+
+### VERIFIED
+- Exact branch HEAD `14d2f09005514030b8f15085bd1c82a87a93d3f1` passed full DI CI run `37006951013`.
+- Automated coverage passed for build, Cashfree server contract, OpenAI BYOK registry guard, Free/Premium/Ultra entitlement boundary contract, ₹200 contract, canonical npm local install, seven DI routes, Explorer/Generator/Pricing/Admin interactions, responsive checks, focus-visible, accessible names and serious/critical Axe.
+- Browser evidence artifact uploaded successfully.
+- Matching Vercel deployment `dpl_3KdDU49dkxjfuLnv2TfkaCcisy8i` is READY.
+- READY deployment route/API checks remain: seven DI routes HTTP 200, unauthenticated `/api/di-knowledge` HTTP 200 free-only, Cashfree create-order GET HTTP 405.
+- The only observed runtime warning remains Node `DEP0169 url.parse()`; it is treated as a dependency warning, not a confirmed application failure.
+
+### IMPLEMENTED
+- The entitlement regression-test seam is now clean: the existing canonical server resolver is unique, and existing DI catalog tier helpers are exported for deterministic CI verification.
+- No new database, API-key vault, provider vault, credential, or large catalog dataset was introduced.
+
+### UNVERIFIED
+- Credentialed Firebase Premium/Ultra boundary and production Firestore.
+- Real MotionZync API-key lifecycle.
+- Cashfree Sandbox ₹200 end-to-end with signed webhook/reconciliation.
+- Real Ultra Effects API/key/CORS execution.
+- Real BYOK provider execution.
+- Manual production device/screen-reader audit.
+- npm registry publication and registry-backed external install.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### NEXT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 end-to-end.
+3. Real Ultra API-key lifecycle + deployed Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Final Phase-A publication/compatibility gates; large content expansion stays deferred.

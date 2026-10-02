@@ -3747,3 +3747,55 @@ FIRST UNFINISHED TASK remains:
 6. Manual production browser/device/screen-reader audit.
 7. Publish `@motionzync/design-intelligence` and verify registry-backed clean installation.
 8. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+
+## 2026-10-02 — Entitlement boundary regression fixed and full CI/Vercel gate re-verified
+
+### VERIFIED
+- Current branch HEAD before this documentation-only checkpoint: `14d2f09005514030b8f15085bd1c82a87a93d3f1`.
+- GitHub Actions run `37006951013` completed successfully on the exact HEAD.
+- The successful run passed: application build, Cashfree server order contract, OpenAI BYOK model registry guard, Firebase entitlement/protected-catalog boundary contract, shared ₹200 price contract, canonical npm tarball/local installation, Playwright/Chromium setup, all seven Design Intelligence routes, Explorer search/domain interaction, Generator deterministic recipe + AI toggle, Pricing ₹200 Cashfree orchestration, Admin DI Billing, mobile/tablet/desktop overflow checks, focus-visible, accessible names, and serious/critical Axe checks.
+- Browser evidence artifact `design-intelligence-browser-evidence.zip` was successfully uploaded by CI.
+- Matching Vercel deployment `dpl_3KdDU49dkxjfuLnv2TfkaCcisy8i` is **READY** for the exact HEAD.
+- Direct protected-deployment fetches on that READY deployment returned HTTP 200 for all seven Design Intelligence routes.
+- Unauthenticated `GET /api/di-knowledge` returned HTTP 200 with `tier=free`, `authenticated=false`, `protectedIncluded=false`, free/public records only.
+- Unauthenticated `GET /api/cashfree-create-order` returned HTTP 405 as expected for the POST-only endpoint.
+- Runtime error aggregation for the relevant routes shows only the pre-existing Node `DEP0169 url.parse()` deprecation warning; no application failure has been demonstrated from it.
+
+### IMPLEMENTED
+- Removed the duplicate `resolveServerEntitlement()` declaration introduced while adding the deterministic entitlement test seam.
+- Kept the pre-existing canonical `resolveServerEntitlement()` implementation as the only server entitlement resolver.
+- Kept `api/di-knowledge.js` on the existing canonical catalog path while exporting its existing tier-filter helpers for deterministic regression testing; no second database/catalog was added.
+
+### UNVERIFIED
+- Real Firebase Premium/Ultra entitlement boundary and production Firestore state.
+- Real MotionZync `mz_live_` API-key issue/rotate/revoke and revoked-key rejection.
+- Real Cashfree Sandbox ₹200 checkout, signed webhook and server-side payment reconciliation.
+- Real Ultra Effects API execution, key enforcement and production CORS allowlist behaviour.
+- Real OpenAI/Anthropic/Gemini/Ollama/custom-compatible provider execution and provider-specific CORS/model entitlement.
+- Manual physical-device, keyboard-only, and screen-reader audit outside the automated CI browser environment.
+- Public npm registry publication and registry-backed clean external installation.
+
+### CHECKPOINT
+- Regression: exact-HEAD full CI passed after the entitlement test-seam fix; unrelated MotionZync features were not changed.
+- Functionality: deterministic Free/Premium/Ultra catalog boundary is CI-VERIFIED; real credentialed Firebase/Firestore behaviour remains UNVERIFIED.
+- Accessibility: automated route, accessible-name, focus-visible, responsive and serious/critical Axe gates are VERIFIED; manual audit remains UNVERIFIED.
+- Privacy/security: no plaintext provider/payment/API credentials added; entitlement authority remains server-side.
+- Performance: no new runtime dependency or second data store introduced.
+- Data quality: no fabricated large catalog expansion; the controlled protected catalog remains unchanged by this milestone.
+- Build/test: exact-HEAD CI run `37006951013` VERIFIED; matching Vercel deployment READY VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + server-side reconciliation.
+3. Real Ultra API-key lifecycle + deployed Effects API exercise.
+4. Real BYOK provider execution/CORS/model compatibility with valid credentials.
+5. Manual production browser/device/screen-reader audit.
+6. Publish `@motionzync/design-intelligence` and verify a registry-backed clean installation.
+7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
