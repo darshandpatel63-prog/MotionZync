@@ -301,7 +301,7 @@ jobs:
               assert((await page.getByText('Payment integration is temporarily pending.', {exact:false}).count()) >= 1, 'Payment pending explanation is missing')
               assert((await page.getByText('₹200', {exact:false}).count()) === 0, 'Temporarily hidden ₹200 price leaked into the public pricing UI')
               assert((await page.getByRole('button', {name:/Pay ₹200/}).count()) === 0, 'Temporarily disabled ₹200 checkout button is still visible')
-            }}
+            }
           }
 
           
