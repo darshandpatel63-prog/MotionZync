@@ -3888,3 +3888,48 @@ FIRST UNFINISHED TASK remains:
 5. Manual production browser/device/screen-reader audit.
 6. Publish `@motionzync/design-intelligence` and verify registry-backed clean installation.
 7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-10-03 — Start/Continue current branch + external-gate checkpoint
+
+### VERIFIED
+- Mandatory Design Intelligence file inventory was re-inspected on `feature/design-intelligence`: all 26 current files under `src/pages/DesignIntelligence/`, plus `src/App.jsx` and `src/components/Navbar/Navbar.jsx`.
+- Current branch HEAD before this documentation sync is `403898e3ce87fdd6ac2e3b90a7f30257f75be57c`.
+- GitHub Actions run `37112309176` for that exact HEAD completed with **success**. Its build job passed the application build, Cashfree server contract, OpenAI BYOK registry guard, Firebase entitlement/protected-catalog contract, shared ₹200 price contract, canonical npm tarball/local installation, Playwright/Chromium browser smoke, responsive and accessibility stages.
+- Current Vercel deployment for the exact HEAD is `dpl_5vEhCAw54h2GeqemX68ZH7qUsSKo`, state **READY**, on `feature/design-intelligence`.
+- Current Vercel runtime log grouping for that deployment over the last 2 hours returned no grouped runtime entries; this does not substitute for credentialed endpoint testing.
+- Server-side source audit re-confirmed canonical Firebase Admin ID-token verification, server entitlement resolution, tier-scoped protected catalog delivery, hash-only MotionZync API-key storage/authentication, and Ultra-only Effects API authentication.
+
+### UNVERIFIED
+- Real Firebase Free/Premium/Ultra entitlement boundary and production Firestore state.
+- Real `mz_live_` API-key issue/rotate/revoke and revoked-key rejection.
+- Real Cashfree Sandbox ₹200 Checkout, signed webhook and server-side payment-status reconciliation.
+- Real Ultra Effects API execution and configured production CORS allowlist behaviour.
+- Real BYOK provider execution/CORS/model compatibility with user/provider credentials.
+- Manual physical-device, keyboard-only and screen-reader production audit.
+- Public npm registry publication and registry-backed clean external installation.
+- Direct public endpoint verification of the newest deployment through the current web-access path; no new endpoint result is claimed.
+
+### CHECKPOINT
+- Regression: current-HEAD CI and source inventory re-verification only; unrelated MotionZync features untouched.
+- Functionality: deterministic engine, access contracts, package adapter and automated browser suite remain VERIFIED; live credentialed integrations remain UNVERIFIED.
+- Accessibility: automated route/name/focus/responsive/serious-critical Axe coverage VERIFIED; manual audit UNVERIFIED.
+- Privacy/security: no credentials, plaintext API keys, second database/vault or frontend entitlement authority introduced.
+- Performance: no runtime architecture change; production profiling remains UNVERIFIED.
+- Data quality: no fabricated 1,000+/10,000+ catalog expansion.
+- Build/test: exact-current-HEAD CI `37112309176` VERIFIED; exact-current-HEAD Vercel `dpl_5vEhCAw54h2GeqemX68ZH7qUsSKo` READY VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + server-side reconciliation.
+3. Real Ultra API-key lifecycle + deployed Effects API exercise.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
