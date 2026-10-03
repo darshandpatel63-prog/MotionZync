@@ -34,8 +34,11 @@ export const AI_PROVIDERS = {
       { id:'gpt-4o',      label:'GPT-4o',        ctx:128000 },
       { id:'gpt-4o-mini', label:'GPT-4o Mini',   ctx:128000 },
       { id:'gpt-4-turbo', label:'GPT-4 Turbo',   ctx:128000 },
-      { id:'o1-preview',  label:'o1 Preview',    ctx:128000 },
-      { id:'o1-mini',     label:'o1 Mini',       ctx:128000 },
+      { id:'gpt-6-astra',    label:'GPT-6 Astra' },
+      { id:'gpt-6-sol',      label:'GPT-6 Sol' },
+      { id:'gpt-6-luna',     label:'GPT-6 Luna' },
+      { id:'gpt-5.6-sol',    label:'GPT-5.6 Sol' },
+      { id:'gpt-5.6-cyber',  label:'GPT-5.6 Cyber' },
     ],
     defaultModel: 'gpt-4o',
     keyPlaceholder: 'sk-...',
@@ -254,6 +257,40 @@ export function AIProviderContext({ children }) {
     setDecryptedKeys({})
   }, [vaultLock])
 
+  // Shared BYOK bridge for optional Design Intelligence AI-assisted recipe refinement.
+  // Provider keys are read only from the existing in-memory decrypted state.
+  const generateText = useCallback(async (providerId = activeProvider, userPrompt = '') => {
+    const cfg = getConfig(providerId)
+    if (!cfg.noKeyRequired && !cfg.apiKey) throw new Error('API key required — unlock the AI vault and configure the selected provider first')
+    if (!cfg.selectedModel) throw new Error('Select an AI model first')
+    if (!String(userPrompt).trim()) throw new Error('AI prompt is empty')
+    setIsLoading(true)
+    try {
+      if (providerId === 'anthropic') {
+        const res = await fetch(cfg.customBaseURL + '/messages', { method:'POST', headers:{'Content-Type':'application/json','x-api-key':cfg.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}, body:JSON.stringify({model:cfg.selectedModel,max_tokens:1800,messages:[{role:'user',content:userPrompt}]}) })
+        const data = await res.json().catch(()=>({}))
+        if (!res.ok) throw new Error(data?.error?.message || ('Anthropic HTTP ' + res.status))
+        return data?.content?.map(part=>part?.text||'').join('') || ''
+      }
+      if (providerId === 'gemini') {
+        const res = await fetch(cfg.customBaseURL + '/models/' + cfg.selectedModel + ':generateContent?key=' + encodeURIComponent(cfg.apiKey), { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({contents:[{parts:[{text:userPrompt}]}]}) })
+        const data = await res.json().catch(()=>({}))
+        if (!res.ok) throw new Error(data?.error?.message || ('Gemini HTTP ' + res.status))
+        return data?.candidates?.[0]?.content?.parts?.map(part=>part?.text||'').join('') || ''
+      }
+      if (providerId === 'ollama') {
+        const res = await fetch(cfg.customBaseURL + '/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({model:cfg.selectedModel,messages:[{role:'user',content:userPrompt}],stream:false}) })
+        const data = await res.json().catch(()=>({}))
+        if (!res.ok) throw new Error(data?.error || ('Ollama HTTP ' + res.status))
+        return data?.message?.content || ''
+      }
+      const base = cfg.customBaseURL || AI_PROVIDERS.openai.baseURL
+      const res = await fetch(base + '/chat/completions', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer ' + cfg.apiKey}, body:JSON.stringify({model:cfg.selectedModel,max_tokens:1800,messages:[{role:'user',content:userPrompt}]}) })
+      const data = await res.json().catch(()=>({}))
+      if (!res.ok) throw new Error(data?.error?.message || ('AI HTTP ' + res.status))
+      return data?.choices?.[0]?.message?.content || ''
+    } finally { setIsLoading(false) }
+  }, [activeProvider, getConfig])
   const testConnection = useCallback(async (providerId) => {
     const cfg = getConfig(providerId)
     if (vaultExists && !vaultUnlocked && !cfg.noKeyRequired) {
@@ -302,7 +339,7 @@ export function AIProviderContext({ children }) {
   return (
     <AIContext.Provider value={{
       configs, activeProvider, activeModel, isConnected, isLoading, AI_PROVIDERS,
-      getConfig, saveConfig, deleteConfig, testConnection,
+      getConfig, saveConfig, deleteConfig, testConnection, generateText,
       setActiveProvider, setActiveModel,
       // Vault (shared with GitHubContext via VaultContext.jsx)
       vaultExists, vaultUnlocked, needsMigration,

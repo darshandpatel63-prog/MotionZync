@@ -1,0 +1,366 @@
+name: Design Intelligence Build Check
+
+on:
+  push:
+    branches:
+      - feature/design-intelligence
+  pull_request:
+    branches:
+      - feature/design-intelligence
+    paths:
+      - "src/pages/DesignIntelligence/**"
+      - "src/App.jsx"
+      - "src/components/Navbar/Navbar.jsx"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.*"
+      - ".github/workflows/design-intelligence-build.yml"
+      - "api/**"
+      - "scripts/di-cashfree-contract.mjs"
+
+concurrency:
+  group: design-intelligence-build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build
+        env:
+          VITE_FIREBASE_API_KEY: "AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          VITE_FIREBASE_AUTH_DOMAIN: "ci-browser-test.invalid"
+          VITE_FIREBASE_PROJECT_ID: "ci-browser-test"
+          VITE_FIREBASE_STORAGE_BUCKET: "ci-browser-test.appspot.com"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "000000000000"
+          VITE_FIREBASE_APP_ID: "1:000000000000:web:ci-browser-test"
+          VITE_CI_ADMIN_EMAIL: "ci-admin@example.invalid"
+          VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
+        run: npm run build -- --mode ci
+
+      - name: Verify Cashfree server order contract
+        run: node scripts/di-cashfree-contract.mjs
+
+      - name: Verify OpenAI BYOK model registry
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -q "o1-preview\|o1-mini" src/ai/providers/AIProviderContext.jsx
+          ! grep -q "gpt-5.6-terra\|gpt-5.6-luna" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-6-astra" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-6-sol" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-6-luna" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-5.6-sol" src/ai/providers/AIProviderContext.jsx
+          grep -q "gpt-5.6-cyber" src/ai/providers/AIProviderContext.jsx
+          echo "OpenAI BYOK model registry: current GPT-6 suggestions + current GPT-5.6 specialized models present; retired IDs absent"
+
+      - name: Verify Firebase entitlement and protected catalog boundary
+        run: node scripts/di-entitlement-contract.mjs
+
+      - name: Verify shared Ultra Premium+ price contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module -e "import { ULTRA_PREMIUM_PRICE_INR as UI_PRICE } from './src/pages/DesignIntelligence/access.js'; import { ULTRA_PREMIUM_PRICE_INR as SERVER_PRICE } from './api/_lib/cashfree.js'; if (UI_PRICE !== 200 || SERVER_PRICE !== 200 || UI_PRICE !== SERVER_PRICE) throw new Error('Ultra Premium+ price contract mismatch'); console.log('Ultra Premium+ price contract: ₹200')"
+
+      - name: Verify canonical npm package tarball and local installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd src/pages/DesignIntelligence
+          npm pack --dry-run --json > /tmp/di-pack-dry-run.json
+          npm pack --json > /tmp/di-pack.json
+          TARBALL="$(node --input-type=commonjs -e "const fs=require('fs'); const x=JSON.parse(fs.readFileSync('/tmp/di-pack.json','utf8')); process.stdout.write(x[0].filename)")"
+          test -f "$TARBALL"
+          cd /tmp
+          rm -rf motionzync-di-npm-install
+          mkdir motionzync-di-npm-install
+          cd motionzync-di-npm-install
+          npm init -y >/dev/null 2>&1
+          npm install "$GITHUB_WORKSPACE/src/pages/DesignIntelligence/$TARBALL" --no-audit --no-fund
+          node --input-type=module -e "const di=await import('@motionzync/design-intelligence'); if(typeof di.buildRecipe!=='function'||typeof di.searchCatalog!=='function'||typeof di.createRemoteKnowledgeClient!=='function'||typeof di.createSpecialEffectsClient!=='function') throw new Error('Canonical npm exports are incomplete'); if(!Array.isArray(di.DI_STYLES)||di.DI_STYLES.length===0) throw new Error('Canonical catalog is empty'); console.log('NPM package install smoke passed')"
+
+      - name: Install CI browser and accessibility tooling
+        run: npm install --no-save --no-audit --no-fund playwright@1.55.0 @axe-core/playwright@4.10.2 axe-core@4.10.2
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Start production Vite preview
+        shell: bash
+        env:
+          VITE_FIREBASE_API_KEY: "AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          VITE_FIREBASE_AUTH_DOMAIN: "ci-browser-test.invalid"
+          VITE_FIREBASE_PROJECT_ID: "ci-browser-test"
+          VITE_FIREBASE_STORAGE_BUCKET: "ci-browser-test.appspot.com"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "000000000000"
+          VITE_FIREBASE_APP_ID: "1:000000000000:web:ci-browser-test"
+          VITE_CI_ADMIN_EMAIL: "ci-admin@example.invalid"
+          VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/motionzync-di-vite.log 2>&1 &
+          echo $! > /tmp/motionzync-di-vite.pid
+          for attempt in {1..30}; do
+            if curl --silent --show-error --fail http://127.0.0.1:4173/design-intelligence >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/motionzync-di-vite.log
+          exit 1
+
+      - name: Browser route, interaction and responsive smoke test
+        shell: bash
+        run: |
+          mkdir -p /tmp/di-browser-artifacts
+          node --input-type=module <<'EOF'
+          import { chromium } from 'playwright'
+          import AxeBuilder from '@axe-core/playwright'
+
+          const base = 'http://127.0.0.1:4173'
+          const routes = [
+            '/design-intelligence',
+            '/design-intelligence/explorer',
+            '/design-intelligence/generator',
+            '/design-intelligence/knowledge',
+            '/design-intelligence/stacks',
+            '/design-intelligence/docs',
+            '/design-intelligence/pricing',
+          ]
+
+          const browser = await chromium.launch({headless:true})
+          const context = await browser.newContext({viewport:{width:1440,height:900}})
+          const page = await context.newPage()
+          await page.addInitScript(() => {
+            window.__motionzyncCashfreeCalls = []
+            window.Cashfree = ({mode}) => ({
+              checkout: async options => {
+                window.__motionzyncCashfreeCalls.push({mode, ...options})
+                return {}
+              },
+            })
+          })
+          await page.route('**/identitytoolkit.googleapis.com/**', async route => {
+            const url = route.request().url()
+            if (url.includes('/accounts:lookup')) {
+              await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ users: [] }),
+              })
+              return
+            }
+            await route.continue()
+          })
+          await page.addInitScript(() => {
+            const originalFetch = window.fetch.bind(window)
+            window.fetch = async (input, init) => {
+              const url = typeof input === 'string' ? input : input.url
+              if (url.endsWith('/api/admin-billing')) {
+                const method = init?.method || (typeof input !== 'string' ? input.method : 'GET')
+                const payload = method === 'POST'
+                  ? {result:{email:'ci-admin@example.invalid',tier:'premium'}}
+                  : {
+                      summary:{uniquePayers:0,successfulPayments:0,grossRevenue:0,refundedAmount:0,activeEntitlements:0,activeApiKeys:0,manualGrants:0,totalPaymentRecords:0},
+                      paymentStatus:[],planDistribution:[],entitlementSources:[],apiKeyStatus:[],monthly:[],recentTransactions:[],
+                      generatedAt:new Date().toISOString(),
+                      limits:{collectionsReadLimit:10000,recentTransactions:100},
+                    }
+                return new Response(JSON.stringify(payload), {status:200,headers:{'Content-Type':'application/json'}})
+              }
+              if (url.endsWith('/api/cashfree-create-order')) {
+                window.__motionzyncCashfreeOrderBody = init?.body || null
+                return new Response(JSON.stringify({
+                  paymentSessionId:'ci-payment-session',
+                  environment:'sandbox',
+                  plan:'ultra-premium',
+                  amount:200,
+                  orderId:'ci-order',
+                }), {status:200,headers:{'Content-Type':'application/json'}})
+              }
+              return originalFetch(input, init)
+            }
+          })
+          const failures = []
+
+          page.on('pageerror', error => failures.push('pageerror: '+error.message+' | url='+page.url()+' | stack='+String(error.stack||'').slice(0,1200)))
+          page.on('console', message => {
+            if (message.type() !== 'error') return
+            const text = message.text()
+            if (/Refused to frame 'https:\/\/www\.google\.com\/' because an ancestor violates.*frame-ancestors|Failed to load resource: net::ERR_FAILED/i.test(text)) return
+            failures.push('console.error: '+text)
+          })
+
+          const assert = (condition, message) => {
+            if (!condition) throw new Error(message)
+          }
+
+          const checkAccessibleNames = async () => page.evaluate(() => {
+            const problems = []
+            for (const element of document.querySelectorAll('button,a,input,textarea,select')) {
+              const style = getComputedStyle(element)
+              if (style.display === 'none' || style.visibility === 'hidden') continue
+              const labelledBy = element.getAttribute('aria-labelledby')
+              const ariaLabel = element.getAttribute('aria-label')
+              const text = (element.textContent || '').trim()
+              const placeholder = element.getAttribute('placeholder') || ''
+              if (!ariaLabel && !labelledBy && !text && !placeholder) {
+                problems.push(element.outerHTML.slice(0,160))
+              }
+              if (element.matches('input,textarea,select') && !ariaLabel && !labelledBy) {
+                const id = element.getAttribute('id')
+                const label = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null
+                if (!label) problems.push('unlabelled-form-control: '+element.outerHTML.slice(0,160))
+              }
+            }
+            return problems
+          })
+
+          const analyzeAxeStable = async route => {
+            let lastError = null
+            for (let attempt = 1; attempt <= 3; attempt++) {
+              try {
+                await page.locator('.di-shell').waitFor({state:'visible'})
+                await page.waitForTimeout(350)
+                return await new AxeBuilder({page}).include('.di-shell').analyze()
+              } catch (error) {
+                lastError = error
+                if (!/Execution context was destroyed|navigation|Target page, context or browser has been closed/i.test(String(error?.message || error)) || attempt === 3) {
+                  throw error
+                }
+                await page.goto(base + route, {waitUntil:'domcontentloaded'})
+                await page.locator('.di-shell').waitFor({state:'visible'})
+              }
+            }
+            throw lastError
+          }
+
+          for (const route of routes) {
+            await page.goto(base + route, {waitUntil:'domcontentloaded'})
+            await page.locator('.di-shell').waitFor({state:'visible'})
+            await page.waitForTimeout(350)
+            const text = await page.locator('body').innerText()
+            const shellCount = await page.locator('.di-shell').count()
+            assert(
+              shellCount === 1,
+              route+' did not mount the Design Intelligence shell. url='+await page.url()+' body='+JSON.stringify(text.slice(0,1200))+' errors='+JSON.stringify(failures)
+            )
+
+            const accessibilityProblems = await checkAccessibleNames()
+            assert(accessibilityProblems.length === 0, route+' accessibility-name issues: '+JSON.stringify(accessibilityProblems))
+
+            const axeResults = await analyzeAxeStable(route)
+            const seriousViolations = axeResults.violations.filter(violation => ['critical','serious'].includes(violation.impact))
+            assert(
+              seriousViolations.length === 0,
+              route+' serious/critical axe violations: '+JSON.stringify(seriousViolations.map(({id,impact,help,nodes})=>({id,impact,help,nodes:nodes.map(node=>node.target)})))
+            )
+
+            await page.screenshot({
+              path:'/tmp/di-browser-artifacts/'+route.split('/').filter(Boolean).join('-')+'.png',
+              fullPage:true,
+            })
+
+            if (route.endsWith('/explorer')) {
+              await page.locator('#di-search').fill('healthcare')
+              assert((await page.locator('.di-record').count()) > 0, 'Explorer search did not produce a healthcare result')
+              const stylesChip = page.getByRole('button', {name:'Styles', exact:true})
+              await stylesChip.click()
+              assert((await stylesChip.getAttribute('aria-pressed')) === 'true', 'Explorer domain button did not expose selected state')
+            }
+
+            if (route.endsWith('/generator')) {
+              await page.getByRole('button', {name:/Generate deterministic recipe/}).click()
+              assert((await page.locator('.di-preview').count()) === 1, 'Generator preview did not render')
+              const aiToggle = page.locator('button[aria-pressed]').first()
+              await aiToggle.waitFor()
+              assert((await aiToggle.getAttribute('aria-pressed')) === 'false', 'AI toggle initial state was not exposed')
+              await aiToggle.click()
+              assert((await aiToggle.getAttribute('aria-pressed')) === 'true', 'AI toggle did not expose pressed state')
+            }
+
+            if (route === '/design-intelligence/pricing') {
+              assert((await page.getByText(/Signed in as ci-admin@example\.invalid\./).count()) === 1, 'Pricing CI authenticated identity state is missing')
+              assert((await page.getByText('Payment launch pending', {exact:true}).count()) >= 1, 'Payment pending UI is missing')
+              assert((await page.getByText('Payment integration is temporarily pending.', {exact:false}).count()) >= 1, 'Payment pending explanation is missing')
+              assert((await page.getByText('₹200', {exact:false}).count()) === 0, 'Temporarily hidden ₹200 price leaked into the public pricing UI')
+              assert((await page.getByRole('button', {name:/Pay ₹200/}).count()) === 0, 'Temporarily disabled ₹200 checkout button is still visible')
+            }
+          }
+
+          
+          await page.goto(base+'/admin', {waitUntil:'networkidle'})
+          assert((await page.getByRole('button', {name:/DI Billing/}).count()) === 1, 'Admin DI Billing tab is missing')
+          await page.getByRole('button', {name:/DI Billing/}).click()
+          await page.getByRole('heading', {name:'Billing & entitlement analytics'}).waitFor()
+          for (const heading of ['Payment status','Paid plan distribution','Entitlement sources','API key status','Monthly revenue','Payment / transaction records']) {
+            assert((await page.getByRole('heading', {name:heading, exact:true}).count()) === 1, 'Admin billing chart/section missing: '+heading)
+          }
+          assert((await page.getByRole('textbox', {name:'Google account email'}).count()) === 1, 'Admin entitlement email field is missing')
+          assert((await page.getByRole('combobox', {name:'Entitlement tier'}).count()) === 1, 'Admin entitlement tier field is missing')
+          assert((await page.getByText('No payment records exist yet. This is not seeded/fake data.').count()) === 1, 'Admin billing empty-state is missing')
+          await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-billing.png',fullPage:true})
+
+          for (const viewport of [
+            {width:390,height:844,name:'mobile'},
+            {width:768,height:1024,name:'tablet'},
+            {width:1440,height:900,name:'desktop'},
+          ]) {
+            await page.setViewportSize({width:viewport.width,height:viewport.height})
+            await page.goto(base+'/design-intelligence/generator', {waitUntil:'networkidle'})
+            const overflow = await page.evaluate(() => ({
+              width: document.documentElement.scrollWidth,
+              viewport: document.documentElement.clientWidth,
+            }))
+            assert(overflow.width <= overflow.viewport + 1, viewport.name+' horizontal overflow: '+JSON.stringify(overflow))
+            await page.screenshot({
+              path:'/tmp/di-browser-artifacts/generator-'+viewport.name+'.png',
+              fullPage:true,
+            })
+          }
+
+          await page.setViewportSize({width:1440,height:900})
+          await page.goto(base+'/admin', {waitUntil:'networkidle'})
+          await page.getByRole('button', {name:/DI Billing/}).click()
+          const adminOverflow = await page.evaluate(() => ({
+            width: document.documentElement.scrollWidth,
+            viewport: document.documentElement.clientWidth,
+          }))
+          assert(adminOverflow.width <= adminOverflow.viewport + 1, 'Admin billing horizontal overflow: '+JSON.stringify(adminOverflow))
+          await page.goto(base+'/design-intelligence/explorer', {waitUntil:'networkidle'})
+          await page.keyboard.press('Tab')
+          const focusVisible = await page.evaluate(() => {
+            const element = document.activeElement
+            return !!element && element.matches(':focus-visible')
+          })
+          assert(focusVisible, 'Keyboard focus did not enter a :focus-visible state')
+
+          if (failures.length) throw new Error(failures.join('\\n'))
+          await browser.close()
+          EOF
+
+      - name: Upload browser screenshots and Vite log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-intelligence-browser-evidence
+          path: |
+            /tmp/di-browser-artifacts/
+            /tmp/motionzync-di-vite.log
+          if-no-files-found: ignore
