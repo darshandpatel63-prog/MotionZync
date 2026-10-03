@@ -600,3 +600,28 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-03 — Browser CI transient-error investigation checkpoint
+
+### VERIFIED
+- Exact application/test commit `3b9edc11f5c3815ded4057d13233104767cb808b` passed full Design Intelligence CI run `37118457360` after adding bounded pageerror URL/stack diagnostics to the CI browser harness.
+- Matching Vercel deployment `dpl_AoxUxLjVu48iBV6FjmNRt5p7Pdwv` is **READY** for that exact commit.
+- The previous `10894c3…` CI run failed only on a non-reproducible `pageerror: int64` collected after the browser assertions; no application runtime change was needed or made.
+
+### UNVERIFIED
+- Real Firebase entitlement/API-key lifecycle, Cashfree ₹200 Sandbox E2E, Ultra Effects API, real BYOK execution, manual device/screen-reader audit, and npm registry publication remain unverified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 end-to-end.
+3. Real Ultra API-key lifecycle + deployed Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Final Phase-A publication/compatibility gates; large content expansion stays deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
