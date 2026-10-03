@@ -567,3 +567,36 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-03 — CURRENT START/CONTINUE CHECKPOINT
+
+### VERIFIED
+- All 26 current files under `src/pages/DesignIntelligence/` plus `src/App.jsx` and `src/components/Navbar/Navbar.jsx` were re-inspected on `feature/design-intelligence`.
+- Current branch HEAD: `403898e3ce87fdd6ac2e3b90a7f30257f75be57c`.
+- Exact-HEAD GitHub Actions run `37112309176`: **SUCCESS**, including build, Cashfree contract, OpenAI BYOK registry guard, entitlement boundary, ₹200 price contract, npm local-install, browser, responsive and accessibility checks.
+- Exact-HEAD Vercel deployment: `dpl_5vEhCAw54h2GeqemX68ZH7qUsSKo` — **READY**.
+- Canonical server-side Firebase/API-key/protected-catalog code remains intact; no second database, fake credential or frontend-only entitlement path was introduced.
+
+### UNVERIFIED
+- Real Firebase Free/Premium/Ultra + MotionZync API-key lifecycle.
+- Real Cashfree Sandbox ₹200 Checkout/webhook/reconciliation.
+- Real Ultra Effects API + production CORS allowlist execution.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual device/keyboard/screen-reader audit.
+- npm registry publication and external clean install.
+- Direct public endpoint checks of the newest deployment were unavailable through the current web-access path.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 end-to-end.
+3. Real Ultra API-key lifecycle + deployed Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Final Phase-A publication/compatibility gates; large content expansion stays deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
