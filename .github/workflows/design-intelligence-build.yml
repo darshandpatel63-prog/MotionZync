@@ -199,7 +199,7 @@ jobs:
           })
           const failures = []
 
-          page.on('pageerror', error => failures.push('pageerror: '+error.message))
+          page.on('pageerror', error => failures.push('pageerror: '+error.message+' | url='+page.url()+' | stack='+String(error.stack||'').slice(0,1200)))
           page.on('console', message => {
             if (message.type() !== 'error') return
             const text = message.text()
