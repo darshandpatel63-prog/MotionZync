@@ -23,7 +23,7 @@ This folder contains the Design Intelligence + UI Generation feature only.
 - Update handover.md after every meaningful milestone.
 
 ## Current implementation
-Phase 1 foundation is implemented; current Phase A engine/system progress is 96%:
+Phase 1 foundation is implemented; current Phase A engine/system progress is 98%:
 - multipage route family under /design-intelligence/*
 - internal navigation
 - structured seed catalog
@@ -493,6 +493,48 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 96%
 
 ### NEXT FIRST UNFINISHED TASK
 1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 end-to-end.
+3. Real Ultra API-key lifecycle + deployed Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Final Phase-A publication/compatibility gates; large content expansion stays deferred.
+
+
+## 2026-10-03 — CURRENT VERIFIED CONTINUATION CHECKPOINT
+
+### VERIFIED
+- Current branch HEAD is `7737611ca57240a497d9796b849958528c6102da`; this is a documentation-only commit on top of the verified application code at `14d2f09005514030b8f15085bd1c82a87a93d3f1`.
+- GitHub Actions run `37007162670` for the current HEAD completed successfully; the full Design Intelligence build/browser/accessibility/package/price/entitlement regression suite passed.
+- Matching Vercel deployment `dpl_DAhvg4YFadZvZ8vYW4Wt83sqkz1J` is READY for the current HEAD.
+- No application runtime code changed in the latest docs-only commit, so the previous exact-application-code verification remains the relevant functional evidence.
+- Current Vercel runtime error aggregation shows only the pre-existing Node `DEP0169 url.parse()` deprecation warning on `/api/di-knowledge`; no application failure has been demonstrated from it.
+
+### UNVERIFIED
+- Real Firebase Premium/Ultra entitlement and MotionZync API-key lifecycle.
+- Real Cashfree Sandbox ₹200 checkout, signed webhook and server-side reconciliation.
+- Real Ultra Effects API execution, key enforcement and production CORS allowlist behavior.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual physical-device, keyboard-only and screen-reader production audit.
+- npm registry publication and registry-backed external installation.
+
+### CHECKPOINT
+- Regression: documentation-only change since the last application-code verification; unrelated MotionZync features untouched.
+- Functionality: deterministic engine, server entitlement semantics, API boundary and UI automation remain VERIFIED; credentialed external flows remain UNVERIFIED.
+- Accessibility: automated route/name/focus/responsive/serious-critical Axe coverage remains VERIFIED; manual audit remains UNVERIFIED.
+- Privacy/security: no credentials, plaintext API keys, duplicate database or frontend entitlement authority introduced; server authority remains the design boundary.
+- Performance: no runtime architecture change; production profiling remains UNVERIFIED.
+- Data quality: no large catalog expansion or fabricated 1,000+/10,000+ records.
+- Build/test: current branch HEAD CI and matching Vercel deployment are VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise.
 2. Real Cashfree Sandbox ₹200 end-to-end.
 3. Real Ultra API-key lifecycle + deployed Effects API.
 4. Real BYOK provider execution/CORS/model compatibility.
