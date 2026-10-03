@@ -40,6 +40,8 @@ export default function DesignIntelligencePricing(){
   const [phone,setPhone]=useState('')
   const [checkoutBusy,setCheckoutBusy]=useState(false)
   const [checkoutStatus,setCheckoutStatus]=useState('')
+  // Public payment launch is intentionally pending. Keep the server-side payment implementation intact.
+  const PAYMENT_LAUNCH_PENDING=true
 
   useEffect(()=>{
     let active=true
@@ -158,32 +160,24 @@ export default function DesignIntelligencePricing(){
       {PLAN_OFFERS.map(plan=><article className={'di-plan '+(plan.id==='ultra-premium-api'?'featured':'')} key={plan.id}>
         <span className="di-kicker">{plan.cadence.toUpperCase()}</span>
         <h2>{plan.name}</h2>
-        <strong>{plan.price}</strong>
+        {plan.id==='ultra-premium-api'&&PAYMENT_LAUNCH_PENDING
+          ?<strong>Coming soon</strong>
+          :<strong>{plan.price}</strong>}
         <p>{plan.access}</p>
         <p className="di-muted"><b>npm:</b> {plan.npmAccess}</p>
         {plan.specialAccess&&<p className="di-warning"><b>Special effects:</b> {plan.specialAccess}</p>}
-        <span className="di-plan-action">{plan.id==='guest-free'?'Available now':plan.id==='member-premium'?(user?'Premium active on this login':'Login to activate'):`₹${ULTRA_PREMIUM_PRICE_INR} server-authorized one-time checkout`}</span>
+        <span className="di-plan-action">{plan.id==='guest-free'?'Available now':plan.id==='member-premium'?(user?'Premium active on this login':'Login to activate'):(PAYMENT_LAUNCH_PENDING?'Payment launch pending':'₹'+ULTRA_PREMIUM_PRICE_INR+' server-authorized one-time checkout')}</span>
       </article>)}
     </section>
 
     <section className="di-surface">
-      <span className="di-kicker">ULTRA PREMIUM+ CHECKOUT</span>
-      <h2>{ultra?'Ultra Premium+ already active':'Unlock Ultra Premium+ for ₹'+ULTRA_PREMIUM_PRICE_INR}</h2>
+      <span className="di-kicker">ULTRA PREMIUM+ ACCESS</span>
+      <h2>{ultra?'Ultra Premium+ already active':'Payment launch pending'}</h2>
       {ultra
-        ?<p>Your server-authorized account is already entitled to Ultra Premium+. No new payment is requested.</p>
-        :<>
-          <p>Orders are created only by the authenticated server endpoint. The frontend does not choose the amount, customer identity or entitlement.</p>
-          <div className="di-checkout-row">
-            <div>
-              <label className="di-label" htmlFor="di-cashfree-phone">Customer phone</label>
-              <input id="di-cashfree-phone" className="di-input" type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={event=>setPhone(event.target.value)} placeholder="+91 9876543210" disabled={checkoutBusy}/>
-            </div>
-            <button className="di-btn di-btn-primary" type="button" onClick={runCheckout} disabled={checkoutBusy||!user}>
-              {checkoutBusy?'Opening…':'Pay ₹'+ULTRA_PREMIUM_PRICE_INR}
-            </button>
-          </div>
-          {!user&&<p className="di-muted">Google login is required before a server-authorized Cashfree order can be created.</p>}
-        </>}
+        ?<p>Your existing server-authorized Ultra Premium+ entitlement remains active. No new payment is requested.</p>
+        :<div className="di-note" role="status">
+          <b>Payment integration is temporarily pending.</b> Ultra Premium+ checkout is not available from the public UI yet. The payment security, server authorization, webhook verification and entitlement infrastructure remain in place for the later launch.
+        </div>}
       {checkoutStatus&&<div className="di-note" role="status">{checkoutStatus}</div>}
     </section>
 
