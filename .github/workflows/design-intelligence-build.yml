@@ -297,21 +297,11 @@ jobs:
 
             if (route === '/design-intelligence/pricing') {
               assert((await page.getByText(/Signed in as ci-admin@example\.invalid\./).count()) === 1, 'Pricing CI authenticated identity state is missing')
-              assert((await page.getByLabel('Customer phone').count()) === 1, 'Cashfree customer phone field is missing')
-              const checkoutButton = page.getByRole('button', {name:'Pay ₹200'})
-              assert((await checkoutButton.count()) === 1, 'Cashfree ₹200 checkout button is missing')
-              await page.getByLabel('Customer phone').fill('+919876543210')
-              assert(await page.evaluate(() => typeof window.Cashfree === 'function'), 'Cashfree CI SDK mock is missing before checkout')
-              await checkoutButton.click()
-              await page.waitForFunction(() => window.__motionzyncCashfreeOrderBody !== null)
-              const orderBody = await page.evaluate(() => JSON.parse(window.__motionzyncCashfreeOrderBody || 'null'))
-              assert(JSON.stringify(orderBody) === JSON.stringify({phone:'+919876543210'}), 'Cashfree order request sent unexpected fields: '+JSON.stringify(orderBody))
-              await page.waitForFunction(() => window.__motionzyncCashfreeCalls?.length === 1)
-              const checkoutCall = await page.evaluate(() => window.__motionzyncCashfreeCalls[0])
-              assert(checkoutCall.mode === 'sandbox', 'Cashfree CI checkout did not use sandbox mode')
-              assert(checkoutCall.paymentSessionId === 'ci-payment-session', 'Cashfree CI checkout did not use the server-returned payment session')
-              assert(checkoutCall.redirectTarget === '_self', 'Cashfree CI checkout did not use _self redirect')
-            }
+              assert((await page.getByText('Payment launch pending', {exact:true}).count()) >= 1, 'Payment pending UI is missing')
+              assert((await page.getByText('Payment integration is temporarily pending.', {exact:false}).count()) >= 1, 'Payment pending explanation is missing')
+              assert((await page.getByText('₹200', {exact:false}).count()) === 0, 'Temporarily hidden ₹200 price leaked into the public pricing UI')
+              assert((await page.getByRole('button', {name:/Pay ₹200/}).count()) === 0, 'Temporarily disabled ₹200 checkout button is still visible')
+            }}
           }
 
           
