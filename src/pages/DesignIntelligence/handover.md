@@ -3933,3 +3933,50 @@ FIRST UNFINISHED TASK remains:
 5. Manual production browser/device/screen-reader audit.
 6. Publish and externally verify `@motionzync/design-intelligence`.
 7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-10-03 — Browser CI transient-error investigation completed
+
+### VERIFIED
+- Exact application/test commit `3b9edc11f5c3815ded4057d13233104767cb808b` initially exposed a CI browser-stage failure as `pageerror: int64` after the route/interaction/accessibility assertions had otherwise completed.
+- The artifact from failed run `37112721255` contains all seven DI route screenshots, generator responsive screenshots and the Vite preview log; the Vite log contains no application crash.
+- A test-only diagnostic change captured pageerror URL/stack context without changing application runtime behavior.
+- Exact diagnostic commit `3b9edc11f5c3815ded4057d13233104767cb808b` then passed the full Design Intelligence CI run `37118457360` with the browser route/interaction/responsive stage **SUCCESS**.
+- Matching Vercel deployment `dpl_AoxUxLjVu48iBV6FjmNRt5p7Pdwv` for that exact commit is **READY**.
+- Therefore the earlier `int64` pageerror is not currently reproducible and no application-runtime fix is claimed or added.
+
+### IMPLEMENTED
+- CI browser pageerror diagnostics now include the browser URL and a bounded stack snippet so a future reproducible page error can be diagnosed from CI logs.
+- No Design Intelligence runtime code, entitlement logic, payment logic, catalog, database or provider architecture was changed for this investigation.
+
+### UNVERIFIED
+- Real Firebase Free/Premium/Ultra entitlement boundary and MotionZync API-key lifecycle.
+- Real Cashfree Sandbox ₹200 Checkout, signed webhook and server-side reconciliation.
+- Real Ultra Effects API execution and production CORS allowlist behavior.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual physical-device, keyboard-only and screen-reader audit.
+- Public npm registry publication and registry-backed external installation.
+
+### CHECKPOINT
+- Regression: full CI success after the diagnostic-only workflow change; unrelated MotionZync features untouched.
+- Functionality: browser route, interaction, responsive and accessibility automation VERIFIED; credentialed integrations remain UNVERIFIED.
+- Accessibility: automated route/name/focus/responsive/serious-critical Axe coverage VERIFIED; manual audit UNVERIFIED.
+- Privacy/security: no secrets, fake entitlements, second database or second provider vault introduced.
+- Performance: no runtime architecture change.
+- Data quality: no fabricated 1,000+/10,000+ content expansion.
+- Build/test: CI `37118457360` VERIFIED; matching Vercel deployment `dpl_AoxUxLjVu48iBV6FjmNRt5p7Pdwv` READY VERIFIED.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 order + Checkout + signed webhook + server-side reconciliation.
+3. Real Ultra API-key lifecycle + deployed Effects API exercise.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
