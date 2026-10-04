@@ -67,4 +67,16 @@ The current package contains the bounded Phase-A seed catalog. It does not claim
 
 ## Current publication status
 
-The repository package structure is package-ready, but registry publication and an external npm registry installation are separate verification milestones and are not claimed here.
+The public npm package has been published as `@motionzync/design-intelligence@0.1.0`. A clean external consumer installation/import from the public npm registry has also been VERIFIED in GitHub Actions. The package is still intentionally bounded to the verified Phase-A seed catalog.
+
+
+## Verified npm release
+
+- Package: `@motionzync/design-intelligence`
+- Published version: `0.1.0`
+- Registry: public npm
+- Public registry installation/import: **VERIFIED**
+- Verified CI consumer test: fresh directory → `npm install @motionzync/design-intelligence@0.1.0` → package import/export smoke test
+- Verified public exports include `buildRecipe`, `searchCatalog`, `createRemoteKnowledgeClient` and `createSpecialEffectsClient`
+- The package does not contain a second Design Intelligence database.
+- Large 1,000+/10,000+ content expansion remains a separate future verified-data milestone.
