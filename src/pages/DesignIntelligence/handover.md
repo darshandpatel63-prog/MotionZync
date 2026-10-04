@@ -4188,3 +4188,45 @@ FIRST UNFINISHED TASK remains:
 ### NEXT OWNER / NEXT AUTOMATED GATE
 - The `[publish-npm]` commit should cause the existing guarded npm workflow to attempt publication.
 - After the workflow result is available, verify the public registry package and a clean registry-backed installation before marking npm publication VERIFIED.
+
+
+## 2026-10-04 — Public npm publication VERIFIED
+
+### VERIFIED
+- GitHub Actions publish workflow run `37181790607` completed with `success` on `feature/design-intelligence`.
+- npm confirmation email reports successful publication of the canonical package `@motionzync/design-intelligence@0.1.0` at 2026-10-04T06:05:47Z.
+- Published package integrity reported by npm: SHA-512 digest `c6b41f36bfdf20436a009df8526eb5a1e1edb599`.
+- The successful workflow used commit `28cb0ac00d54c90adde6f754042fa577dba6a254`, the intended guarded `[publish-npm]` trigger on `feature/design-intelligence`.
+
+### IMPLEMENTED
+- The canonical Design Intelligence package is now publicly published through the existing npm publication workflow.
+- No duplicate package, second Design Intelligence core, runtime feature rewrite, payment change, or unrelated MotionZync change was introduced for publication.
+
+### UNVERIFIED
+- Clean external consumer installation from the public registry has not yet been executed in this environment.
+- External consumer import/export smoke test has not yet been executed against the registry package.
+- npm provenance attestation and registry metadata should be checked independently before claiming the entire publication gate is closed.
+
+### CHECKPOINT
+- Regression: publish-only workflow milestone; application runtime and unrelated MotionZync features untouched.
+- Functionality: npm publication is VERIFIED; registry consumer installation remains UNVERIFIED.
+- Accessibility: no application UI changed in this milestone.
+- Privacy/security: no npm token or secret was written to the repository; npm credentials remain secret-backed.
+- Performance: no runtime impact.
+- Data quality: canonical package/version only; no fabricated package records.
+- Build/test: publication workflow completed successfully; external consumer smoke test remains.
+- Documentation: handover updated with run ID, package version and integrity digest.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **IMPLEMENTED / PUBLICLY PUBLISHED — final external-install verification pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Clean external `npm install @motionzync/design-intelligence@0.1.0` and export/import smoke test.
+2. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+3. Real Cashfree Sandbox ₹200 end-to-end (public payment UI intentionally deferred).
+4. Real Ultra API-key lifecycle + deployed Effects API.
+5. Real BYOK provider execution/CORS/model compatibility.
+6. Manual production browser/device/screen-reader audit.
+7. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
