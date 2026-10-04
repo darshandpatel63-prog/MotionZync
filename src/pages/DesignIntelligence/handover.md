@@ -4262,3 +4262,45 @@ FIRST UNFINISHED TASK remains:
 5. Real BYOK provider execution/CORS/model compatibility.
 6. Manual production browser/device/screen-reader audit.
 7. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+
+## 2026-10-04 — External npm registry installation/import VERIFIED
+
+### VERIFIED
+- Branch HEAD cbdc47a7d55c3990f5882ee96436939a59c81346 was re-checked after the external npm verification gate was added.
+- GitHub Actions Design Intelligence build job 111376349657 completed successfully as part of run 37182026206.
+- The fresh-consumer step successfully ran npm install @motionzync/design-intelligence@0.1.0 --registry=https://registry.npmjs.org.
+- The published package import smoke test passed, confirming version 0.1.0, required exports (buildRecipe, searchCatalog, createRemoteKnowledgeClient, createSpecialEffectsClient) and a non-empty canonical DI_STYLES catalog.
+- This is now VERIFIED evidence of a clean registry-backed installation/import from public npm, not merely a local tarball install.
+- Vercel also reports successful deployment completion for this exact HEAD; no new credentialed runtime claim is made from that status alone.
+
+### UNVERIFIED
+- npm provenance/registry metadata inspection beyond the successful install/import smoke test.
+- Real Firebase Free/Premium/Ultra entitlement and MotionZync API-key lifecycle.
+- Real Cashfree Sandbox ₹200 Checkout + signed webhook + server-side reconciliation.
+- Real Ultra API-key issue/rotate/revoke and deployed Effects API execution/CORS allowlist.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual production browser/device/keyboard/screen-reader audit.
+
+### CHECKPOINT
+- Regression: external npm consumer CI verification only; unrelated MotionZync features untouched.
+- Functionality: published package registry installation/import VERIFIED; credentialed runtime integrations remain unverified.
+- Accessibility: no runtime UI change in this milestone; automated DI accessibility suite remains the prior VERIFIED baseline; manual audit remains unverified.
+- Privacy/security: no secrets added; package import uses the public npm registry; no frontend entitlement authority or duplicate data store introduced.
+- Performance: CI-only verification; no runtime performance change.
+- Data quality: published package still uses the bounded canonical catalog; no fabricated 1,000+/10,000+ expansion.
+- Build/test: Design Intelligence build job 111376349657 SUCCESS; external registry smoke step explicitly passed.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 end-to-end (public payment UI intentionally deferred).
+3. Real Ultra API-key lifecycle + deployed Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: 98% — IN PROGRESS
+- Phase B — Publish: 0% — IN PROGRESS (npm package publication and clean registry installation are now VERIFIED; remaining publication/compatibility gates remain.)
+- Phase C — Continuous Content Expansion: 0% — NOT STARTED
