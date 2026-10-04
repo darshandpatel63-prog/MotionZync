@@ -257,6 +257,7 @@ jobs:
             await page.waitForTimeout(350)
             const text = await page.locator('body').innerText()
             const shellCount = await page.locator('.di-shell').count()
+            assert(!text.includes('₹200'), route+' leaked the deferred payment price into public UI')
             assert(
               shellCount === 1,
               route+' did not mount the Design Intelligence shell. url='+await page.url()+' body='+JSON.stringify(text.slice(0,1200))+' errors='+JSON.stringify(failures)
