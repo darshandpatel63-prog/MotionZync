@@ -65,7 +65,7 @@ import {
 } from '@motionzync/design-intelligence'
 
 const style = DI_STYLES.find(item => item.id === 'style-minimalism')
-const palette = DI_PALETTES.find(item => item.id === 'palette-healthcare-teal')
+const palette = DI_PALETTES.find(item => item.id === 'palette-health-teal')
 const typography = DI_TYPOGRAPHY.find(item => item.id === 'type-inter-inter')
 const chart = DI_CHARTS.find(item => item.id === 'chart-kpi-line')
 const stack = DI_STACKS.find(item => item.id === 'stack-react')
