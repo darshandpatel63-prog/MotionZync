@@ -719,3 +719,17 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — npm publication continuation checkpoint
+
+### VERIFIED
+- The owner has configured the GitHub Actions repository secret `NPM_TOKEN` for the canonical npm publication workflow.
+- The manual `Run workflow` button is not visible because the workflow file is only on `feature/design-intelligence`; the branch-local guarded `[publish-npm]` push trigger is being used instead, without touching `main`.
+- A handover commit with `[publish-npm]` has been created to trigger the existing publication workflow.
+
+### UNVERIFIED
+- The resulting npm publication run and public registry installation are not yet verified.
+
+### NEXT
+- Verify the publication run, then verify `@motionzync/design-intelligence@0.1.0` on the public npm registry and perform a clean external installation.
