@@ -625,3 +625,24 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — npm publication readiness checkpoint
+
+### IMPLEMENTED
+- Added guarded npm publication workflow `.github/workflows/design-intelligence-npm-publish.yml`.
+- Normal commits cannot publish; only an explicit `[publish-npm]` commit triggers the publication job.
+- The workflow uses the existing canonical package and npm provenance.
+
+### VERIFIED
+- `@motionzync/design-intelligence@0.1.0` package structure and local clean installation were previously verified.
+- Public npm registry publication is not currently verified.
+
+### UNVERIFIED
+- npm registry publication and external `npm install`.
+- Repository `NPM_TOKEN` availability and npm scope publishing permission.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
