@@ -4230,3 +4230,35 @@ FIRST UNFINISHED TASK remains:
 5. Real BYOK provider execution/CORS/model compatibility.
 6. Manual production browser/device/screen-reader audit.
 7. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+
+## 2026-10-04 — External npm consumer verification gate added
+
+### IMPLEMENTED
+- Added a CI-only external registry smoke test to `.github/workflows/design-intelligence-build.yml`.
+- The new check installs exactly `@motionzync/design-intelligence@0.1.0` from `https://registry.npmjs.org` into a fresh consumer directory and imports the published package.
+- The check verifies the published version, required public exports, and non-empty canonical seed catalog.
+- No application/runtime/catalog/payment/auth code was changed by this milestone.
+
+### UNVERIFIED
+- The new CI run for commit `12265c1cf1321854cecefe29208de43902d1df7f` has not yet been observed as completed in this continuation checkpoint.
+- Therefore clean public-registry installation/import remains **UNVERIFIED** until the CI job completes successfully.
+
+### CHECKPOINT
+- Regression: CI workflow-only change; unrelated MotionZync features untouched.
+- Functionality: external npm verification gate IMPLEMENTED; result pending.
+- Accessibility: no UI change.
+- Privacy/security: no secrets or credentials added; registry URL is public npm only.
+- Performance: CI-only; no runtime impact.
+- Data quality: verifies the canonical published package and does not add records.
+- Build/test: waiting for the new build workflow result.
+- Documentation: handover updated.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Observe the CI result for commit `12265c1cf1321854cecefe29208de43902d1df7f`; if green, mark clean external npm installation/import **VERIFIED**. If red, inspect the failing job log and fix only the verified issue.
+2. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+3. Real Cashfree Sandbox ₹200 end-to-end (public payment UI intentionally deferred).
+4. Real Ultra API-key lifecycle + deployed Effects API.
+5. Real BYOK provider execution/CORS/model compatibility.
+6. Manual production browser/device/screen-reader audit.
+7. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
