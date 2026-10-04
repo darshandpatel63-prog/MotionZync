@@ -31,6 +31,34 @@ export default function DesignIntelligenceDocs(){return <div className="di-page"
   </section>
 
   <section className="di-surface">
+    <span className="di-kicker">PUBLIC NPM — HOW TO USE</span>
+    <h2>Install once, then choose designs from the same Design Intelligence core</h2>
+    <p>Developers can install the public package in a JavaScript or TypeScript project and use the same canonical design knowledge used by MotionZync Web. No second Design Intelligence database is created.</p>
+    <pre className="di-code">npm install @motionzync/design-intelligence</pre>
+    <p><b>Search designs:</b> use <code>searchCatalog()</code> to find styles, palettes, typography, charts or technology stacks by words such as <code>minimal</code>, <code>dashboard</code>, <code>healthcare</code>, <code>dark</code>, <code>comparison</code> or <code>react</code>.</p>
+    <pre className="di-code">{`import { searchCatalog } from '@motionzync/design-intelligence'
+
+const styles = searchCatalog('minimal dashboard', 'styles')
+const palettes = searchCatalog('healthcare', 'palettes')
+const charts = searchCatalog('comparison', 'charts')`}</pre>
+    <p><b>Generate a design recipe:</b> describe what you want in normal language. <code>buildRecipe()</code> deterministically selects a compatible combination of style, palette, typography, chart, stack, layout/navigation direction and UX guidance.</p>
+    <pre className="di-code">{`import { buildRecipe } from '@motionzync/design-intelligence'
+
+const recipe = buildRecipe(
+  'dark SaaS analytics dashboard for developers using React'
+)
+
+console.log(recipe.style.name)
+console.log(recipe.palette.name)
+console.log(recipe.typography.name)
+console.log(recipe.chart?.name)
+console.log(recipe.stack.name)`}</pre>
+    <p><b>Use the selected design:</b> your own UI generator can render the recipe, or convert it into CSS custom properties with <code>recipeToCSSVariables()</code>. <code>recipeToExport()</code> produces a portable recipe object for another renderer or design-system layer.</p>
+    <p><b>Check before rendering:</b> <code>evaluateCompatibility()</code> and <code>validateRecipe()</code> can report platform/stack mismatches, contrast problems, chart-purpose mismatches and other bounded compatibility issues.</p>
+    <p className="di-muted">The current public package is a verified Phase-A seed catalog. It does not claim 1,000+/10,000+ records, and it does not require an external AI provider for deterministic recipe generation. Large content expansion remains a separate verified-data milestone.</p>
+  </section>
+
+  <section className="di-surface">
     <span className="di-kicker">NPM</span>
     <h2>One core, one package direction</h2>
     <p>The npm package uses the same canonical Design Intelligence core as the web app. Free/public records can be distributed locally, while authenticated Premium and Ultra integrations can use the same canonical core plus server-delivered protected knowledge.</p>
