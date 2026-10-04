@@ -31,14 +31,16 @@ export default function DesignIntelligenceDocs(){return <div className="di-page"
   </section>
 
   <section className="di-surface">
-    <span className="di-kicker">NPM</span>
-    <h2>One core, one package direction</h2>
-    <p>The target npm model is not a second dataset. Free/public records can be distributed locally, while authenticated Premium and Ultra integrations can use the same canonical core plus server-delivered protected knowledge. The package publication itself is still a separate release milestone and is not claimed as published in this source-only milestone.</p>
+    <span className="di-kicker">NPM / DEVELOPER MODE</span>
+    <h2>Install the published canonical core</h2>
+    <p>The public npm package is now published as <b>@motionzync/design-intelligence@0.1.0</b>. It uses the same canonical Design Intelligence core as the web app and does not create a second database.</p>
+    <pre className="di-code">npm install @motionzync/design-intelligence</pre>
+    <p>The package exposes the deterministic search engine, requirement-to-recipe engine, compatibility and validation helpers, canonical catalog records, relationships and supported recipe export helpers. Protected knowledge and Ultra Premium+ effects remain server-authorized capabilities.</p>
   </section>
 
   <section className="di-surface">
     <span className="di-kicker">IMPORTANT</span>
     <h2>What is not live yet</h2>
-    <p>Live ₹{ULTRA_PREMIUM_PRICE_INR} Cashfree checkout, production API-key usage, published npm package, MCP service, large-scale content ingestion and final accessibility/performance automation remain verification/release milestones. The access contract and server-side enforcement foundation are being aligned now; no fake API key or fake payment is created.</p>
+    <p>Live ₹{ULTRA_PREMIUM_PRICE_INR} Cashfree checkout, production API-key usage, MCP service, large-scale content ingestion and final accessibility/performance automation remain verification/release milestones. The public npm package @motionzync/design-intelligence@0.1.0 has been published and its clean registry-backed installation/import has been verified. The access contract and server-side enforcement foundation are being aligned now; no fake API key or fake payment is created.</p>
   </section>
 </div>}
