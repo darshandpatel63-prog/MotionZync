@@ -25,7 +25,6 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-          cache: false
 
       - name: Verify package metadata
         working-directory: src/pages/DesignIntelligence
