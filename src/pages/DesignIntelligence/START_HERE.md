@@ -749,3 +749,28 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - **IMPLEMENTED:** DI build CI now installs `@motionzync/design-intelligence@0.1.0` from the public npm registry in a fresh consumer directory and smoke-tests its published exports/version/catalog.
 - **UNVERIFIED:** The resulting CI run has not yet been observed as completed. Do not mark external registry installation VERIFIED until that run passes.
 - **Current continuation:** inspect the latest Design Intelligence Build Check result for the external npm install/import step, then continue from `handover.md` FIRST UNFINISHED TASK.
+
+
+## 2026-10-04 — External npm registry installation/import VERIFIED
+
+### VERIFIED
+- The current branch HEAD cbdc47a7d55c3990f5882ee96436939a59c81346 has a successful Design Intelligence CI build job 111376349657 in run 37182026206.
+- CI installed @motionzync/design-intelligence@0.1.0 from the public npm registry in a fresh consumer directory and successfully imported the published package.
+- The smoke test verified published version 0.1.0, required public exports, and a non-empty canonical DI_STYLES catalog.
+- Therefore clean registry-backed npm installation/import is now VERIFIED.
+
+### UNVERIFIED
+- Real Firebase Free/Premium/Ultra entitlement and MotionZync API-key lifecycle.
+- Real Cashfree Sandbox ₹200 end-to-end.
+- Real Ultra API-key lifecycle and deployed Effects API execution/CORS.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual production browser/device/keyboard/screen-reader audit.
+- npm provenance/registry metadata inspection beyond the successful install/import smoke test.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 end-to-end (public payment UI intentionally deferred).
+3. Real Ultra API-key lifecycle + deployed Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
