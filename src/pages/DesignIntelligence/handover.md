@@ -4015,3 +4015,13 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED** (npm publication readiness IMPLEMENTED; actual registry publication still UNVERIFIED)
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — npm publication attempt
+
+### IMPLEMENTED
+- A guarded publication trigger was committed with `[publish-npm]`.
+- No npm credential value is stored in the repository.
+
+### UNVERIFIED
+- Awaiting the GitHub Actions publication result for `@motionzync/design-intelligence@0.1.0`.
