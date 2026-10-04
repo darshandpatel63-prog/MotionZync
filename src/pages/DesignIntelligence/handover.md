@@ -4025,3 +4025,30 @@ FIRST UNFINISHED TASK remains:
 
 ### UNVERIFIED
 - Awaiting the GitHub Actions publication result for `@motionzync/design-intelligence@0.1.0`.
+
+
+## 2026-10-04 — npm publication authentication checkpoint
+
+### VERIFIED
+- The guarded npm workflow reached the publish command after successfully validating the package metadata and `npm pack --dry-run`.
+- The package tarball contains exactly the intended 9 published files and version `0.1.0`.
+- The publish attempt failed with npm `ENEEDAUTH` because `NODE_AUTH_TOKEN` received an empty value; no package was published.
+- The existing DI build job on this commit has passed build, Cashfree contract, BYOK registry, Firebase entitlement boundary, ₹200 contract and canonical npm local-install checks; browser tooling is still running.
+
+### IMPLEMENTED
+- The npm workflow now also supports manual `workflow_dispatch`, so after the npm credential is configured the owner can publish without making another code change.
+- Normal commits remain non-publishing unless explicitly triggered.
+
+### UNVERIFIED
+- Public npm registry publication.
+- External `npm install @motionzync/design-intelligence`.
+- npm account ownership/write permission for the `@motionzync` scope.
+
+### REQUIRED OWNER ACTION
+- Configure a GitHub Actions repository secret named `NPM_TOKEN` containing an appropriate npm granular access token with permission to publish the package. Do not paste the token into chat or source control.
+- After configuring the secret, run the `Publish Design Intelligence package to npm` workflow manually from the `feature/design-intelligence` branch. npm recommends trusted publishing/OIDC for ongoing CI publishing; the first publication requires the package to exist before an npm trusted-publisher relationship can be configured.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED** (publication workflow IMPLEMENTED; registry publication blocked only by missing npm authentication)
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
