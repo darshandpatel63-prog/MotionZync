@@ -96,6 +96,16 @@ jobs:
           npm install "$GITHUB_WORKSPACE/src/pages/DesignIntelligence/$TARBALL" --no-audit --no-fund
           node --input-type=module -e "const di=await import('@motionzync/design-intelligence'); if(typeof di.buildRecipe!=='function'||typeof di.searchCatalog!=='function'||typeof di.createRemoteKnowledgeClient!=='function'||typeof di.createSpecialEffectsClient!=='function') throw new Error('Canonical npm exports are incomplete'); if(!Array.isArray(di.DI_STYLES)||di.DI_STYLES.length===0) throw new Error('Canonical catalog is empty'); console.log('NPM package install smoke passed')"
 
+      - name: Verify published npm registry installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir published-motionzync-di-consumer
+          cd published-motionzync-di-consumer
+          npm init -y >/dev/null 2>&1
+          npm install @motionzync/design-intelligence@0.1.0 --registry=https://registry.npmjs.org --no-audit --no-fund
+          node --input-type=module -e "const di=await import('@motionzync/design-intelligence'); if(di.DESIGN_INTELLIGENCE_NPM_VERSION!=='0.1.0') throw new Error('Published npm version mismatch'); if(typeof di.buildRecipe!=='function'||typeof di.searchCatalog!=='function'||typeof di.createRemoteKnowledgeClient!=='function'||typeof di.createSpecialEffectsClient!=='function') throw new Error('Published npm exports are incomplete'); if(!Array.isArray(di.DI_STYLES)||di.DI_STYLES.length===0) throw new Error('Published npm catalog is empty'); console.log('Published npm registry install/import smoke passed')"
+
       - name: Install CI browser and accessibility tooling
         run: npm install --no-save --no-audit --no-fund playwright@1.55.0 @axe-core/playwright@4.10.2 axe-core@4.10.2
 
