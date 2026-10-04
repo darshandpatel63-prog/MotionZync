@@ -4156,3 +4156,35 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED** (public npm documentation/workflow and local installation are verified; registry publication remains blocked by authentication)
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — npm authentication configured / publish trigger checkpoint
+
+### VERIFIED
+- The repository owner configured the npm granular access token and added it to GitHub Actions repository secrets as `NPM_TOKEN`; the secret value is not stored in source control or exposed in this handover.
+- The existing canonical package remains `@motionzync/design-intelligence@0.1.0`; no package rename or duplicate package was introduced.
+- The npm publication workflow still targets only the canonical Design Intelligence package and uses `NODE_AUTH_TOKEN` from the GitHub secret interface.
+- The mobile GitHub Actions UI did not expose the manual **Run workflow** button. The workflow file is currently only on `feature/design-intelligence`; GitHub documents that a `workflow_dispatch` workflow must exist on the repository default branch for the UI button to appear. We are not moving this feature work to `main` because project rules prohibit that without explicit user instruction.
+- The safe branch-local publication trigger remains available: a push to `feature/design-intelligence` with a commit message containing `[publish-npm]` satisfies the workflow's guarded publish condition.
+
+### IMPLEMENTED
+- This handover checkpoint intentionally uses the existing Design Intelligence documentation file as the branch-local `[publish-npm]` trigger; no application runtime code, catalog, payment system, entitlement system or authentication architecture is changed.
+
+### UNVERIFIED
+- Whether the newly configured `NPM_TOKEN` has the required write permission for the `@motionzync` scope.
+- Actual npm registry publication of `@motionzync/design-intelligence@0.1.0`.
+- Registry-backed clean external `npm install`.
+
+### CHECKPOINT
+- Regression: documentation-only branch update; unrelated MotionZync runtime features untouched.
+- Functionality: publication workflow configuration is IMPLEMENTED; authenticated registry publication is pending this guarded run.
+- Accessibility: no application UI changed.
+- Privacy/security: npm credential remains GitHub-secret-only; no token copied into repository files.
+- Performance: no runtime impact.
+- Data quality: no catalog records added or fabricated.
+- Build/test: existing package/tarball/local-install CI baseline remains VERIFIED; this publish run is the next external gate.
+- Documentation: UPDATED.
+
+### NEXT OWNER / NEXT AUTOMATED GATE
+- The `[publish-npm]` commit should cause the existing guarded npm workflow to attempt publication.
+- After the workflow result is available, verify the public registry package and a clean registry-backed installation before marking npm publication VERIFIED.
