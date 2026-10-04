@@ -774,3 +774,27 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 4. Real BYOK provider execution/CORS/model compatibility.
 5. Manual production browser/device/screen-reader audit.
 6. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+
+## 2026-10-04 — CURRENT CONTINUATION CHECKPOINT
+
+### VERIFIED
+- Public npm package publication and clean registry installation/import are VERIFIED.
+
+### IMPLEMENTED
+- Public npm developer documentation is available in the feature docs and main user-facing documentation.
+- npm installation and developer example code on the Design Intelligence Docs route now have accessible Copy controls.
+
+### UNVERIFIED
+- Real Firebase Free/Premium/Ultra entitlement/API-key boundary.
+- Real Ultra API-key lifecycle and deployed effects API/CORS exercise.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual production browser/device/keyboard/screen-reader audit.
+- Final Phase-A publication/compatibility closure.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Ultra API-key lifecycle + deployed Effects API/CORS exercise.
+3. Real BYOK provider execution/CORS/model compatibility.
+4. Manual production browser/device/screen-reader audit.
+5. Final Phase-A publication/compatibility gates; keep large content expansion deferred.
