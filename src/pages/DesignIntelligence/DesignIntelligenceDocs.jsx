@@ -1,4 +1,24 @@
+import {useState} from 'react'
 import './DesignIntelligence.css'
+
+function CopyCommand({children}) {
+  const [copied,setCopied]=useState(false)
+  const copy=async()=>{
+    try{
+      await navigator.clipboard.writeText(String(children))
+      setCopied(true)
+      window.setTimeout(()=>setCopied(false),1600)
+    }catch{
+      setCopied(false)
+    }
+  }
+  return <div className="di-code-wrap">
+    <pre className="di-code">{children}</pre>
+    <button type="button" className="di-copy-btn" onClick={copy} aria-label={copied?'Copied command':'Copy command'}>
+      {copied?'Copied':'Copy'}
+    </button>
+  </div>
+}
 
 export default function DesignIntelligenceDocs(){return <div className="di-page">
   <section className="di-page-intro">
@@ -20,9 +40,9 @@ export default function DesignIntelligenceDocs(){return <div className="di-page"
     <span className="di-kicker">NPM / DEVELOPER MODE</span>
     <h2>Install the same canonical core</h2>
     <p>After the package is published to the public npm registry, any developer can install it with the standard npm command. No separate database is created.</p>
-    <pre className="di-code">npm install @motionzync/design-intelligence</pre>
+    <CopyCommand>npm install @motionzync/design-intelligence</CopyCommand>
     <p>Then a developer can search and compose designs directly:</p>
-    <pre className="di-code">{`import { searchCatalog, buildRecipe, recipeToCSSVariables } from '@motionzync/design-intelligence'
+    <CopyCommand>{`import { searchCatalog, buildRecipe, recipeToCSSVariables } from '@motionzync/design-intelligence'
 
 const styles = searchCatalog('healthcare minimal', 'styles', 'free')
 const recipe = buildRecipe('dark healthcare analytics dashboard', 'free')
@@ -30,7 +50,7 @@ const css = recipeToCSSVariables(recipe)
 
 console.log(styles)
 console.log(recipe.style.name, recipe.palette.name, recipe.typography.name)
-console.log(css)`}</pre>
+console.log(css)`}</CopyCommand>
     <p className="di-muted">The npm package exposes the canonical design records, deterministic engine, schema, search index, relationships, validation helpers and supported export helpers.</p>
   </section>
 
