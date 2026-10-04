@@ -1,0 +1,42 @@
+name: Publish Design Intelligence package to npm
+
+on:
+  push:
+    branches:
+      - feature/design-intelligence
+    paths:
+      - "src/pages/DesignIntelligence/**"
+      - ".github/workflows/design-intelligence-npm-publish.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: contains(github.event.head_commit.message, '[publish-npm]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: false
+
+      - name: Verify package metadata
+        working-directory: src/pages/DesignIntelligence
+        run: |
+          test "$(node -p "require('./package.json').name")" = "@motionzync/design-intelligence"
+          test "$(node -p "require('./package.json').version")" = "0.1.0"
+          test "$(node -p "require('./package.json').publishConfig.access")" = "public"
+          npm pack --dry-run
+
+      - name: Publish public package with provenance
+        working-directory: src/pages/DesignIntelligence
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
