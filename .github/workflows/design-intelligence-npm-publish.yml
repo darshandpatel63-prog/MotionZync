@@ -1,6 +1,7 @@
 name: Publish Design Intelligence package to npm
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - feature/design-intelligence
@@ -13,7 +14,7 @@ permissions:
 
 jobs:
   publish:
-    if: contains(github.event.head_commit.message, '[publish-npm]')
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[publish-npm]')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
