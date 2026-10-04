@@ -4098,3 +4098,36 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED** (public developer documentation and publication workflow IMPLEMENTED; registry publication UNVERIFIED)
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — Public npm developer documentation milestone
+
+### IMPLEMENTED
+- Expanded `src/pages/DesignIntelligence/README.md` into a public developer guide covering installation, search, direct design selection, Design Recipe generation, compatibility/validation, design tokens, CSS variables, portable JSON, current catalog scope, protected knowledge and Ultra Premium+ special-effects usage.
+- Added matching NPM/developer guidance to `DesignIntelligenceDocs.jsx`, including the public `npm install @motionzync/design-intelligence` command and concrete ways to select or generate design intelligence.
+- Kept the deferred payment price out of public DI page UI while payment backend/security infrastructure remains intact.
+
+### VERIFIED
+- Documented functions match the current canonical npm/engine exports.
+- Example canonical record IDs were cross-checked against the catalog.
+- Existing CI tarball/local-install coverage remains the npm integrity baseline.
+
+### UNVERIFIED
+- Public npm registry publication and registry-backed external installation.
+- Real protected npm knowledge/effects requests using server-issued credentials.
+- Manual production review of the new documentation UI.
+
+### CHECKPOINT
+- Regression: Design Intelligence documentation/UI-copy scope only; unrelated MotionZync features untouched.
+- Functionality: documented examples map to implemented APIs; registry availability remains unverified.
+- Accessibility: semantic structure retained; manual production audit remains unverified.
+- Privacy/security: no secret/API key added; credential examples use environment variables.
+- Performance: no new runtime dependency or large browser dataset.
+- Data quality: only current bounded catalog content is documented.
+- Build/test: final documentation checkpoint triggers a fresh CI run.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED** (npm docs/workflow implemented; registry publication still blocked by missing npm authentication)
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
