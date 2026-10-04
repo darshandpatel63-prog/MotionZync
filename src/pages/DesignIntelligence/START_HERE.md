@@ -742,3 +742,10 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - **IMPLEMENTED:** handover records the publication milestone and moves the first unfinished task to a clean registry-backed consumer install/import smoke test.
 - **UNVERIFIED:** external clean install/import, provenance/registry metadata inspection, and all credentialed runtime integrations.
 - **Do not redo:** npm package implementation/publication workflow. Continue with the new first unfinished task in `handover.md`.
+
+
+## 2026-10-04 — External npm registry verification gate
+
+- **IMPLEMENTED:** DI build CI now installs `@motionzync/design-intelligence@0.1.0` from the public npm registry in a fresh consumer directory and smoke-tests its published exports/version/catalog.
+- **UNVERIFIED:** The resulting CI run has not yet been observed as completed. Do not mark external registry installation VERIFIED until that run passes.
+- **Current continuation:** inspect the latest Design Intelligence Build Check result for the external npm install/import step, then continue from `handover.md` FIRST UNFINISHED TASK.
