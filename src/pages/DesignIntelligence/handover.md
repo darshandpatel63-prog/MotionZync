@@ -4304,3 +4304,38 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: 98% — IN PROGRESS
 - Phase B — Publish: 0% — IN PROGRESS (npm package publication and clean registry installation are now VERIFIED; remaining publication/compatibility gates remain.)
 - Phase C — Continuous Content Expansion: 0% — NOT STARTED
+
+
+## 2026-10-04 — Public npm command copy controls
+
+### IMPLEMENTED
+- Added an accessible Copy control to the public npm installation command and developer example code on the Design Intelligence Docs route.
+- Copy uses the browser Clipboard API, gives immediate Copied feedback, and exposes an accessible button name/state.
+- Added responsive styling and visible keyboard focus treatment without adding a runtime dependency.
+
+### UNVERIFIED
+- The newest copy-control commit has not yet completed a fresh CI/browser run.
+- Clipboard behavior on every production browser/device remains unverified.
+
+### CHECKPOINT
+- Regression: documentation/UI-only change; canonical engine, catalog, auth, billing and payment infrastructure untouched.
+- Functionality: copy-control implementation is present; runtime verification pending.
+- Accessibility: semantic button and focus-visible treatment implemented; manual screen-reader/device verification pending.
+- Privacy/security: no data or credentials are collected by the control.
+- Performance: no new dependency; minimal UI state only.
+- Data quality: no catalog changes.
+- Build/test: fresh CI pending.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASKS (PAYMENT UI EXCLUDED)
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Ultra API-key issue/rotate/revoke and deployed Ultra-only effects API/CORS exercise.
+3. Real BYOK provider execution/CORS/model compatibility.
+4. Manual production browser/device/keyboard/screen-reader audit.
+5. Final Phase-A publication/compatibility gate review after the above credentialed/manual checks.
+6. Keep large 1,000+/10,000+ verified-data expansion deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
