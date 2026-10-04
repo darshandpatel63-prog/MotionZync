@@ -700,3 +700,22 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 5. Manual production browser/device/screen-reader audit.
 6. Publish and externally verify `@motionzync/design-intelligence`.
 7. Final Phase-A publication/compatibility gates; large content expansion deferred.
+
+
+## 2026-10-04 — Public npm developer documentation checkpoint
+
+### IMPLEMENTED
+- Public package README now documents installation, design search/selection, recipe generation, compatibility checks, token/CSS/JSON exports, current catalog, protected API clients and release boundaries.
+- In-product Docs now explains the same canonical npm core and keeps the deferred payment price out of public UI.
+
+### VERIFIED
+- Documentation examples align with current npm exports and canonical record IDs.
+
+### UNVERIFIED
+- Public npm registry publication and external `npm install`.
+- Real protected API calls with valid server-issued credentials.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
