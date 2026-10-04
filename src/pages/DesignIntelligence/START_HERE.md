@@ -670,3 +670,33 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — Public npm/developer documentation checkpoint
+
+### IMPLEMENTED
+- Public npm README now explains installation, search, design selection, deterministic recipe generation, validation, exports and authorized remote/API usage.
+- Public Design Intelligence Docs now exposes the same developer workflow and current seed-design categories.
+- Public Home/Docs no longer display the deferred Ultra payment price.
+
+### VERIFIED
+- npm package metadata and local tarball installation remain VERIFIED.
+- Publication workflow includes the GitHub Actions OIDC permission required for npm provenance publishing. citeturn115542search6turn115542search2
+
+### UNVERIFIED
+- Public npm registry publication and external registry install.
+- Current post-documentation browser/build verification until CI completes.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase entitlement/API-key boundary exercise.
+2. Cashfree Sandbox end-to-end (public payment UI intentionally deferred).
+3. Ultra API-key lifecycle + Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Final Phase-A publication/compatibility gates; large content expansion deferred.
