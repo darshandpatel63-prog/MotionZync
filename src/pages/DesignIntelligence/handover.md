@@ -4131,3 +4131,28 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED** (npm docs/workflow implemented; registry publication still blocked by missing npm authentication)
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — Public npm guide verification checkpoint
+
+### VERIFIED
+- Exact implementation checkpoint `a4006cea4848665ae42a9048899fd8cc75ce1905` passed DI CI run `37179952629`.
+- Build, Cashfree server contract, BYOK registry guard, Firebase entitlement boundary, shared ₹200 backend contract, npm tarball/local installation, browser route/interaction, responsive, focus-visible and serious/critical Axe checks all completed successfully.
+- The browser suite explicitly verified that the deferred payment price does not appear on any Design Intelligence route and that the public Docs route exposes the npm installation/capability guidance.
+- Vercel preview feedback for the documentation checkpoint has no unresolved feedback.
+
+### IMPLEMENTED
+- Public npm README and in-product developer documentation now explain how developers install, search, select designs, generate recipes, validate compatibility, export tokens/JSON and use protected API clients.
+
+### UNVERIFIED
+- Public npm registry publication and registry-backed external `npm install`.
+- Real protected API requests and real provider execution.
+- Manual physical-device/screen-reader production audit.
+
+### NEXT OWNER ACTION
+- Add the GitHub Actions `NPM_TOKEN` secret and manually run the existing npm publication workflow. Until that succeeds, the package remains registry-unpublished.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED** (public npm documentation/workflow and local installation are verified; registry publication remains blocked by authentication)
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
