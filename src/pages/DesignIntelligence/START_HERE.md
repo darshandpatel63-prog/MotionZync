@@ -646,3 +646,27 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — npm publication authentication checkpoint
+
+### VERIFIED
+- npm package metadata and tarball validation passed in GitHub Actions.
+- The publish command reached npm but returned `ENEEDAUTH` because the repository's `NPM_TOKEN` secret is empty/unavailable.
+- No npm package was published.
+
+### IMPLEMENTED
+- npm publication workflow supports both guarded push and manual `workflow_dispatch`.
+- No npm credential is stored in repository files.
+
+### UNVERIFIED
+- Public npm publication and external `npm install`.
+- npm scope ownership/write permission.
+
+### REQUIRED OWNER ACTION
+- Add repository secret `NPM_TOKEN` with a suitable npm granular publish token, then run the workflow manually. Never share the token in chat.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
