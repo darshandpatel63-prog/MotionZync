@@ -3980,3 +3980,38 @@ FIRST UNFINISHED TASK remains:
 5. Manual production browser/device/screen-reader audit.
 6. Publish and externally verify `@motionzync/design-intelligence`.
 7. Close final Phase-A publication/compatibility gates; keep 1,000+/10,000+ content expansion deferred.
+
+
+## 2026-10-04 — npm publication readiness milestone
+
+### IMPLEMENTED
+- Added a guarded GitHub Actions workflow at `.github/workflows/design-intelligence-npm-publish.yml`.
+- The workflow publishes only when a commit explicitly contains `[publish-npm]`, preventing normal Design Intelligence commits from publishing accidentally.
+- Publication targets the existing canonical package `@motionzync/design-intelligence` version `0.1.0` with public access and npm provenance.
+- The workflow uses `NPM_TOKEN` only through the GitHub Actions secret interface; no token is stored in the repository.
+
+### VERIFIED
+- Package metadata is already canonical and package-ready: public access, ESM entry, repository URL, and the bounded Phase-A canonical core.
+- Local tarball/clean-install verification remains green from the latest DI CI checkpoint.
+- Public npm registry search did not find `@motionzync/design-intelligence`; public registry publication is therefore not yet claimed.
+
+### UNVERIFIED
+- Actual npm registry publication.
+- External clean installation from the public registry.
+- Availability of the repository's `NPM_TOKEN` secret and the npm account's permission to publish the `@motionzync` scope.
+- npm account/package settings and 2FA/publishing policy.
+
+### CHECKPOINT
+- Regression: publication workflow is isolated to the Design Intelligence package and does not alter application runtime.
+- Functionality: package metadata and local install are VERIFIED; registry publication is UNVERIFIED.
+- Accessibility: no public UI changes in this milestone.
+- Privacy/security: no npm token is committed; CI receives credentials only through GitHub Secrets.
+- Performance: no runtime application impact.
+- Data quality: package still uses the existing canonical bounded seed catalog; no fabricated records.
+- Build/test: existing DI CI tarball/local-install coverage remains the baseline; publication workflow itself awaits an authenticated publish run.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED** (npm publication readiness IMPLEMENTED; actual registry publication still UNVERIFIED)
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
