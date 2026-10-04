@@ -4052,3 +4052,49 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED** (publication workflow IMPLEMENTED; registry publication blocked only by missing npm authentication)
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — Public npm/developer documentation milestone
+
+### IMPLEMENTED
+- Expanded the package README with public developer instructions covering installation, catalog search, direct record selection, deterministic recipe generation, compatibility validation, design-token/CSS export, protected knowledge and Ultra effects API usage.
+- Added a current seed-catalog reference so developers can see which design directions are actually available now.
+- Expanded the in-product Design Intelligence Docs page with an npm installation/developer-mode section and practical usage examples.
+- Updated public DI Home/Docs copy so the deferred payment price is not displayed while the payment launch is pending.
+- Corrected the Docs export wording: JSON recipe and CSS custom-property exports are implemented; executable rich code exporters remain future work.
+
+### VERIFIED
+- The existing npm package metadata, tarball and local clean-install checks remain the canonical package verification baseline.
+- npm documentation confirms the package root README is rendered on the npm package page and README is included in published packages. citeturn115542search0turn115542search1
+- npm's current provenance documentation requires OIDC `id-token: write` for GitHub Actions provenance publishing; the publication workflow now includes that permission. citeturn115542search6turn115542search2
+- The package documentation does not expose any real MotionZync API key, provider secret or npm credential.
+
+### UNVERIFIED
+- Public registry publication of `@motionzync/design-intelligence@0.1.0`.
+- Clean external installation from the public npm registry.
+- Final browser/build verification of the newest Docs/Home changes is pending the current CI run.
+- Credentialed npm publishing still requires a repository authentication configuration.
+
+### CHECKPOINT
+- Regression: only Design Intelligence public documentation/UI copy and npm publication workflow were changed; unrelated MotionZync features remain untouched.
+- Functionality: developer documentation is IMPLEMENTED; runtime/build verification of the newest Docs JSX is pending CI.
+- Accessibility: semantic existing DI structure retained; automated current-commit verification pending.
+- Privacy/security: no secrets added; npm publication remains credential-gated and package runtime does not embed credentials.
+- Performance: documentation-only application work; no new runtime dependency.
+- Data quality: only existing verified seed names/capabilities documented; no fabricated records or counts.
+- Build/test: existing package/local-install baseline VERIFIED; current post-doc CI pending.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 end-to-end (public payment UI intentionally deferred).
+3. Real Ultra API-key lifecycle + deployed Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED** (public developer documentation and publication workflow IMPLEMENTED; registry publication UNVERIFIED)
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
