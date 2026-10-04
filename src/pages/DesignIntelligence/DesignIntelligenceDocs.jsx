@@ -33,12 +33,14 @@ export default function DesignIntelligenceDocs(){return <div className="di-page"
   <section className="di-surface">
     <span className="di-kicker">NPM</span>
     <h2>One core, one package direction</h2>
-    <p>The target npm model is not a second dataset. Free/public records can be distributed locally, while authenticated Premium and Ultra integrations can use the same canonical core plus server-delivered protected knowledge. The package publication itself is still a separate release milestone and is not claimed as published in this source-only milestone.</p>
+    <p>The npm package uses the same canonical Design Intelligence core as the web app. Free/public records can be distributed locally, while authenticated Premium and Ultra integrations can use the same canonical core plus server-delivered protected knowledge.</p>
+    <pre className="di-code">npm install @motionzync/design-intelligence</pre>
+    <p className="di-muted">The public package <b>@motionzync/design-intelligence@0.1.0</b> is published on npm. Clean external installation/import from the public registry is VERIFIED. The package does not create a second Design Intelligence database.</p>
   </section>
 
   <section className="di-surface">
     <span className="di-kicker">IMPORTANT</span>
     <h2>What is not live yet</h2>
-    <p>Live ₹{ULTRA_PREMIUM_PRICE_INR} Cashfree checkout, production API-key usage, published npm package, MCP service, large-scale content ingestion and final accessibility/performance automation remain verification/release milestones. The access contract and server-side enforcement foundation are being aligned now; no fake API key or fake payment is created.</p>
+    <p>Live ₹{ULTRA_PREMIUM_PRICE_INR} Cashfree checkout, production API-key usage, MCP service, large-scale content ingestion and final accessibility/performance automation remain verification/release milestones. The npm package publication and clean public-registry installation are already VERIFIED. No fake API key or fake payment is created.</p>
   </section>
 </div>}
