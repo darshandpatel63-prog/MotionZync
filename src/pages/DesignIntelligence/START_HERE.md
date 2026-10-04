@@ -733,3 +733,12 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 
 ### NEXT
 - Verify the publication run, then verify `@motionzync/design-intelligence@0.1.0` on the public npm registry and perform a clean external installation.
+
+
+## 2026-10-04 — npm publication checkpoint
+
+- **VERIFIED:** GitHub Actions publish run `37181790607` succeeded on `feature/design-intelligence`.
+- **VERIFIED:** npm published `@motionzync/design-intelligence@0.1.0`; npm confirmation reports SHA-512 digest `c6b41f36bfdf20436a009df8526eb5a1e1edb599`.
+- **IMPLEMENTED:** handover records the publication milestone and moves the first unfinished task to a clean registry-backed consumer install/import smoke test.
+- **UNVERIFIED:** external clean install/import, provenance/registry metadata inspection, and all credentialed runtime integrations.
+- **Do not redo:** npm package implementation/publication workflow. Continue with the new first unfinished task in `handover.md`.
