@@ -798,3 +798,31 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 3. Real BYOK provider execution/CORS/model compatibility.
 4. Manual production browser/device/screen-reader audit.
 5. Final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+
+## 2026-10-08 — CURRENT CONTINUATION CHECKPOINT
+
+### VERIFIED
+- Current `feature/design-intelligence` HEAD is `203f293197044ca5ed6ebef18c11e5ae7686fd9b`.
+- Latest READY feature-branch Vercel runtime deployment is `dpl_FN7svLPVZ4cULDHRRUZcfc9FG3Xa` from commit `7d44bad8d9c28de8ddc469ab8d0a50f2a5ec1acb`; later commits through current HEAD are documentation/public-npm workflow changes only.
+- Unauthenticated `/api/di-knowledge` on the READY feature deployment returns the free-only, server-derived boundary.
+- Firebase Admin environment-variable names are present in Vercel; secret values were not decrypted.
+
+### UNVERIFIED
+- Real authenticated Firebase Free/Premium/Ultra and MotionZync API-key exercise.
+- Real Ultra API-key lifecycle and deployed Effects API/CORS exercise.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual production browser/device/keyboard/screen-reader audit.
+- Final Phase-A publication/compatibility closure.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Ultra API-key lifecycle + deployed Effects API/CORS exercise.
+3. Real BYOK provider execution/CORS/model compatibility.
+4. Manual production browser/device/keyboard/screen-reader audit.
+5. Final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
