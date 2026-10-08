@@ -4339,3 +4339,48 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-08 — Firebase credentialed-boundary continuation check
+
+### VERIFIED
+- Mandatory Start/Continue documentation set was re-read and the current Design Intelligence implementation/architecture was re-checked before resuming the first unfinished task.
+- Current feature branch HEAD is `203f293197044ca5ed6ebef18c11e5ae7686fd9b`.
+- The feature branch's latest READY Vercel deployment is `dpl_FN7svLPVZ4cULDHRRUZcfc9FG3Xa`, sourced from `feature/design-intelligence` at commit `7d44bad8d9c28de8ddc469ab8d0a50f2a5ec1acb`.
+- Compare review from `7d44bad...` to current HEAD `203f293...` shows only Design Intelligence documentation/public-npm workflow files changed; no newer runtime application implementation was introduced after that READY feature deployment.
+- The READY feature deployment's unauthenticated `GET /api/di-knowledge` returns HTTP 200 with server-derived `tier: free`, `authenticated: false`, `protectedIncluded: false`, and the public/free catalog only.
+- Vercel project environment metadata contains the required server-side Firebase Admin variable names `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` and `ADMIN_EMAIL` across the configured environments. Values were not decrypted or exposed.
+- Runtime-error aggregation for the project over the last 24 hours shows only the pre-existing Node `DEP0169 url.parse()` deprecation warning on `/api/di-knowledge`; no application failure is demonstrated by that warning.
+
+### IMPLEMENTED
+- No new application code was added during this checkpoint.
+- The credentialed Firebase test path was explicitly prepared as the next verification gate without fabricating identities, tokens or entitlements.
+
+### UNVERIFIED
+- Real Firebase-authenticated Free/Premium/Ultra requests remain unverified because a real Firebase ID token/session is not available through the current tool path.
+- Real MotionZync `mz_live_` API-key issue/rotate/revoke and revoked-key rejection remain unverified because they require a real authenticated Ultra entitlement and session.
+- The feature deployment's protected `/api/di-api-key` and `/api/di-effects` routes could not be fetched through the available Vercel share path without an authenticated session; no false runtime claim is made.
+- Real BYOK provider execution/CORS/model compatibility remains unverified.
+- Manual production browser/device/keyboard/screen-reader audit remains unverified.
+
+### CHECKPOINT
+- Regression: no application runtime code changed in this milestone; unrelated MotionZync features remain untouched.
+- Functionality: public/free knowledge boundary is VERIFIED on the READY feature deployment; credentialed Firebase/API-key functionality remains UNVERIFIED.
+- Accessibility: existing automated CI route/name/focus/responsive/serious-critical Axe coverage remains the verified baseline; manual production audit remains UNVERIFIED.
+- Privacy/security: no credentials or plaintext API keys were created or exposed; server-authoritative entitlement and hash-only API-key architecture remain intact.
+- Performance: no runtime architecture change; production profiling remains UNVERIFIED.
+- Data quality: no fabricated catalog records and no large 1,000+/10,000+ expansion.
+- Build/test: current branch Vercel lineage is VERIFIED; no new exact-current-HEAD full CI result is claimed from this checkpoint because the latest branch commits are documentation/public-workflow changes.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete a real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise with a real Google/Firebase session; no secret values should be pasted into chat.
+2. Complete the real Ultra API-key lifecycle and deployed Ultra-only Effects API/CORS exercise.
+3. Verify real BYOK provider execution/CORS/model compatibility with valid provider credentials.
+4. Complete manual production browser/device/keyboard/screen-reader audit.
+5. Close final Phase-A publication/compatibility review; keep 1,000+/10,000+ verified-data expansion deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
