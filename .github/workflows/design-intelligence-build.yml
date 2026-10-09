@@ -155,7 +155,7 @@ jobs:
           ]
 
           const browser = await chromium.launch({headless:true})
-          const context = await browser.newContext({viewport:{width:1440,height:900}})
+          const context = await browser.newContext({viewport:{width:1440,height:900},permissions:['clipboard-read','clipboard-write']})
           const page = await context.newPage()
           await page.addInitScript(() => {
             window.__motionzyncCashfreeCalls = []
@@ -316,6 +316,22 @@ jobs:
           }
 
           
+          await page.goto(base+'/design-intelligence/docs', {waitUntil:'networkidle'})
+          const copyButtons = page.getByRole('button', {name:'Copy command', exact:true})
+          assert((await copyButtons.count()) === 2, 'Docs should expose Copy controls for both the npm command and developer example')
+          await copyButtons.nth(0).click()
+          await page.getByRole('button', {name:'Copied command', exact:true}).waitFor()
+          await page.locator('.di-copy-status').filter({hasText:'Copied to clipboard.'}).waitFor()
+          const installCommand = await page.evaluate(() => navigator.clipboard.readText())
+          assert(installCommand === 'npm install @motionzync/design-intelligence', 'Copy control did not copy the exact npm installation command')
+          await page.locator('.di-code-wrap .di-copy-btn').nth(1).click()
+          await page.locator('.di-code-wrap:nth-of-type(2) .di-copy-status').filter({hasText:'Copied to clipboard.'}).waitFor().catch(async () => {
+            await page.locator('.di-copy-status').filter({hasText:'Copied to clipboard.'}).last().waitFor()
+          })
+          const exampleCommand = await page.evaluate(() => navigator.clipboard.readText())
+          assert(exampleCommand.includes("searchCatalog('healthcare minimal', 'styles', 'free')"), 'Copy control omitted the developer search example')
+          assert(exampleCommand.includes("buildRecipe('dark healthcare analytics dashboard', 'free')"), 'Copy control omitted the developer recipe example')
+
           await page.goto(base+'/admin', {waitUntil:'networkidle'})
           assert((await page.getByRole('button', {name:/DI Billing/}).count()) === 1, 'Admin DI Billing tab is missing')
           await page.getByRole('button', {name:/DI Billing/}).click()
