@@ -3,10 +3,12 @@ import { resolveServerEntitlement } from '../api/_lib/billing.js'
 import {
   ALL_DI_PROTECTED_RECORDS,
 } from '../api/_lib/di-protected-catalog.js'
-import {
+import diKnowledgeHandler, {
   combineCatalogs,
   isTierAccessible,
 } from '../api/di-knowledge.js'
+import diApiKeyHandler from '../api/di-api-key.js'
+import diEffectsHandler from '../api/di-effects.js'
 import { DI_DOMAINS, validateCatalog } from '../src/pages/DesignIntelligence/schema.js'
 
 const NOW = Date.parse('2026-10-02T12:00:00.000Z')
@@ -110,4 +112,74 @@ for (const id of protectedUltraIds) {
   )
 }
 
-console.log('Firebase entitlement semantics + DI protected catalog boundary contract passed')
+
+function createResponseStub() {
+  const state = { statusCode: 200, headers: {}, body: null, ended: false }
+  const response = {
+    setHeader(name, value) { state.headers[String(name).toLowerCase()] = value; return this },
+    status(code) { state.statusCode = code; return this },
+    json(body) { state.body = body; return this },
+    end() { state.ended = true; return this },
+  }
+  return { response, state }
+}
+
+async function callHandler(handler, request = {}) {
+  const { response, state } = createResponseStub()
+  await handler({
+    method: request.method || 'GET',
+    headers: request.headers || {},
+    query: request.query || {},
+    body: request.body || {},
+  }, response)
+  return state
+}
+
+// Credential-free endpoint contract: public knowledge stays Free, while
+// key/effects routes reject guests before any Firebase/Firestore lookup.
+const guestKnowledge = await callHandler(diKnowledgeHandler)
+assert.equal(guestKnowledge.statusCode, 200, 'Guest knowledge request should remain public')
+assert.deepEqual(guestKnowledge.state, undefined)
+
+const guestResponse = await callHandler(diKnowledgeHandler)
+assert.equal(guestResponse.statusCode, 200, 'Guest knowledge request should remain public')
+assert.deepEqual(guestResponse.body.entitlement, {
+  tier: 'free',
+  authenticated: false,
+  protectedIncluded: false,
+})
+assert.equal(guestResponse.body.protectedRecordCount, 0, 'Guest response exposed protected records')
+assert.equal(guestResponse.body.records.every(record => record.tier === 'free'), true, 'Guest response contains a non-Free record')
+assert.equal(guestResponse.headers['cache-control'], 'private, no-store, max-age=0')
+
+const unknownDomain = await callHandler(diKnowledgeHandler, {
+  query: { domain: 'not-a-real-domain' },
+})
+assert.equal(unknownDomain.statusCode, 400, 'Unknown knowledge domain should be rejected')
+
+const guestKeyStatus = await callHandler(diApiKeyHandler, { method: 'GET' })
+assert.equal(guestKeyStatus.statusCode, 401, 'Guest API-key status must require Firebase authentication')
+
+const guestEffects = await callHandler(diEffectsHandler, { method: 'GET' })
+assert.equal(guestEffects.statusCode, 401, 'Guest Effects API request must require a server-issued key')
+
+const originalAllowedOrigins = process.env.MOTIONZYNC_API_ALLOWED_ORIGINS
+process.env.MOTIONZYNC_API_ALLOWED_ORIGINS = 'https://allowed.example'
+const blockedOrigin = await callHandler(diEffectsHandler, {
+  method: 'OPTIONS',
+  headers: { origin: 'https://untrusted.example' },
+})
+assert.equal(blockedOrigin.statusCode, 403, 'Unallowlisted Effects API origin must be rejected')
+
+const allowedPreflight = await callHandler(diEffectsHandler, {
+  method: 'OPTIONS',
+  headers: { origin: 'https://allowed.example' },
+})
+assert.equal(allowedPreflight.statusCode, 204, 'Allowlisted CORS preflight should succeed')
+assert.equal(allowedPreflight.headers['access-control-allow-origin'], 'https://allowed.example')
+assert.match(allowedPreflight.headers['access-control-allow-methods'], /GET, POST, OPTIONS/)
+
+if (originalAllowedOrigins === undefined) delete process.env.MOTIONZYNC_API_ALLOWED_ORIGINS
+else process.env.MOTIONZYNC_API_ALLOWED_ORIGINS = originalAllowedOrigins
+
+console.log('Firebase entitlement, protected catalog, guest API-key and Effects API CORS boundary contracts passed')
