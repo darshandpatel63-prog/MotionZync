@@ -6,7 +6,7 @@ export const PLAN_OFFERS=[
     price:'₹0',
     cadence:'forever',
     access:'Simple/public design knowledge, deterministic recipes and free exports without login.',
-    npmAccess:'Free/local npm distribution of public knowledge when the package is published.'
+    npmAccess:'Free/local npm distribution of the public seed catalog via the published package.'
   },
   {
     id:'member-premium',
@@ -30,7 +30,10 @@ export const PLAN_OFFERS=[
 export const ENTITLEMENT_LEVELS={free:0,premium:1,'ultra-premium':2}
 
 export function hasEntitlement(requiredTier,entitlementTier='free'){
-  return (ENTITLEMENT_LEVELS[entitlementTier]??0)>=(ENTITLEMENT_LEVELS[requiredTier]??0)
+  const requiredLevel=ENTITLEMENT_LEVELS[requiredTier]
+  if(requiredLevel===undefined)return false
+  const currentLevel=ENTITLEMENT_LEVELS[entitlementTier]??ENTITLEMENT_LEVELS.free
+  return currentLevel>=requiredLevel
 }
 
 export function accessLabel(tier){
