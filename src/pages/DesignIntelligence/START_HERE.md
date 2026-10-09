@@ -826,3 +826,30 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — CURRENT VERIFIED CONTINUATION CHECKPOINT
+
+### VERIFIED
+- The latest observed READY feature deployment is `dpl_FfroGwy6o8WVc6vXDzqfPz4RQQBc` from commit `6fa8155f3befaad1fba30da6d47a213bbeb39115`; the Vercel deployment check reports success.
+- Public production `GET /api/di-knowledge` returns HTTP 200 with server-derived Free access, `authenticated: false`, `protectedIncluded: false`, and only the bounded free catalog.
+- Unknown knowledge domains are rejected with HTTP 400.
+- The latest details and complete regression/functionality/accessibility/privacy/performance/data/build/documentation status are recorded at the end of `handover.md`.
+
+### UNVERIFIED
+- Real Firebase-authenticated Free/Premium/Ultra boundary and real MotionZync API-key issue/rotate/revoke lifecycle.
+- Real Ultra Effects API/CORS execution and real BYOK provider/model/CORS execution.
+- Manual production browser/device/keyboard/screen-reader review and direct clipboard interaction.
+- Preview API route tests that require a Vercel-authenticated path have not been reported as application failures.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete the real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise without sharing ID tokens or API secrets.
+2. Verify real Ultra API-key lifecycle and deployed Effects API/CORS.
+3. Verify real BYOK provider execution, CORS and model compatibility.
+4. Complete manual production browser/device/keyboard/screen-reader audit, including Docs copy buttons.
+5. Close final Phase-A publication/compatibility gates. Keep 1,000+/10,000+ verified-data expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
