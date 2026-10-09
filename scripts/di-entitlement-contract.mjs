@@ -10,6 +10,35 @@ import diKnowledgeHandler, {
 import diApiKeyHandler from '../api/di-api-key.js'
 import diEffectsHandler from '../api/di-effects.js'
 import { DI_DOMAINS, validateCatalog } from '../src/pages/DesignIntelligence/schema.js'
+import { buildRecipe } from '../src/pages/DesignIntelligence/engine.js'
+import { DI_STYLES, DI_PALETTES, DI_TYPOGRAPHY, DI_CHARTS, DI_STACKS, DI_RECIPES } from '../src/pages/DesignIntelligence/catalog.js'
+
+
+const tieredStackFixtures = [
+  { id: 'stack-react-native', name: 'Test React Native', tier: 'premium', category: 'cross-platform-mobile', focus: ['mobile'] },
+  { id: 'stack-flutter', name: 'Test Flutter', tier: 'ultra-premium', category: 'cross-platform-mobile', focus: ['mobile'] },
+  { id: 'stack-swiftui', name: 'Test SwiftUI', tier: 'ultra-premium', category: 'native-ios', focus: ['ios'] },
+  { id: 'test-free-cross-platform', name: 'Test Free Cross-platform', tier: 'free', category: 'cross-platform-mobile', focus: ['mobile'] },
+  { id: 'test-free-web', name: 'Test Free Web', tier: 'free', category: 'frontend', focus: ['web'] },
+]
+const tieredStackTestCatalog = {
+  styles: DI_STYLES,
+  palettes: DI_PALETTES,
+  typography: DI_TYPOGRAPHY,
+  charts: DI_CHARTS,
+  stacks: tieredStackFixtures,
+  recipes: DI_RECIPES,
+}
+const freeMobileRecipe = buildRecipe('mobile app', 'free', tieredStackTestCatalog)
+assert.equal(freeMobileRecipe.stack.id, 'test-free-cross-platform', 'Free recipe must not force a Premium React Native stack')
+assert.equal(freeMobileRecipe.stack.tier, 'free')
+const premiumMobileRecipe = buildRecipe('mobile app', 'premium', tieredStackTestCatalog)
+assert.equal(premiumMobileRecipe.stack.id, 'stack-react-native', 'Premium should retain its accessible preferred stack')
+const ultraFlutterRecipe = buildRecipe('flutter android app', 'ultra-premium', tieredStackTestCatalog)
+assert.equal(ultraFlutterRecipe.stack.id, 'stack-flutter', 'Ultra Premium+ should retain its accessible preferred Flutter stack')
+const freeIosRecipe = buildRecipe('ios app', 'free', tieredStackTestCatalog)
+assert.notEqual(freeIosRecipe.stack.id, 'stack-swiftui', 'Free recipe must not force an Ultra Premium+ SwiftUI stack')
+assert.equal(freeIosRecipe.stack.tier, 'free')
 
 const NOW = Date.parse('2026-10-02T12:00:00.000Z')
 const future = new Date(NOW + 24 * 60 * 60 * 1000).toISOString()
