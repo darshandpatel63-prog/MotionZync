@@ -2,21 +2,27 @@ import {useState} from 'react'
 import './DesignIntelligence.css'
 
 function CopyCommand({children}) {
-  const [copied,setCopied]=useState(false)
+  const [copyState,setCopyState]=useState('idle')
   const copy=async()=>{
     try{
       await navigator.clipboard.writeText(String(children))
-      setCopied(true)
-      window.setTimeout(()=>setCopied(false),1600)
+      setCopyState('copied')
+      window.setTimeout(()=>setCopyState('idle'),1600)
     }catch{
-      setCopied(false)
+      setCopyState('failed')
     }
   }
+  const feedback=copyState==='copied'
+    ? 'Copied to clipboard.'
+    : copyState==='failed'
+      ? 'Clipboard access was blocked. Select the text above and copy it manually.'
+      : ''
   return <div className="di-code-wrap">
     <pre className="di-code">{children}</pre>
-    <button type="button" className="di-copy-btn" onClick={copy} aria-label={copied?'Copied command':'Copy command'}>
-      {copied?'Copied':'Copy'}
+    <button type="button" className="di-copy-btn" onClick={copy} aria-label={copyState==='copied'?'Copied command':'Copy command'}>
+      {copyState==='copied'?'Copied':'Copy'}
     </button>
+    {feedback&&<span className="di-copy-status" role="status">{feedback}</span>}
   </div>
 }
 
@@ -39,7 +45,7 @@ export default function DesignIntelligenceDocs(){return <div className="di-page"
   <section className="di-surface">
     <span className="di-kicker">NPM / DEVELOPER MODE</span>
     <h2>Install the same canonical core</h2>
-    <p>After the package is published to the public npm registry, any developer can install it with the standard npm command. No separate database is created.</p>
+    <p>The package is publicly published as @motionzync/design-intelligence@0.1.0, and a clean registry-backed installation/import has been verified. Install it with the standard npm command; no separate database is created.</p>
     <CopyCommand>npm install @motionzync/design-intelligence</CopyCommand>
     <p>Then a developer can search and compose designs directly:</p>
     <CopyCommand>{`import { searchCatalog, buildRecipe, recipeToCSSVariables } from '@motionzync/design-intelligence'
