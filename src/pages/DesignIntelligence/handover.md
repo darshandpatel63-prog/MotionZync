@@ -4511,3 +4511,50 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm publication, clean registry install/import and Docs copy-control CI VERIFIED; credentialed compatibility gates remain**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — Access-boundary hardening and regression contracts VERIFIED
+
+### IMPLEMENTED
+- Preferred mobile/iOS stack selection now uses the tier-aware record lookup. If the preferred stack is not entitled/available, recipe generation falls back to the best record accessible to that tier instead of forcing the preferred ID.
+- Catalog records with an unknown/invalid tier are rejected by the access helper; deterministic search and recipe selection use the same fail-closed access predicate.
+- Unknown requested entitlement tiers return false; unknown current-tier values safely behave as Free.
+- The entitlement contract test now exercises tier-specific mobile/iOS stack selection and invalid-tier search cases.
+- The same contract script calls the real route handlers with controlled in-memory request/response stubs to verify guest-only boundaries: guest knowledge is Free-only/no-store, unsupported domain is rejected, unauthenticated API-key status and Effects requests return 401, an unallowlisted Effects Origin returns 403, and an allowlisted preflight returns 204 with the exact allowed-Origin header.
+- Corrected the access-plan npm description that still said the package would be published in the future.
+
+### VERIFIED
+- Design Intelligence Build Check **37921788661** succeeded for commit `14536bb350851077ac1d4683c22247c0ee39526f`: https://github.com/darshandpatel63-prog/MotionZync/actions/runs/37921788661
+- The run passed build, Cashfree-order contract, BYOK model-registry contract, Firebase entitlement/protected-catalog contract (including the new route/invalid-tier tests), price contract, local package tarball/install, public npm registry install/import, and browser/Axe/responsive suite.
+- Vercel feature deployment `dpl_DPW1FLdkUovCHvMbVKhHpiqgD3o2` for the same commit is **READY**.
+- The copy-control clipboard assertions introduced earlier remain included in the passing browser suite.
+
+### UNVERIFIED
+- These negative/contract tests do not substitute for real Firebase-authenticated Free/Premium/Ultra sessions or a real paid/owner-granted Ultra entitlement.
+- Real MotionZync API-key issue/rotate/revoke/revoked-key rejection with an authenticated user remains unverified.
+- Real Effects API requests using a genuine server-issued Ultra key, configured production CORS and the actual deployment remain unverified.
+- Real BYOK provider execution, provider-specific CORS/model compatibility and manual production Android/mobile keyboard/screen-reader review remain unverified.
+- Public npm `@motionzync/design-intelligence@0.1.0` was published before these new source changes. This branch's newer access hardening is **not claimed as included** in that already-published artifact. Do not republish version `0.1.0`; a future public package release needs a new version and its own clean consumer verification.
+
+### MILESTONE AUDIT
+- Regression: full exact-commit Build Check passed and the feature Vercel deployment is READY. `src/App.jsx` and `src/components/Navbar/Navbar.jsx` were not changed in this milestone.
+- Functionality: preferred stack selection and invalid-tier search/entitlement cases now have automated regression checks.
+- Accessibility: all existing CI accessible-name and serious/critical Axe checks passed, as did copy-control feedback/clipboard checks; manual device/screen-reader review remains unverified.
+- Privacy/security: unauthenticated routes were exercised without creating or exposing user tokens/secrets; CORS allow/deny and no-store behavior are covered by contracts.
+- Performance: Vite build and browser/responsive suite passed; no new production dependency was added.
+- Data quality: canonical seed catalog is unchanged and intentionally bounded; test-only fixtures were not inserted into the catalog; no second database or filler records.
+- Build/test: Build Check 37921788661 **SUCCESS**; Vercel deployment READY.
+- Documentation: handover and START_HERE updated.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise using genuine sessions; never ask the user to paste ID tokens or API secrets into chat.
+2. Verify genuine Ultra API-key issue/rotate/revoke and rejected revoked-key behavior against the deployed API.
+3. Verify deployed Ultra Effects API and allowlisted CORS with a real server-issued key.
+4. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+5. Complete manual production Android/mobile, keyboard and screen-reader audit.
+6. Plan a new npm package version for the hardened source, then publish/verify it only as an explicit release milestone. Keep 1,000+/10,000+ content expansion deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm 0.1.0 publication + clean registry install/import VERIFIED; the hardened feature-branch source needs a separate versioned release; authenticated runtime gates remain**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
