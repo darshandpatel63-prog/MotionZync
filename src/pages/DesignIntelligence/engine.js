@@ -31,7 +31,6 @@ const scoreRecord=(record,tokens)=>{
   return tokens.reduce((score,token)=>score+(haystack.includes(token)?1:0),0)
 }
 const best=(records,tokens,entitlementTier='free',fallback=0,anchorIds=[])=>{
-  const max=levelOf(entitlementTier)
   const allowed=records.filter(record=>isAccessible(record,entitlementTier))
   const pool=allowed.length?allowed:records.filter(record=>record.tier==='free')
   const ranked=pool.map(record=>({record,score:scoreRecord(record,tokens),relationshipScore:relationshipScore(record.id,anchorIds)})).sort((a,b)=>b.score-a.score||b.relationshipScore-a.relationshipScore)
@@ -233,7 +232,6 @@ export function buildRecipe(prompt='',entitlementTier='free',catalogs=CATALOG_BY
 export function searchCatalog(query='',domain='all',entitlementTier='free',catalogs=CATALOG_BY_DOMAIN){
   const catalog=catalogMap(catalogs)
   const domains=domain==='all'?Object.keys(catalog):[domain]
-  const max=levelOf(entitlementTier)
   const results=[]
   for(const currentDomain of domains){
     const records=catalog[currentDomain]
