@@ -10,7 +10,8 @@ import diKnowledgeHandler, {
 import diApiKeyHandler from '../api/di-api-key.js'
 import diEffectsHandler from '../api/di-effects.js'
 import { DI_DOMAINS, validateCatalog } from '../src/pages/DesignIntelligence/schema.js'
-import { buildRecipe } from '../src/pages/DesignIntelligence/engine.js'
+import { buildRecipe, isAccessible, searchCatalog } from '../src/pages/DesignIntelligence/engine.js'
+import { hasEntitlement } from '../src/pages/DesignIntelligence/access.js'
 import { DI_STYLES, DI_PALETTES, DI_TYPOGRAPHY, DI_CHARTS, DI_STACKS, DI_RECIPES } from '../src/pages/DesignIntelligence/catalog.js'
 
 
@@ -39,6 +40,24 @@ assert.equal(ultraFlutterRecipe.stack.id, 'stack-flutter', 'Ultra Premium+ shoul
 const freeIosRecipe = buildRecipe('ios app', 'free', tieredStackTestCatalog)
 assert.notEqual(freeIosRecipe.stack.id, 'stack-swiftui', 'Free recipe must not force an Ultra Premium+ SwiftUI stack')
 assert.equal(freeIosRecipe.stack.tier, 'free')
+
+const invalidTierRecord = {
+  id: 'test-invalid-tier-style',
+  name: 'Classified Test Style',
+  tier: 'unrecognized-tier',
+  tags: ['classified'],
+  description: 'Fixture proving invalid tier data does not become public.',
+  suitedFor: ['SaaS'],
+}
+assert.equal(isAccessible(invalidTierRecord, 'free'), false, 'An unknown record tier must never be treated as Free')
+assert.equal(
+  searchCatalog('classified', 'styles', 'free', { styles: [...DI_STYLES, invalidTierRecord] })
+    .some(record => record.id === invalidTierRecord.id),
+  false,
+  'Free search must exclude records with an unknown tier',
+)
+assert.equal(hasEntitlement('unrecognized-tier', 'ultra-premium'), false, 'Unknown required tiers must fail closed')
+assert.equal(hasEntitlement('premium', 'unrecognized-tier'), false, 'Unknown current tiers must fall back to Free')
 
 const NOW = Date.parse('2026-10-02T12:00:00.000Z')
 const future = new Date(NOW + 24 * 60 * 60 * 1000).toISOString()
