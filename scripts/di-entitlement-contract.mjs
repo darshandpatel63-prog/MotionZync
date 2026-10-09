@@ -137,10 +137,6 @@ async function callHandler(handler, request = {}) {
 
 // Credential-free endpoint contract: public knowledge stays Free, while
 // key/effects routes reject guests before any Firebase/Firestore lookup.
-const guestKnowledge = await callHandler(diKnowledgeHandler)
-assert.equal(guestKnowledge.statusCode, 200, 'Guest knowledge request should remain public')
-assert.deepEqual(guestKnowledge.state, undefined)
-
 const guestResponse = await callHandler(diKnowledgeHandler)
 assert.equal(guestResponse.statusCode, 200, 'Guest knowledge request should remain public')
 assert.deepEqual(guestResponse.body.entitlement, {
