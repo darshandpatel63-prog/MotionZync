@@ -853,3 +853,33 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — CURRENT CONTINUATION CHECKPOINT (COPY-CONTROL CI PENDING)
+
+### IMPLEMENTED
+- Docs and package README now accurately state that public npm version `@motionzync/design-intelligence@0.1.0` is published and clean registry installation/import is verified.
+- Docs command Copy controls announce success/failure using a semantic status region.
+- Design Intelligence browser CI now verifies both copy controls, clipboard contents for the exact installation command and developer example, and success feedback.
+
+### VERIFIED
+- Previous public production free-only knowledge response and invalid-domain rejection remain verified in the preceding checkpoint.
+- npm publication and clean registry installation/import remain VERIFIED.
+
+### UNVERIFIED
+- The latest full CI run, including Chromium clipboard assertions, is pending observation.
+- Production mobile clipboard/screen-reader behavior remains manual verification work.
+- Real authenticated Firebase/Ultra API-key/effects and BYOK execution remain unverified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Observe the current Design Intelligence Build Check; fix any reproduced build/browser/Axe/clipboard failure narrowly.
+2. Complete authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary verification without exposing secrets.
+3. Verify Ultra API-key lifecycle and deployed Effects API/CORS.
+4. Verify BYOK provider/CORS/model compatibility.
+5. Complete the manual production browser/device/keyboard/screen-reader audit.
+6. Close final Phase-A compatibility gates; keep 1,000+/10,000+ data expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; clipboard CI and credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
