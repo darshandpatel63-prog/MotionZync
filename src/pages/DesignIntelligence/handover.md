@@ -4469,3 +4469,45 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm publication + clean registry installation VERIFIED; clipboard CI and remaining credentialed compatibility gates pending**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — Docs copy controls and full Design Intelligence CI VERIFIED
+
+### VERIFIED
+- Full Design Intelligence Build Check run **37920642677** succeeded on feature commit `6bef91249f3a6be076733f78f93acf68fad4d80a`: https://github.com/darshandpatel63-prog/MotionZync/actions/runs/37920642677
+- The exact-head run passed build; Cashfree order contract; BYOK model-registry guard; Firebase entitlement/protected-catalog contract; shared price contract; local npm tarball installation/import; public npm registry installation/import; and the Playwright browser/Axe/responsive smoke suite.
+- The browser test exercised the Docs copy controls in Chromium with clipboard permissions, confirmed the exact text `npm install @motionzync/design-intelligence`, confirmed the multi-line developer example included both search and recipe calls, and observed the accessible “Copied to clipboard.” status message.
+- The browser suite also passed its seven DI route smoke checks, accessible-name checks, serious/critical Axe gate, Explorer/G​enerator interactions, deferred-payment UI contract, Admin Billing smoke checks, mobile/tablet/desktop overflow checks and keyboard focus-visible check.
+- Public npm `@motionzync/design-intelligence@0.1.0` publication and clean registry-backed installation/import remain VERIFIED.
+
+### IMPLEMENTED
+- Copy control success/failure feedback is visible and exposed through a semantic status message.
+- Feature README and in-product Docs accurately describe the already-published npm package.
+- No production route/authentication/entitlement/payment implementation was changed for this documentation/clipboard milestone.
+
+### UNVERIFIED
+- Real Firebase-authenticated Free/Premium/Ultra access and real MotionZync API-key issue/rotate/revoke/revoked-key rejection still require a genuine authenticated session and entitled account.
+- Real deployed Ultra Effects API/CORS, real BYOK provider execution/model/CORS compatibility and manual production Android/mobile screen-reader review remain unverified.
+- Passing the local Chromium clipboard check does not by itself prove clipboard permissions or assistive-technology behavior on every production device/browser.
+
+### MILESTONE AUDIT
+- Regression: full exact-commit Build Check succeeded; unrelated MotionZync routes and core integration files were not changed in this milestone.
+- Functionality: Docs copy controls and their exact clipboard contents are VERIFIED by the browser test.
+- Accessibility: all existing CI serious/critical Axe and accessible-name checks passed; copy success feedback uses `role="status"`. Manual device/screen-reader review remains unverified.
+- Privacy/security: copied values are only the displayed user-requested installation command/example; no credential capture or server submission was introduced.
+- Performance: full build and browser smoke suite passed; no dependency added to production runtime.
+- Data quality: seed catalog remains intentionally bounded; no fabricated records or duplicate DB.
+- Build/test: exact-head run 37920642677 **SUCCESS**.
+- Documentation: handover and START_HERE synchronized to this result.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise without sharing ID tokens or API secrets.
+2. Complete real Ultra API-key issue/rotate/revoke and deployed Ultra-only Effects API/CORS exercise.
+3. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+4. Complete manual production browser/device/keyboard/screen-reader audit, especially on Android/mobile.
+5. Close final Phase-A publication/compatibility review; keep 1,000+/10,000+ verified-data expansion deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication, clean registry install/import and Docs copy-control CI VERIFIED; credentialed compatibility gates remain**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
