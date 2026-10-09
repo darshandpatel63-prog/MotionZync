@@ -198,11 +198,11 @@ export function buildRecipe(prompt='',entitlementTier='free',catalogs=CATALOG_BY
   const palette=best(catalog.palettes,[...tokens,request.industry],entitlementTier,0,[style.id])
   const typography=best(catalog.typography,[...tokens,request.industry],entitlementTier,0,[style.id,palette.id])
   const chart=(request.product==='dashboard'||request.product==='analytics')?best(catalog.charts,tokens,entitlementTier,0,[style.id,palette.id,typography.id]):null
-  const stack=request.platform==='mobile'||request.platform==='android'
-    ?(tokens.includes('flutter')?catalog.stacks.find(r=>r.id==='stack-flutter'):catalog.stacks.find(r=>r.id==='stack-react-native'))
-    :(request.platform==='ios'
-      ?(catalog.stacks.find(r=>r.id==='stack-swiftui')||best(catalog.stacks,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
-      :best(catalog.stacks,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
+  const preferredStackId=request.platform==='mobile'||request.platform==='android'
+    ?(tokens.includes('flutter')?'stack-flutter':'stack-react-native')
+    :request.platform==='ios'?'stack-swiftui':null
+  const stack=(preferredStackId?getAccessibleRecord(catalog.stacks,preferredStackId,entitlementTier):null)
+    ||best(catalog.stacks,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id])
   const recipeMatch=best(catalog.recipes,[...tokens,request.industry,style.id],entitlementTier,0,[style.id,palette.id,typography.id,chart?.id,stack?.id])
   const compositionFamily=request.product==='dashboard'||request.product==='analytics'?'dashboard':request.product==='ecommerce'||request.product==='commerce'?'commerce':request.product==='landing'||request.product==='portfolio'?'editorial':request.product==='mobile'||request.product==='app'?'mobile':request.product==='healthcare'||request.product==='education'||request.product==='admin'?'workspace':'product'
   const candidate={
