@@ -325,9 +325,7 @@ jobs:
           const installCommand = await page.evaluate(() => navigator.clipboard.readText())
           assert(installCommand === 'npm install @motionzync/design-intelligence', 'Copy control did not copy the exact npm installation command')
           await page.locator('.di-code-wrap .di-copy-btn').nth(1).click()
-          await page.locator('.di-code-wrap:nth-of-type(2) .di-copy-status').filter({hasText:'Copied to clipboard.'}).waitFor().catch(async () => {
-            await page.locator('.di-copy-status').filter({hasText:'Copied to clipboard.'}).last().waitFor()
-          })
+          await page.locator('.di-copy-status').filter({hasText:'Copied to clipboard.'}).last().waitFor()
           const exampleCommand = await page.evaluate(() => navigator.clipboard.readText())
           assert(exampleCommand.includes("searchCatalog('healthcare minimal', 'styles', 'free')"), 'Copy control omitted the developer search example')
           assert(exampleCommand.includes("buildRecipe('dark healthcare analytics dashboard', 'free')"), 'Copy control omitted the developer recipe example')
