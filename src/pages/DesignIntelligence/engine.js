@@ -32,13 +32,16 @@ const scoreRecord=(record,tokens)=>{
 }
 const best=(records,tokens,entitlementTier='free',fallback=0,anchorIds=[])=>{
   const max=levelOf(entitlementTier)
-  const allowed=records.filter(record=>levelOf(record.tier)<=max)
+  const allowed=records.filter(record=>isAccessible(record,entitlementTier))
   const pool=allowed.length?allowed:records.filter(record=>record.tier==='free')
   const ranked=pool.map(record=>({record,score:scoreRecord(record,tokens),relationshipScore:relationshipScore(record.id,anchorIds)})).sort((a,b)=>b.score-a.score||b.relationshipScore-a.relationshipScore)
   return (ranked[0]?.score||0)>fallback?ranked[0].record:pool[0]
 }
 
-export const isAccessible=(record,entitlementTier='free')=>!!record&&levelOf(record.tier)<=levelOf(entitlementTier)
+export const isAccessible=(record,entitlementTier='free')=>{
+  const recordLevel=ENTITLEMENT_LEVELS[record?.tier]
+  return !!record&&recordLevel!==undefined&&recordLevel<=levelOf(entitlementTier)
+}
 export const getAccessibleRecord=(records,id,entitlementTier='free')=>{
   const record=records.find(item=>item.id===id)
   return isAccessible(record,entitlementTier)?record:null
@@ -237,7 +240,7 @@ export function searchCatalog(query='',domain='all',entitlementTier='free',catal
     const index=catalogs===CATALOG_BY_DOMAIN?SEARCH_INDEXES[currentDomain]:buildSearchIndex(records)
     if(!records||!index)continue
     for(const record of searchIndex(index,query)){
-      if(levelOf(record.tier)>max)continue
+      if(!isAccessible(record,entitlementTier))continue
       const score=scoreSearchRecord(record,query)
       if(!query||score>0)results.push({record,score})
     }
