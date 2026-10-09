@@ -4384,3 +4384,46 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — Production free-boundary recheck
+
+### VERIFIED
+- The latest observed READY feature deployment is `dpl_FfroGwy6o8WVc6vXDzqfPz4RQQBc` on `feature/design-intelligence`, commit `6fa8155f3befaad1fba30da6d47a213bbeb39115`; its Vercel deployment check reports success.
+- The public production route `GET https://motion-zync.vercel.app/api/di-knowledge` returned HTTP 200 with server-derived `tier: free`, `authenticated: false`, `protectedIncluded: false`, and the bounded free catalog only.
+- The response included `Cache-Control: private, no-store, max-age=0` and `Vary: Authorization`.
+- An unsupported `domain=definitely-unknown` query returned HTTP 400 with `Unknown Design Intelligence domain`.
+- Static review reconfirmed that `scripts/di-entitlement-contract.mjs` covers authenticated-user Premium semantics, expiry fallback, schema validation and Premium-versus-Ultra record separation. This source review is not a substitute for a fresh successful workflow run.
+
+### IMPLEMENTED
+- No runtime application code, access policy, catalog, billing system or existing MotionZync feature was changed in this checkpoint.
+- The observed live boundary result and the exact limits of the available test path are documented for the next session.
+
+### UNVERIFIED
+- Real Firebase-authenticated Free/Premium/Ultra responses remain unverified. The available Vercel preview-fetch path was blocked by its deployment-authentication gate for `/api/di-api-key` and `/api/di-effects`; this is not evidence that those application routes returned an HTTP error.
+- Real API-key issuance/rotation/revocation and revoked-key rejection remain unverified.
+- Real Ultra-only Effects API calls and allowlisted-origin CORS remain unverified.
+- Real BYOK execution, provider-specific CORS/model compatibility, and manual production browser/device/keyboard/screen-reader checks remain unverified.
+- The copy-command control's actual clipboard interaction and screen-reader announcement have not been independently exercised in a fresh browser test.
+
+### CHECKPOINT
+- Regression: read-only public endpoint checks; no source/runtime changes.
+- Functionality: public/free knowledge boundary and invalid-domain rejection are VERIFIED on the public production alias; credentialed boundaries remain UNVERIFIED.
+- Accessibility: no UI changed; prior automated CI evidence remains the baseline; manual accessibility and clipboard interaction remain UNVERIFIED.
+- Privacy/security: no credentials, ID tokens or plaintext API keys were requested, created or exposed during this check.
+- Performance: no runtime changes or performance claims; profiling remains UNVERIFIED.
+- Data quality: the bounded canonical seed catalog remains unchanged; no fabricated records or duplicate database.
+- Build/test: observed READY Vercel deployment and successful Vercel deployment check; no new full GitHub Actions success claim is made for this checkpoint.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete authenticated Firebase Free/Premium/Ultra and MotionZync API-key boundary exercise using real sessions; never paste ID tokens, API keys or other secrets into chat.
+2. Complete real Ultra API-key issue/rotate/revoke plus deployed Ultra-only Effects API/CORS exercise.
+3. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+4. Complete production browser/device/keyboard/screen-reader audit, including the Docs copy-button interaction.
+5. Close the final Phase-A publication/compatibility review; keep the large 1,000+/10,000+ verified-data expansion deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
