@@ -913,3 +913,34 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm publication + clean registry installation/import + clipboard CI VERIFIED; credentialed gates pending**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — CURRENT CHECKPOINT (ACCESS CONTRACTS PASSED)
+
+### VERIFIED
+- Design Intelligence Build Check [37921788661](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/37921788661) succeeded on `14536bb350851077ac1d4683c22247c0ee39526f`.
+- Matching Vercel feature deployment `dpl_DPW1FLdkUovCHvMbVKhHpiqgD3o2` is READY.
+- Tier-aware preferred-stack and invalid-tier regression tests passed, along with guest API-key/Effects rejection, unknown-domain rejection, allowlisted/untrusted CORS, npm local/public install checks, Docs clipboard tests, route smoke tests, accessibility and responsive checks.
+
+### IMPLEMENTED
+- Preferred stack selection now respects the caller's tier.
+- Invalid record tiers fail closed in entitlement/search/recipe access.
+- Contract tests exercise the public guest and unauthenticated server-route boundaries.
+- npm publication wording reflects the existing public `0.1.0` release.
+
+### UNVERIFIED
+- Real authenticated Firebase Free/Premium/Ultra and API-key lifecycle, real deployed Ultra Effects API/CORS and real BYOK provider execution.
+- Manual production Android/mobile, keyboard and screen-reader audit.
+- New access-hardening source changes are not claimed as part of already-published npm `0.1.0`; bump version before any next publication.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify real authenticated Free/Premium/Ultra and MotionZync API-key boundaries without exposing tokens/secrets.
+2. Verify genuine Ultra API-key issue/rotate/revoke and deployed Effects API/CORS.
+3. Verify real BYOK provider/model/CORS compatibility.
+4. Manual production Android/mobile, keyboard and screen-reader audit.
+5. Plan a new npm version for the hardened core and verify the new public consumer install when explicitly releasing; leave dataset expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm 0.1.0 installation/import VERIFIED; hardened source needs a new versioned release; credentialed gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
