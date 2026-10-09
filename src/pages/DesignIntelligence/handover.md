@@ -4427,3 +4427,45 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — Public npm instructions and command-copy regression gate
+
+### IMPLEMENTED
+- Updated the in-product Docs route to state accurately that `@motionzync/design-intelligence@0.1.0` is already published and that clean registry-backed installation/import is verified.
+- Added a visible status announcement after copying a command. Clipboard success reports “Copied to clipboard.”; a denied/unsupported clipboard operation explains that users can select and copy the displayed text manually.
+- Updated the feature package README so its installation and registry-publication sections do not describe a completed release as still future work.
+- Extended the existing Design Intelligence Playwright browser suite to grant clipboard permissions, assert that both Copy controls exist, verify the exact npm install command in the clipboard, verify the developer example text, and check the announced success feedback.
+- No new runtime dependency, second catalog/database, payment launch, or unrelated MotionZync change was introduced.
+
+### VERIFIED
+- Source review confirms the controls use the existing browser Clipboard API, preserve the visible command/example as selectable text, and render the result in a semantic `role="status"` message.
+- The CI workflow source contains the two-control clipboard assertions and exact-command/example checks.
+
+### UNVERIFIED
+- The fresh Design Intelligence Build Check, including actual Chromium clipboard reads and the new assertions, has not yet been observed as successful after these latest commits.
+- Actual clipboard behavior and screen-reader announcement on a production Android/mobile browser still require manual verification.
+- Real Firebase entitlement, MotionZync API-key lifecycle, Ultra effects CORS/runtime and BYOK provider execution remain unverified. The payment UI remains intentionally pending and was not changed.
+
+### CHECKPOINT
+- Regression: changes are limited to Design Intelligence Docs/README/CSS and its existing CI workflow; App.jsx, Navbar.jsx, authentication, server entitlement, billing and payment logic were not altered.
+- Functionality: copy success/failure feedback IMPLEMENTED; automated clipboard assertion IMPLEMENTED, awaiting a passing workflow result.
+- Accessibility: semantic status feedback and visible focus style are present; automated and manual verification of this new control is pending.
+- Privacy/security: clipboard contents are only the command/example the user explicitly clicks to copy; no key/token collection or remote submission was added.
+- Performance: no dependency/runtime network calls added; a tiny UI state update and one CI browser assertion group only.
+- Data quality: canonical catalog unchanged; no filler content or second database.
+- Build/test: current workflow source is updated; the exact latest full CI result remains UNVERIFIED until observed.
+- Documentation: README, Docs, START_HERE and handover updated for the current state.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Observe the fresh Design Intelligence Build Check after the clipboard regression gate was added. If any clipboard/Axe/build assertion fails, diagnose that exact failure and make a narrowly scoped fix; do not claim verification beforehand.
+2. Complete the real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise without sharing ID tokens or API secrets.
+3. Complete real Ultra API-key issue/rotate/revoke plus deployed Ultra-only Effects API/CORS exercise.
+4. Verify real BYOK provider execution, provider-specific CORS and model compatibility.
+5. Complete production browser/device/keyboard/screen-reader audit, including the Docs copy controls.
+6. Close final Phase-A publication/compatibility gates. Keep 1,000+/10,000+ verified-data expansion deferred.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; clipboard CI and remaining credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
