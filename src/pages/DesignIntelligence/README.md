@@ -7,7 +7,7 @@ It is the same canonical core used by MotionZync Web. The npm adapter does **not
 
 ## Installation
 
-After the package is published to the public npm registry:
+The package is publicly published as `@motionzync/design-intelligence@0.1.0` on the public npm registry. Install it with:
 
 ```bash
 npm install @motionzync/design-intelligence
@@ -357,9 +357,9 @@ The goal is to keep the same IDs, schemas, relationships, compatibility rules an
 
 Source package, metadata, tarball creation and clean local installation have been verified in CI.
 
-Public npm registry publication and a registry-backed external installation are currently a separate release gate and are not claimed as complete until the registry package is actually available.
+Public npm registry publication and clean external consumer installation/import for `@motionzync/design-intelligence@0.1.0` are **VERIFIED** by the registry-backed GitHub Actions smoke test. The package remains intentionally bounded to the Phase-A seed catalog.
 
-Once published, the public installation command is:
+The public installation command is:
 
 ```bash
 npm install @motionzync/design-intelligence
