@@ -17,6 +17,7 @@ on:
       - ".github/workflows/design-intelligence-build.yml"
       - "api/**"
       - "scripts/di-cashfree-contract.mjs"
+      - "scripts/di-entitlement-contract.mjs"
 
 concurrency:
   group: design-intelligence-build-${{ github.ref }}
