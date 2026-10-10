@@ -4827,3 +4827,21 @@ FIRST UNFINISHED TASK remains:
 1. Create a normal follow-up commit after the two-parent merge commit and verify Vercel can resolve Git metadata/build a READY preview. Do not merge PR #3 into main while the feature preview remains unresolved.
 2. After the follow-up preview is READY, merge PR #3 only if CI/preview checks remain green; then verify main CI + production deployment.
 3. Perform real Firebase/main-domain and physical-device/API tests at the end, as requested.
+
+## 2026-10-10 — Browser test stability and pre-main verification
+
+### IMPLEMENTED
+- Updated the DI Playwright workflow to block only external Google AdSense measurement/ad requests in the isolated CI browser. Production AdSense code/settings are unchanged; this removes nondeterministic third-party scripts from the UI regression test.
+
+### VERIFIED
+- The main-history merge commit's build/contracts/npm checks passed. Its PR-triggered browser run 38053826724 passed.
+- The same SHA's push-triggered browser run 38053823256 failed only because the third-party AdSense RUM script threw an "int64" pageerror. No Design Intelligence source assertion failed. The matching post-merge feature preview dpl_HYJHaZzX8UmbZUYW1Tw8SeC6ZRFz is READY.
+
+### UNVERIFIED
+- The updated CI-head browser run and matching preview still require verification before merge to main.
+- Real Firebase admin login, real Firestore policy persistence, API key lifecycle, Effects/CORS/BYOK, and physical-device checks remain deferred until main deployment.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify the new CI head after isolating third-party AdSense scripts.
+2. Merge PR #3 only after exact-head checks pass and the matching Vercel preview is READY.
+3. Verify main deployment, then perform genuine Firebase/admin/API and physical-device checks last.

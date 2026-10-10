@@ -1081,3 +1081,21 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 
 ### UNVERIFIED
 - Current reconciled merge commit CI/preview, main deployment, real Firebase admin login/API-key lifecycle and physical-device checks are still pending.
+
+## 2026-10-10 — Pre-main browser CI stability checkpoint
+
+### IMPLEMENTED
+- The browser test now blocks external AdSense measurement requests inside Playwright CI only so third-party RUM failures do not make DI checks flaky. Production advertising configuration is untouched.
+
+### VERIFIED
+- The main-history merge commit's build/contracts/npm checks passed, and PR-triggered run 38053826724 passed. One push-triggered run failed on a pageerror originating in Google's external AdSense RUM script, not the Design Intelligence app.
+- The post-merge feature preview is READY at deployment dpl_HYJHaZzX8UmbZUYW1Tw8SeC6ZRFz. Live guest knowledge remained Free-only, forged tier claims did not reveal protected records, and unknown domains returned HTTP 400.
+
+### UNVERIFIED
+- The latest workflow change must pass on its own exact head before merge.
+- Genuine Firebase/admin/API and physical-device checks stay last, using the main-domain deployment.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify the current-head CI and preview after external script isolation.
+2. Merge to main only when those gates pass.
+3. Test the genuine Firebase admin account, real policy write/read, API-key/effects/BYOK, and physical Android accessibility last.

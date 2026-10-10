@@ -169,6 +169,10 @@ jobs:
               },
             })
           })
+          // External AdSense measurement scripts are not part of DI UI behavior and
+          // can throw transient third-party errors; block them in isolated CI only.
+          await page.route('**/pagead2.googlesyndication.com/**', route => route.abort())
+          await page.route('**/googleads.g.doubleclick.net/**', route => route.abort())
           await page.route('**/identitytoolkit.googleapis.com/**', async route => {
             const url = route.request().url()
             if (url.includes('/accounts:lookup')) {
