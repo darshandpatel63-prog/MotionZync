@@ -42,7 +42,7 @@ export default function DesignIntelligenceGenerator(){
   const {activeProvider,activeModel,getConfig,generateText,isLoading}=useAI()
   const {user}=useAuth()
   const [catalog,setCatalog]=useState(PUBLIC_CATALOG)
-  const [entitlementTier,setEntitlementTier]=useState('free')
+  const [entitlementTier,setEntitlementTier]=useState('free');const [designAccessTier,setDesignAccessTier]=useState('free');const [contentAccessReason,setContentAccessReason]=useState('public-free')
   const [knowledgeState,setKnowledgeState]=useState('Loading free knowledge…')
   const [prompt,setPrompt]=useState(EXAMPLES[0]);const [submitted,setSubmitted]=useState(EXAMPLES[0]);const [previewViewport,setPreviewViewport]=useState('desktop');const [recipeChoices,setRecipeChoices]=useState({style:'',palette:'',typography:'',stack:''});const [aiEnabled,setAiEnabled]=useState(false);const [aiStatus,setAiStatus]=useState('');const [aiOutput,setAiOutput]=useState(null)
 
@@ -53,7 +53,9 @@ export default function DesignIntelligenceGenerator(){
         if(!active)return
         setCatalog(prev=>mergeKnowledgeCatalog(prev,result.catalogs))
         setEntitlementTier(result.entitlementTier||'free')
-        setKnowledgeState(result.protectedIncluded?'Verified entitlement knowledge loaded.':'Free knowledge loaded.')
+        setDesignAccessTier(result.designAccessTier||result.entitlementTier||'free')
+        setContentAccessReason(result.contentAccessReason||'public-free')
+        setKnowledgeState(result.ultraContentIncluded&&result.entitlementTier==='premium'?'Ultra Premium design content is shared by the current admin policy; developer API access stays Premium-restricted.':result.protectedIncluded?'Verified entitlement knowledge loaded.':'Free knowledge loaded.')
       })
       .catch(error=>{
         if(!active)return
@@ -62,29 +64,29 @@ export default function DesignIntelligenceGenerator(){
     return()=>{active=false}
   },[user])
 
-  const deterministicRecipe=useMemo(()=>buildRecipe(submitted,entitlementTier,catalog),[submitted,entitlementTier,catalog])
+  const deterministicRecipe=useMemo(()=>buildRecipe(submitted,designAccessTier,catalog),[submitted,designAccessTier,catalog])
   const aiRefinedRecipe=useMemo(()=>{
     if(!aiOutput)return deterministicRecipe
-    const candidate={...deterministicRecipe,style:getAccessibleRecord(catalog.styles,aiOutput.styleId,entitlementTier)||deterministicRecipe.style,palette:getAccessibleRecord(catalog.palettes,aiOutput.paletteId,entitlementTier)||deterministicRecipe.palette,typography:getAccessibleRecord(catalog.typography,aiOutput.typographyId,entitlementTier)||deterministicRecipe.typography,stack:getAccessibleRecord(catalog.stacks,aiOutput.stackId,entitlementTier)||deterministicRecipe.stack,layout:typeof aiOutput.layout==='string'&&aiOutput.layout.trim()?aiOutput.layout:deterministicRecipe.layout,navigation:typeof aiOutput.navigation==='string'&&aiOutput.navigation.trim()?aiOutput.navigation:deterministicRecipe.navigation,warnings:[...deterministicRecipe.warnings,...(Array.isArray(aiOutput.warnings)?aiOutput.warnings.filter(v=>typeof v==='string').slice(0,5):[])],aiAssisted:true}
+    const candidate={...deterministicRecipe,style:getAccessibleRecord(catalog.styles,aiOutput.styleId,designAccessTier)||deterministicRecipe.style,palette:getAccessibleRecord(catalog.palettes,aiOutput.paletteId,designAccessTier)||deterministicRecipe.palette,typography:getAccessibleRecord(catalog.typography,aiOutput.typographyId,designAccessTier)||deterministicRecipe.typography,stack:getAccessibleRecord(catalog.stacks,aiOutput.stackId,designAccessTier)||deterministicRecipe.stack,layout:typeof aiOutput.layout==='string'&&aiOutput.layout.trim()?aiOutput.layout:deterministicRecipe.layout,navigation:typeof aiOutput.navigation==='string'&&aiOutput.navigation.trim()?aiOutput.navigation:deterministicRecipe.navigation,warnings:[...deterministicRecipe.warnings,...(Array.isArray(aiOutput.warnings)?aiOutput.warnings.filter(v=>typeof v==='string').slice(0,5):[])],aiAssisted:true}
     const compatibility=evaluateCompatibility(candidate)
-    const validation=validateRecipe({...candidate,compatibility},entitlementTier,catalog)
+    const validation=validateRecipe({...candidate,compatibility},designAccessTier,catalog)
     return validation.valid?{...candidate,compatibility,warnings:[...candidate.warnings,...validation.warnings]}:deterministicRecipe
-  },[aiOutput,deterministicRecipe,catalog,entitlementTier])
+  },[aiOutput,deterministicRecipe,catalog,designAccessTier])
 
   const recipe=useMemo(()=>{
     const candidate={
       ...aiRefinedRecipe,
-      style:getAccessibleRecord(catalog.styles,recipeChoices.style,entitlementTier)||aiRefinedRecipe.style,
-      palette:getAccessibleRecord(catalog.palettes,recipeChoices.palette,entitlementTier)||aiRefinedRecipe.palette,
-      typography:getAccessibleRecord(catalog.typography,recipeChoices.typography,entitlementTier)||aiRefinedRecipe.typography,
-      stack:getAccessibleRecord(catalog.stacks,recipeChoices.stack,entitlementTier)||aiRefinedRecipe.stack,
+      style:getAccessibleRecord(catalog.styles,recipeChoices.style,designAccessTier)||aiRefinedRecipe.style,
+      palette:getAccessibleRecord(catalog.palettes,recipeChoices.palette,designAccessTier)||aiRefinedRecipe.palette,
+      typography:getAccessibleRecord(catalog.typography,recipeChoices.typography,designAccessTier)||aiRefinedRecipe.typography,
+      stack:getAccessibleRecord(catalog.stacks,recipeChoices.stack,designAccessTier)||aiRefinedRecipe.stack,
     }
     const compatibility=evaluateCompatibility(candidate)
-    const validation=validateRecipe({...candidate,compatibility},entitlementTier,catalog)
+    const validation=validateRecipe({...candidate,compatibility},designAccessTier,catalog)
     return validation.valid
       ? {...candidate,compatibility,warnings:[...candidate.warnings,...validation.warnings]}
       : {...aiRefinedRecipe,warnings:[...aiRefinedRecipe.warnings,'One or more custom choices were ignored because they failed compatibility or access validation.']}
-  },[aiRefinedRecipe,recipeChoices,catalog,entitlementTier])
+  },[aiRefinedRecipe,recipeChoices,catalog,designAccessTier])
   const tokens=recipeToTokens(recipe)
   const previewStyle={background:recipe.palette.background,color:recipe.palette.text,'--di-accent':recipe.palette.accent,'--di-cta':recipe.palette.cta}
   const runAI=async()=>{
@@ -94,7 +96,7 @@ export default function DesignIntelligenceGenerator(){
     try{
       setAiStatus('AI is refining the deterministic Design Recipe…')
       const base=buildRecipe(prompt,entitlementTier,catalog)
-      const text=await generateText(activeProvider,'You are the execution model connected to MotionZync Design Intelligence. The Design Intelligence layer supplies the canonical knowledge, constraints, relationships and allowed record IDs. Refine the recipe; do not invent records.\n\n'+buildDIContext(prompt,base,catalog,entitlementTier)+'\n\nReturn JSON with only these optional fields: styleId, paletteId, typographyId, stackId, layout, navigation, warnings.')
+      const text=await generateText(activeProvider,'You are the execution model connected to MotionZync Design Intelligence. The Design Intelligence layer supplies the canonical knowledge, constraints, relationships and allowed record IDs. Refine the recipe; do not invent records.\n\n'+buildDIContext(prompt,base,catalog,designAccessTier)+'\n\nReturn JSON with only these optional fields: styleId, paletteId, typographyId, stackId, layout, navigation, warnings.')
       const parsed=extractJson(text)
       if(!parsed){setAiStatus('AI returned an invalid structure; the deterministic recipe remains active.');return}
       setAiOutput(parsed);setAiStatus('AI-assisted recipe applied. Unknown IDs were safely ignored; the preview is deterministic and non-executable.')
