@@ -40,7 +40,7 @@ export const DEFAULT_DI_ACCESS_POLICY = Object.freeze({
 })
 
 function localIndiaDateTimeMs(date, time) {
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date) || !/^\\d{2}:\\d{2}$/.test(time)) return null
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return null
   const value = Date.parse(date + 'T' + time + ':00+05:30')
   if (!Number.isFinite(value)) return null
   const parsed = new Date(value + (5.5 * 60 * 60 * 1000))
