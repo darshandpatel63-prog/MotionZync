@@ -4911,3 +4911,62 @@ FIRST UNFINISHED TASK remains:
 1. Verify real admin login and access-policy persistence from https://motion-zync.vercel.app/admin using the configured account; do not paste Firebase tokens or secrets into chat.
 2. Test API key issue/rotate/revoke and Effects/CORS/BYOK with authorized accounts.
 3. Finish physical device and manual accessibility checks last.
+
+
+## 2026-10-10 — Kimi-generated 3,600-design bundle: safe import checkpoint
+
+### IMPLEMENTED
+- Created scripts/di-design-bundle-import.py and .github/workflows/design-intelligence-bundle-import.yml. The workflow is restricted to feature/design-intelligence, pins the reviewed outer/inner archive SHA-256, audits nested ZIP contents, validates file paths, repairs known unresolved JSX placeholders, validates the staged pack and existing app build, and commits only the approved asset directory. Re-runs are add-only/idempotent: matching files are skipped and conflicting or unexpected files cause a hard failure.
+- Created scripts/di-design-bundle-audit.py and .github/workflows/design-intelligence-bundle-audit.yml to produce an auditable inventory before import.
+- Imported the Kimi bundle into src/pages/DesignIntelligence/ui-design-bundle/; bundle root contents are stored once, without an extra nested top-level bundle folder and without copying a ZIP into the source tree.
+- Added shared/parts/GeneratedParts.jsx and repaired all 3,600 Design.jsx components to replace undefined BENTO/ROWS5/CARDS2/CARDS4/FLOATINGNODES/PARAGRAPHS/TIMELINEITEMS/FORMFIELDS/CARDS6/TABLEROWS JSX expressions with imported static React components keyed by each design ID.
+- Updated the bundle validator to require the shared-parts helper and detect unexpanded references. Replaced the static preview-index builder with an HTML-escaping version to avoid injecting manifest text into generated HTML.
+- Documented the bundle as a review-only asset pack. No catalog, Firestore collection, entitlement logic, authentication route, payment route, API-key permission, or production secret was modified by this import.
+
+### VERIFIED
+- Original outer archive path: zip-upload-folder/Kimi_Agent_Direct Zip Download.zip.
+- Reviewed outer archive SHA-256: 8a272ca2f3614e9247030eefe667b905b64512e025ae68a263d3ac9a637b0e6b.
+- Reviewed inner archive SHA-256: 6361469e05954db6b7a8ad4f4f05ad11826e2d8127f7c7e1522ca51e500dd687.
+- Audit workflow run 38069287318 completed SUCCESS and published a report/file inventory/review artifact.
+- Import workflow run 38070025991 completed SUCCESS on importer source commit 1b2c325518971420e4093f93df3ba146e61cab3e. Workflow link: https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38070025991.
+- Asset commit pushed to feature/design-intelligence: 78a8235 (feat(di): add validated 3600-design UI asset bundle). Commit log confirms the changed-file paths stay beneath src/pages/DesignIntelligence/ui-design-bundle/.
+- Bundle validator result: ALL GATES PASSED; 3,600 unique IDs; 18 categories; each category has 100 Premium and 100 Ultra Premium+ entries; themes on each design include light/dark/colorful; manifest paths resolve; no unresolved macro placeholders after repair; no TODO/placeholder or tiny JSX files; 3,600 unique structural fingerprints; secrets scan passed; no unsafe injection patterns in the components/shell; focus-visible, reduced-motion and responsive CSS rules are present in all 3,600 design CSS files.
+- JSX syntax transform passed for 3,602 files (3,600 designs plus GeneratedParts.jsx and PreviewShell.jsx).
+- Existing MotionZync app Vite build passed with the imported asset folder in the checkout: built in 2.56 seconds. It uses the current CI placeholder Firebase env values and did not use VITEMOTIONAPI.
+- 10,820 files were staged in the asset folder: 3,600 Design.jsx, 3,600 design.css, 3,600 NOTES.md, 18 support/manifest/preview/helper items plus generated import notes/helper adjustments (the validator/commit inventory is authoritative if this breakdown is queried). No zip archive was committed into the asset folder.
+- VITEMOTIONAPI metadata was checked without decrypting its value: environment type is Sensitive with configured environment targets; secret value was not read, logged, copied to source or exposed to browser code. Import does not need the API.
+
+### UNVERIFIED
+- This checkpoint is a successful feature-branch import only; it is not yet evidence that the design assets are present on main.
+- Exact-head full regression checks on the post-import documentation commit and subsequent PR head must pass before merging to main.
+- Full human visual review and original/meaningful diversity across all 3,600 is NOT VERIFIED. The bundle validator's fingerprints are a structural heuristic only.
+- Bundle components have not been registered in the Explorer/Generator and are not yet live user-facing designs. The asset pack is deliberately not a new database or a replacement for the canonical catalog.
+- A production deployment after the import, Vercel clone/build effects, real browser screenshot spot checks, runtime theme switching, screen-reader/keyboard/device review remain UNVERIFIED.
+- Real Firebase admin login, persisted siteContent/designIntelligenceAccess behavior, actual Premium/Ultra account checks, API-key issue/rotate/revoke/hash-only storage, Effects/CORS, live BYOK and Cashfree entitlement remain UNVERIFIED.
+- Do not claim full visual checks or live design selection based on the manifest count.
+
+### MILESTONE AUDIT
+- Regression: Vite app build passed after the folder was present. Full exact-head regression suite must be run after docs sync and checked again on the PR.
+- Functionality: manifest paths and JSX parse checks passed; shared component placeholders were repaired. No production routes or catalog integration were changed.
+- Accessibility: each CSS passed the required source-rule presence checks. Real rendering, keyboard flow and screen-reader checks remain unverified.
+- Privacy/security: ZIP member paths, symlinks, path collisions, CRCs and both archive hashes were checked. Static source scan found no private-key/token-like signatures. No VITEMOTIONAPI value was accessed. Imported components make no remote API calls.
+- Performance: build time for the existing app was 2.56 seconds. The UI pack is large; production deploy duration, preview loading and device memory/interaction are not yet measured.
+- Data quality: exact counts/unique IDs/category-tier minimums and manifest paths passed. The ten undefined macro names were detected and repaired; no second DB or fake entitlement rows were created.
+- Build/test: workflow 38070025991 SUCCESS. First two importer attempts correctly stopped before commit: one found the existing root package/package-lock mismatch; the next found an over-broad validator text replacement. Both were fixed, and the final run passed every step and pushed the asset commit. Do not list those failed attempts as production/source failures.
+- Documentation: START_HERE.md and this handover are being updated to record the latest state and next unfinished tasks.
+
+### STATUS
+- Design bundle import: IMPLEMENTED on feature/design-intelligence and VERIFIED by its import workflow and app build.
+- Main branch import: PLANNED / FUTURE until the post-import PR and exact-head checks pass.
+- Explorer/Generator integration: PLANNED / FUTURE.
+- Human visual originality review: UNVERIFIED.
+- Current server-authoritative access policy and API-secret boundaries are retained; no client-side premium or API entitlement shortcut was added.
+- VITEMOTIONAPI: configured as Sensitive environment metadata; future API consumption must be server-side via an existing/approved backend route, never by embedding the value in import.meta.env or browser code.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Finish this handover update and let the full Design Intelligence Build Check run on the resulting exact feature head. Inspect build/contracts/npm/Playwright/a11y steps, not just the importer workflow.
+2. Create or update the PR from feature/design-intelligence to main; verify the bundle commit is included, no unexpected paths/files changed, and all required exact-head checks pass before merge.
+3. After merge, verify main CI and a READY production deployment. Do not call the source assets live until the Explorer/Generator catalog registration is implemented separately.
+4. Add a controlled registration layer from the existing manifest into the canonical DI catalog/selector. Honor existing server-side content visibility and entitlement checks; do not create a second database or let asset tier labels grant access. Perform this in a separate scoped change with its own tests.
+5. Human spot-check representative layouts by category and theme, visual diversity, mobile/tablet/desktop overflow, keyboard, reduced-motion and screen-reader behavior. Full 3,600-design visual review remains UNVERIFIED until evidence exists.
+6. Keep real Firebase/admin, API-key lifecycle, Effects/CORS/BYOK and physical-device checks last. Never request or log the VITEMOTIONAPI value, Firebase ID tokens, service-account keys or other secrets in chat.
