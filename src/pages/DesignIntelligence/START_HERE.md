@@ -1042,3 +1042,29 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 1. Verify current-head preview/build and any available exact-head browser CI.
 2. Verify the real admin Gmail account through a genuine Firebase session; do not share ID tokens or keys in chat.
 3. Continue the UI-generation workflow from the one canonical core; do not claim a full live application renderer exists yet.
+
+## 2026-10-10 — Tier access policy, scheduled offer and design-bundle prompt
+
+### IMPLEMENTED
+- Added a protected server-side access-policy setting in the existing Firestore siteContent collection (no second database).
+- Ultra design sharing for authenticated Premium accounts defaults ON; it controls knowledge visibility only, not subscription tier, API eligibility or API-only special effects.
+- Admin Settings includes a switch plus a scheduled festival offer with India date/time start and end. With the master switch OFF, the offer works only between the saved start-inclusive/end-exclusive IST times; guests remain Free.
+- Explorer has category/domain and Simple / Free, Premium, Ultra Premium+ tier filters. Generator recipe choices use separate server-authorized design visibility and account entitlement.
+- Added a Claude master prompt for a single ZIP containing at least 100 Premium and 100 Ultra Premium+ designs per each of 18 categories, with light, dark and colorful theme support and validation scripts.
+
+### VERIFIED
+- Prior exact code/test head 2000968913ded33933481fa1b5077860f4cb0ff1 passed full Design Intelligence CI run 38053111652 and its matching Vercel feature preview is READY.
+- Live guest and forged-query checks returned Free-only content, zero protected records for guests, private/no-store cache headers and HTTP 400 for an unknown domain.
+- Physical/main-domain Firebase login, real Firestore policy writes and authenticated API lifecycle remain unverified.
+
+### UNVERIFIED
+- Genuine main-domain admin Gmail/Firebase login and actual ADMIN_EMAIL server configuration.
+- Real policy save/reload and real Premium/Ultra user access, API-key lifecycle, Effects/CORS and BYOK.
+- Physical Android/mobile/keyboard/screen-reader checks.
+- The design ZIP has not been produced yet; the prompt file is ready for Claude.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Re-run CI and preview checks for the next documentation/test synchronization commit.
+2. Review and incorporate the six newer main-branch commits, keeping existing main work intact, then merge only after tests pass.
+3. Complete real Firebase/API and physical-device tests against the main-domain deployment at the end.
+4. Review the ZIP Claude returns before integrating any design components.

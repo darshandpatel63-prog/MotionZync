@@ -107,6 +107,11 @@ assert.deepEqual(ultraSubscriptionContent, { contentTier: 'ultra-premium', reaso
 const defaultAccessPolicy = normalizeDesignIntelligenceAccessPolicy(DEFAULT_DI_ACCESS_POLICY)
 assert.equal(defaultAccessPolicy.shareUltraWithPremium, true, 'Ultra design sharing must default ON')
 assert.equal(defaultAccessPolicy.festivalOffer.enabled, false, 'Festival offer must default OFF')
+assert.equal(
+  normalizeDesignIntelligenceAccessPolicy({ shareUltraWithPremium: 'false' }).shareUltraWithPremium,
+  false,
+  'Malformed non-boolean access policy values must fail closed',
+)
 assert.equal(getDesignIntelligenceAccessState(defaultAccessPolicy, NOW).premiumCanAccessUltraContent, true)
 
 const scheduledOfferPolicy = normalizeDesignIntelligenceAccessPolicy({

@@ -4741,3 +4741,52 @@ FIRST UNFINISHED TASK remains:
 2. Confirm the configured admin email with a genuine Firebase-authenticated session in the deployed preview; never ask for or paste ID tokens/keys into chat.
 3. Test real API-key lifecycle, Effects/CORS and BYOK via an authorized test session; finish manual Android accessibility review.
 4. Continue UI generation from the canonical recipe core (real editable components and a fuller application renderer are still future work), without inflating catalog counts or claiming a live app renderer exists.
+
+## 2026-10-10 — Server-authoritative tier sharing, festival offer and UI bundle prompt
+
+### IMPLEMENTED
+- Added the server-owned Design Intelligence access policy to the existing Firestore database under the existing siteContent collection (document designIntelligenceAccess). No new database or catalog store was created.
+- Default policy: shareUltraWithPremium = true, so every authenticated Premium account can browse Ultra Premium+ design records by default. The response preserves the user's real entitlement tier and separately reports contentTier; design visibility does not grant Ultra subscription status, API-key eligibility, or API-only effects.
+- When the master sharing switch is OFF, a saved festival offer can temporarily expose Ultra design records only to signed-in accounts between an exact start date/time and end date/time in Asia/Kolkata (IST). The offer is inactive outside the start-inclusive/end-exclusive interval. Guests remain Free. Bad dates, missing schedule fields, inverted windows, malformed boolean settings, and policy-read failures do not expose Ultra records.
+- Admin Panel → Settings now includes the access switch, an OFF-by-default timed festival offer, start/end date and time inputs, reload/save controls, and server-status copy. The API independently protects reads/writes with the existing requireAdmin Firebase identity check.
+- Design Intelligence Explorer now filters separately among All tiers, Simple / Free, Premium, and Ultra Premium+ records. Generator filters and recipe validation use the server-authorized content tier while account labels remain tied to real entitlement.
+- Added MotionZync_Premium_Ultra_UI_Design_Bundle_Claude_Prompt.md. It instructs Claude to produce one ZIP with at least 100 Premium and 100 Ultra Premium+ designs in each of 18 categories (3,600 minimum), each supporting light, dark and colorful themes, plus source, manifest and validation tooling. No bundle of 3,600 designs has been generated or added by this change; the prompt is the deliverable.
+- Updated pricing copy to distinguish admin-shared Ultra design visibility from account/API entitlements.
+
+### VERIFIED
+- Exact-head Design Intelligence Build Check run 38053111652 completed SUCCESS on code/test head 2000968913ded33933481fa1b5077860f4cb0ff1. Vite build, Cashfree order contract, BYOK model registry, entitlement/content-visibility contracts, shared price contract, local npm install/import, published npm registry install/import, Playwright route and interaction tests, browser accessibility-name checks, Axe serious/critical gate, responsive layout, and keyboard-focus gate passed.
+- Browser CI tested the Admin Settings controls (sharing ON by default, timed offer OFF by default, date/time entry, saving through the mocked admin endpoint) and existing generator customization + responsive preview controls. These are browser mocks and do not prove a real Firebase policy write.
+- Matching Vercel preview deployment dpl_EmFs2BrwvsfG8FZ1ybXBnoJF8r8E (code/test head 2000968913ded33933481fa1b5077860f4cb0ff1) is READY.
+- Live guest GET /api/di-knowledge on that READY preview returned HTTP 200; actual tier Free, contentTier Free, authenticated false, ultraContentIncluded false, 35 Free records and protectedRecordCount 0, with private/no-store caching.
+- Live forged query claims tier=ultra-premium&entitlement=ultra-premium still returned Free-only records and protectedRecordCount 0. Unknown domain was rejected with HTTP 400.
+- The current deployed Explorer JS/CSS assets returned HTTP 200 and contain the tier filters and Admin access/offer setting text and styling.
+- Direct preview fetches for Admin-only/API-key endpoints remain blocked at the Vercel Deployment Protection layer in this tool path; that restriction is not treated as an application-level failure.
+
+### UNVERIFIED
+- The production value of server-only ADMIN_EMAIL has not been inspected. The configured admin Gmail has not logged in through the genuine main-domain Firebase session from this tool environment.
+- Real Firebase sign-in, real Firestore saving/reloading of the sharing policy, effective content visibility for real users, real Ultra subscription/API-key issue/rotate/revoke/hash-only storage/revoked-key rejection, Effects API/CORS, real BYOK provider execution and actual Cashfree payment entitlement remain UNVERIFIED.
+- Physical Android/mobile, device-specific keyboard and screen-reader tests remain UNVERIFIED and are deliberately deferred until after verified code reaches the main-domain deployment.
+- The Claude ZIP has not yet been generated. It must be reviewed for actual per-category counts, duplicates, security, theme coverage and compatibility before importing any designs.
+
+### MILESTONE AUDIT
+- Regression: current-head automated build/contracts/browser tests passed; unrelated route/auth/Firebase settings and public payment-launch state were not intentionally redesigned.
+- Functionality: policy uses existing server-side Firebase Admin/Firestore; timed offers are exact-window and server-enforced, not a frontend countdown entitlement.
+- Accessibility: Admin settings use labeled native inputs, role/status messages and visible focus; Playwright/Axe/keyboard checks passed; physical/manual screen-reader review remains UNVERIFIED.
+- Privacy/security: no secrets or real user tokens added; admin policy write requires requireAdmin; guest requests cannot use offers; policy errors fail closed.
+- Performance: current policy document is one small read on authenticated Premium knowledge requests; production latency profiling remains UNVERIFIED.
+- Data quality: no fictional billing records, entitlements, API keys or catalog rows were added.
+- Build/test: exact-head run 38053111652 SUCCESS and matching code preview READY; the next docs/test synchronization commit still needs its own CI/deployment verification.
+- Documentation: handover and START_HERE updated with status boundaries and next tasks.
+
+### STATUS
+- Phase A — Engine / System: 98% — IN PROGRESS; true authenticated API gates are not complete.
+- Phase B — Publish: public npm 0.1.0 remains verified only for its published contents; these new source changes require a future versioned release if package publication is requested.
+- Phase C — Continuous Content Expansion: 0% — NOT STARTED. The Claude prompt exists, but design assets and evidence-backed catalog expansion remain future work.
+- Payment launch UI remains intentionally pending.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Run and verify the combined docs/test synchronization commit and matching feature preview; current latest-main divergence must also be reviewed before promoting code.
+2. Safely incorporate the six newer main-branch commits (notably DesignIntelligenceDocs.jsx, DesignIntelligence/README.md and the npm-publish workflow), preserve both sides' intended changes and rerun CI before merging the complete verified feature to main.
+3. After the main-domain deployment is ready, test the genuine admin Gmail/Firebase session and real Firestore policy write/read through the main URL. Never paste an ID token or secret into chat.
+4. Then complete authorized API-key, effects/CORS, BYOK and physical-device tests. Keep these last, as requested.
+5. When Claude returns the ZIP, validate counts, diversity, light/dark/colorful themes, build/security/accessibility and manifest paths before integrating any templates.

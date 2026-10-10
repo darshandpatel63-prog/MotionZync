@@ -305,6 +305,13 @@ jobs:
             if (route.endsWith('/explorer')) {
               await page.locator('#di-search').fill('healthcare')
               assert((await page.locator('.di-record').count()) > 0, 'Explorer search did not produce a healthcare result')
+              const simpleTier = page.getByRole('button', {name:'Simple / Free', exact:true})
+              await simpleTier.click()
+              assert((await simpleTier.getAttribute('aria-pressed')) === 'true', 'Explorer simple/free tier filter did not expose selected state')
+              assert((await page.locator('.di-record').count()) > 0, 'Free-tier filtering unexpectedly hid all local Free designs')
+              const allTiers = page.getByRole('button', {name:'All tiers', exact:true})
+              await allTiers.click()
+              assert((await allTiers.getAttribute('aria-pressed')) === 'true', 'Explorer All tiers filter did not reset selected state')
               const stylesChip = page.getByRole('button', {name:'Styles', exact:true})
               await stylesChip.click()
               assert((await stylesChip.getAttribute('aria-pressed')) === 'true', 'Explorer domain button did not expose selected state')
