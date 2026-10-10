@@ -119,14 +119,72 @@ def main():
                 if not dest.resolve().is_relative_to(extracted.resolve()): raise ValueError("entry would escape extraction root")
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 with zf.open(item) as src, dest.open("wb") as dst: shutil.copyfileobj(src,dst,1024*1024)
-            inventory = sorted(p.relative_to(extracted).as_posix() for p in extracted.rglob("*") if p.is_file())
+            incoming_root = extracted
+            nested_archives = [p for p in extracted.rglob("*") if p.is_file() and p.suffix.lower() == ".zip"]
+            if nested_archives:
+                if len(nested_archives) != 1:
+                    raise ValueError("multiple nested ZIPs found; explicit selection is required")
+                nested_archive = nested_archives[0]
+                lines += ["", "## Nested bundle ZIP", "",
+                          "The outer upload ZIP contains a second ZIP: " + nested_archive.relative_to(extracted).as_posix(),
+                          "The inner ZIP is audited as the actual bundle; it is never copied as a runtime asset."]
+                inner_digest = sha256_file(nested_archive)
+                inner_size = nested_archive.stat().st_size
+                if inner_size > MAX_ARCHIVE_BYTES:
+                    raise ValueError("nested bundle ZIP exceeds configured compressed-size cap")
+                with zipfile.ZipFile(nested_archive) as inner:
+                    inner_infos = inner.infolist()
+                    inner_issues, inner_exact, inner_folded = [], set(), {}
+                    inner_total = 0
+                    for inner_info in inner_infos:
+                        for issue in validate_member(inner_info):
+                            inner_issues.append((inner_info.filename, issue))
+                        normalized = inner_info.filename.replace("\\\\", "/").rstrip("/")
+                        if normalized in inner_exact:
+                            inner_issues.append((inner_info.filename, "duplicate nested ZIP path"))
+                        inner_exact.add(normalized)
+                        folded_key = normalized.casefold()
+                        if folded_key in inner_folded and inner_folded[folded_key] != normalized:
+                            inner_issues.append((inner_info.filename, "case-insensitive nested path collision with " + inner_folded[folded_key]))
+                        else:
+                            inner_folded[folded_key] = normalized
+                        inner_total += inner_info.file_size
+                    if len(inner_infos) > MAX_ENTRIES:
+                        inner_issues.append(("<inner ZIP>", f"entry count exceeds {MAX_ENTRIES}"))
+                    if inner_total > MAX_EXTRACTED_BYTES:
+                        inner_issues.append(("<inner ZIP>", "expanded size exceeds configured cap"))
+                    lines += [f"Inner compressed size: {inner_size:,} bytes",
+                              f"Inner SHA-256: {inner_digest}",
+                              f"Inner entries: {len(inner_infos):,}; declared expanded size: {inner_total:,} bytes"]
+                    if inner_issues:
+                        lines += ["", "Nested ZIP safety issues:"]
+                        lines += [f"- {path} — {issue}" for path, issue in inner_issues[:100]]
+                        raise ValueError("nested ZIP failed safety/integrity gates")
+                    incoming_root = scratch / "inner-bundle"
+                    incoming_root.mkdir(parents=True, exist_ok=True)
+                    for inner_info in inner_infos:
+                        if inner_info.is_dir():
+                            continue
+                        dest = incoming_root.joinpath(*PurePosixPath(inner_info.filename.replace("\\\\", "/")).parts)
+                        if not dest.resolve().is_relative_to(incoming_root.resolve()):
+                            raise ValueError("nested ZIP entry would escape extraction root")
+                        dest.parent.mkdir(parents=True, exist_ok=True)
+                        with inner.open(inner_info) as src, dest.open("wb") as dst:
+                            shutil.copyfileobj(src, dst, 1024*1024)
+                deeper_zips = [p.relative_to(incoming_root).as_posix() for p in incoming_root.rglob("*") if p.is_file() and p.suffix.lower() == ".zip"]
+                if deeper_zips:
+                    lines += ["", "Further nested ZIPs exist inside the inner bundle:"]
+                    lines += ["- " + v for v in deeper_zips[:30]]
+                    raise ValueError("more than two ZIP layers detected; explicit review is required")
+                lines += ["Inner bundle scratch extraction: passed path/symlink/duplicate/case/size checks."]
+            inventory = sorted(p.relative_to(incoming_root).as_posix() for p in incoming_root.rglob("*") if p.is_file())
             inventory_file.write_text("\n".join(inventory)+"\n", encoding="utf-8")
             roots = collections.Counter(v.split("/",1)[0] for v in inventory if "/" in v)
             lines += ["", "## Bundle root candidate", ""]
             lines.append("- All nested files use top folder " + next(iter(roots)) + "; stripping it is a candidate only." if len(roots)==1 else "- Multiple roots/root-level files detected; an explicit mapping will be required.")
             summaries = []
-            for path in extracted.rglob("*.json"):
-                rel = path.relative_to(extracted).as_posix()
+            for path in incoming_root.rglob("*.json"):
+                rel = path.relative_to(incoming_root).as_posix()
                 name = path.name.lower()
                 if "manifest" not in name and name not in {"package.json","catalog.json","designs.json"}: continue
                 if path.stat().st_size > 10*1024*1024:
@@ -164,11 +222,11 @@ def main():
             exec_patterns=[re.compile(r"\beval\s*\("),re.compile(r"\bnew\s+Function\s*\("),
                            re.compile(r"dangerouslySetInnerHTML"),re.compile(r"<script[^>]+src\s*=\s*['\"]https?://",re.I)]
             risky_secret, risky_exec=set(),set()
-            for p in extracted.rglob("*"):
+            for p in incoming_root.rglob("*"):
                 if not p.is_file() or p.stat().st_size>2*1024*1024 or p.suffix.lower() not in {".js",".jsx",".mjs",".cjs",".ts",".tsx",".json",".html",".md",".txt",".css"}: continue
                 try: source=p.read_text(encoding="utf-8")
                 except (UnicodeDecodeError,OSError): continue
-                rel=p.relative_to(extracted).as_posix()
+                rel=p.relative_to(incoming_root).as_posix()
                 if any(expr.search(source) for expr in secret_patterns): risky_secret.add(rel)
                 if p.suffix.lower() in {".js",".jsx",".mjs",".cjs",".ts",".tsx",".html"} and any(expr.search(source) for expr in exec_patterns): risky_exec.add(rel)
             lines += ["", "## Heuristic source-risk scan", "",
