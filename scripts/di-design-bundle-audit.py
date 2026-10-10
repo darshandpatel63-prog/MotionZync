@@ -234,6 +234,14 @@ def main():
             lines += ["  - "+v for v in sorted(risky_secret)[:25]]
             lines.append(f"- Files with dynamic-execution or remote-script patterns: {len(risky_exec)}. Review source before integration.")
             lines += ["  - "+v for v in sorted(risky_exec)[:25]]
+            review_archive = OUT / "review-bundle-source.zip"
+            with zipfile.ZipFile(review_archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as review_zip:
+                for review_path in incoming_root.rglob("*"):
+                    if review_path.is_file():
+                        review_zip.write(review_path, review_path.relative_to(incoming_root).as_posix())
+            lines += ["", "## Source review artifact", "",
+                      f"Built a review-only archive of the validated inner bundle: {review_archive.name} ({review_archive.stat().st_size:,} compressed bytes).",
+                      "This archive is a workflow artifact only; it is not committed to the repo and must not be imported without an explicit mapping.", ""]
             lines += ["", "## Import decision", "",
                       "NOT APPROVED FOR IMPORT YET. This was a safe scratch extraction and audit only. An explicit path map and conflict policy must be reviewed before copying anything into app paths. No app source files or database records were changed.", ""]
         except Exception as exc:
