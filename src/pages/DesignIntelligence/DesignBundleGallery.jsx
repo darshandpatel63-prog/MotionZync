@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext.jsx'
 import { fetchDesignIntelligenceKnowledge } from './knowledgeClient.js'
 import manifest from './ui-design-bundle/manifest.json'
 import './DesignBundleGallery.css'
+import './DesignBundleGalleryThemes.css'
 import './ui-design-bundle/shared/tokens.css'
 
 const DESIGN_MODULES = import.meta.glob('./ui-design-bundle/designs/**/Design.jsx')
