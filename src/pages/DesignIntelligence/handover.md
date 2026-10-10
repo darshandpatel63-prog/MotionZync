@@ -4993,3 +4993,43 @@ FIRST UNFINISHED TASK remains:
 2. Browser-test `/design-intelligence/ui-gallery`: count 3,600; 18 categories; category/tier/search filters; preview load; all four themes; responsive/mobile/keyboard/accessibility; and confirm Explorer's original canonical knowledge flow is unchanged.
 3. Update the deployment/main only after exact-head tests and preview pass. Do not claim 3,600 are in the canonical knowledge API; the Gallery is the template-bundle UI.
 4. Real Firebase/API credentialed and physical-device tests remain UNVERIFIED and must be completed by an authorized human at the end.
+
+
+## 2026-10-10 — Production comparison and UI Gallery regression coverage
+
+### VERIFIED
+- The validated UI asset import remains recorded at commit `78a8235` and import workflow run `38070025991`: 3,600 manifest designs across 18 categories, with 100 Premium and 100 Ultra Premium+ entries per category; the importer validated 3,602 JSX files and built the existing app.
+- The main branch's current commit at the time of inspection was `25e037d84dcb27410e40d9b3164b04935c6e07b3`. Vercel's production alias `motion-zync.vercel.app` was READY on that same `main` commit.
+- `main/src/App.jsx` does not import `DesignBundleGallery` and does not register the `/design-intelligence/ui-gallery` route. The production screenshot therefore correctly shows the existing overview's small canonical seed catalog counters (10 styles, 4 palettes, 5 typography pairs, 6 chart patterns, 8 stacks), not the separate 3,600-template bundle.
+- On `feature/design-intelligence`, `DesignBundleGallery.jsx`, the route in `App.jsx`, and the internal `UI Gallery` navigation link already exist. The current feature-to-main tree comparison showed the gallery wiring and its documentation as changes absent from `main`; PR #4 was merged for the asset pack, not the later Gallery UI wiring.
+- Fixed selection logic so the Gallery preview follows the active filtered result set instead of remaining selected on an item hidden by category/tier/search filters.
+- Expanded the existing Design Intelligence CI workflow to include `/design-intelligence/ui-gallery` in its browser/accessibility route suite, a clearly CI-only Premium fixture for the knowledge endpoint, checks for the 3,600/18 manifest summary and initial rendering bounds, category/tier/search behavior, lazy-loaded preview, all four theme controls, Premium-versus-Ultra UI lock behavior, and responsive horizontal-overflow checks.
+
+### IMPLEMENTED
+- Gallery filter-selection correction and targeted automated browser assertions are committed to `feature/design-intelligence` after the imported asset bundle.
+- The CI authentication/access response added for Gallery browser tests is a deterministic test fixture only; it does not simulate or verify genuine Firebase authentication, server entitlements, or production security.
+
+### UNVERIFIED
+- Exact-head Design Intelligence CI for the Gallery changes, including the large Vite module-glob build and actual preview import, is pending.
+- Matching Vercel preview readiness and real browser interaction/visual render are pending.
+- Main/production still serves `25e037d` and does not yet contain the Gallery route; no main merge or production deployment of the Gallery UI is claimed.
+- The bundle files are present in the public repository and are client-buildable assets. Gallery's UI tier lock must not be represented as confidential/server-protected delivery of those source files. Existing API knowledge entitlements remain server-authoritative, but the 3,600 public template files are not secret.
+- Explorer/Generator canonical knowledge records have not been expanded to 3,600; the bundle is currently exposed through a separate UI Gallery route. Do not claim those 3,600 entries are records returned by `/api/di-knowledge`.
+- Human visual originality review, full production Firebase/entitlement checks, real-device accessibility, and production rendering of every template remain unverified.
+
+### MILESTONE AUDIT
+- Regression: additive Gallery selection fix and Gallery-specific test coverage; existing route, auth, payment, Firebase and Vercel source were not intentionally replaced.
+- Functionality: branch source now has the Gallery route and targeted regression tests; runtime test result remains pending.
+- Accessibility: Gallery is included in the existing CI accessible-name and axe route loop; test outcome pending and manual screen-reader/device review remains unverified.
+- Privacy/security: no secret value was accessed; CI entitlement is explicitly a mock fixture; public-bundle content is not described as secure/protected.
+- Performance: build with all lazy-loaded template modules and mobile/tablet/desktop overflow checks are pending.
+- Data quality: no new design records or database were created; the existing manifest/import validation remains the source for bundle counts.
+- Build/test: exact-head run pending; previous import CI success is not substituted for the new Gallery tests.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Open/update a PR from `feature/design-intelligence` to `main` for the Gallery wiring and these targeted CI tests. Keep main unchanged until the exact PR-head Design Intelligence Build Check and Vercel preview pass.
+2. Inspect the large module-glob build, browser preview import, theme/filter/search/lock assertions, and mobile/tablet/desktop overflow results. Fix failures on the feature branch only.
+3. After CI and preview pass, merge through the PR and confirm the resulting main commit and READY production deployment before expecting the `UI Gallery` tab to appear at `/design-intelligence/ui-gallery`.
+4. Treat the 3,600 templates as a separate template gallery until a reviewed, secure canonical integration is designed. Do not count them as `/api/di-knowledge` records or rely on client-only tier checks to protect public source files.
+5. Continue real Firebase/API/BYOK/Cashfree and human physical-device accessibility checks only with an authorized session; never copy secrets or tokens to chat.
