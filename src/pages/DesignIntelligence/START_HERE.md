@@ -1213,3 +1213,38 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - **UNVERIFIED:** exact-head CI and Vercel preview for these Gallery changes are pending. The prior ZIP-import workflow does not verify Gallery integration.
 - **SECURITY NOTE:** the bundle files themselves are present in the public repository and are client-buildable. UI tier locks are not a security boundary for those public source files; do not claim that the asset pack is protected server-side. The existing canonical knowledge API access checks remain a separate server-authoritative path.
 - **CURRENT FIRST UNFINISHED TASK:** open a PR from `feature/design-intelligence` to `main`; inspect the exact-head CI and preview before merging. Keep the 3,600 template bundle distinct from the canonical `/api/di-knowledge` records unless a separately reviewed secure integration changes that architecture.
+
+
+## 2026-10-10 — Live UI diagnosis and Gallery validation checkpoint
+
+### VERIFIED
+- The screenshot matches the production `main` branch's existing Design Intelligence Overview: `DesignIntelligenceHome.jsx` imports counts from the original `catalog.js` seed arrays (10 styles, 4 palettes, 5 typography pairings, 6 chart patterns, 8 tech stacks).
+- PR #4 imported the 3,600-entry UI bundle to `src/pages/DesignIntelligence/ui-design-bundle/`, but `main`'s `src/App.jsx` and `DesignIntelligenceLayout.jsx` do not contain the `/design-intelligence/ui-gallery` route or navigation link.
+- `feature/design-intelligence` contains the Gallery route/component and bundle manifest wiring. PR #5 is open against `main`; it has not been merged. Do not assume live production contains the Gallery.
+- The Gallery presents the bundle as a separate template gallery rather than claiming its 3,600 entries are canonical `/api/di-knowledge` records.
+- Gallery theme-token CSS is now imported by the Gallery; the browser workflow was strengthened to assert computed `--mz-surface` values as well as the theme attribute.
+- No changes were made directly to `main`; no API/environment secret was read.
+
+### UNVERIFIED
+- Exact latest-head Design Intelligence Build Check and Gallery browser assertions.
+- Current Vercel preview build/runtime on the latest Gallery commit; last observed preview status was pending.
+- Production UI Gallery route, selected component preview, all theme token changes, full user-account entitlement behavior, and manual real-device/screen-reader review.
+- Genuine protected access to template assets: because these asset files are already in the public repository, client-side tier locks cannot make their source confidential or act as a security boundary.
+
+### MILESTONE AUDIT
+- Regression: no unrelated route/auth/Firebase/payment source was intentionally changed; full latest-head regression remains pending.
+- Functionality: cause of the live screenshot mismatch is established; Gallery wiring exists on the feature branch only.
+- Accessibility: Gallery is included in the existing route/axe checks; latest CI result and physical-device checks remain pending/unverified.
+- Privacy/security: no secret value was accessed; do not treat public bundle labels or frontend locks as server-authoritative content protection.
+- Performance: Gallery lazy-loads the selected design and initially displays up to 120 filtered cards; latest build and mobile/tablet overflow checks remain pending.
+- Data quality: the import workflow remains the evidence for 3,600 manifest IDs across 18 categories; do not count these as canonical API records.
+- Build/test: the previous import run does not substitute for the new Gallery exact-head test result.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify exact-head CI and the Vercel preview for PR #5; fix any reproducible failure on `feature/design-intelligence` only.
+2. Investigate the PR's current mergeability/base divergence without changing `main`; reconcile any required main-side commits safely on the feature branch and rerun exact-head checks.
+3. Confirm the Gallery shows all 3,600 manifest entries in its total count and that category/tier/search can reach the entries, while component preview and computed theme tokens work.
+4. Merge only after required CI and preview checks pass, then verify main's new commit and READY production deployment before expecting the Gallery link on the production site.
+5. Treat Premium/Ultra labels on this public-repository bundle as non-confidential metadata until a genuinely server-protected delivery architecture is designed. Do not create a second database or claim client-side preview locks are secure.
+6. Continue real Firebase/API/BYOK/Cashfree and manual Android/keyboard/screen-reader checks only with an authorized session; never copy secrets or tokens to chat.
