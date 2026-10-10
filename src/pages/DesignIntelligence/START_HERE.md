@@ -1000,3 +1000,25 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase B — Publish: existing npm 0.1.0 install/import **VERIFIED**; new hardened source needs a future versioned release.
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
 - Cashfree launch UI stays pending.
+
+## 2026-10-10 — Admin Ultra Premium+ + Generator Preview checkpoint
+
+### IMPLEMENTED
+- Server entitlement now gives the account matching the existing server-only ADMIN_EMAIL permanent Ultra Premium+ access. Matching is checked against the Firebase Admin user resolved from the UID; the browser cannot grant itself access with an email/tier claim.
+- Added regression assertions for the admin-email policy.
+- Added Desktop / Tablet / Mobile layout-simulation controls in the Generator preview, with an accessible labeled group, pressed state and responsive styling.
+- Added browser-CI assertions for all three preview sizes; adjusted the AI-mode selector to avoid collisions with the new pressed-state buttons.
+
+### VERIFIED
+- Previously recorded CI and preview checks for earlier commits still stand for those commits only.
+
+### UNVERIFIED
+- The new exact-head CI result and latest feature-preview deployment must be checked before marking this milestone VERIFIED.
+- Real Firebase admin login, Premium/Ultra authenticated account behavior, API-key lifecycle, Effects/CORS and BYOK execution remain UNVERIFIED through the current tool path. Do not ask for or paste tokens/API secrets in chat.
+- The new size selector simulates recipe-preview layout; it does not yet render a full running generated website or emulate a physical device.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify the exact branch-head CI and Vercel preview for this milestone.
+2. Confirm permanent Ultra access with the real admin Firebase session in the deployed app.
+3. Continue genuine authenticated API-key/Effects/BYOK verification if an approved authenticated test path is available.
+4. Continue expanding the UI-generation workflow while preserving the one canonical Design Intelligence core.
