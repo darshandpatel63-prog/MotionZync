@@ -1123,3 +1123,22 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 3. With authorized real accounts, test API-key issue/rotate/revoke, hash-only-at-rest, Premium denial, revoked-key rejection, Effects/CORS and actual BYOK execution.
 4. Inspect Claude's eventual design ZIP for 18 categories × 100 Premium + 100 Ultra minimum, non-duplicate designs, light/dark/colorful themes, build/security/accessibility and compatible import paths. The ZIP is not generated yet; use the linked repository prompt to obtain it.
 5. Finish physical Android, keyboard and screen-reader checks LAST and record observed results honestly.
+
+## 2026-10-10 — Final production secret-visibility checkpoint
+
+### IMPLEMENTED
+- Vercel FIREBASE_PRIVATE_KEY and GITHUB_TOKEN were changed to Sensitive/Secret visibility without reading or changing values; all existing environment targets are preserved.
+- ADMIN_EMAIL and VITE_ADMIN_EMAIL are configured for production and match. Their values are not written into source or documentation.
+- The current production redeploy is READY after the environment visibility update.
+
+### VERIFIED
+- Exact main docs checkpoint SHA 5368e73e44b538ede6dadbe41fe4ba6c1e6e3a13 passed Design Intelligence CI run 38054504475.
+- Production guest knowledge remains Free-only (35 records, zero protected records), forged Ultra query claims are ignored, and generator route returns HTTP 200.
+
+### UNVERIFIED
+- Real admin Gmail login, real access-policy save/reload, authenticated API-key lifecycle, Effects/CORS, BYOK execution and physical Android/keyboard/screen-reader tests remain pending.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Test the configured admin Gmail at https://motion-zync.vercel.app/admin and verify policy save/reload with a real session; never share ID tokens or secrets in chat.
+2. Test API-key issue/rotate/revoke, Effects/CORS and BYOK using authorized accounts.
+3. Complete physical device and manual accessibility tests last.
