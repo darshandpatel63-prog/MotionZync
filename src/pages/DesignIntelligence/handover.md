@@ -4700,3 +4700,44 @@ FIRST UNFINISHED TASK remains:
 4. Complete manual Android/mobile keyboard, focus and screen-reader review.
 5. Continue building out the actual UI-generation workflow from the existing canonical recipe core; keep responsive preview clearly distinguished from a full live rendered app.
 6. Keep Phase A at 98%, Phase B package re-release pending, Phase C content expansion deferred, and Cashfree launch UI pending until their respective gates close.
+
+## 2026-10-10 — Manual Design Recipe customization UI
+
+### IMPLEMENTED
+- Generator now exposes optional manual choices for visual style, colour palette, font pairing, and technology stack. Each select is populated from the current canonical catalog with only records accessible at the server-derived tier.
+- The custom recipe is re-evaluated by the existing compatibility engine and validator. Invalid/inaccessible combinations fall back to the last valid recipe and show a warning; no arbitrary catalog IDs are accepted.
+- Added a reset control to return all choices to “Use generated choice”.
+- The existing Desktop / Tablet / Mobile preview mode remains in place, and preview mode is explicitly described as layout simulation rather than a full running website.
+- Extended existing Playwright browser checks to exercise style selection, palette selection, resetting choices and responsive preview switching. No new auth, AI-vault, dataset or database was added.
+
+### VERIFIED
+- Earlier preview deployment dpl_BGCHj8Y3uTqwAsc5QJ4HntZ9LPZF (commit 9d01d91a7b072ce57fc4a8fbd34f460b901133bd) was READY; its Generator JS/CSS assets contained the responsive preview controls, and public /api/di-knowledge live checks returned only 35 Free records with private/no-store cache headers, ignored forged Ultra query claims, and rejected an unknown domain with HTTP 400.
+- That deployment predates the new manual selector UI and is not claimed to contain the latest customization changes.
+- The current exact-head build/browser checks and matching Vercel deployment must be rechecked before marking the new selector UI VERIFIED.
+
+### UNVERIFIED
+- End-to-end manual selector interactions for this latest code are awaiting current-head browser CI/live-preview verification.
+- Real authenticated Firebase admin session and actual admin Gmail Ultra entitlement remain unverified. The source derives the override from the server-side ADMIN_EMAIL plus the Firebase Admin user's account; the actual configured environment value was not inspected.
+- Actual key issuance/rotation/revocation, hash-only storage, Effects API/CORS, BYOK provider execution, and manual Android/screen-reader review remain UNVERIFIED.
+
+### MILESTONE AUDIT
+- Regression: new automated browser assertions cover the four recipe inputs and reset, together with the Desktop/Tablet/Mobile preview controls; exact-head result pending.
+- Functionality: all custom values resolve to existing records and pass through the canonical validation path.
+- Accessibility: real labels, native select inputs, keyboard-operable details disclosure, labeled preview-control group and selected-state attributes are implemented; current-head Axe/browser run pending.
+- Privacy/security: no frontend email/tier claim can grant admin; no user credential, secret, fake entitlement or API key was created.
+- Performance: selector option rendering is bounded by current catalog size; production profiling is UNVERIFIED.
+- Data quality: no new catalog records or fabricated large dataset.
+- Build/test: latest exact-head CI and matching deployment state pending recheck.
+- Documentation: UPDATED.
+
+### STATUS
+- Phase A — Engine / System: 98% — IN PROGRESS; no percentage increase until remaining credentialed gates close.
+- Phase B — Publish: public npm 0.1.0 remains verified for its published contents only; current source changes require a future bumped package version if released.
+- Phase C — Continuous Content Expansion: 0% — NOT STARTED.
+- Cashfree/payment launch UI stays pending.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify the current source/test commit's Vercel build and, where available, exact-head browser CI before marking manual controls VERIFIED.
+2. Confirm the configured admin email with a genuine Firebase-authenticated session in the deployed preview; never ask for or paste ID tokens/keys into chat.
+3. Test real API-key lifecycle, Effects/CORS and BYOK via an authorized test session; finish manual Android accessibility review.
+4. Continue UI generation from the canonical recipe core (real editable components and a fuller application renderer are still future work), without inflating catalog counts or claiming a live app renderer exists.
