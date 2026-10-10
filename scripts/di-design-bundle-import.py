@@ -240,12 +240,17 @@ def prepare(bundle: Path):
     required_marker = '"shared/preview-shell/PreviewShell.jsx"'
     if '"shared/parts/GeneratedParts.jsx"' not in validator:
         if required_marker not in validator: raise ValueError("validator required-file list changed; refusing to patch")
-        validator = validator.replace(required_marker, required_marker + ',"shared/parts/GeneratedParts.jsx"')
+        validator = validator.replace(required_marker, required_marker + ',"shared/parts/GeneratedParts.jsx"', 1)
     old_code = '  const codeOnly = src.replace(/placeholder="[^"]*"/g, "");'
     new_code = old_code + '\n  const executableSource = codeOnly.replace(/\\/\\*[\\s\\S]*?\\*\\//g, "").replace(/^\\s*import\\s*\\{[^}]+\\}\\s*from[^\\n]*$/gm, "");\n  if (/\\{\\s*(BENTO|ROWS5|CARDS2|CARDS4|FLOATINGNODES|PARAGRAPHS|TIMELINEITEMS|FORMFIELDS|CARDS6|TABLEROWS)\\s*\\}/.test(executableSource)) fail("unresolved generated macro in " + p);'
     if "unresolved generated macro in " not in validator:
         if old_code not in validator: raise ValueError("validator source shape changed; refusing to patch")
         validator = validator.replace(old_code, new_code, 1)
+    unsafe_scan_marker = 'jsxFiles.concat([join(root, "shared/preview-shell/PreviewShell.jsx")])'
+    unsafe_scan_patch = 'jsxFiles.concat([join(root, "shared/preview-shell/PreviewShell.jsx"),join(root, "shared/parts/GeneratedParts.jsx")])'
+    if unsafe_scan_patch not in validator:
+        if unsafe_scan_marker not in validator: raise ValueError("validator unsafe-scan list changed; refusing to patch")
+        validator = validator.replace(unsafe_scan_marker, unsafe_scan_patch, 1)
     validator_path.write_text(validator, encoding="utf-8")
     (bundle / "scripts" / "build-preview.mjs").write_text(SAFE_BUILD_PREVIEW, encoding="utf-8")
     (bundle / "IMPORT_REVIEW.md").write_text(IMPORT_NOTE, encoding="utf-8")
