@@ -45,7 +45,7 @@ export default function DesignBundleGallery() {
       && (tier === 'all' || item.tier === tier)
       && haystack.includes(query.trim().toLowerCase())
   })
-  const selected = manifest.designs.find(item => item.id === selectedId) || filtered[0] || null
+  const selected = filtered.find(item => item.id === selectedId) || filtered[0] || null
   const canPreview = selected && tierRank(selected.tier) <= tierRank(designAccessTier)
 
   async function loadSelected() {
