@@ -89,6 +89,28 @@ export function getDesignIntelligenceAccessState(input = DEFAULT_DI_ACCESS_POLIC
   return { policy, festivalOfferActive, premiumCanAccessUltraContent: policy.shareUltraWithPremium || festivalOfferActive, timezone: 'Asia/Kolkata' }
 }
 
+export function resolveDesignIntelligenceContentAccess({
+  entitlementTier = 'free',
+  authenticated = false,
+  apiKeyAuthenticated = false,
+  accessState = null,
+  policyUnavailable = false,
+} = {}) {
+  if (!authenticated) return { contentTier: 'free', reason: 'public-free' }
+  if (apiKeyAuthenticated) return { contentTier: entitlementTier, reason: 'ultra-api-key' }
+  if (entitlementTier === 'ultra-premium') return { contentTier: 'ultra-premium', reason: 'ultra-subscription' }
+  if (entitlementTier === 'premium' && accessState?.premiumCanAccessUltraContent === true) {
+    return {
+      contentTier: 'ultra-premium',
+      reason: accessState.festivalOfferActive ? 'scheduled-festival-offer' : 'admin-shared-ultra-content',
+    }
+  }
+  if (policyUnavailable && entitlementTier === 'premium') {
+    return { contentTier: 'premium', reason: 'policy-unavailable-fail-closed' }
+  }
+  return { contentTier: entitlementTier, reason: 'authenticated-entitlement' }
+}
+
 export async function getDesignIntelligenceAccessPolicy() {
   const snapshot = await getAdminDb().collection('siteContent').doc(DI_ACCESS_POLICY_DOCUMENT).get()
   return normalizeDesignIntelligenceAccessPolicy(snapshot.exists ? snapshot.data() : DEFAULT_DI_ACCESS_POLICY)
