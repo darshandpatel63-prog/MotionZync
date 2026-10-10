@@ -4845,3 +4845,49 @@ FIRST UNFINISHED TASK remains:
 1. Verify the new CI head after isolating third-party AdSense scripts.
 2. Merge PR #3 only after exact-head checks pass and the matching Vercel preview is READY.
 3. Verify main deployment, then perform genuine Firebase/admin/API and physical-device checks last.
+## 2026-10-10 — Main promotion complete; physical/authenticated checks remain
+
+### IMPLEMENTED
+- Design Intelligence access policy, category-aware UI controls, scheduled festival offer, admin tier-sharing setting, and Claude design-bundle prompt were promoted through PR #3 to main.
+- Main merge commit: 5a71396220a488dbcfae700f2a8e2d9bf851de32.
+- Main uses the existing canonical Firebase/Admin systems and the existing siteContent Firestore collection; no API key, Firebase service-account secret, or user token was committed to source.
+- The server-only ADMIN_EMAIL allowlist is used by Firebase Admin user lookup to grant the configured admin account permanent Ultra Premium+. The real environment value is not hard-coded.
+
+### VERIFIED
+- Feature head f28f1e35b38f635479ca5f5cc46a4de0a142bdc3 passed full Design Intelligence Build Check run 38054013873, including build, entitlement/content-access contracts, npm/package checks, Playwright UI interactions, responsive layout, accessibility-name, Axe serious/critical and keyboard-focus gates.
+- Main merge commit 5a71396220a488dbcfae700f2a8e2d9bf851de32 passed full Design Intelligence Build Check run 38054135153.
+- Main Vercel deployment dpl_66PCkhLXPS5mtgPFskzJyWg9h3nj is READY with production alias https://motion-zync.vercel.app.
+- Live production GET /api/di-knowledge returned HTTP 200 for a guest: tier=free, contentTier=free, authenticated=false, 35 Free records, protectedRecordCount=0 and Cache-Control private/no-store.
+- The same endpoint ignored forged tier=ultra-premium and entitlement=ultra-premium query claims and returned only Free records. An invalid domain returned HTTP 400.
+- Production Generator/Explorer JavaScript and CSS assets returned HTTP 200 and contain the tier filter, responsive preview, Admin sharing switch and time-window offer UI.
+- Playwright Admin settings tests use a mocked admin API and verify form/payload behavior; they do not claim real Firestore writes.
+
+### UNVERIFIED
+- The production ADMIN_EMAIL value and real admin Gmail login have not been observed through a genuine session in this tool environment. The user should validate login from the deployed main-domain URL.
+- Real Firestore save/reload of designIntelligenceAccess, signed-in Premium/Ultra account visibility, API-key issue/rotate/revoke and hash-only storage, revoked-key rejection, Effects API/CORS, live BYOK provider execution, and Cashfree payment entitlement remain UNVERIFIED.
+- Physical Android/mobile, actual keyboard and screen-reader checks remain UNVERIFIED and are intentionally last.
+- The Claude ZIP has not yet been generated. Its prompt requests at least 100 Premium plus 100 Ultra Premium+ designs in each of 18 categories (3,600 minimum) with light, dark and colorful themes; generated assets must be checked before integration.
+
+### MILESTONE AUDIT
+- Regression: exact-head feature and main merge CI succeeded; live guest production boundary checks passed.
+- Functionality: public Free knowledge and category validation work live; authenticated behavior awaits a real signed-in session.
+- Accessibility: automated browser/Axe/keyboard-focus gates passed; physical screen-reader/device review is not done.
+- Privacy/security: no production credentials or user tokens are in source. Entitlements stay server-authoritative; sharing design records does not grant Ultra subscription or API permission.
+- Performance: current bundle/assets served successfully; production latency and device-level performance profiling remain UNVERIFIED.
+- Data quality: no fabricated catalog records, fake payments or user entitlements were added.
+- Build/test: merge-head CI run 38054135153 SUCCESS; production Vercel deployment READY. The follow-up docs-only checkpoint commit still needs its own CI/deployment confirmation.
+- Documentation: updated in this checkpoint.
+
+### STATUS
+- Phase A — Engine / System: 98% — IN PROGRESS until credentialed API and physical gates are closed.
+- Phase B — Publish: published npm 0.1.0 is verified only for its published contents; newer source changes need a separately versioned release.
+- Phase C — Continuous Content Expansion: 0% — NOT STARTED. Claude prompt is ready; actual design bundle/catalog expansion is future work.
+- Payment launch UI remains intentionally pending.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify CI and production deployment for this documentation checkpoint; the application code does not change in this commit.
+2. From https://motion-zync.vercel.app/admin, use the real admin Gmail and confirm the Admin panel accepts it. Do not share a Firebase ID token or secrets in chat.
+3. From the main URL, test access-policy save/reload and confirm a real Premium account sees Ultra design records when the switch is ON, and not when OFF outside an active offer. API entitlement must remain unchanged.
+4. Verify API-key issue/rotate/revoke, hash-only storage, revoked-key rejection, Effects/CORS and BYOK with authorized test accounts.
+5. Finish physical Android, keyboard and screen-reader tests last. Report observed outcomes honestly; no credentials need to be pasted into chat.
+6. Review Claude's ZIP for exact category/tier counts, source paths, visual diversity, three themes, build/security/accessibility before integrating designs.

@@ -1099,3 +1099,25 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 1. Verify the current-head CI and preview after external script isolation.
 2. Merge to main only when those gates pass.
 3. Test the genuine Firebase admin account, real policy write/read, API-key/effects/BYOK, and physical Android accessibility last.
+## 2026-10-10 — Promoted to main; final real-user/device checks
+
+### IMPLEMENTED
+- PR #3 merged to main at 5a71396220a488dbcfae700f2a8e2d9bf851de32. Server-side admin email allowlist, Ultra design-sharing policy, IST timed festival offer, category/tier UI filters, recipe customization and Claude UI-design prompt are included.
+- No production Firebase service-account secret, ID token, or API secret is committed to source.
+
+### VERIFIED
+- Feature exact-head CI 38054013873 and main merge-head CI 38054135153 both succeeded.
+- Main Vercel deployment dpl_66PCkhLXPS5mtgPFskzJyWg9h3nj is READY on https://motion-zync.vercel.app.
+- Production guest knowledge response remains Free-only (35 records, zero protected records) despite forged Ultra query claims; invalid domain returns HTTP 400.
+- Production JavaScript/CSS assets returned HTTP 200 and include the new controls.
+
+### UNVERIFIED
+- Real admin Gmail login and production ADMIN_EMAIL configuration are not yet validated by a genuine session.
+- Actual Firebase policy writes, authenticated entitlement/API-key lifecycle, Effects/CORS, live BYOK and physical Android/accessibility checks remain UNVERIFIED.
+- The Claude prompt is added; the 3,600+ design ZIP itself remains to be generated and reviewed.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Confirm CI and deployment for this docs-only checkpoint.
+2. Test the real admin Gmail at https://motion-zync.vercel.app/admin and access-policy persistence from the main URL.
+3. Run authorized API-key/Effects/BYOK tests, then finish physical device and screen-reader testing.
+4. Review and integrate Claude's ZIP only after validator, counts, diversity and compatibility are checked.
