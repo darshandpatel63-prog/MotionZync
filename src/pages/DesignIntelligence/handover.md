@@ -4713,21 +4713,21 @@ FIRST UNFINISHED TASK remains:
 ### VERIFIED
 - Earlier preview deployment dpl_BGCHj8Y3uTqwAsc5QJ4HntZ9LPZF (commit 9d01d91a7b072ce57fc4a8fbd34f460b901133bd) was READY; its Generator JS/CSS assets contained the responsive preview controls, and public /api/di-knowledge live checks returned only 35 Free records with private/no-store cache headers, ignored forged Ultra query claims, and rejected an unknown domain with HTTP 400.
 - That deployment predates the new manual selector UI and is not claimed to contain the latest customization changes.
-- The current exact-head build/browser checks and matching Vercel deployment must be rechecked before marking the new selector UI VERIFIED.
+- Exact-head GitHub Actions Design Intelligence Build Check run 38051385478 completed SUCCESS on source/test HEAD 7924116728c01aaa1cdbb2e8e71ba9d8ae73d155. The run passed Vite build, Firebase entitlement contract, npm package/install checks, Playwright interaction/responsive tests, clipboard, Axe serious/critical gate and keyboard-focus checks.
 
 ### UNVERIFIED
-- End-to-end manual selector interactions for this latest code are awaiting current-head browser CI/live-preview verification.
+- Manual style selection, palette selection, reset and Desktop/Tablet/Mobile preview interactions passed the current-head Playwright browser test. Live preview deployment dpl_G5hqpPCSBvWL1VSv2ZPPHt4cmEkf (source/test HEAD 7924116728c01aaa1cdbb2e8e71ba9d8ae73d155) is READY; the Generator JS/CSS assets returned HTTP 200 and contain the new controls.
 - Real authenticated Firebase admin session and actual admin Gmail Ultra entitlement remain unverified. The source derives the override from the server-side ADMIN_EMAIL plus the Firebase Admin user's account; the actual configured environment value was not inspected.
 - Actual key issuance/rotation/revocation, hash-only storage, Effects API/CORS, BYOK provider execution, and manual Android/screen-reader review remain UNVERIFIED.
 
 ### MILESTONE AUDIT
-- Regression: new automated browser assertions cover the four recipe inputs and reset, together with the Desktop/Tablet/Mobile preview controls; exact-head result pending.
+- Regression: exact-head run 38051385478 passed new browser assertions for style/palette selection, reset, and Desktop/Tablet/Mobile preview controls.
 - Functionality: all custom values resolve to existing records and pass through the canonical validation path.
-- Accessibility: real labels, native select inputs, keyboard-operable details disclosure, labeled preview-control group and selected-state attributes are implemented; current-head Axe/browser run pending.
+- Accessibility: exact-head Playwright route, accessible-name, Axe serious/critical, responsive and keyboard-focus gates passed. Real device/screen-reader review remains UNVERIFIED.
 - Privacy/security: no frontend email/tier claim can grant admin; no user credential, secret, fake entitlement or API key was created.
 - Performance: selector option rendering is bounded by current catalog size; production profiling is UNVERIFIED.
 - Data quality: no new catalog records or fabricated large dataset.
-- Build/test: latest exact-head CI and matching deployment state pending recheck.
+- Build/test: GitHub Actions run 38051385478 SUCCESS; Vercel feature preview dpl_G5hqpPCSBvWL1VSv2ZPPHt4cmEkf READY. Live guest knowledge endpoint returned HTTP 200 with Free-only records, protectedRecordCount 0 and private/no-store cache; caller-supplied Ultra query claims remained Free-only.
 - Documentation: UPDATED.
 
 ### STATUS
@@ -4737,7 +4737,7 @@ FIRST UNFINISHED TASK remains:
 - Cashfree/payment launch UI stays pending.
 
 ### CURRENT FIRST UNFINISHED TASK
-1. Verify the current source/test commit's Vercel build and, where available, exact-head browser CI before marking manual controls VERIFIED.
+1. Verify the actual configured admin Gmail through a genuine Firebase-authenticated session and confirm the server returns permanent Ultra Premium+; do not share ID tokens or keys in chat.
 2. Confirm the configured admin email with a genuine Firebase-authenticated session in the deployed preview; never ask for or paste ID tokens/keys into chat.
 3. Test real API-key lifecycle, Effects/CORS and BYOK via an authorized test session; finish manual Android accessibility review.
 4. Continue UI generation from the canonical recipe core (real editable components and a fuller application renderer are still future work), without inflating catalog counts or claiming a live app renderer exists.

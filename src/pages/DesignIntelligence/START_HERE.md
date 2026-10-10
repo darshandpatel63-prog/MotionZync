@@ -1031,8 +1031,8 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Browser automation was extended to test manual style and palette selection, reset, and responsive preview switching.
 
 ### VERIFIED
-- A prior preview with responsive preview only is READY and passed static asset/live guest-boundary checks. It does not include the newest manual customization UI.
-- Recheck the new exact-head preview/build before declaring manual customization VERIFIED.
+- Exact-head GitHub Actions run 38051385478 passed build, Firebase entitlement contract, npm package/install, browser interactions, responsive behavior, Axe serious/critical gate and keyboard-focus checks. Matching feature preview dpl_G5hqpPCSBvWL1VSv2ZPPHt4cmEkf is READY; live Generator JS/CSS assets returned HTTP 200 and include the new controls.
+- Manual style/palette selection, reset and Desktop/Tablet/Mobile preview controls are VERIFIED by the current-head Playwright test and READY feature preview.
 
 ### UNVERIFIED
 - Genuine Firebase login and server-side ADMIN_EMAIL entitlement are not verified end-to-end because no authorized live session is available to this tool path.
