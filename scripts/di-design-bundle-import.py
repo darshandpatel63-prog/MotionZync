@@ -309,9 +309,8 @@ def import_safe():
                 with inner.open(info) as src, dest.open("wb") as dst: shutil.copyfileobj(src, dst, 1024 * 1024)
         patched, counts = prepare(bundle)
         subprocess.run(["node", str(bundle / "scripts" / "validate-bundle.mjs"), str(bundle)], cwd=ROOT, check=True)
-        subprocess.run(["node", str(bundle / "scripts" / "build-preview.mjs")], cwd=ROOT, check=True, env={**os.environ, "MZ_BUNDLE_BUILD_ROOT": str(bundle)})
-        # Run the safely inspected builder in its own directory so its relative output is confined to the staging pack.
-        subprocess.run(["node", str(bundle / "scripts" / "build-preview.mjs")], cwd=bundle, check=True)
+        # The reviewed builder resolves its output path from its own file, keeping generation in staging.
+        subprocess.run(["node", str(bundle / "scripts" / "build-preview.mjs")], cwd=ROOT, check=True)
         syntax_check_jsx(bundle)
         manifest = json.loads((bundle / "manifest.json").read_text(encoding="utf-8"))
         for design in manifest["designs"]:
