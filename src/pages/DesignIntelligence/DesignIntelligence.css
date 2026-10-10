@@ -30,3 +30,24 @@
 .di-customize-grid .di-input{min-height:44px}
 .di-customize-reset{grid-column:1/-1;justify-self:start}
 @media(max-width:620px){.di-customize-grid{grid-template-columns:minmax(0,1fr)}.di-customize-reset{width:100%}}
+
+/* Explicit tier filtering and server-authoritative admin access settings. */
+.di-tier-filter{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07)}
+.di-tier-filter>span{font-size:.78rem;font-weight:800;color:#cbd5e1;margin-right:4px}
+.di-tier-filter .di-chip{min-height:44px}
+.di-admin-access-settings-wrap{margin-top:24px}
+.di-admin-access-settings{margin-top:0}
+.di-admin-access-settings h2{line-height:1.25}
+.di-access-setting-row{display:flex;align-items:flex-start;gap:12px;padding:16px 0;cursor:pointer}
+.di-access-setting-row input[type=checkbox]{width:20px;height:20px;min-width:20px;margin-top:2px;accent-color:#7c3aed}
+.di-access-setting-row span{display:grid;gap:6px}
+.di-access-setting-row strong{color:#f8fafc;line-height:1.45}
+.di-access-setting-row small{color:#94a3b8;font-size:.82rem;line-height:1.65}
+.di-access-offer{margin-top:12px;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.02)}
+.di-access-date-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.di-access-date-grid>div{min-width:0}
+.di-access-date-grid .di-input{min-height:44px;color-scheme:dark}
+.di-access-state{margin-top:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:10px;color:#cbd5e1;font-size:.82rem}
+.di-access-state.active{border-color:rgba(34,197,94,.3);color:#86efac;background:rgba(34,197,94,.07)}
+.di-admin-access-settings button:focus-visible,.di-admin-access-settings input:focus-visible{outline:3px solid #67e8f9;outline-offset:3px}
+@media(max-width:620px){.di-tier-filter{align-items:stretch}.di-tier-filter>span{width:100%}.di-tier-filter .di-chip{flex:1}.di-access-date-grid{grid-template-columns:minmax(0,1fr)}}
