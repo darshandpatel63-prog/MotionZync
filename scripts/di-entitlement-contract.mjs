@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { resolveServerEntitlement } from '../api/_lib/billing.js'
+import { resolveServerEntitlement, resolveAdminEntitlement } from '../api/_lib/billing.js'
 import {
   ALL_DI_PROTECTED_RECORDS,
 } from '../api/_lib/di-protected-catalog.js'
@@ -60,6 +60,22 @@ assert.equal(hasEntitlement('unrecognized-tier', 'ultra-premium'), false, 'Unkno
 assert.equal(hasEntitlement('premium', 'unrecognized-tier'), false, 'Unknown current tiers must fall back to Free')
 
 const NOW = Date.parse('2026-10-02T12:00:00.000Z')
+
+// The configured server admin receives a permanent Ultra Premium+ override.
+// Email matching is case-insensitive; an absent config or a different account
+// must never receive the override.
+assert.deepEqual(
+  resolveAdminEntitlement('Owner@Example.com', 'owner@example.com'),
+  {
+    tier: 'ultra-premium',
+    active: true,
+    source: 'admin-email-allowlist',
+    expiresAt: null,
+  },
+  'Configured admin email must always resolve to active Ultra Premium+',
+)
+assert.equal(resolveAdminEntitlement('member@example.com', 'owner@example.com'), null)
+assert.equal(resolveAdminEntitlement('owner@example.com', ''), null)
 const future = new Date(NOW + 24 * 60 * 60 * 1000).toISOString()
 const past = new Date(NOW - 24 * 60 * 60 * 1000).toISOString()
 
