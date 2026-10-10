@@ -207,6 +207,28 @@ assert.equal(guestResponse.body.protectedRecordCount, 0, 'Guest response exposed
 assert.equal(guestResponse.body.records.every(record => record.tier === 'free'), true, 'Guest response contains a non-Free record')
 assert.equal(guestResponse.headers['cache-control'], 'private, no-store, max-age=0')
 
+// A caller cannot self-grant Premium/Ultra access with query/body/header claims.
+const spoofedTierGuest = await callHandler(diKnowledgeHandler, {
+  query: { tier: 'ultra-premium' },
+  headers: { 'x-motionzync-tier': 'ultra-premium' },
+  body: { tier: 'ultra-premium', entitlement: 'ultra-premium' },
+})
+assert.equal(spoofedTierGuest.statusCode, 200)
+assert.deepEqual(spoofedTierGuest.body.entitlement, {
+  tier: 'free',
+  authenticated: false,
+  protectedIncluded: false,
+})
+assert.equal(spoofedTierGuest.body.records.every(record => record.tier === 'free'), true)
+assert.equal(spoofedTierGuest.body.protectedRecordCount, 0)
+
+// A claimed Ultra tier is not enough to issue a developer key without Firebase auth.
+const spoofedKeyIssue = await callHandler(diApiKeyHandler, {
+  method: 'POST',
+  body: { action: 'issue', tier: 'ultra-premium', entitlement: 'ultra-premium' },
+})
+assert.equal(spoofedKeyIssue.statusCode, 401, 'Client-supplied Ultra claims must not bypass Firebase authentication')
+
 const unknownDomain = await callHandler(diKnowledgeHandler, {
   query: { domain: 'not-a-real-domain' },
 })
