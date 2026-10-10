@@ -72,8 +72,13 @@ async function getActiveApiKeyDocs(db, userId) {
 export function resolveServerEntitlement(data = {}, nowMs = Date.now()) {
   const record = data && typeof data === 'object' ? data : {}
   const tier = str(record.entitlement || record.plan).toLowerCase()
-  const expiry = dateOf(record.entitlementExpiresAt)
-  const paidOrGrantedActive = ENTITLED_TIERS.has(tier) && (!expiry || expiry.getTime() > nowMs)
+  const rawExpiry = record.entitlementExpiresAt
+  const hasConfiguredExpiry = rawExpiry !== undefined && rawExpiry !== null && rawExpiry !== ''
+  const expiry = hasConfiguredExpiry ? dateOf(rawExpiry) : null
+  const expiryIsValid = !hasConfiguredExpiry || (expiry instanceof Date && Number.isFinite(expiry.getTime()))
+  const paidOrGrantedActive = ENTITLED_TIERS.has(tier)
+    && expiryIsValid
+    && (!hasConfiguredExpiry || expiry.getTime() > nowMs)
 
   // Every Firebase-authenticated user receives Premium web access at ₹0.
   // Only an active Ultra Premium+ entitlement unlocks the developer API.
