@@ -20,3 +20,13 @@
 .di-preview-viewport-mobile .di-preview-editorial h3,.di-preview-viewport-mobile .di-preview-commerce h3{font-size:clamp(1.5rem,7vw,2rem)}
 .di-preview-controls .di-chip{min-height:44px}
 @media(max-width:620px){.di-preview-toolbar{align-items:flex-start;flex-direction:column}.di-preview-controls{width:100%}.di-preview-controls .di-chip{flex:1}}
+
+/* User-controlled, validated recipe overrides. */
+.di-customize{margin-top:16px;padding:13px;border:1px solid rgba(255,255,255,.09);border-radius:13px;background:rgba(255,255,255,.02)}
+.di-customize summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:#e2e8f0;font-weight:700}
+.di-customize summary:focus-visible{outline:3px solid #67e8f9;outline-offset:3px;border-radius:6px}
+.di-customize-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.di-customize-grid>div{min-width:0}
+.di-customize-grid .di-input{min-height:44px}
+.di-customize-reset{grid-column:1/-1;justify-self:start}
+@media(max-width:620px){.di-customize-grid{grid-template-columns:minmax(0,1fr)}.di-customize-reset{width:100%}}
