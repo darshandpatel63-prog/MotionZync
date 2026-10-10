@@ -26,6 +26,86 @@ const month = value => {
   return date ? `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}` : null
 }
 
+export const DI_ACCESS_POLICY_DOCUMENT = 'designIntelligenceAccess'
+export const DEFAULT_DI_ACCESS_POLICY = Object.freeze({
+  shareUltraWithPremium: true,
+  festivalOffer: Object.freeze({
+    enabled: false,
+    startDate: '',
+    startTime: '',
+    endDate: '',
+    endTime: '',
+    timezone: 'Asia/Kolkata',
+  }),
+})
+
+function localIndiaDateTimeMs(date, time) {
+  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(date) || !/^\\d{2}:\\d{2}$/.test(time)) return null
+  const value = Date.parse(date + 'T' + time + ':00+05:30')
+  if (!Number.isFinite(value)) return null
+  const parsed = new Date(value + (5.5 * 60 * 60 * 1000))
+  const parts = date.split('-').map(Number)
+  const clock = time.split(':').map(Number)
+  return parsed.getUTCFullYear() === parts[0]
+    && parsed.getUTCMonth() + 1 === parts[1]
+    && parsed.getUTCDate() === parts[2]
+    && parsed.getUTCHours() === clock[0]
+    && parsed.getUTCMinutes() === clock[1]
+    ? value
+    : null
+}
+
+export function normalizeDesignIntelligenceAccessPolicy(input = {}) {
+  const source = input && typeof input === 'object' ? input : {}
+  const rawOffer = source.festivalOffer && typeof source.festivalOffer === 'object' ? source.festivalOffer : {}
+  const festivalOffer = {
+    enabled: rawOffer.enabled === true,
+    startDate: str(rawOffer.startDate),
+    startTime: str(rawOffer.startTime),
+    endDate: str(rawOffer.endDate),
+    endTime: str(rawOffer.endTime),
+    timezone: 'Asia/Kolkata',
+  }
+  const scheduleValues = [festivalOffer.startDate, festivalOffer.startTime, festivalOffer.endDate, festivalOffer.endTime]
+  const hasSchedule = scheduleValues.some(Boolean)
+  if (festivalOffer.enabled || hasSchedule) {
+    if (scheduleValues.some(value => !value)) throw new Error('Festival offer needs a start date/time and an end date/time.')
+    const startMs = localIndiaDateTimeMs(festivalOffer.startDate, festivalOffer.startTime)
+    const endMs = localIndiaDateTimeMs(festivalOffer.endDate, festivalOffer.endTime)
+    if (startMs === null || endMs === null) throw new Error('Festival offer date or time is invalid.')
+    if (endMs <= startMs) throw new Error('Festival offer end must be later than its start.')
+  }
+  return { shareUltraWithPremium: source.shareUltraWithPremium !== false, festivalOffer }
+}
+
+export function getDesignIntelligenceAccessState(input = DEFAULT_DI_ACCESS_POLICY, nowMs = Date.now()) {
+  let policy
+  try { policy = normalizeDesignIntelligenceAccessPolicy(input) }
+  catch { policy = normalizeDesignIntelligenceAccessPolicy(DEFAULT_DI_ACCESS_POLICY) }
+  const offer = policy.festivalOffer
+  const startMs = offer.enabled ? localIndiaDateTimeMs(offer.startDate, offer.startTime) : null
+  const endMs = offer.enabled ? localIndiaDateTimeMs(offer.endDate, offer.endTime) : null
+  const festivalOfferActive = startMs !== null && endMs !== null && nowMs >= startMs && nowMs < endMs
+  return { policy, festivalOfferActive, premiumCanAccessUltraContent: policy.shareUltraWithPremium || festivalOfferActive, timezone: 'Asia/Kolkata' }
+}
+
+export async function getDesignIntelligenceAccessPolicy() {
+  const snapshot = await getAdminDb().collection('siteContent').doc(DI_ACCESS_POLICY_DOCUMENT).get()
+  return normalizeDesignIntelligenceAccessPolicy(snapshot.exists ? snapshot.data() : DEFAULT_DI_ACCESS_POLICY)
+}
+
+export async function saveDesignIntelligenceAccessPolicy(input, savedBy = null) {
+  const policy = normalizeDesignIntelligenceAccessPolicy(input)
+  const now = new Date().toISOString()
+  await getAdminDb().collection('siteContent').doc(DI_ACCESS_POLICY_DOCUMENT).set({
+    ...policy,
+    updatedAt: now,
+    updatedByUid: str(savedBy?.uid) || null,
+    updatedByEmail: str(savedBy?.email).toLowerCase() || null,
+  }, { merge: false })
+  return policy
+}
+
 export function normalizePaymentRecord(input = {}) {
   const payment = {
     userId: str(input.userId),
