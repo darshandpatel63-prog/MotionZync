@@ -1,0 +1,110 @@
+name: Design Intelligence Bundle Import
+
+on:
+  push:
+    branches:
+      - feature/design-intelligence
+    paths:
+      - ".github/workflows/design-intelligence-bundle-import.yml"
+      - "scripts/di-design-bundle-import.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: di-bundle-import-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  import-and-verify:
+    if: github.ref == 'refs/heads/feature/design-intelligence'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout feature branch without persistent credentials
+        uses: actions/checkout@v4
+        with:
+          ref: feature/design-intelligence
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install existing app dependencies without rewriting the known-stale lock file
+        run: npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund
+
+      - name: Safely unpack, repair and validate the UI design asset pack
+        run: python scripts/di-design-bundle-import.py
+
+      - name: Build existing MotionZync app
+        env:
+          VITE_FIREBASE_API_KEY: "AIzaSyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          VITE_FIREBASE_AUTH_DOMAIN: "ci-browser-test.invalid"
+          VITE_FIREBASE_PROJECT_ID: "ci-browser-test"
+          VITE_FIREBASE_STORAGE_BUCKET: "ci-browser-test.appspot.com"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "000000000000"
+          VITE_FIREBASE_APP_ID: "1:000000000000:web:ci-browser-test"
+          VITE_CI_ADMIN_EMAIL: "ci-admin@example.invalid"
+          VITE_ADMIN_EMAIL: "ci-admin@example.invalid"
+        run: npm run build -- --mode ci
+
+      - name: Check imported file count and scope before commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f src/pages/DesignIntelligence/ui-design-bundle/manifest.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("src/pages/DesignIntelligence/ui-design-bundle")
+          m=json.loads((root/"manifest.json").read_text())
+          assert len(m.get("designs", [])) == 3600, "expected 3,600 designs"
+          assert len(m.get("categories", [])) == 18, "expected 18 categories"
+          entries=list(root.rglob("*"))
+          files=[p for p in entries if p.is_file()]
+          assert len(list((root/"designs").rglob("Design.jsx"))) == 3600, "expected 3,600 React components"
+          assert len(list((root/"designs").rglob("design.css"))) == 3600, "expected 3,600 CSS files"
+          assert not any(p.suffix.lower()==".zip" for p in files), "ZIP should not be copied into the asset folder"
+          tracked_changes=[]
+          print(f"Design bundle: {len(m['designs'])} manifest entries, {len(m['categories'])} categories, {len(files)} files")
+          PY
+          git status --short
+          unexpected="$(git status --porcelain --untracked-files=all | sed -E 's/^...//' | grep -v '^src/pages/DesignIntelligence/ui-design-bundle/' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Unexpected workspace changes outside the Design Intelligence bundle:"
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Commit only the validated Design Intelligence asset pack
+        shell: bash
+        env:
+          ACTIONS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git add src/pages/DesignIntelligence/ui-design-bundle
+          if git diff --cached --quiet; then
+            echo "The exact validated bundle is already present; idempotent no-op."
+            exit 0
+          fi
+          changed="$(git diff --cached --name-only)"
+          unexpected="$(printf '%s\n' "$changed" | grep -v '^src/pages/DesignIntelligence/ui-design-bundle/' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "Refusing to commit files outside the DI bundle:"
+            echo "$unexpected"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "feat(di): add validated 3600-design UI asset bundle"
+          auth="$(printf 'x-access-token:%s' "$ACTIONS_TOKEN" | base64 -w0)"
+          git -c http.extraheader="AUTHORIZATION: basic $auth" push origin HEAD:refs/heads/feature/design-intelligence

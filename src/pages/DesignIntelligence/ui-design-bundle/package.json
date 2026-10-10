@@ -1,0 +1,14 @@
+{
+  "name": "motionzync-premium-ultra-ui-design-bundle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UI design asset pack for MotionZync Design Intelligence (review-only, no backend wiring)",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate-bundle.mjs",
+    "build:preview": "node scripts/build-preview.mjs"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  }
+}

@@ -1142,3 +1142,42 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 1. Test the configured admin Gmail at https://motion-zync.vercel.app/admin and verify policy save/reload with a real session; never share ID tokens or secrets in chat.
 2. Test API-key issue/rotate/revoke, Effects/CORS and BYOK using authorized accounts.
 3. Complete physical device and manual accessibility tests last.
+
+
+## 2026-10-10 — Kimi UI design ZIP imported to the feature branch
+
+### IMPLEMENTED
+- Added a hash-pinned, two-layer ZIP importer workflow and safe audit workflow for the uploaded archive at zip-upload-folder/Kimi_Agent_Direct Zip Download.zip.
+- Added the prepared asset pack at src/pages/DesignIntelligence/ui-design-bundle/ in commit 78a8235. The top-level bundle root was stripped once, and the pack's README.md/package.json remain isolated from the repository-root files.
+- Repaired unresolved generated JSX references in all 3,600 design components using statically imported shared React parts in shared/parts/GeneratedParts.jsx. No generated API calls or secret values were added.
+- Hardened the preview-index builder to HTML-escape manifest metadata and improved its validator to detect unresolved macro references.
+
+### VERIFIED
+- The archive-audit workflow run 38069287318 passed. The reviewed outer and inner ZIP SHA-256 values were pinned in the importer, and both archive layers passed path, duplicate, case-collision, symlink and CRC/integrity checks.
+- The import workflow run 38070025991 passed: https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38070025991
+- Manifest validation found 3,600 unique design IDs, exactly 18 categories with at least 100 Premium and 100 Ultra Premium+ entries each, and light/dark/colorful theme metadata. There are 3,600 Design.jsx files and 3,600 design.css files.
+- Static JSX parsing passed for 3,602 files (the 3,600 designs, GeneratedParts.jsx and PreviewShell.jsx). The bundle validator reported ALL GATES PASSED, and the existing MotionZync Vite build passed in 2.56 seconds.
+- The importer staged and committed 10,820 files only within src/pages/DesignIntelligence/ui-design-bundle/. It did not copy the ZIP into the runtime bundle, overwrite root README/package files, alter the canonical database, or change unrelated application routes.
+- Vercel metadata confirms VITEMOTIONAPI is stored as a Sensitive environment variable for the configured environments. Its value was not read, logged, or embedded into client-side code; the asset import does not require it.
+
+### UNVERIFIED
+- Full human visual-origination/originality review and real browser render spot checks across the bundle.
+- Explorer/Generator registration and canonical catalog mapping: the imported bundle is deliberately an asset pack and is not yet exposed as 3,600 live selectable designs.
+- Production deployment impact on clone/build time and real-device performance after this large source addition.
+- Genuine Firebase admin, authenticated Premium/Ultra, API-key lifecycle, Effects/CORS, BYOK and physical Android/keyboard/screen-reader checks remain UNVERIFIED.
+
+### MILESTONE AUDIT
+- Regression: the existing application build passed with the asset folder present; no route, auth, payment, Firebase or Vercel configuration file was changed by the import.
+- Functionality: bundle manifest, file paths, shared-part imports and JSX syntax passed automated checks; live Explorer/Generator wiring is not implemented by this commit.
+- Accessibility: every design CSS file has focus-visible, prefers-reduced-motion and responsive media rules according to the bundle validator. Real screen-reader and device review is still required.
+- Privacy/security: both ZIP layers passed path/symlink/collision/integrity checks; heuristic scan found no private-key/token signatures. VITEMOTIONAPI remains Sensitive and is not used by the design components.
+- Performance: the existing Vite build succeeded; production deployment and on-device rendering/performance have not yet been checked.
+- Data quality: no duplicate manifest IDs were found; category/tier minimums and manifest paths passed; unresolved JSX macro references were repaired instead of importing broken templates.
+- Documentation: this START_HERE checkpoint and handover.md checkpoint are being synchronized on the feature branch.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete the documentation checkpoint and run the full Design Intelligence regression suite on the actual asset-import commit/head.
+2. Open/update a PR from feature/design-intelligence to main and merge only after the exact-head CI checks pass; verify main CI and Vercel deployment afterward.
+3. Perform representative browser/theme/responsive/accessibility spot checks. Do not claim all 3,600 designs visually reviewed.
+4. Plan a separate, controlled Explorer/Generator catalog registration that uses the existing canonical Design Intelligence and server-authoritative entitlement boundary—no second database, no client-only premium unlock.
+5. Finish real Firebase/API and physical-device tests last, as requested.

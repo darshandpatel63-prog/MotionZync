@@ -1,0 +1,36 @@
+/**
+ * ultra-games-hud-menus-073 — Character loadout screen — Expanded Advanced
+ * Category: games-hud-menus | Tier: Ultra Premium+ | Layout: split-pane
+ * Sample data is fictional. Themes: light, dark, colorful (semantic tokens).
+ */
+import React from "react";
+import "./design.css";
+import {CARDS2, ROWS5} from "../../../../shared/parts/GeneratedParts.jsx";
+
+export default function Design() {
+  return (
+    <div className="mz-root mz-ultra-games-hud-menus-073 mz-density--roomy" data-motion="purposeful-reduced-motion-aware">
+      <nav className="mz-nav mz-nav--sidebar" aria-label="Primary">
+        <div className="mz-brand"><span aria-hidden="true">◆</span> MotionZync</div>
+        <ul>          <li><a href="#" className="mz-navlink is-active">Library</a></li>
+          <li><a href="#" className="mz-navlink">Archive</a></li>
+          <li><a href="#" className="mz-navlink">Saved</a></li>
+          <li><a href="#" className="mz-navlink">Explore</a></li></ul>
+      </nav>
+      <main className="mz-main">
+        <div className="mz-split">
+          <section className="mz-split__list" aria-label="List"><ROWS5 seed="ultra-games-hud-menus-073" /></section>
+          <section className="mz-split__detail" aria-label="Detail">
+            <h2>Character loadout screen — Expanded Advanced</h2>
+            <p>Select an item to inspect its full detail here.</p>
+            <CARDS2 seed="ultra-games-hud-menus-073" />
+          </section>
+        </div>
+        <aside className="mz-insight" aria-label="Insight">
+          <h3>Key insight</h3>
+          <p>Three items need review before the weekly sync.</p>
+        </aside>
+      </main>
+    </div>
+  );
+}

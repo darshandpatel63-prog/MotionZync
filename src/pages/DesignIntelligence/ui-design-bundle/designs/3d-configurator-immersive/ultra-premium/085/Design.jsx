@@ -1,0 +1,32 @@
+/**
+ * ultra-3d-configurator-immersive-085 — Garden landscape builder — Compare Advanced
+ * Category: 3d-configurator-immersive | Tier: Ultra Premium+ | Layout: card-grid
+ * Sample data is fictional. Themes: light, dark, colorful (semantic tokens).
+ */
+import React from "react";
+import "./design.css";
+import {CARDS6} from "../../../../shared/parts/GeneratedParts.jsx";
+
+export default function Design() {
+  return (
+    <div className="mz-root mz-ultra-3d-configurator-immersive-085 mz-density--default" data-motion="purposeful-reduced-motion-aware">
+      <nav className="mz-nav mz-nav--rail" aria-label="Primary">
+        <ul>          <li><a href="#" className="mz-navlink is-active">Members</a></li>
+          <li><a href="#" className="mz-navlink">Explore</a></li>
+          <li><a href="#" className="mz-navlink">Library</a></li>
+          <li><a href="#" className="mz-navlink">Settings</a></li></ul>
+      </nav>
+      <main className="mz-main">
+        <section className="mz-gridhead">
+          <h2>Garden landscape builder — Compare Advanced</h2>
+          <p>Browse, filter and compare items in this collection.</p>
+        </section>
+        <section className="mz-cardgrid" aria-label="Items"><CARDS6 seed="ultra-3d-configurator-immersive-085" /></section>
+        <section className="mz-compare" aria-label="Comparison">
+                    <div className="mz-compare__card"><h4>Option A</h4><p className="mz-metric">53%</p></div>
+          <div className="mz-compare__card"><h4>Option B</h4><p className="mz-metric">15%</p></div>
+        </section>
+      </main>
+    </div>
+  );
+}
