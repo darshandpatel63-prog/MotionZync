@@ -346,6 +346,8 @@ jobs:
               await page.locator('.dib-preview-placeholder button').click()
               await page.locator('.dib-rendered-preview').waitFor({state:'visible',timeout:30000})
               assert((await page.locator('.dib-rendered-preview').getAttribute('data-theme')) === 'light', 'UI Gallery initial theme is not light')
+              const lightSurface = await page.locator('.dib-rendered-preview').evaluate(element => getComputedStyle(element).getPropertyValue('--mz-surface').trim())
+              assert(lightSurface === '#ffffff', 'UI Gallery light theme tokens were not applied: '+lightSurface)
               const themeSurfaceTokens = {light:'#ffffff',dark:'#12141a',colorful:'#fffaf3','high-contrast':'#000'}
               const readSurfaceToken = () => page.locator('.dib-rendered-preview').evaluate(element => getComputedStyle(element).getPropertyValue('--mz-surface').trim())
               assert((await readSurfaceToken()) === themeSurfaceTokens.light, 'UI Gallery light theme surface token was not applied')
@@ -353,6 +355,9 @@ jobs:
                 await page.getByRole('button', {name:theme, exact:true}).click()
                 const expected = theme === 'High contrast' ? 'high-contrast' : theme.toLowerCase()
                 assert((await page.locator('.dib-rendered-preview').getAttribute('data-theme')) === expected, 'UI Gallery theme did not apply: '+expected)
+                const expectedSurface = {'Dark':'#12141a','Colorful':'#fffaf3','High contrast':'#000'}[theme]
+                const surface = await page.locator('.dib-rendered-preview').evaluate(element => getComputedStyle(element).getPropertyValue('--mz-surface').trim())
+                assert(surface === expectedSurface, 'UI Gallery computed theme token mismatch for '+expected+': '+surface)
                 assert((await readSurfaceToken()) === themeSurfaceTokens[expected], 'UI Gallery theme surface token did not apply: '+expected)
               }
 
