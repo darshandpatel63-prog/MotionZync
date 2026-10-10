@@ -4890,3 +4890,24 @@ FIRST UNFINISHED TASK remains:
 3. With authorized real accounts/credentials, verify API-key issue/rotate/revoke, hash-only-at-rest, Premium denial, revoked-key rejection, Effects/CORS and live BYOK execution.
 4. Review Claude's eventual ZIP for all 18 categories, at least 100 Premium + 100 Ultra designs per category (3,600 minimum), distinct compositions, light/dark/colorful themes, manifest paths and build/security/accessibility before integrating templates. The ZIP itself has not yet been generated.
 5. Finish physical Android, keyboard and screen-reader checks LAST. Record the actual result and do not paste ID tokens/API secrets into chat.
+
+## 2026-10-10 — Production environment secret-visibility hardening
+
+### IMPLEMENTED
+- In the existing Vercel MotionZync project, changed FIREBASE_PRIVATE_KEY and GITHUB_TOKEN visibility to Sensitive/Secret, without reading or changing their values. Existing development, preview and production targets were preserved.
+- Confirmed ADMIN_EMAIL and VITE_ADMIN_EMAIL are both configured for production and match after normalized comparison. No email value is recorded here.
+- Redeployed the unchanged main source with the environment visibility update; no secret or token was committed to Git.
+
+### VERIFIED
+- Production redeployment dpl_GMfbDQixUNotVNqZPRWMn1D2xQMS reached READY on https://motion-zync.vercel.app.
+- The environment metadata reports FIREBASE_PRIVATE_KEY and GITHUB_TOKEN as sensitive with no readable-secret warning.
+- Post-redeploy guest /api/di-knowledge returned HTTP 200, 35 Free-only records and protectedRecordCount 0. Forged Ultra query claims remained Free-only. Generator route returned HTTP 200.
+- Main docs checkpoint SHA 5368e73e44b538ede6dadbe41fe4ba6c1e6e3a13 passed Design Intelligence CI run 38054504475. Its production deployment dpl_7MWBak1AHeZio4PRZVffuQD1HtDJ is READY.
+
+### UNVERIFIED
+- Real admin Gmail login, real Firestore policy save/reload, signed-in Premium/Ultra visibility, actual API-key lifecycle, Effects/CORS, and live BYOK execution still require a genuine authorized user session. Physical Android, keyboard and screen-reader testing remains deferred until last.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify real admin login and access-policy persistence from https://motion-zync.vercel.app/admin using the configured account; do not paste Firebase tokens or secrets into chat.
+2. Test API key issue/rotate/revoke and Effects/CORS/BYOK with authorized accounts.
+3. Finish physical device and manual accessibility checks last.
