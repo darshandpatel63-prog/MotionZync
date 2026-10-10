@@ -4655,3 +4655,48 @@ FIRST UNFINISHED TASK remains:
 3. Test deployed `/api/di-knowledge` and `/api/di-effects` with authorized credentials, including CORS allow/deny, effects payload limit, CSS-only generation and reduced-motion fallback.
 4. Verify the actual Design Intelligence Generator → existing BYOK provider/model → output flow using real configured provider credentials.
 5. Finish manual Android/mobile keyboard/screen-reader review. Do not change the payment launch state or begin large content expansion before these gates close.
+
+## 2026-10-10 — Admin Ultra Premium+ override and generator responsive preview
+
+### IMPLEMENTED
+- Added resolveAdminEntitlement() in api/_lib/billing.js. If the Firebase Admin SDK resolves the authenticated UID to the server-configured ADMIN_EMAIL (case-insensitive match), entitlement resolves to permanent ultra-premium with source admin-email-allowlist and no expiry.
+- This does not trust a browser-supplied email/tier claim and does not hard-code or expose the admin Gmail in source. It depends on the existing server-only ADMIN_EMAIL environment setting.
+- Added pure contract assertions proving case-insensitive allowlist matching, rejection of another email, and rejection when the server allowlist is missing.
+- Added Desktop / Tablet / Mobile size controls to the Design Intelligence Generator preview. The selected button exposes aria-pressed and changes the recipe-preview layout class. The caption explicitly identifies this as a layout simulation, not a live website screenshot.
+- Extended the existing browser CI step to verify all three preview states. Adjusted the AI-refinement selector so the additional aria-pressed preview controls do not collide with its test.
+- Firebase Admin is initialized before the authenticated user lookup. No changes to src/App.jsx or src/components/Navbar/Navbar.jsx were needed.
+
+### VERIFIED
+- Earlier exact-head Design Intelligence run 38050558688 completed its previously reported build, contract, browser, accessibility, clipboard and responsive checks successfully for the then-current documentation-only HEAD.
+- The new admin contract, responsive-preview browser assertions, and new preview UI need the Actions result for the resulting HEAD before they can be marked VERIFIED.
+- The feature preview deployment for the latest code/test commits is being created; its runtime interaction and Firebase-authenticated behavior are not claimed yet.
+
+### UNVERIFIED
+- The actual production value/configuration of ADMIN_EMAIL cannot be read through this repository connector. The code uses that server-only setting; successful end-to-end access for the genuine admin Gmail still needs the user's real signed-in session.
+- Real Firebase Premium/Ultra account behavior, API-key issue/rotate/revoke/hash-only storage, revoked-key rejection, authenticated Effects/CORS, BYOK provider execution and manual Android/screen-reader audit remain UNVERIFIED.
+- Responsive controls are a styled preview simulation, not an iframe/device emulator or full generated application renderer.
+- The public production alias is still not claimed to contain these feature-branch changes.
+
+### MILESTONE AUDIT
+- Regression: existing full CI suite is preserved and a specific Playwright assertion was added for Desktop/Tablet/Mobile preview switching; current-head result pending.
+- Functionality: the admin tier is derived from the Firebase Admin user record and the server allowlist, not frontend claims. Browser preview controls update selected state and CSS layout simulation.
+- Accessibility: preview controls have a labeled group, meaningful button names, aria-pressed, 44px minimum height, and existing visible-focus styles; current-head automated Axe result pending, manual screen-reader review remains UNVERIFIED.
+- Privacy/security: no token, API key or production Gmail was read or copied into source. Admin identity check uses Firebase Admin on the server.
+- Performance: configured admin checking requires a Firebase Admin user lookup for authenticated entitlement resolution; production latency profiling is UNVERIFIED.
+- Data quality: no fabricated user, Firestore entitlement, catalog record, API key, or second database was created.
+- Build/test: new exact-head CI result and newest preview READY state still need confirmation.
+- Documentation: this entry records the implementation and verification boundary; keep the status labels accurate.
+
+### STATUS
+- Phase A — Engine / System: 98% — IN PROGRESS; do not increase based only on this milestone.
+- Phase B — Publish: existing published npm 0.1.0 remains verified, but it does not contain these newer source changes. Any later release must bump version and verify a clean public install.
+- Phase C — Continuous Content Expansion: 0% — NOT STARTED. No large or fabricated catalog expansion was made.
+- Cashfree / payment launch UI remains intentionally pending.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify the exact latest branch-head CI result and matching Vercel preview deployment/runtime before claiming the new changes are verified.
+2. Run a genuine Firebase-authenticated admin session through Design Intelligence and confirm server response resolves to permanent Ultra Premium+; do not paste ID tokens or keys into chat.
+3. Using authorized credentials, verify real Premium denial and Ultra API-key issue/rotate/revoke, hash-only-at-rest and revoked-key rejection; then verify Effects API/CORS and BYOK.
+4. Complete manual Android/mobile keyboard, focus and screen-reader review.
+5. Continue building out the actual UI-generation workflow from the existing canonical recipe core; keep responsive preview clearly distinguished from a full live rendered app.
+6. Keep Phase A at 98%, Phase B package re-release pending, Phase C content expansion deferred, and Cashfree launch UI pending until their respective gates close.
