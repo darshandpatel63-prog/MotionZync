@@ -330,8 +330,12 @@ const guestResponse = await callHandler(diKnowledgeHandler)
 assert.equal(guestResponse.statusCode, 200, 'Guest knowledge request should remain public')
 assert.deepEqual(guestResponse.body.entitlement, {
   tier: 'free',
+  contentTier: 'free',
   authenticated: false,
   protectedIncluded: false,
+  ultraContentIncluded: false,
+  contentAccessReason: 'public-free',
+  festivalOfferActive: false,
 })
 assert.equal(guestResponse.body.protectedRecordCount, 0, 'Guest response exposed protected records')
 assert.equal(guestResponse.body.records.every(record => record.tier === 'free'), true, 'Guest response contains a non-Free record')
@@ -346,8 +350,12 @@ const spoofedTierGuest = await callHandler(diKnowledgeHandler, {
 assert.equal(spoofedTierGuest.statusCode, 200)
 assert.deepEqual(spoofedTierGuest.body.entitlement, {
   tier: 'free',
+  contentTier: 'free',
   authenticated: false,
   protectedIncluded: false,
+  ultraContentIncluded: false,
+  contentAccessReason: 'public-free',
+  festivalOfferActive: false,
 })
 assert.equal(spoofedTierGuest.body.records.every(record => record.tier === 'free'), true)
 assert.equal(spoofedTierGuest.body.protectedRecordCount, 0)
