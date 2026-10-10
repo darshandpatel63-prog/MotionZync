@@ -1,5 +1,5 @@
 import { requireAdmin } from './_lib/firebase-admin.js'
-import { getBillingAnalytics, grantEntitlementByEmail } from './_lib/billing.js'
+import { getBillingAnalytics, grantEntitlementByEmail, getDesignIntelligenceAccessPolicy, getDesignIntelligenceAccessState, saveDesignIntelligenceAccessPolicy } from './_lib/billing.js'
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control','private, no-store, max-age=0')
@@ -19,10 +19,29 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      return res.status(200).json(await getBillingAnalytics())
+      const [analytics, accessPolicy] = await Promise.all([
+        getBillingAnalytics(),
+        getDesignIntelligenceAccessPolicy(),
+      ])
+      return res.status(200).json({
+        ...analytics,
+        accessPolicy,
+        accessPolicyState: getDesignIntelligenceAccessState(accessPolicy),
+      })
     }
 
     const body = req.body || {}
+    if (body.action === 'saveDesignIntelligenceAccessPolicy') {
+      const accessPolicy = await saveDesignIntelligenceAccessPolicy(body.accessPolicy, {
+        uid: adminUser.uid,
+        email: adminUser.email,
+      })
+      return res.status(200).json({
+        ok: true,
+        accessPolicy,
+        accessPolicyState: getDesignIntelligenceAccessState(accessPolicy),
+      })
+    }
     if (body.action !== 'grantEntitlement') {
       return res.status(400).json({ error:'Unknown billing admin action' })
     }

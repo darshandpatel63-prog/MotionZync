@@ -31,14 +31,16 @@ const scoreRecord=(record,tokens)=>{
   return tokens.reduce((score,token)=>score+(haystack.includes(token)?1:0),0)
 }
 const best=(records,tokens,entitlementTier='free',fallback=0,anchorIds=[])=>{
-  const max=levelOf(entitlementTier)
-  const allowed=records.filter(record=>levelOf(record.tier)<=max)
+  const allowed=records.filter(record=>isAccessible(record,entitlementTier))
   const pool=allowed.length?allowed:records.filter(record=>record.tier==='free')
   const ranked=pool.map(record=>({record,score:scoreRecord(record,tokens),relationshipScore:relationshipScore(record.id,anchorIds)})).sort((a,b)=>b.score-a.score||b.relationshipScore-a.relationshipScore)
   return (ranked[0]?.score||0)>fallback?ranked[0].record:pool[0]
 }
 
-export const isAccessible=(record,entitlementTier='free')=>!!record&&levelOf(record.tier)<=levelOf(entitlementTier)
+export const isAccessible=(record,entitlementTier='free')=>{
+  const recordLevel=ENTITLEMENT_LEVELS[record?.tier]
+  return !!record&&recordLevel!==undefined&&recordLevel<=levelOf(entitlementTier)
+}
 export const getAccessibleRecord=(records,id,entitlementTier='free')=>{
   const record=records.find(item=>item.id===id)
   return isAccessible(record,entitlementTier)?record:null
@@ -198,11 +200,11 @@ export function buildRecipe(prompt='',entitlementTier='free',catalogs=CATALOG_BY
   const palette=best(catalog.palettes,[...tokens,request.industry],entitlementTier,0,[style.id])
   const typography=best(catalog.typography,[...tokens,request.industry],entitlementTier,0,[style.id,palette.id])
   const chart=(request.product==='dashboard'||request.product==='analytics')?best(catalog.charts,tokens,entitlementTier,0,[style.id,palette.id,typography.id]):null
-  const stack=request.platform==='mobile'||request.platform==='android'
-    ?(tokens.includes('flutter')?catalog.stacks.find(r=>r.id==='stack-flutter'):catalog.stacks.find(r=>r.id==='stack-react-native'))
-    :(request.platform==='ios'
-      ?(catalog.stacks.find(r=>r.id==='stack-swiftui')||best(catalog.stacks,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
-      :best(catalog.stacks,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id]))
+  const preferredStackId=request.platform==='mobile'||request.platform==='android'
+    ?(tokens.includes('flutter')?'stack-flutter':'stack-react-native')
+    :request.platform==='ios'?'stack-swiftui':null
+  const stack=(preferredStackId?getAccessibleRecord(catalog.stacks,preferredStackId,entitlementTier):null)
+    ||best(catalog.stacks,tokens,entitlementTier,0,[style.id,palette.id,typography.id,chart?.id])
   const recipeMatch=best(catalog.recipes,[...tokens,request.industry,style.id],entitlementTier,0,[style.id,palette.id,typography.id,chart?.id,stack?.id])
   const compositionFamily=request.product==='dashboard'||request.product==='analytics'?'dashboard':request.product==='ecommerce'||request.product==='commerce'?'commerce':request.product==='landing'||request.product==='portfolio'?'editorial':request.product==='mobile'||request.product==='app'?'mobile':request.product==='healthcare'||request.product==='education'||request.product==='admin'?'workspace':'product'
   const candidate={
@@ -230,14 +232,13 @@ export function buildRecipe(prompt='',entitlementTier='free',catalogs=CATALOG_BY
 export function searchCatalog(query='',domain='all',entitlementTier='free',catalogs=CATALOG_BY_DOMAIN){
   const catalog=catalogMap(catalogs)
   const domains=domain==='all'?Object.keys(catalog):[domain]
-  const max=levelOf(entitlementTier)
   const results=[]
   for(const currentDomain of domains){
     const records=catalog[currentDomain]
     const index=catalogs===CATALOG_BY_DOMAIN?SEARCH_INDEXES[currentDomain]:buildSearchIndex(records)
     if(!records||!index)continue
     for(const record of searchIndex(index,query)){
-      if(levelOf(record.tier)>max)continue
+      if(!isAccessible(record,entitlementTier))continue
       const score=scoreSearchRecord(record,query)
       if(!query||score>0)results.push({record,score})
     }

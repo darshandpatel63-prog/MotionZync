@@ -40,6 +40,10 @@ export async function fetchDesignIntelligenceKnowledge(user=null){
   return {
     catalogs:records,
     entitlementTier:json?.entitlement?.tier||'free',
+    designAccessTier:json?.entitlement?.contentTier||json?.entitlement?.tier||'free',
+    contentAccessReason:json?.entitlement?.contentAccessReason||'public-free',
+    ultraContentIncluded:json?.entitlement?.ultraContentIncluded===true,
+    festivalOfferActive:json?.entitlement?.festivalOfferActive===true,
     protectedIncluded:json?.entitlement?.protectedIncluded===true,
     counts:json?.counts||{},
   }

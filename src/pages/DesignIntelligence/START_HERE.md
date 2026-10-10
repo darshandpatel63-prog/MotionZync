@@ -625,3 +625,477 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **0% — NOT STARTED**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — npm publication readiness checkpoint
+
+### IMPLEMENTED
+- Added guarded npm publication workflow `.github/workflows/design-intelligence-npm-publish.yml`.
+- Normal commits cannot publish; only an explicit `[publish-npm]` commit triggers the publication job.
+- The workflow uses the existing canonical package and npm provenance.
+
+### VERIFIED
+- `@motionzync/design-intelligence@0.1.0` package structure and local clean installation were previously verified.
+- Public npm registry publication is not currently verified.
+
+### UNVERIFIED
+- npm registry publication and external `npm install`.
+- Repository `NPM_TOKEN` availability and npm scope publishing permission.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — npm publication authentication checkpoint
+
+### VERIFIED
+- npm package metadata and tarball validation passed in GitHub Actions.
+- The publish command reached npm but returned `ENEEDAUTH` because the repository's `NPM_TOKEN` secret is empty/unavailable.
+- No npm package was published.
+
+### IMPLEMENTED
+- npm publication workflow supports both guarded push and manual `workflow_dispatch`.
+- No npm credential is stored in repository files.
+
+### UNVERIFIED
+- Public npm publication and external `npm install`.
+- npm scope ownership/write permission.
+
+### REQUIRED OWNER ACTION
+- Add repository secret `NPM_TOKEN` with a suitable npm granular publish token, then run the workflow manually. Never share the token in chat.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — Public npm/developer documentation checkpoint
+
+### IMPLEMENTED
+- Public npm README now explains installation, search, design selection, deterministic recipe generation, validation, exports and authorized remote/API usage.
+- Public Design Intelligence Docs now exposes the same developer workflow and current seed-design categories.
+- Public Home/Docs no longer display the deferred Ultra payment price.
+
+### VERIFIED
+- npm package metadata and local tarball installation remain VERIFIED.
+- Publication workflow includes the GitHub Actions OIDC permission required for npm provenance publishing. citeturn115542search6turn115542search2
+
+### UNVERIFIED
+- Public npm registry publication and external registry install.
+- Current post-documentation browser/build verification until CI completes.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase entitlement/API-key boundary exercise.
+2. Cashfree Sandbox end-to-end (public payment UI intentionally deferred).
+3. Ultra API-key lifecycle + Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Publish and externally verify `@motionzync/design-intelligence`.
+7. Final Phase-A publication/compatibility gates; large content expansion deferred.
+
+
+## 2026-10-04 — Public npm developer documentation checkpoint
+
+### IMPLEMENTED
+- Public package README now documents installation, design search/selection, recipe generation, compatibility checks, token/CSS/JSON exports, current catalog, protected API clients and release boundaries.
+- In-product Docs now explains the same canonical npm core and keeps the deferred payment price out of public UI.
+
+### VERIFIED
+- Documentation examples align with current npm exports and canonical record IDs.
+
+### UNVERIFIED
+- Public npm registry publication and external `npm install`.
+- Real protected API calls with valid server-issued credentials.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **0% — NOT STARTED**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-04 — npm publication continuation checkpoint
+
+### VERIFIED
+- The owner has configured the GitHub Actions repository secret `NPM_TOKEN` for the canonical npm publication workflow.
+- The manual `Run workflow` button is not visible because the workflow file is only on `feature/design-intelligence`; the branch-local guarded `[publish-npm]` push trigger is being used instead, without touching `main`.
+- A handover commit with `[publish-npm]` has been created to trigger the existing publication workflow.
+
+### UNVERIFIED
+- The resulting npm publication run and public registry installation are not yet verified.
+
+### NEXT
+- Verify the publication run, then verify `@motionzync/design-intelligence@0.1.0` on the public npm registry and perform a clean external installation.
+
+
+## 2026-10-04 — npm publication checkpoint
+
+- **VERIFIED:** GitHub Actions publish run `37181790607` succeeded on `feature/design-intelligence`.
+- **VERIFIED:** npm published `@motionzync/design-intelligence@0.1.0`; npm confirmation reports SHA-512 digest `c6b41f36bfdf20436a009df8526eb5a1e1edb599`.
+- **IMPLEMENTED:** handover records the publication milestone and moves the first unfinished task to a clean registry-backed consumer install/import smoke test.
+- **UNVERIFIED:** external clean install/import, provenance/registry metadata inspection, and all credentialed runtime integrations.
+- **Do not redo:** npm package implementation/publication workflow. Continue with the new first unfinished task in `handover.md`.
+
+
+## 2026-10-04 — External npm registry verification gate
+
+- **IMPLEMENTED:** DI build CI now installs `@motionzync/design-intelligence@0.1.0` from the public npm registry in a fresh consumer directory and smoke-tests its published exports/version/catalog.
+- **UNVERIFIED:** The resulting CI run has not yet been observed as completed. Do not mark external registry installation VERIFIED until that run passes.
+- **Current continuation:** inspect the latest Design Intelligence Build Check result for the external npm install/import step, then continue from `handover.md` FIRST UNFINISHED TASK.
+
+
+## 2026-10-04 — External npm registry installation/import VERIFIED
+
+### VERIFIED
+- The current branch HEAD cbdc47a7d55c3990f5882ee96436939a59c81346 has a successful Design Intelligence CI build job 111376349657 in run 37182026206.
+- CI installed @motionzync/design-intelligence@0.1.0 from the public npm registry in a fresh consumer directory and successfully imported the published package.
+- The smoke test verified published version 0.1.0, required public exports, and a non-empty canonical DI_STYLES catalog.
+- Therefore clean registry-backed npm installation/import is now VERIFIED.
+
+### UNVERIFIED
+- Real Firebase Free/Premium/Ultra entitlement and MotionZync API-key lifecycle.
+- Real Cashfree Sandbox ₹200 end-to-end.
+- Real Ultra API-key lifecycle and deployed Effects API execution/CORS.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual production browser/device/keyboard/screen-reader audit.
+- npm provenance/registry metadata inspection beyond the successful install/import smoke test.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Cashfree Sandbox ₹200 end-to-end (public payment UI intentionally deferred).
+3. Real Ultra API-key lifecycle + deployed Effects API.
+4. Real BYOK provider execution/CORS/model compatibility.
+5. Manual production browser/device/screen-reader audit.
+6. Close final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+
+## 2026-10-04 — CURRENT CONTINUATION CHECKPOINT
+
+### VERIFIED
+- Public npm package publication and clean registry installation/import are VERIFIED.
+
+### IMPLEMENTED
+- Public npm developer documentation is available in the feature docs and main user-facing documentation.
+- npm installation and developer example code on the Design Intelligence Docs route now have accessible Copy controls.
+
+### UNVERIFIED
+- Real Firebase Free/Premium/Ultra entitlement/API-key boundary.
+- Real Ultra API-key lifecycle and deployed effects API/CORS exercise.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual production browser/device/keyboard/screen-reader audit.
+- Final Phase-A publication/compatibility closure.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Ultra API-key lifecycle + deployed Effects API/CORS exercise.
+3. Real BYOK provider execution/CORS/model compatibility.
+4. Manual production browser/device/screen-reader audit.
+5. Final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+
+## 2026-10-08 — CURRENT CONTINUATION CHECKPOINT
+
+### VERIFIED
+- Current `feature/design-intelligence` HEAD is `203f293197044ca5ed6ebef18c11e5ae7686fd9b`.
+- Latest READY feature-branch Vercel runtime deployment is `dpl_FN7svLPVZ4cULDHRRUZcfc9FG3Xa` from commit `7d44bad8d9c28de8ddc469ab8d0a50f2a5ec1acb`; later commits through current HEAD are documentation/public-npm workflow changes only.
+- Unauthenticated `/api/di-knowledge` on the READY feature deployment returns the free-only, server-derived boundary.
+- Firebase Admin environment-variable names are present in Vercel; secret values were not decrypted.
+
+### UNVERIFIED
+- Real authenticated Firebase Free/Premium/Ultra and MotionZync API-key exercise.
+- Real Ultra API-key lifecycle and deployed Effects API/CORS exercise.
+- Real BYOK provider execution/CORS/model compatibility.
+- Manual production browser/device/keyboard/screen-reader audit.
+- Final Phase-A publication/compatibility closure.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise.
+2. Real Ultra API-key lifecycle + deployed Effects API/CORS exercise.
+3. Real BYOK provider execution/CORS/model compatibility.
+4. Manual production browser/device/keyboard/screen-reader audit.
+5. Final Phase-A publication/compatibility gates; keep large content expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — CURRENT VERIFIED CONTINUATION CHECKPOINT
+
+### VERIFIED
+- The latest observed READY feature deployment is `dpl_FfroGwy6o8WVc6vXDzqfPz4RQQBc` from commit `6fa8155f3befaad1fba30da6d47a213bbeb39115`; the Vercel deployment check reports success.
+- Public production `GET /api/di-knowledge` returns HTTP 200 with server-derived Free access, `authenticated: false`, `protectedIncluded: false`, and only the bounded free catalog.
+- Unknown knowledge domains are rejected with HTTP 400.
+- The latest details and complete regression/functionality/accessibility/privacy/performance/data/build/documentation status are recorded at the end of `handover.md`.
+
+### UNVERIFIED
+- Real Firebase-authenticated Free/Premium/Ultra boundary and real MotionZync API-key issue/rotate/revoke lifecycle.
+- Real Ultra Effects API/CORS execution and real BYOK provider/model/CORS execution.
+- Manual production browser/device/keyboard/screen-reader review and direct clipboard interaction.
+- Preview API route tests that require a Vercel-authenticated path have not been reported as application failures.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete the real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary exercise without sharing ID tokens or API secrets.
+2. Verify real Ultra API-key lifecycle and deployed Effects API/CORS.
+3. Verify real BYOK provider execution, CORS and model compatibility.
+4. Complete manual production browser/device/keyboard/screen-reader audit, including Docs copy buttons.
+5. Close final Phase-A publication/compatibility gates. Keep 1,000+/10,000+ verified-data expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; remaining credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — CURRENT CONTINUATION CHECKPOINT (COPY-CONTROL CI PENDING)
+
+### IMPLEMENTED
+- Docs and package README now accurately state that public npm version `@motionzync/design-intelligence@0.1.0` is published and clean registry installation/import is verified.
+- Docs command Copy controls announce success/failure using a semantic status region.
+- Design Intelligence browser CI now verifies both copy controls, clipboard contents for the exact installation command and developer example, and success feedback.
+
+### VERIFIED
+- Previous public production free-only knowledge response and invalid-domain rejection remain verified in the preceding checkpoint.
+- npm publication and clean registry installation/import remain VERIFIED.
+
+### UNVERIFIED
+- The latest full CI run, including Chromium clipboard assertions, is pending observation.
+- Production mobile clipboard/screen-reader behavior remains manual verification work.
+- Real authenticated Firebase/Ultra API-key/effects and BYOK execution remain unverified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Observe the current Design Intelligence Build Check; fix any reproduced build/browser/Axe/clipboard failure narrowly.
+2. Complete authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary verification without exposing secrets.
+3. Verify Ultra API-key lifecycle and deployed Effects API/CORS.
+4. Verify BYOK provider/CORS/model compatibility.
+5. Complete the manual production browser/device/keyboard/screen-reader audit.
+6. Close final Phase-A compatibility gates; keep 1,000+/10,000+ data expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation VERIFIED; clipboard CI and credentialed compatibility gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — CURRENT VERIFIED CONTINUATION CHECKPOINT (CLIPBOARD CI PASSED)
+
+### VERIFIED
+- Design Intelligence Build Check run [37920642677](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/37920642677) succeeded on commit `6bef91249f3a6be076733f78f93acf68fad4d80a`.
+- The run passed the build, entitlement/catalog contract, npm local and public registry consumer checks, and Playwright/Axe/responsive browser suite.
+- Chromium verified both Docs Copy controls, exact installation command, developer example contents and the “Copied to clipboard.” status feedback.
+- Previous public production free-boundary response and invalid-domain rejection remain VERIFIED; real authenticated tier and API-key behavior is not implied by those guest checks.
+
+### IMPLEMENTED
+- npm docs were corrected to reflect the published `@motionzync/design-intelligence@0.1.0` package.
+- Copy success/failure feedback and CI clipboard assertions are implemented.
+
+### UNVERIFIED
+- Real authenticated Firebase Free/Premium/Ultra and MotionZync API-key lifecycle.
+- Real Ultra Effects API/CORS and BYOK provider/model/CORS execution.
+- Manual production Android/mobile, keyboard and screen-reader audit.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real authenticated Firebase Free/Premium/Ultra + MotionZync API-key boundary verification, without exposing secrets.
+2. Real Ultra API-key issue/rotate/revoke and deployed Effects API/CORS verification.
+3. Real BYOK provider/CORS/model-compatibility verification.
+4. Manual production browser/device/keyboard/screen-reader audit.
+5. Final Phase-A publication/compatibility gates. Keep 1,000+/10,000+ dataset expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm publication + clean registry installation/import + clipboard CI VERIFIED; credentialed gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-09 — CURRENT CHECKPOINT (ACCESS CONTRACTS PASSED)
+
+### VERIFIED
+- Design Intelligence Build Check [37921788661](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/37921788661) succeeded on `14536bb350851077ac1d4683c22247c0ee39526f`.
+- Matching Vercel feature deployment `dpl_DPW1FLdkUovCHvMbVKhHpiqgD3o2` is READY.
+- Tier-aware preferred-stack and invalid-tier regression tests passed, along with guest API-key/Effects rejection, unknown-domain rejection, allowlisted/untrusted CORS, npm local/public install checks, Docs clipboard tests, route smoke tests, accessibility and responsive checks.
+
+### IMPLEMENTED
+- Preferred stack selection now respects the caller's tier.
+- Invalid record tiers fail closed in entitlement/search/recipe access.
+- Contract tests exercise the public guest and unauthenticated server-route boundaries.
+- npm publication wording reflects the existing public `0.1.0` release.
+
+### UNVERIFIED
+- Real authenticated Firebase Free/Premium/Ultra and API-key lifecycle, real deployed Ultra Effects API/CORS and real BYOK provider execution.
+- Manual production Android/mobile, keyboard and screen-reader audit.
+- New access-hardening source changes are not claimed as part of already-published npm `0.1.0`; bump version before any next publication.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify real authenticated Free/Premium/Ultra and MotionZync API-key boundaries without exposing tokens/secrets.
+2. Verify genuine Ultra API-key issue/rotate/revoke and deployed Effects API/CORS.
+3. Verify real BYOK provider/model/CORS compatibility.
+4. Manual production Android/mobile, keyboard and screen-reader audit.
+5. Plan a new npm version for the hardened core and verify the new public consumer install when explicitly releasing; leave dataset expansion deferred.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: **npm 0.1.0 installation/import VERIFIED; hardened source needs a new versioned release; credentialed gates pending**
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-10 — Current access-boundary continuation checkpoint
+
+### VERIFIED
+- Exact-head Design Intelligence Build Check [run 38049898324](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38049898324) succeeded on code/test commit `af1d2e68d642f2594d5aafac7ac6765ef65574f9`.
+- Build, Cashfree order contract, BYOK model-registry contract, Firebase entitlement/protected-catalog contract (including malformed expiry), plan-price contract, local/public npm installation, browser/Axe/clipboard/responsive/keyboard checks passed.
+- Malformed configured entitlement expiry now fails closed to authenticated Premium web access instead of being treated as a permanent Ultra grant.
+- Current feature deployment is still BUILDING; production runtime for this fix is not claimed.
+
+### IMPLEMENTED
+- Server-side entitlement expiry hardening and regression contract are committed on `feature/design-intelligence`.
+- Existing route/navigation integration, canonical catalog, payment-pending UI and BYOK provider/vault architecture remain unchanged.
+
+### UNVERIFIED
+- Real Firebase Premium/Ultra sessions, real API-key lifecycle and deployed Ultra effects/CORS remain unverified.
+- Real BYOK execution and manual production device/screen-reader checks remain unverified.
+- The production alias remains attached to a main-branch deployment; this feature fix is not claimed live until the matching feature deployment is READY and verified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify real authenticated Firebase Free/Premium/Ultra entitlement boundaries using genuine sessions, without sharing ID tokens or API secrets.
+2. Verify genuine Ultra API-key issue/rotate/revoke/revoked-key rejection and deployed Ultra Effects API/CORS.
+3. Verify real BYOK provider execution, model compatibility and provider-specific CORS.
+4. Complete manual Android/mobile, keyboard, clipboard and screen-reader audit.
+5. Keep Phase A at **98% — IN PROGRESS** until concrete remaining gates close. Phase B package hardening needs a future versioned npm release; Phase C large data expansion remains deferred. Keep Cashfree launch UI pending.
+
+
+## 2026-10-10 — Firebase access-boundary checkpoint
+
+### VERIFIED
+- Design Intelligence Build Check [run 38050405963](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38050405963) passed on test commit `41853b3ffb2294a0c71e535a357242e70e4f1a19`.
+- Resolver regression contracts now cover malformed expiry, `entitlementActive: false`, revoked/pending/unknown status, active status, and client-supplied tier claims.
+- The matching READY code deployment `dpl_DXUhfayWUH6VqmunenHB51uq6qiw` returned only Free knowledge to unauthenticated callers (35 records), ignored attempted Ultra tier query claims, included private/no-store headers and rejected unknown domains with HTTP 400.
+- The server-authoritative entitlement source remains the existing Firebase Admin/Firestore path.
+
+### IMPLEMENTED
+- Explicit inactive/unknown configured entitlement status fails closed to the authenticated Premium web tier.
+- Malformed configured expiry also fails closed.
+- No fake users, entitlements, API keys or second database were created.
+
+### UNVERIFIED
+- A real Firebase-authenticated Premium/Ultra session and real Firestore-backed API-key lifecycle are not verified through the available tool path.
+- Vercel Deployment Protection blocked direct tool-fetch of the protected API-key/effects routes before an application response was observed; this is not labeled as an application failure.
+- Real BYOK execution and manual Android/device/screen-reader checks remain unverified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real authenticated Firebase Premium and Ultra knowledge-boundary test without exposing ID tokens/secrets.
+2. Real Ultra API-key issue/rotate/revoke/hash-only-at-rest/revoked-key rejection.
+3. Real authorized Effects API/CORS and BYOK provider/model tests.
+4. Manual mobile/keyboard/screen-reader audit.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: existing npm 0.1.0 install/import **VERIFIED**; new hardened source needs a future versioned release.
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+- Cashfree launch UI stays pending.
+
+## 2026-10-10 — Admin Ultra Premium+ + Generator Preview checkpoint
+
+### IMPLEMENTED
+- Server entitlement now gives the account matching the existing server-only ADMIN_EMAIL permanent Ultra Premium+ access. Matching is checked against the Firebase Admin user resolved from the UID; the browser cannot grant itself access with an email/tier claim.
+- Added regression assertions for the admin-email policy.
+- Added Desktop / Tablet / Mobile layout-simulation controls in the Generator preview, with an accessible labeled group, pressed state and responsive styling.
+- Added browser-CI assertions for all three preview sizes; adjusted the AI-mode selector to avoid collisions with the new pressed-state buttons.
+
+### VERIFIED
+- Previously recorded CI and preview checks for earlier commits still stand for those commits only.
+
+### UNVERIFIED
+- The new exact-head CI result and latest feature-preview deployment must be checked before marking this milestone VERIFIED.
+- Real Firebase admin login, Premium/Ultra authenticated account behavior, API-key lifecycle, Effects/CORS and BYOK execution remain UNVERIFIED through the current tool path. Do not ask for or paste tokens/API secrets in chat.
+- The new size selector simulates recipe-preview layout; it does not yet render a full running generated website or emulate a physical device.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify the exact branch-head CI and Vercel preview for this milestone.
+2. Confirm permanent Ultra access with the real admin Firebase session in the deployed app.
+3. Continue genuine authenticated API-key/Effects/BYOK verification if an approved authenticated test path is available.
+4. Continue expanding the UI-generation workflow while preserving the one canonical Design Intelligence core.
+
+## 2026-10-10 — Recipe customization continuation
+
+### IMPLEMENTED
+- Generator now offers validated choices for visual style, colour palette, font pairing, and technology stack, plus a reset-to-generated-choice action.
+- Desktop / Tablet / Mobile preview switching and accessible selected-state controls remain implemented.
+- Browser automation was extended to test manual style and palette selection, reset, and responsive preview switching.
+
+### VERIFIED
+- Exact-head GitHub Actions run 38051385478 passed build, Firebase entitlement contract, npm package/install, browser interactions, responsive behavior, Axe serious/critical gate and keyboard-focus checks. Matching feature preview dpl_G5hqpPCSBvWL1VSv2ZPPHt4cmEkf is READY; live Generator JS/CSS assets returned HTTP 200 and include the new controls.
+- Manual style/palette selection, reset and Desktop/Tablet/Mobile preview controls are VERIFIED by the current-head Playwright test and READY feature preview.
+
+### UNVERIFIED
+- Genuine Firebase login and server-side ADMIN_EMAIL entitlement are not verified end-to-end because no authorized live session is available to this tool path.
+- API-key lifecycle, Effects/CORS, real BYOK generation and manual device/screen-reader checks remain unverified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify current-head preview/build and any available exact-head browser CI.
+2. Verify the real admin Gmail account through a genuine Firebase session; do not share ID tokens or keys in chat.
+3. Continue the UI-generation workflow from the one canonical core; do not claim a full live application renderer exists yet.
+
+## 2026-10-10 — Tier access policy, scheduled offer and design-bundle prompt
+
+### IMPLEMENTED
+- Added a protected server-side access-policy setting in the existing Firestore siteContent collection (no second database).
+- Ultra design sharing for authenticated Premium accounts defaults ON; it controls knowledge visibility only, not subscription tier, API eligibility or API-only special effects.
+- Admin Settings includes a switch plus a scheduled festival offer with India date/time start and end. With the master switch OFF, the offer works only between the saved start-inclusive/end-exclusive IST times; guests remain Free.
+- Explorer has category/domain and Simple / Free, Premium, Ultra Premium+ tier filters. Generator recipe choices use separate server-authorized design visibility and account entitlement.
+- Added a Claude master prompt for a single ZIP containing at least 100 Premium and 100 Ultra Premium+ designs per each of 18 categories, with light, dark and colorful theme support and validation scripts.
+
+### VERIFIED
+- Prior exact code/test head 2000968913ded33933481fa1b5077860f4cb0ff1 passed full Design Intelligence CI run 38053111652 and its matching Vercel feature preview is READY.
+- Live guest and forged-query checks returned Free-only content, zero protected records for guests, private/no-store cache headers and HTTP 400 for an unknown domain.
+- Physical/main-domain Firebase login, real Firestore policy writes and authenticated API lifecycle remain unverified.
+
+### UNVERIFIED
+- Genuine main-domain admin Gmail/Firebase login and actual ADMIN_EMAIL server configuration.
+- Real policy save/reload and real Premium/Ultra user access, API-key lifecycle, Effects/CORS and BYOK.
+- Physical Android/mobile/keyboard/screen-reader checks.
+- The design ZIP has not been produced yet; the prompt file is ready for Claude.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Re-run CI and preview checks for the next documentation/test synchronization commit.
+2. Review and incorporate the six newer main-branch commits, keeping existing main work intact, then merge only after tests pass.
+3. Complete real Firebase/API and physical-device tests against the main-domain deployment at the end.
+4. Review the ZIP Claude returns before integrating any design components.
+
+
+## 2026-10-10 — Main history reconciled on feature before promotion
+
+### IMPLEMENTED
+- Main's existing npm usage documentation and guarded publish workflow are being preserved alongside the newer feature UI/access-policy work.
+- Main is added to the DI build workflow's push and pull-request checks so promotion will trigger the same regression/accessibility suite.
+
+### VERIFIED
+- Before the history-reconciliation merge commit, feature CI run 38053437404 passed and feature preview dpl_3XPv3aVhMppYaZVpr7MXnhtEAzLD was READY.
+
+### UNVERIFIED
+- Current reconciled merge commit CI/preview, main deployment, real Firebase admin login/API-key lifecycle and physical-device checks are still pending.
+
+## 2026-10-10 — Pre-main browser CI stability checkpoint
+
+### IMPLEMENTED
+- The browser test now blocks external AdSense measurement requests inside Playwright CI only so third-party RUM failures do not make DI checks flaky. Production advertising configuration is untouched.
+
+### VERIFIED
+- The main-history merge commit's build/contracts/npm checks passed, and PR-triggered run 38053826724 passed. One push-triggered run failed on a pageerror originating in Google's external AdSense RUM script, not the Design Intelligence app.
+- The post-merge feature preview is READY at deployment dpl_HYJHaZzX8UmbZUYW1Tw8SeC6ZRFz. Live guest knowledge remained Free-only, forged tier claims did not reveal protected records, and unknown domains returned HTTP 400.
+
+### UNVERIFIED
+- The latest workflow change must pass on its own exact head before merge.
+- Genuine Firebase/admin/API and physical-device checks stay last, using the main-domain deployment.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify the current-head CI and preview after external script isolation.
+2. Merge to main only when those gates pass.
+3. Test the genuine Firebase admin account, real policy write/read, API-key/effects/BYOK, and physical Android accessibility last.

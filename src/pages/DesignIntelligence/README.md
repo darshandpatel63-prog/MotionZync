@@ -1,57 +1,105 @@
+
 # @motionzync/design-intelligence
 
-Canonical MotionZync Design Intelligence core for deterministic design knowledge, search, relationships, recipe generation, compatibility checks and access-aware data handling.
+MotionZync Design Intelligence is a reusable, deterministic design-knowledge core for searching design patterns, selecting compatible design ingredients, building Design Recipes, validating combinations, and exporting design tokens.
+
+It is the same canonical core used by MotionZync Web. The npm adapter does **not** create a second Design Intelligence database.
 
 ## Installation
+
+The package is publicly published as `@motionzync/design-intelligence@0.1.0` on the public npm registry. Install it with:
 
 ```bash
 npm install @motionzync/design-intelligence
 ```
 
-The package is intended to share the same canonical Design Intelligence core used by MotionZync Web. It does not create a second Design Intelligence database.
-
-## Core usage
-
-The package exports the canonical access helpers, catalog, deterministic engine, schema, lexical search index and relationship layer.
+Then import the API from the package:
 
 ```js
 import {
   buildRecipe,
-  evaluateCompatibility,
   searchCatalog,
+  evaluateCompatibility,
   validateRecipe,
+  recipeToTokens,
+  recipeToCSSVariables,
+  recipeToExport,
+  DI_STYLES,
+  DI_PALETTES,
+  DI_TYPOGRAPHY,
+  DI_CHARTS,
+  DI_STACKS,
+  DI_RECIPES,
 } from '@motionzync/design-intelligence'
 ```
 
-Basic deterministic generation does not require an external AI provider.
+The npm package uses the same canonical Design Intelligence core as MotionZync Web. It never fabricates catalog entries or creates a second Design Intelligence database.
 
-## Public npm usage guide
+## What npm users can do
 
-After installation, the package can be used directly from JavaScript/TypeScript projects:
+The package currently gives developers a deterministic design-intelligence toolkit. You can:
 
-```bash
-npm install @motionzync/design-intelligence
+1. Search the canonical seed catalog.
+2. Read individual styles, palettes, typography pairings, charts, technology stacks and recipes.
+3. Generate a Design Recipe from a plain-language requirement.
+4. Keep recipe selection inside the requested entitlement tier.
+5. Check whether the selected design pieces are compatible.
+6. Validate a recipe before using it in an application.
+7. Convert a recipe into design-token objects.
+8. Convert a recipe into CSS custom-property declarations.
+9. Convert a recipe into portable JSON.
+10. Connect to protected MotionZync knowledge through the server-authorized remote client.
+11. Connect to the Ultra Premium+ special-effects API when you have an authorized MotionZync API key.
+
+The deterministic core does not require an external AI provider.
+
+## Choose a design directly
+
+Every catalog record has a stable canonical ID. You can inspect the public seed catalog and select exactly the design ingredient you need.
+
+```js
+import {
+  DI_STYLES,
+  DI_PALETTES,
+  DI_TYPOGRAPHY,
+  DI_CHARTS,
+  DI_STACKS,
+} from '@motionzync/design-intelligence'
+
+const style = DI_STYLES.find(item => item.id === 'style-minimalism')
+const palette = DI_PALETTES.find(item => item.id === 'palette-health-teal')
+const typography = DI_TYPOGRAPHY.find(item => item.id === 'type-inter-inter')
+const chart = DI_CHARTS.find(item => item.id === 'chart-kpi-line')
+const stack = DI_STACKS.find(item => item.id === 'stack-react')
 ```
 
-### 1. Search for a design choice
+Use the returned record data as structured input to your own UI system. The package does not force one fixed visual template.
 
-Search the canonical catalog by words such as `minimal`, `dashboard`, `healthcare`, `dark`, `chart`, `react`, or `creative`:
+## Search for a design
+
+Search is deterministic and lexical. It looks across useful record fields such as name, description, tags, suited-for information, stack focus, layout, navigation, UX and chart purpose.
 
 ```js
 import { searchCatalog } from '@motionzync/design-intelligence'
 
-const styles = searchCatalog('minimal dashboard', 'styles')
-const palettes = searchCatalog('healthcare', 'palettes')
-const typography = searchCatalog('modern', 'typography')
-const charts = searchCatalog('comparison', 'charts')
-const stacks = searchCatalog('react', 'stacks')
+const styles = searchCatalog('minimal', 'styles', 'free')
+const stacks = searchCatalog('developer', 'stacks', 'free')
+const dashboardRecipes = searchCatalog('dashboard', 'recipes', 'free')
 ```
 
-Each result is a canonical record. The package does not generate fake catalog entries.
+You can also search all supported public domains:
 
-### 2. Ask for a complete design recipe
+```js
+const results = searchCatalog('accessibility', 'all', 'free')
+```
 
-Give the deterministic engine a plain-language UI request:
+The current semantic/LLM search layer is not part of this deterministic npm API yet.
+
+## Generate a design from a requirement
+
+The simplest developer workflow is:
+
+**requirement → interpretation → compatible recipe → tokens / JSON**
 
 ```js
 import {
@@ -61,120 +109,264 @@ import {
 } from '@motionzync/design-intelligence'
 
 const recipe = buildRecipe(
-  'dark SaaS analytics dashboard for developers using React'
+  'healthcare dashboard web dark professional',
+  'free',
 )
 
 console.log(recipe.style.name)
 console.log(recipe.palette.name)
 console.log(recipe.typography.name)
-console.log(recipe.chart?.name)
-console.log(recipe.stack.name)
+console.log(recipe.layout)
+console.log(recipe.navigation)
 console.log(recipe.compatibility)
-```
 
-The recipe can select a **style, color palette, typography pairing, chart, technology stack, layout/navigation direction and UX guidance** from the canonical records. The current deterministic engine works without an external AI provider.
-
-### 3. Take a specific design from the catalog
-
-You can search first and then use the returned record IDs in your own application, design system or generator. For example, a project can choose a style such as **Minimalism**, **Glassmorphism**, **Bento**, **Editorial** or **Dark UI**, then combine it with a palette and typography pairing selected by the same canonical catalog.
-
-The current public package intentionally contains a verified Phase-A seed catalog, not a claimed 1,000+/10,000+ dataset. More records are added only through verified-data milestones.
-
-### 4. Export design tokens
-
-A generated recipe can be converted to CSS custom properties:
-
-```js
+const portableRecipe = recipeToExport(recipe)
 const css = recipeToCSSVariables(recipe)
+
+console.log(portableRecipe)
 console.log(css)
 ```
 
-The export includes canonical variables for primary/secondary/accent/CTA colors, background/surface/text/muted colors, spacing/radius and heading/body fonts. A portable recipe object is also available:
+The parser currently recognizes basic product, industry, platform, light/dark and mood signals. More advanced natural-language interpretation is a future enhancement.
 
-```js
-const portable = recipeToExport(recipe)
-```
+## Build the design yourself
 
-This lets a UI generator or design-system tool consume the result without creating another Design Intelligence database.
+A Design Recipe is structured, so you can change the selected ingredients in your own code and run validation before using the result.
 
-### 5. Validate and check compatibility
+A recipe contains canonical references for:
 
-Use the same core to check whether a recipe is structurally valid and whether choices fit the requested platform/data purpose:
+- style
+- palette
+- typography
+- chart
+- technology stack
+- layout
+- navigation
+- UX guidance
+- composition family
+- entitlement tier
+- compatibility result
+- warnings
+
+This makes the package useful as a design decision layer inside your own UI generator, component library, application, CLI or build system.
+
+## Validate compatibility
+
+Use the compatibility engine to detect combinations that need review.
 
 ```js
 import {
+  buildRecipe,
   evaluateCompatibility,
   validateRecipe,
 } from '@motionzync/design-intelligence'
 
+const recipe = buildRecipe('analytics dashboard dark technical', 'free')
+
 const compatibility = evaluateCompatibility(recipe)
-const validation = validateRecipe(recipe)
+const validation = validateRecipe(recipe, 'free')
+
+if (!validation.valid) {
+  console.error(validation.errors)
+}
 
 console.log(compatibility.status)
-console.log(validation.valid)
-console.log(validation.warnings)
+console.log(compatibility.issues)
 ```
 
-Checks include platform/stack fit, text and CTA contrast, style/industry suitability, chart-purpose suitability and other bounded compatibility rules.
+Possible compatibility states are:
 
-### What can be built with the package
+- `compatible`
+- `acceptable`
+- `questionable`
+- `incompatible`
 
-The public package is useful for **UI generators, design-system tooling, dashboards, landing-page generators, React/Next.js/Vue/Svelte workflows, mobile UI planning, CSS-token generation, recipe search and developer tools**. It provides the design-intelligence decision layer; your application remains responsible for rendering the final UI.
+The package does not claim that every combination is automatically correct. The result is intended to be reviewed by the developer or generation pipeline.
 
-**Typical flow:** user describes a product → `buildRecipe()` interprets it → the engine selects compatible design records → your app renders the recipe → optional `recipeToCSSVariables()` / `recipeToExport()` output feeds the renderer or design system.
+## Turn a recipe into design tokens
 
-## Remote protected knowledge
+```js
+import {
+  buildRecipe,
+  recipeToTokens,
+  recipeToCSSVariables,
+} from '@motionzync/design-intelligence'
 
-The package includes a client for the server-authoritative MotionZync knowledge endpoint:
+const recipe = buildRecipe('saas dashboard professional', 'free')
+
+const tokens = recipeToTokens(recipe)
+
+const cssVariables = recipeToCSSVariables(recipe)
+
+console.log(tokens)
+/*
+{
+  '--mz-primary': '...',
+  '--mz-secondary': '...',
+  '--mz-accent': '...',
+  '--mz-cta': '...',
+  '--mz-background': '...',
+  '--mz-surface': '...',
+  '--mz-text': '...',
+  '--mz-muted': '...',
+  '--mz-radius': '16px',
+  '--mz-spacing': '8px',
+  '--mz-font-heading': '...',
+  '--mz-font-body': '...'
+}
+*/
+
+console.log(cssVariables)
+```
+
+You can attach these values to your own CSS, design-system layer or component theme.
+
+## Portable recipe JSON
+
+```js
+import {
+  buildRecipe,
+  recipeToExport,
+} from '@motionzync/design-intelligence'
+
+const recipe = buildRecipe('portfolio editorial web', 'free')
+const json = recipeToExport(recipe)
+
+console.log(JSON.stringify(json, null, 2))
+```
+
+The exported object uses the MotionZync Design Recipe format and stable canonical IDs so another compatible MotionZync adapter can resolve the same ingredients.
+
+## Current public catalog
+
+The Phase-A package currently contains a deliberately bounded seed set. It is real structured content, not filler data.
+
+### Styles
+
+Minimalism, Glassmorphism, Neumorphism, Brutalism, Neo-Brutalism, Bento, Claymorphism, Aurora UI, Editorial, Dark UI.
+
+### Palettes
+
+Slate + Cyan, Violet + Indigo, Healthcare Teal, Warm Amber.
+
+### Typography
+
+Inter + Inter, Space Grotesk + Inter, Playfair Display + Inter, Manrope + Inter, DM Sans + DM Sans.
+
+### Charts
+
+KPI + Time Series, Grouped Bar Comparison, Stacked Bar Composition, Donut for Small Part-to-Whole, Heatmap Matrix, Scatter Relationship.
+
+### Technology stacks
+
+React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, Tailwind CSS.
+
+### Ready-made recipes
+
+Focused SaaS Analytics Dashboard, AI Developer Workspace.
+
+The project deliberately does **not** claim 1,000+ or 10,000+ implemented records yet. Large-scale content expansion is a future verified-data milestone.
+
+## Protected MotionZync knowledge
+
+The package also exposes a remote client for the server-authoritative MotionZync knowledge API.
 
 ```js
 import { createRemoteKnowledgeClient } from '@motionzync/design-intelligence'
 
 const client = createRemoteKnowledgeClient({
   baseUrl: 'https://motion-zync.vercel.app',
-  bearerToken: 'SERVER_ISSUED_MOTIONZYNC_API_KEY',
+  bearerToken: process.env.MOTIONZYNC_API_KEY,
 })
 
 const knowledge = await client.fetchKnowledge('styles')
 ```
 
-Protected Premium/Ultra knowledge and developer API access remain server-authorized capabilities. Do not treat a provider BYOK key as proof of MotionZync entitlement.
+The bearer token must be authorized by MotionZync. A provider BYOK key is not a substitute for MotionZync entitlement.
+
+For security, keep MotionZync API keys in a server-side or otherwise appropriate protected environment. Do not publish them in client-side source, public repositories or screenshots.
 
 ## Ultra Premium+ special effects
 
-The package also includes a remote client for the Ultra Premium+ special-effects API:
+Authorized Ultra Premium+ developers can use the same package adapter for the special-effects API:
 
 ```js
 import { createSpecialEffectsClient } from '@motionzync/design-intelligence'
 
 const effects = createSpecialEffectsClient({
   baseUrl: 'https://motion-zync.vercel.app',
-  apiKey: 'SERVER_ISSUED_MOTIONZYNC_API_KEY',
+  apiKey: process.env.MOTIONZYNC_API_KEY,
 })
 
-const supported = await effects.listEffects()
+const available = await effects.listEffects()
+
+const result = await effects.createEffect('shimmer', {
+  durationMs: 1400,
+})
 ```
 
-The server controls entitlement. The package does not fabricate or embed MotionZync API keys.
+The current bounded effects capability includes:
 
-## Canonical-core rule
+- Shimmer
+- Float
+- Glow Pulse
+- Gradient Shift
+- Spin
 
-Web, future npm/CLI, API and future MCP/AI-agent adapters are designed to reuse one canonical Design Intelligence core.
+The server controls entitlement and the allowed capability set. The effects API returns CSS and includes reduced-motion fallbacks; it does not execute arbitrary JavaScript.
 
-The current package contains the bounded Phase-A seed catalog. It does not claim 1,000+ or 10,000+ implemented records.
+## Access model
 
-## Current publication status
+The package follows the MotionZync access model:
 
-The public npm package has been published as `@motionzync/design-intelligence@0.1.0`. A clean external consumer installation/import from the public npm registry has also been VERIFIED in GitHub Actions. The package is still intentionally bounded to the verified Phase-A seed catalog.
+**Free**
 
+Public deterministic knowledge and recipes can be used locally.
 
-## Verified npm release
+**Premium**
 
-- Package: `@motionzync/design-intelligence`
-- Published version: `0.1.0`
-- Registry: public npm
-- Public registry installation/import: **VERIFIED**
-- Verified CI consumer test: fresh directory → `npm install @motionzync/design-intelligence@0.1.0` → package import/export smoke test
-- Verified public exports include `buildRecipe`, `searchCatalog`, `createRemoteKnowledgeClient` and `createSpecialEffectsClient`
-- The package does not contain a second Design Intelligence database.
-- Large 1,000+/10,000+ content expansion remains a separate future verified-data milestone.
+Protected knowledge can be delivered by the MotionZync server after the existing Google/Firebase identity is verified server-side.
+
+**Ultra Premium+**
+
+Protected developer API access and special-effects API access require a server-authorized Ultra Premium+ entitlement and a valid MotionZync API key.
+
+The npm package never fabricates an entitlement or a MotionZync API key.
+
+## What this package does not currently provide
+
+The current `0.1.0` package does not claim:
+
+- executable React/Next.js/Vue/Svelte/Flutter code generation
+- a standalone CLI binary
+- an MCP server
+- semantic/LLM search as a built-in requirement
+- a second Design Intelligence database
+- thousands of fabricated records
+- offline access to protected Premium/Ultra knowledge without server authorization
+
+Those are separate future milestones unless/ until their implementations are actually published and verified.
+
+## Canonical-core architecture
+
+MotionZync uses one canonical Design Intelligence core:
+
+**Web → npm → future CLI/API → future MCP/AI-agent adapters**
+
+The goal is to keep the same IDs, schemas, relationships, compatibility rules and Design Recipe model across interfaces rather than maintaining separate datasets.
+
+## Registry publication status
+
+Source package, metadata, tarball creation and clean local installation have been verified in CI.
+
+Public npm registry publication and clean external consumer installation/import for `@motionzync/design-intelligence@0.1.0` are **VERIFIED** by the registry-backed GitHub Actions smoke test. The package remains intentionally bounded to the Phase-A seed catalog.
+
+The public installation command is:
+
+```bash
+npm install @motionzync/design-intelligence
+```
+
+Repository: https://github.com/darshandpatel63-prog/MotionZync
+
+Web: https://motion-zync.vercel.app/design-intelligence

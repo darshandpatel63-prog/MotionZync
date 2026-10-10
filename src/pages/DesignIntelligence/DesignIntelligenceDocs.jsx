@@ -1,74 +1,104 @@
-import {ULTRA_PREMIUM_PRICE_INR} from './access.js'
+import {useState} from 'react'
 import './DesignIntelligence.css'
+
+function CopyCommand({children}) {
+  const [copyState,setCopyState]=useState('idle')
+  const copy=async()=>{
+    try{
+      await navigator.clipboard.writeText(String(children))
+      setCopyState('copied')
+      window.setTimeout(()=>setCopyState('idle'),1600)
+    }catch{
+      setCopyState('failed')
+    }
+  }
+  const feedback=copyState==='copied'
+    ? 'Copied to clipboard.'
+    : copyState==='failed'
+      ? 'Clipboard access was blocked. Select the text above and copy it manually.'
+      : ''
+  return <div className="di-code-wrap">
+    <pre className="di-code">{children}</pre>
+    <button type="button" className="di-copy-btn" onClick={copy} aria-label={copyState==='copied'?'Copied command':'Copy command'}>
+      {copyState==='copied'?'Copied':'Copy'}
+    </button>
+    {feedback&&<span className="di-copy-status" role="status">{feedback}</span>}
+  </div>
+}
+
 export default function DesignIntelligenceDocs(){return <div className="di-page">
-  <section className="di-page-intro"><span className="di-kicker">HOW TO USE</span><h1>Design Intelligence workflow</h1><p>This page is the in-product explanation a new user should be able to read before touching the generator.</p></section>
+  <section className="di-page-intro">
+    <span className="di-kicker">HOW TO USE</span>
+    <h1>Design Intelligence workflow</h1>
+    <p>This page explains how to use the same canonical Design Intelligence core from the MotionZync web app and the npm package.</p>
+  </section>
 
   <section className="di-grid-2">
-    <article className="di-surface"><span className="di-step">01</span><h2>Describe</h2><p>Tell the system what you are building, for whom, on which platform, with what mood, constraints and data needs.</p></article>
-    <article className="di-surface"><span className="di-step">02</span><h2>Interpret</h2><p>The deterministic core extracts basic product, industry, platform, color/mode and mood signals. Nothing is hidden behind an LLM.</p></article>
-    <article className="di-surface"><span className="di-step">03</span><h2>Search</h2><p>The engine searches structured records and relationships. Later semantic search can improve this without duplicating the dataset.</p></article>
-    <article className="di-surface"><span className="di-step">04</span><h2>Check compatibility</h2><p>Choices should be reviewed together: contrast, chart suitability, typography readability, responsive behaviour and technology support.</p></article>
-    <article className="di-surface"><span className="di-step">05</span><h2>Review the recipe</h2><p>The recipe tells you style, palette, typography, navigation, layout, charts, UX and stack direction.</p></article>
-    <article className="di-surface"><span className="di-step">06</span><h2>Generate / export</h2><p>Future adapters will produce HTML/CSS, React, Next.js, Vue, Svelte, Flutter, React Native, CSS variables, JSON and design tokens where supported.</p></article>
+    <article className="di-surface"><span className="di-step">01</span><h2>Describe</h2><p>Tell the system what you are building, for whom, on which platform, with which mood and constraints.</p></article>
+    <article className="di-surface"><span className="di-step">02</span><h2>Interpret</h2><p>The deterministic core extracts product, industry, platform, light/dark mode and mood signals without requiring an LLM.</p></article>
+    <article className="di-surface"><span className="di-step">03</span><h2>Search</h2><p>Search structured styles, palettes, typography, charts, stacks and recipes, then choose the direction that fits the product.</p></article>
+    <article className="di-surface"><span className="di-step">04</span><h2>Check compatibility</h2><p>Review compatibility warnings for contrast, chart suitability, typography, mode and other recipe constraints.</p></article>
+    <article className="di-surface"><span className="di-step">05</span><h2>Review the recipe</h2><p>The recipe combines the selected style, palette, typography, navigation, layout, charts, UX and technology direction.</p></article>
+    <article className="di-surface"><span className="di-step">06</span><h2>Export</h2><p>Current Phase-A exports include portable recipe JSON and CSS custom-property tokens. Rich executable code exporters are future work.</p></article>
   </section>
 
   <section className="di-surface">
-    <span className="di-kicker">FREE VS PREMIUM VS ULTRA</span>
-    <h2>What access means</h2>
+    <span className="di-kicker">NPM / DEVELOPER MODE</span>
+    <h2>Install the same canonical core</h2>
+    <p>The package is publicly published as @motionzync/design-intelligence@0.1.0, and a clean registry-backed installation/import has been verified. Install it with the standard npm command; no separate database is created.</p>
+    <CopyCommand>npm install @motionzync/design-intelligence</CopyCommand>
+    <p>Then a developer can search and compose designs directly:</p>
+    <CopyCommand>{`import { searchCatalog, buildRecipe, recipeToCSSVariables } from '@motionzync/design-intelligence'
+
+const styles = searchCatalog('healthcare minimal', 'styles', 'free')
+const recipe = buildRecipe('dark healthcare analytics dashboard', 'free')
+const css = recipeToCSSVariables(recipe)
+
+console.log(styles)
+console.log(recipe.style.name, recipe.palette.name, recipe.typography.name)
+console.log(css)`}</CopyCommand>
+    <p className="di-muted">The npm package exposes the canonical design records, deterministic engine, schema, search index, relationships, validation helpers and supported export helpers.</p>
+  </section>
+
+  <section className="di-surface">
+    <span className="di-kicker">WHAT YOU CAN CHOOSE</span>
+    <h2>Design directions available in the current seed</h2>
     <div className="di-table">
-      <div><b>Free · no login</b><span>Simple/public knowledge and free recipes can be used immediately.</span></div>
-      <div><b>Premium · Google login · ₹0</b><span>Verified Firebase identity unlocks Premium protected knowledge server-side and keeps the same canonical core available for npm/local usage.</span></div>
-      <div><b>Ultra Premium+ · ₹{ULTRA_PREMIUM_PRICE_INR}</b><span>Paid server-authorized tier with all web-accessible knowledge and developer API access.</span></div>
-      <div><b>Special animation + effects</b><span>API-only; requires Ultra Premium+ and a valid server-issued API key.</span></div>
+      <div><b>Styles</b><span>Minimalism, Glassmorphism, Neumorphism, Brutalism, Neo-Brutalism, Bento, Claymorphism, Aurora UI, Editorial, Dark UI.</span></div>
+      <div><b>Palettes</b><span>Slate + Cyan, Violet + Indigo, Healthcare Teal, Warm Amber.</span></div>
+      <div><b>Typography</b><span>Inter + Inter, Space Grotesk + Inter, Playfair Display + Inter, Manrope + Inter, DM Sans + DM Sans.</span></div>
+      <div><b>Charts</b><span>KPI + Time Series, Grouped Bar Comparison, Stacked Bar Composition, Donut, Heatmap Matrix, Scatter Relationship.</span></div>
+      <div><b>Stacks</b><span>React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter and Tailwind CSS.</span></div>
+    </div>
+  </section>
+
+  <section className="di-surface">
+    <span className="di-kicker">ACCESS MODEL</span>
+    <h2>Free, Premium and Ultra Premium+</h2>
+    <div className="di-table">
+      <div><b>Free · no login</b><span>Simple/public knowledge, deterministic recipes and supported free exports.</span></div>
+      <div><b>Premium · Google login · ₹0</b><span>Verified Firebase identity can unlock protected Premium knowledge through the server-authoritative access path.</span></div>
+      <div><b>Ultra Premium+ · payment launch pending</b><span>Paid server-authorized tier reserved for the later payment launch. The public checkout is temporarily disabled.</span></div>
+      <div><b>Special animation + effects</b><span>API-only capability requiring Ultra Premium+ and a valid server-issued MotionZync API key.</span></div>
     </div>
   </section>
 
   <section className="di-surface">
     <span className="di-kicker">SPECIAL ANIMATION + EFFECTS API</span>
     <h2>Ultra Premium+ developer capability</h2>
-    <p>The API now exposes a bounded, server-authorized special-effects capability. A valid Ultra Premium+ MotionZync API key can list supported effects and request a safe CSS implementation for the selected effect. The service returns CSS only; it does not return or execute arbitrary JavaScript. POST requests are additionally capped at 16 KB before effect generation.</p>
-    <p className="di-muted">Current capability includes Shimmer, Float, Glow Pulse, Gradient Shift and Spin. Each effect includes a reduced-motion fallback. Cross-origin browser use is deny-by-default until an origin is explicitly configured in the server allowlist.</p>
+    <p>The API exposes a bounded, server-authorized special-effects capability. An authorized Ultra Premium+ API key can list supported effects and request a safe CSS implementation. The service returns CSS only and does not execute arbitrary JavaScript. POST request bodies are capped at 16 KB before generation.</p>
+    <p className="di-muted">Current bounded effects: Shimmer, Float, Glow Pulse, Gradient Shift and Spin. Each includes a reduced-motion fallback. Cross-origin browser use is deny-by-default until an allowed origin is configured on the server.</p>
   </section>
 
   <section className="di-surface">
-    <span className="di-kicker">PUBLIC NPM — HOW TO USE</span>
-    <h2>Install once, then choose designs from the same Design Intelligence core</h2>
-    <p>Developers can install the public package in a JavaScript or TypeScript project and use the same canonical design knowledge used by MotionZync Web. No second Design Intelligence database is created.</p>
-    <pre className="di-code">npm install @motionzync/design-intelligence</pre>
-    <p><b>Search designs:</b> use <code>searchCatalog()</code> to find styles, palettes, typography, charts or technology stacks by words such as <code>minimal</code>, <code>dashboard</code>, <code>healthcare</code>, <code>dark</code>, <code>comparison</code> or <code>react</code>.</p>
-    <pre className="di-code">{`import { searchCatalog } from '@motionzync/design-intelligence'
-
-const styles = searchCatalog('minimal dashboard', 'styles')
-const palettes = searchCatalog('healthcare', 'palettes')
-const charts = searchCatalog('comparison', 'charts')`}</pre>
-    <p><b>Generate a design recipe:</b> describe what you want in normal language. <code>buildRecipe()</code> deterministically selects a compatible combination of style, palette, typography, chart, stack, layout/navigation direction and UX guidance.</p>
-    <pre className="di-code">{`import { buildRecipe } from '@motionzync/design-intelligence'
-
-const recipe = buildRecipe(
-  'dark SaaS analytics dashboard for developers using React'
-)
-
-console.log(recipe.style.name)
-console.log(recipe.palette.name)
-console.log(recipe.typography.name)
-console.log(recipe.chart?.name)
-console.log(recipe.stack.name)`}</pre>
-    <p><b>Use the selected design:</b> your own UI generator can render the recipe, or convert it into CSS custom properties with <code>recipeToCSSVariables()</code>. <code>recipeToExport()</code> produces a portable recipe object for another renderer or design-system layer.</p>
-    <p><b>Check before rendering:</b> <code>evaluateCompatibility()</code> and <code>validateRecipe()</code> can report platform/stack mismatches, contrast problems, chart-purpose mismatches and other bounded compatibility issues.</p>
-    <p className="di-muted">The current public package is a verified Phase-A seed catalog. It does not claim 1,000+/10,000+ records, and it does not require an external AI provider for deterministic recipe generation. Large content expansion remains a separate verified-data milestone.</p>
+    <span className="di-kicker">ONE SOURCE OF TRUTH</span>
+    <h2>Web → npm → future interfaces</h2>
+    <p>The web app, npm/local mode, future CLI, REST API and future MCP/AI-agent interfaces are designed to use the same canonical Design Intelligence core. No duplicate design database is introduced for npm.</p>
   </section>
 
   <section className="di-surface">
-    <span className="di-kicker">NPM</span>
-    <h2>One core, one package direction</h2>
-    <p>The npm package uses the same canonical Design Intelligence core as the web app. Free/public records can be distributed locally, while authenticated Premium and Ultra integrations can use the same canonical core plus server-delivered protected knowledge.</p>
-    <pre className="di-code">npm install @motionzync/design-intelligence</pre>
-    <p className="di-muted">The public package <b>@motionzync/design-intelligence@0.1.0</b> is published on npm. Clean external installation/import from the public registry is VERIFIED. The package does not create a second Design Intelligence database.</p>
-  </section>
-
-  <section className="di-surface">
-    <span className="di-kicker">IMPORTANT</span>
-    <h2>What is not live yet</h2>
-    <p>Live ₹{ULTRA_PREMIUM_PRICE_INR} Cashfree checkout, production API-key usage, MCP service, large-scale content ingestion and final accessibility/performance automation remain verification/release milestones. The npm package publication and clean public-registry installation are already VERIFIED. No fake API key or fake payment is created.</p>
+    <span className="di-kicker">PAYMENT STATUS</span>
+    <h2>Public payment launch is temporarily pending</h2>
+    <p>The public payment UI is currently held back while the payment launch is prepared. The server-side Cashfree order, webhook verification, entitlement and API-key security infrastructure remains in the repository and is not being removed.</p>
   </section>
 </div>}

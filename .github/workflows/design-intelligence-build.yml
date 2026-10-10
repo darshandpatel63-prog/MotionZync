@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - feature/design-intelligence
+      - main
   pull_request:
     branches:
       - feature/design-intelligence
+      - main
     paths:
       - "src/pages/DesignIntelligence/**"
       - "src/App.jsx"
@@ -17,6 +19,7 @@ on:
       - ".github/workflows/design-intelligence-build.yml"
       - "api/**"
       - "scripts/di-cashfree-contract.mjs"
+      - "scripts/di-entitlement-contract.mjs"
 
 concurrency:
   group: design-intelligence-build-${{ github.ref }}
@@ -96,6 +99,16 @@ jobs:
           npm install "$GITHUB_WORKSPACE/src/pages/DesignIntelligence/$TARBALL" --no-audit --no-fund
           node --input-type=module -e "const di=await import('@motionzync/design-intelligence'); if(typeof di.buildRecipe!=='function'||typeof di.searchCatalog!=='function'||typeof di.createRemoteKnowledgeClient!=='function'||typeof di.createSpecialEffectsClient!=='function') throw new Error('Canonical npm exports are incomplete'); if(!Array.isArray(di.DI_STYLES)||di.DI_STYLES.length===0) throw new Error('Canonical catalog is empty'); console.log('NPM package install smoke passed')"
 
+      - name: Verify published npm registry installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir published-motionzync-di-consumer
+          cd published-motionzync-di-consumer
+          npm init -y >/dev/null 2>&1
+          npm install @motionzync/design-intelligence@0.1.0 --registry=https://registry.npmjs.org --no-audit --no-fund
+          node --input-type=module -e "const di=await import('@motionzync/design-intelligence'); if(di.DESIGN_INTELLIGENCE_NPM_VERSION!=='0.1.0') throw new Error('Published npm version mismatch'); if(typeof di.buildRecipe!=='function'||typeof di.searchCatalog!=='function'||typeof di.createRemoteKnowledgeClient!=='function'||typeof di.createSpecialEffectsClient!=='function') throw new Error('Published npm exports are incomplete'); if(!Array.isArray(di.DI_STYLES)||di.DI_STYLES.length===0) throw new Error('Published npm catalog is empty'); console.log('Published npm registry install/import smoke passed')"
+
       - name: Install CI browser and accessibility tooling
         run: npm install --no-save --no-audit --no-fund playwright@1.55.0 @axe-core/playwright@4.10.2 axe-core@4.10.2
 
@@ -145,7 +158,7 @@ jobs:
           ]
 
           const browser = await chromium.launch({headless:true})
-          const context = await browser.newContext({viewport:{width:1440,height:900}})
+          const context = await browser.newContext({viewport:{width:1440,height:900},permissions:['clipboard-read','clipboard-write']})
           const page = await context.newPage()
           await page.addInitScript(() => {
             window.__motionzyncCashfreeCalls = []
@@ -156,6 +169,10 @@ jobs:
               },
             })
           })
+          // External AdSense measurement scripts are not part of DI UI behavior and
+          // can throw transient third-party errors; block them in isolated CI only.
+          await page.route('**/pagead2.googlesyndication.com/**', route => route.abort())
+          await page.route('**/googleads.g.doubleclick.net/**', route => route.abort())
           await page.route('**/identitytoolkit.googleapis.com/**', async route => {
             const url = route.request().url()
             if (url.includes('/accounts:lookup')) {
@@ -169,19 +186,32 @@ jobs:
             await route.continue()
           })
           await page.addInitScript(() => {
+            window.__motionzyncAccessPolicySaves = []
             const originalFetch = window.fetch.bind(window)
             window.fetch = async (input, init) => {
               const url = typeof input === 'string' ? input : input.url
               if (url.endsWith('/api/admin-billing')) {
                 const method = init?.method || (typeof input !== 'string' ? input.method : 'GET')
-                const payload = method === 'POST'
-                  ? {result:{email:'ci-admin@example.invalid',tier:'premium'}}
-                  : {
+                const requestBody = method === 'POST' ? JSON.parse(init?.body || '{}') : {}
+                const payload = method === 'POST' && requestBody.action === 'saveDesignIntelligenceAccessPolicy'
+                  ? {
+                      ok:true,
+                      accessPolicy:requestBody.accessPolicy,
+                      accessPolicyState:{policy:requestBody.accessPolicy,festivalOfferActive:false,premiumCanAccessUltraContent:requestBody.accessPolicy.shareUltraWithPremium || requestBody.accessPolicy.festivalOffer?.enabled === true,timezone:'Asia/Kolkata'},
+                    }
+                  : method === 'POST'
+                    ? {result:{email:'ci-admin@example.invalid',tier:'premium'}}
+                    : {
                       summary:{uniquePayers:0,successfulPayments:0,grossRevenue:0,refundedAmount:0,activeEntitlements:0,activeApiKeys:0,manualGrants:0,totalPaymentRecords:0},
                       paymentStatus:[],planDistribution:[],entitlementSources:[],apiKeyStatus:[],monthly:[],recentTransactions:[],
                       generatedAt:new Date().toISOString(),
                       limits:{collectionsReadLimit:10000,recentTransactions:100},
+                      accessPolicy:{shareUltraWithPremium:true,festivalOffer:{enabled:false,startDate:'',startTime:'',endDate:'',endTime:'',timezone:'Asia/Kolkata'}},
+                      accessPolicyState:{festivalOfferActive:false,premiumCanAccessUltraContent:true,timezone:'Asia/Kolkata'},
                     }
+                if(method==='POST' && requestBody.action==='saveDesignIntelligenceAccessPolicy'){
+                  window.__motionzyncAccessPolicySaves.push(requestBody.accessPolicy)
+                }
                 return new Response(JSON.stringify(payload), {status:200,headers:{'Content-Type':'application/json'}})
               }
               if (url.endsWith('/api/cashfree-create-order')) {
@@ -257,6 +287,7 @@ jobs:
             await page.waitForTimeout(350)
             const text = await page.locator('body').innerText()
             const shellCount = await page.locator('.di-shell').count()
+            assert(!text.includes('₹200'), route+' leaked the deferred payment price into public UI')
             assert(
               shellCount === 1,
               route+' did not mount the Design Intelligence shell. url='+await page.url()+' body='+JSON.stringify(text.slice(0,1200))+' errors='+JSON.stringify(failures)
@@ -280,6 +311,13 @@ jobs:
             if (route.endsWith('/explorer')) {
               await page.locator('#di-search').fill('healthcare')
               assert((await page.locator('.di-record').count()) > 0, 'Explorer search did not produce a healthcare result')
+              const simpleTier = page.getByRole('button', {name:'Simple / Free', exact:true})
+              await simpleTier.click()
+              assert((await simpleTier.getAttribute('aria-pressed')) === 'true', 'Explorer simple/free tier filter did not expose selected state')
+              assert((await page.locator('.di-record').count()) > 0, 'Free-tier filtering unexpectedly hid all local Free designs')
+              const allTiers = page.getByRole('button', {name:'All tiers', exact:true})
+              await allTiers.click()
+              assert((await allTiers.getAttribute('aria-pressed')) === 'true', 'Explorer All tiers filter did not reset selected state')
               const stylesChip = page.getByRole('button', {name:'Styles', exact:true})
               await stylesChip.click()
               assert((await stylesChip.getAttribute('aria-pressed')) === 'true', 'Explorer domain button did not expose selected state')
@@ -288,7 +326,30 @@ jobs:
             if (route.endsWith('/generator')) {
               await page.getByRole('button', {name:/Generate deterministic recipe/}).click()
               assert((await page.locator('.di-preview').count()) === 1, 'Generator preview did not render')
-              const aiToggle = page.locator('button[aria-pressed]').first()
+              const customize = page.locator('.di-customize')
+              await customize.locator('summary').click()
+              await page.locator('#di-choice-style').selectOption({label:'Bento'})
+              assert((await page.locator('.di-recipe-grid h2').innerText()).includes('Bento'), 'Manual style override did not update the validated recipe')
+              await page.locator('#di-choice-palette').selectOption({label:'Violet + Indigo'})
+              assert((await page.locator('.di-recipe-grid h2').innerText()).includes('Violet + Indigo'), 'Manual palette override did not update the validated recipe')
+              await page.getByRole('button', {name:'Reset recipe choices'}).click()
+              assert((await page.locator('#di-choice-style').inputValue()) === '', 'Reset did not restore generated style choice')
+              assert((await page.locator('#di-choice-palette').inputValue()) === '', 'Reset did not restore generated palette choice')
+              const previewControls = page.getByRole('group', {name:'Responsive preview size'})
+              assert((await previewControls.getByRole('button').count()) === 3, 'Generator should expose Desktop, Tablet and Mobile preview controls')
+              const mobilePreview = previewControls.getByRole('button', {name:'Mobile', exact:true})
+              await mobilePreview.click()
+              assert((await mobilePreview.getAttribute('aria-pressed')) === 'true', 'Mobile preview button did not expose selected state')
+              assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-mobile'), 'Mobile preview did not update the preview layout')
+              assert((await page.locator('.di-preview-caption').innerText()).includes('Mobile layout simulation'), 'Mobile preview state caption is missing')
+              const tabletPreview = previewControls.getByRole('button', {name:'Tablet', exact:true})
+              await tabletPreview.click()
+              assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-tablet'), 'Tablet preview did not update the preview layout')
+              const desktopPreview = previewControls.getByRole('button', {name:'Desktop', exact:true})
+              await desktopPreview.click()
+              assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-desktop'), 'Desktop preview did not update the preview layout')
+
+              const aiToggle = page.getByRole('button', {name:/Enable AI-assisted refinement|AI-assisted mode enabled/})
               await aiToggle.waitFor()
               assert((await aiToggle.getAttribute('aria-pressed')) === 'false', 'AI toggle initial state was not exposed')
               await aiToggle.click()
@@ -305,6 +366,20 @@ jobs:
           }
 
           
+          await page.goto(base+'/design-intelligence/docs', {waitUntil:'networkidle'})
+          const copyButtons = page.getByRole('button', {name:'Copy command', exact:true})
+          assert((await copyButtons.count()) === 2, 'Docs should expose Copy controls for both the npm command and developer example')
+          await copyButtons.nth(0).click()
+          await page.getByRole('button', {name:'Copied command', exact:true}).waitFor()
+          await page.locator('.di-copy-status').filter({hasText:'Copied to clipboard.'}).waitFor()
+          const installCommand = await page.evaluate(() => navigator.clipboard.readText())
+          assert(installCommand === 'npm install @motionzync/design-intelligence', 'Copy control did not copy the exact npm installation command')
+          await page.locator('.di-code-wrap .di-copy-btn').nth(1).click()
+          await page.locator('.di-copy-status').filter({hasText:'Copied to clipboard.'}).last().waitFor()
+          const exampleCommand = await page.evaluate(() => navigator.clipboard.readText())
+          assert(exampleCommand.includes("searchCatalog('healthcare minimal', 'styles', 'free')"), 'Copy control omitted the developer search example')
+          assert(exampleCommand.includes("buildRecipe('dark healthcare analytics dashboard', 'free')"), 'Copy control omitted the developer recipe example')
+
           await page.goto(base+'/admin', {waitUntil:'networkidle'})
           assert((await page.getByRole('button', {name:/DI Billing/}).count()) === 1, 'Admin DI Billing tab is missing')
           await page.getByRole('button', {name:/DI Billing/}).click()
@@ -316,6 +391,27 @@ jobs:
           assert((await page.getByRole('combobox', {name:'Entitlement tier'}).count()) === 1, 'Admin entitlement tier field is missing')
           assert((await page.getByText('No payment records exist yet. This is not seeded/fake data.').count()) === 1, 'Admin billing empty-state is missing')
           await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-billing.png',fullPage:true})
+
+          await page.getByRole('button', {name:/Settings/}).click()
+          await page.getByRole('heading', {name:'Premium / Ultra Premium+ content settings'}).waitFor()
+          const shareUltra = page.getByRole('checkbox', {name:/Allow logged-in Premium accounts to view Ultra Premium\+ designs/})
+          assert(await shareUltra.isChecked(), 'Ultra design sharing should default to ON')
+          const festivalOffer = page.getByRole('checkbox', {name:/Schedule a time-limited festival offer for Ultra designs/})
+          assert(!(await festivalOffer.isChecked()), 'Festival offer should default to OFF')
+          await page.locator('#di-offer-start-date').fill('2026-10-31')
+          await page.locator('#di-offer-start-time').fill('10:00')
+          await page.locator('#di-offer-end-date').fill('2026-11-01')
+          await page.locator('#di-offer-end-time').fill('20:00')
+          await festivalOffer.check()
+          await page.getByRole('button', {name:'Save access settings'}).click()
+          await page.getByText('Settings saved on the server. Access changes apply to new knowledge requests.', {exact:true}).waitFor()
+          const savedPolicies = await page.evaluate(() => window.__motionzyncAccessPolicySaves)
+          assert(savedPolicies.length === 1, 'Admin access policy did not call the protected server save action')
+          assert(savedPolicies[0].shareUltraWithPremium === true, 'Admin access policy save unexpectedly disabled Ultra sharing')
+          assert(savedPolicies[0].festivalOffer.enabled === true, 'Admin festival offer toggle was not persisted')
+          assert(savedPolicies[0].festivalOffer.startDate === '2026-10-31' && savedPolicies[0].festivalOffer.endDate === '2026-11-01', 'Admin offer date window was not persisted')
+          assert(savedPolicies[0].festivalOffer.startTime === '10:00' && savedPolicies[0].festivalOffer.endTime === '20:00', 'Admin offer time window was not persisted')
+          await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-access-settings.png',fullPage:true})
 
           for (const viewport of [
             {width:390,height:844,name:'mobile'},

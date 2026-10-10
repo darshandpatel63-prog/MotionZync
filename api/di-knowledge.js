@@ -1,5 +1,5 @@
 import { requireAuthenticatedUser } from './_lib/firebase-admin.js'
-import { authenticateMotionZyncApiKey, getServerEntitlement } from './_lib/billing.js'
+import { authenticateMotionZyncApiKey, getServerEntitlement, getDesignIntelligenceAccessPolicy, getDesignIntelligenceAccessState, resolveDesignIntelligenceContentAccess } from './_lib/billing.js'
 import {
   ALL_DI_PROTECTED_RECORDS,
   DI_PROTECTED_STYLES,
@@ -78,6 +78,9 @@ export default async function handler(req, res) {
 
   let tier = 'free'
   let authenticated = false
+  let apiKeyAuthenticated = false
+  let accessState = null
+  let policyUnavailable = false
 
   const bearerToken = hasBearerToken(req)
   if (bearerToken) {
@@ -86,6 +89,7 @@ export default async function handler(req, res) {
         const apiAccess = await authenticateMotionZyncApiKey(bearerToken)
         tier = apiAccess.entitlement.tier
         authenticated = true
+        apiKeyAuthenticated = true
       } else {
         const user = await requireAuthenticatedUser(req)
         const entitlement = await getServerEntitlement(user.uid)
@@ -97,8 +101,29 @@ export default async function handler(req, res) {
     }
   }
 
-  const catalog = combineCatalogs(tier)
-  const protectedIncludedRecords = ALL_DI_PROTECTED_RECORDS.filter(record => isTierAccessible(record, tier))
+  // This policy controls visibility of Ultra design records only. It never
+  // changes the account entitlement and can never grant developer API access.
+  if (authenticated && !apiKeyAuthenticated && tier === 'premium') {
+    try {
+      const policy = await getDesignIntelligenceAccessPolicy()
+      accessState = getDesignIntelligenceAccessState(policy)
+    } catch {
+      // A policy read failure must not disclose Ultra records.
+      policyUnavailable = true
+    }
+  }
+
+  const visibility = resolveDesignIntelligenceContentAccess({
+    entitlementTier: tier,
+    authenticated,
+    apiKeyAuthenticated,
+    accessState,
+    policyUnavailable,
+  })
+  const contentTier = visibility.contentTier
+  const contentAccessReason = visibility.reason
+  const catalog = combineCatalogs(contentTier)
+  const protectedIncludedRecords = ALL_DI_PROTECTED_RECORDS.filter(record => isTierAccessible(record, contentTier))
   const report = validateCatalog(catalog)
 
   if (!report.valid) {
@@ -114,8 +139,12 @@ export default async function handler(req, res) {
     schemaVersion: report.schemaVersion,
     entitlement: {
       tier,
+      contentTier,
       authenticated,
       protectedIncluded: protectedIncludedRecords.length > 0,
+      ultraContentIncluded: contentTier === 'ultra-premium',
+      contentAccessReason,
+      festivalOfferActive: accessState?.festivalOfferActive === true,
     },
     records,
     counts: Object.fromEntries(domains.map(domain => [domain, catalog[domain]?.length || 0])),

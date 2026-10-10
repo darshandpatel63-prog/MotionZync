@@ -26,6 +26,108 @@ const month = value => {
   return date ? `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}` : null
 }
 
+export const DI_ACCESS_POLICY_DOCUMENT = 'designIntelligenceAccess'
+export const DEFAULT_DI_ACCESS_POLICY = Object.freeze({
+  shareUltraWithPremium: true,
+  festivalOffer: Object.freeze({
+    enabled: false,
+    startDate: '',
+    startTime: '',
+    endDate: '',
+    endTime: '',
+    timezone: 'Asia/Kolkata',
+  }),
+})
+
+function localIndiaDateTimeMs(date, time) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return null
+  const value = Date.parse(date + 'T' + time + ':00+05:30')
+  if (!Number.isFinite(value)) return null
+  const parsed = new Date(value + (5.5 * 60 * 60 * 1000))
+  const parts = date.split('-').map(Number)
+  const clock = time.split(':').map(Number)
+  return parsed.getUTCFullYear() === parts[0]
+    && parsed.getUTCMonth() + 1 === parts[1]
+    && parsed.getUTCDate() === parts[2]
+    && parsed.getUTCHours() === clock[0]
+    && parsed.getUTCMinutes() === clock[1]
+    ? value
+    : null
+}
+
+export function normalizeDesignIntelligenceAccessPolicy(input = {}) {
+  const source = input && typeof input === 'object' ? input : {}
+  const rawOffer = source.festivalOffer && typeof source.festivalOffer === 'object' ? source.festivalOffer : {}
+  const festivalOffer = {
+    enabled: rawOffer.enabled === true,
+    startDate: str(rawOffer.startDate),
+    startTime: str(rawOffer.startTime),
+    endDate: str(rawOffer.endDate),
+    endTime: str(rawOffer.endTime),
+    timezone: 'Asia/Kolkata',
+  }
+  const scheduleValues = [festivalOffer.startDate, festivalOffer.startTime, festivalOffer.endDate, festivalOffer.endTime]
+  const hasSchedule = scheduleValues.some(Boolean)
+  if (festivalOffer.enabled || hasSchedule) {
+    if (scheduleValues.some(value => !value)) throw new Error('Festival offer needs a start date/time and an end date/time.')
+    const startMs = localIndiaDateTimeMs(festivalOffer.startDate, festivalOffer.startTime)
+    const endMs = localIndiaDateTimeMs(festivalOffer.endDate, festivalOffer.endTime)
+    if (startMs === null || endMs === null) throw new Error('Festival offer date or time is invalid.')
+    if (endMs <= startMs) throw new Error('Festival offer end must be later than its start.')
+  }
+  return { shareUltraWithPremium: source.shareUltraWithPremium === true, festivalOffer }
+}
+
+export function getDesignIntelligenceAccessState(input = DEFAULT_DI_ACCESS_POLICY, nowMs = Date.now()) {
+  let policy
+  try { policy = normalizeDesignIntelligenceAccessPolicy(input) }
+  catch { policy = normalizeDesignIntelligenceAccessPolicy(DEFAULT_DI_ACCESS_POLICY) }
+  const offer = policy.festivalOffer
+  const startMs = offer.enabled ? localIndiaDateTimeMs(offer.startDate, offer.startTime) : null
+  const endMs = offer.enabled ? localIndiaDateTimeMs(offer.endDate, offer.endTime) : null
+  const festivalOfferActive = startMs !== null && endMs !== null && nowMs >= startMs && nowMs < endMs
+  return { policy, festivalOfferActive, premiumCanAccessUltraContent: policy.shareUltraWithPremium || festivalOfferActive, timezone: 'Asia/Kolkata' }
+}
+
+export function resolveDesignIntelligenceContentAccess({
+  entitlementTier = 'free',
+  authenticated = false,
+  apiKeyAuthenticated = false,
+  accessState = null,
+  policyUnavailable = false,
+} = {}) {
+  if (!authenticated) return { contentTier: 'free', reason: 'public-free' }
+  if (apiKeyAuthenticated) return { contentTier: entitlementTier, reason: 'ultra-api-key' }
+  if (entitlementTier === 'ultra-premium') return { contentTier: 'ultra-premium', reason: 'ultra-subscription' }
+  if (entitlementTier === 'premium' && accessState?.premiumCanAccessUltraContent === true) {
+    return {
+      contentTier: 'ultra-premium',
+      reason: accessState.festivalOfferActive ? 'scheduled-festival-offer' : 'admin-shared-ultra-content',
+    }
+  }
+  if (policyUnavailable && entitlementTier === 'premium') {
+    return { contentTier: 'premium', reason: 'policy-unavailable-fail-closed' }
+  }
+  return { contentTier: entitlementTier, reason: entitlementTier === 'premium' ? 'premium-ultra-restricted' : 'authenticated-entitlement' }
+}
+
+export async function getDesignIntelligenceAccessPolicy() {
+  const snapshot = await getAdminDb().collection('siteContent').doc(DI_ACCESS_POLICY_DOCUMENT).get()
+  return normalizeDesignIntelligenceAccessPolicy(snapshot.exists ? snapshot.data() : DEFAULT_DI_ACCESS_POLICY)
+}
+
+export async function saveDesignIntelligenceAccessPolicy(input, savedBy = null) {
+  const policy = normalizeDesignIntelligenceAccessPolicy(input)
+  const now = new Date().toISOString()
+  await getAdminDb().collection('siteContent').doc(DI_ACCESS_POLICY_DOCUMENT).set({
+    ...policy,
+    updatedAt: now,
+    updatedByUid: str(savedBy?.uid) || null,
+    updatedByEmail: str(savedBy?.email).toLowerCase() || null,
+  }, { merge: false })
+  return policy
+}
+
 export function normalizePaymentRecord(input = {}) {
   const payment = {
     userId: str(input.userId),
@@ -50,6 +152,7 @@ export function normalizePaymentRecord(input = {}) {
 
 
 const ENTITLED_TIERS = new Set(['premium', 'ultra-premium'])
+const ACTIVE_ENTITLEMENT_STATUSES = new Set(['active', 'granted'])
 
 function keyDigest(value) {
   return crypto.createHash('sha256').update(value, 'utf8').digest('hex')
@@ -72,8 +175,18 @@ async function getActiveApiKeyDocs(db, userId) {
 export function resolveServerEntitlement(data = {}, nowMs = Date.now()) {
   const record = data && typeof data === 'object' ? data : {}
   const tier = str(record.entitlement || record.plan).toLowerCase()
-  const expiry = dateOf(record.entitlementExpiresAt)
-  const paidOrGrantedActive = ENTITLED_TIERS.has(tier) && (!expiry || expiry.getTime() > nowMs)
+  const rawExpiry = record.entitlementExpiresAt
+  const hasConfiguredExpiry = rawExpiry !== undefined && rawExpiry !== null && rawExpiry !== ''
+  const expiry = hasConfiguredExpiry ? dateOf(rawExpiry) : null
+  const expiryIsValid = !hasConfiguredExpiry || (expiry instanceof Date && Number.isFinite(expiry.getTime()))
+  const entitlementStatus = str(record.entitlementStatus).toLowerCase()
+  const hasConfiguredStatus = entitlementStatus !== ''
+  const statusIsActive = !hasConfiguredStatus || ACTIVE_ENTITLEMENT_STATUSES.has(entitlementStatus)
+  const entitlementIsActive = record.entitlementActive !== false && statusIsActive
+  const paidOrGrantedActive = ENTITLED_TIERS.has(tier)
+    && entitlementIsActive
+    && expiryIsValid
+    && (!hasConfiguredExpiry || expiry.getTime() > nowMs)
 
   // Every Firebase-authenticated user receives Premium web access at ₹0.
   // Only an active Ultra Premium+ entitlement unlocks the developer API.
@@ -94,11 +207,35 @@ export function resolveServerEntitlement(data = {}, nowMs = Date.now()) {
   }
 }
 
+export function resolveAdminEntitlement(userEmail, configuredAdminEmail) {
+  const actualEmail = str(userEmail).toLowerCase()
+  const expectedEmail = str(configuredAdminEmail).toLowerCase()
+  if (!actualEmail || !expectedEmail || actualEmail !== expectedEmail) return null
+
+  return {
+    tier: 'ultra-premium',
+    active: true,
+    source: 'admin-email-allowlist',
+    expiresAt: null,
+  }
+}
+
 export async function getServerEntitlement(userId) {
   const cleanUserId = str(userId)
   if (!cleanUserId) throw new Error('Firebase user ID is required')
 
-  const snapshot = await getAdminDb().collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
+  // Keep the configured admin at Ultra Premium+ independently of editable
+  // Firestore entitlement fields. Resolve the email from Firebase Admin, never
+  // from a browser-provided email or tier claim.
+  const db = getAdminDb()
+  const configuredAdminEmail = str(process.env.ADMIN_EMAIL).toLowerCase()
+  if (configuredAdminEmail) {
+    const firebaseUser = await getAuth().getUser(cleanUserId)
+    const adminEntitlement = resolveAdminEntitlement(firebaseUser.email, configuredAdminEmail)
+    if (adminEntitlement) return adminEntitlement
+  }
+
+  const snapshot = await db.collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
   const data = snapshot.exists ? (snapshot.data() || {}) : {}
   return resolveServerEntitlement(data)
 }
