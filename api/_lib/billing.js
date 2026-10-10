@@ -50,6 +50,7 @@ export function normalizePaymentRecord(input = {}) {
 
 
 const ENTITLED_TIERS = new Set(['premium', 'ultra-premium'])
+const ACTIVE_ENTITLEMENT_STATUSES = new Set(['active', 'granted'])
 
 function keyDigest(value) {
   return crypto.createHash('sha256').update(value, 'utf8').digest('hex')
@@ -76,7 +77,12 @@ export function resolveServerEntitlement(data = {}, nowMs = Date.now()) {
   const hasConfiguredExpiry = rawExpiry !== undefined && rawExpiry !== null && rawExpiry !== ''
   const expiry = hasConfiguredExpiry ? dateOf(rawExpiry) : null
   const expiryIsValid = !hasConfiguredExpiry || (expiry instanceof Date && Number.isFinite(expiry.getTime()))
+  const entitlementStatus = str(record.entitlementStatus).toLowerCase()
+  const hasConfiguredStatus = entitlementStatus !== ''
+  const statusIsActive = !hasConfiguredStatus || ACTIVE_ENTITLEMENT_STATUSES.has(entitlementStatus)
+  const entitlementIsActive = record.entitlementActive !== false && statusIsActive
   const paidOrGrantedActive = ENTITLED_TIERS.has(tier)
+    && entitlementIsActive
     && expiryIsValid
     && (!hasConfiguredExpiry || expiry.getTime() > nowMs)
 
