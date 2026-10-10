@@ -1106,10 +1106,11 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - No production Firebase service-account secret, ID token, or API secret is committed to source.
 
 ### VERIFIED
-- Feature exact-head CI 38054013873 and main merge-head CI 38054135153 both succeeded.
-- Main Vercel deployment dpl_66PCkhLXPS5mtgPFskzJyWg9h3nj is READY on https://motion-zync.vercel.app.
+- Feature exact-head CI run 38054011439, same-head PR CI run 38054013873 and main merge-head CI run 38054135153 succeeded.
+- Main Vercel deployment dpl_66PCkhLXPS5mtgPFskzJyWg9h3nj is READY on https://motion-zync.vercel.app. The later docs-only main commit a8def3c6aec314065a2a05ab5c6da5703bdca598 passed CI run 38054344234 and its matching production deployment dpl_96qohbjPoAuVb6KurrnvbDNRRW11 is READY.
 - Production guest knowledge response remains Free-only (35 records, zero protected records) despite forged Ultra query claims; invalid domain returns HTTP 400.
-- Production JavaScript/CSS assets returned HTTP 200 and include the new controls.
+- Production Generator JavaScript/CSS assets returned HTTP 200 and contain the admin sharing setting, festival-offer controls, tier filters, and recipe customization/preview controls.
+- CI browser checks for manual recipe selection/reset, responsive preview, Admin Settings mock-save, accessibility-name/Axe and mobile/tablet/desktop overflow all passed. This status sync is documentation-only and does not alter runtime code.
 
 ### UNVERIFIED
 - Real admin Gmail login and production ADMIN_EMAIL configuration are not yet validated by a genuine session.
@@ -1117,7 +1118,8 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - The Claude prompt is added; the 3,600+ design ZIP itself remains to be generated and reviewed.
 
 ### CURRENT FIRST UNFINISHED TASK
-1. Confirm CI and deployment for this docs-only checkpoint.
-2. Test the real admin Gmail at https://motion-zync.vercel.app/admin and access-policy persistence from the main URL.
-3. Run authorized API-key/Effects/BYOK tests, then finish physical device and screen-reader testing.
-4. Review and integrate Claude's ZIP only after validator, counts, diversity and compatibility are checked.
+1. Use the genuine admin Gmail at https://motion-zync.vercel.app/admin to verify server-side ADMIN_EMAIL mapping and permanent Ultra Premium+ for that authenticated UID. Never paste Firebase tokens or secrets in chat.
+2. Test real access-policy save/reload and the actual Premium-vs-Ultra content-visibility behavior on the main URL, including a scheduled IST offer; verify the switch does not change API entitlement.
+3. With authorized real accounts, test API-key issue/rotate/revoke, hash-only-at-rest, Premium denial, revoked-key rejection, Effects/CORS and actual BYOK execution.
+4. Inspect Claude's eventual design ZIP for 18 categories × 100 Premium + 100 Ultra minimum, non-duplicate designs, light/dark/colorful themes, build/security/accessibility and compatible import paths. The ZIP is not generated yet; use the linked repository prompt to obtain it.
+5. Finish physical Android, keyboard and screen-reader checks LAST and record observed results honestly.

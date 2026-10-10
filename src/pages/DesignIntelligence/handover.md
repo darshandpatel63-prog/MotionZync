@@ -4875,7 +4875,7 @@ FIRST UNFINISHED TASK remains:
 - Privacy/security: no production credentials or user tokens are in source. Entitlements stay server-authoritative; sharing design records does not grant Ultra subscription or API permission.
 - Performance: current bundle/assets served successfully; production latency and device-level performance profiling remain UNVERIFIED.
 - Data quality: no fabricated catalog records, fake payments or user entitlements were added.
-- Build/test: merge-head CI run 38054135153 SUCCESS; production Vercel deployment READY. The follow-up docs-only checkpoint commit still needs its own CI/deployment confirmation.
+- Build/test: code-changing main merge CI run 38054135153 SUCCESS; main deployment dpl_66PCkhLXPS5mtgPFskzJyWg9h3nj READY. The documentation-only follow-up commit a8def3c6aec314065a2a05ab5c6da5703bdca598 also passed CI run 38054344234 and its matching production deployment dpl_96qohbjPoAuVb6KurrnvbDNRRW11 is READY. This status sync is documentation-only and does not change application runtime.
 - Documentation: updated in this checkpoint.
 
 ### STATUS
@@ -4885,9 +4885,8 @@ FIRST UNFINISHED TASK remains:
 - Payment launch UI remains intentionally pending.
 
 ### CURRENT FIRST UNFINISHED TASK
-1. Verify CI and production deployment for this documentation checkpoint; the application code does not change in this commit.
-2. From https://motion-zync.vercel.app/admin, use the real admin Gmail and confirm the Admin panel accepts it. Do not share a Firebase ID token or secrets in chat.
-3. From the main URL, test access-policy save/reload and confirm a real Premium account sees Ultra design records when the switch is ON, and not when OFF outside an active offer. API entitlement must remain unchanged.
-4. Verify API-key issue/rotate/revoke, hash-only storage, revoked-key rejection, Effects/CORS and BYOK with authorized test accounts.
-5. Finish physical Android, keyboard and screen-reader tests last. Report observed outcomes honestly; no credentials need to be pasted into chat.
-6. Review Claude's ZIP for exact category/tier counts, source paths, visual diversity, three themes, build/security/accessibility before integrating designs.
+1. From https://motion-zync.vercel.app/admin, use the genuine admin Gmail session to verify the Admin panel accepts that account and the configured server-side ADMIN_EMAIL maps it to permanent Ultra Premium+. Do not share a Firebase ID token or secret in chat.
+2. Using that real main-domain session, test access-policy save/reload and confirm a genuine Premium account sees Ultra design records when sharing is ON, and cannot when it is OFF outside an active IST offer. Verify account/API entitlement remains unchanged.
+3. With authorized real accounts/credentials, verify API-key issue/rotate/revoke, hash-only-at-rest, Premium denial, revoked-key rejection, Effects/CORS and live BYOK execution.
+4. Review Claude's eventual ZIP for all 18 categories, at least 100 Premium + 100 Ultra designs per category (3,600 minimum), distinct compositions, light/dark/colorful themes, manifest paths and build/security/accessibility before integrating templates. The ZIP itself has not yet been generated.
+5. Finish physical Android, keyboard and screen-reader checks LAST. Record the actual result and do not paste ID tokens/API secrets into chat.
