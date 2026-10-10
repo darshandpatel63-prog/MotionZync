@@ -969,3 +969,34 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 3. Verify real BYOK provider execution, model compatibility and provider-specific CORS.
 4. Complete manual Android/mobile, keyboard, clipboard and screen-reader audit.
 5. Keep Phase A at **98% — IN PROGRESS** until concrete remaining gates close. Phase B package hardening needs a future versioned npm release; Phase C large data expansion remains deferred. Keep Cashfree launch UI pending.
+
+
+## 2026-10-10 — Firebase access-boundary checkpoint
+
+### VERIFIED
+- Design Intelligence Build Check [run 38050405963](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38050405963) passed on test commit `41853b3ffb2294a0c71e535a357242e70e4f1a19`.
+- Resolver regression contracts now cover malformed expiry, `entitlementActive: false`, revoked/pending/unknown status, active status, and client-supplied tier claims.
+- The matching READY code deployment `dpl_DXUhfayWUH6VqmunenHB51uq6qiw` returned only Free knowledge to unauthenticated callers (35 records), ignored attempted Ultra tier query claims, included private/no-store headers and rejected unknown domains with HTTP 400.
+- The server-authoritative entitlement source remains the existing Firebase Admin/Firestore path.
+
+### IMPLEMENTED
+- Explicit inactive/unknown configured entitlement status fails closed to the authenticated Premium web tier.
+- Malformed configured expiry also fails closed.
+- No fake users, entitlements, API keys or second database were created.
+
+### UNVERIFIED
+- A real Firebase-authenticated Premium/Ultra session and real Firestore-backed API-key lifecycle are not verified through the available tool path.
+- Vercel Deployment Protection blocked direct tool-fetch of the protected API-key/effects routes before an application response was observed; this is not labeled as an application failure.
+- Real BYOK execution and manual Android/device/screen-reader checks remain unverified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Real authenticated Firebase Premium and Ultra knowledge-boundary test without exposing ID tokens/secrets.
+2. Real Ultra API-key issue/rotate/revoke/hash-only-at-rest/revoked-key rejection.
+3. Real authorized Effects API/CORS and BYOK provider/model tests.
+4. Manual mobile/keyboard/screen-reader audit.
+
+### STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**
+- Phase B — Publish: existing npm 0.1.0 install/import **VERIFIED**; new hardened source needs a future versioned release.
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+- Cashfree launch UI stays pending.
