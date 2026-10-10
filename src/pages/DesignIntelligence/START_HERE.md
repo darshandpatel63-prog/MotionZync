@@ -1204,3 +1204,12 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 2. Browser-test `/design-intelligence/ui-gallery`: count 3,600; 18 categories; category/tier/search filters; preview load; all four themes; responsive/mobile/keyboard/accessibility; and confirm Explorer's original canonical knowledge flow is unchanged.
 3. Update the deployment/main only after exact-head tests and preview pass. Do not claim 3,600 are in the canonical knowledge API; the Gallery is the template-bundle UI.
 4. Real Firebase/API credentialed and physical-device tests remain UNVERIFIED and must be completed by an authorized human at the end.
+
+
+## 2026-10-10 — Production Gallery visibility checkpoint
+
+- **VERIFIED:** Vercel production alias `motion-zync.vercel.app` points to main commit `25e037d84dcb27410e40d9b3164b04935c6e07b3`. That main `src/App.jsx` lacks the `DesignBundleGallery` import and `/design-intelligence/ui-gallery` route, so the production Overview still shows canonical seed-catalog counts rather than the imported design bundle.
+- **IMPLEMENTED on feature branch:** the Gallery route/nav UI exists; selection now follows active filters, and the existing CI browser suite includes the Gallery route, manifest counts, category/tier/search, lazy preview, four themes, mocked Premium/Ultra display boundary and responsive checks.
+- **UNVERIFIED:** exact-head CI and Vercel preview for these Gallery changes are pending. The prior ZIP-import workflow does not verify Gallery integration.
+- **SECURITY NOTE:** the bundle files themselves are present in the public repository and are client-buildable. UI tier locks are not a security boundary for those public source files; do not claim that the asset pack is protected server-side. The existing canonical knowledge API access checks remain a separate server-authoritative path.
+- **CURRENT FIRST UNFINISHED TASK:** open a PR from `feature/design-intelligence` to `main`; inspect the exact-head CI and preview before merging. Keep the 3,600 template bundle distinct from the canonical `/api/di-knowledge` records unless a separately reviewed secure integration changes that architecture.
