@@ -4972,6 +4972,49 @@ FIRST UNFINISHED TASK remains:
 6. Keep real Firebase/admin, API-key lifecycle, Effects/CORS/BYOK and physical-device checks last. Never request or log the VITEMOTIONAPI value, Firebase ID tokens, service-account keys or other secrets in chat.
 
 
+## 2026-10-10 — Kimi design bundle promoted to main
+
+### IMPLEMENTED
+- PR #4 (Import validated 3,600-design bundle into Design Intelligence) merged to main.
+- Main merge commit: f44200059790be5be98ac3eee0ce042dd72e713c.
+- The bundle is now stored at src/pages/DesignIntelligence/ui-design-bundle/; it stays isolated from repository-root README/package files and is not extracted twice.
+- The dedicated importer/audit workflows and repaired static shared React parts are included. No Firestore database/collection, authentication, billing, access entitlement or payment logic was changed by this bundle import.
+
+### VERIFIED
+- PR #4 merged successfully after exact feature-head CI and the Vercel PR preview were Ready.
+- Full main-merge Design Intelligence CI run 38070364672 passed on exact main SHA f44200059790be5be98ac3eee0ce042dd72e713c: build, Cashfree and entitlement contracts, BYOK model-registry checks, price consistency, npm local/public registry checks, Playwright browser route/interactions, responsive smoke tests and screenshot/log upload.
+- Production Vercel deployment dpl_EjoowgMSAi3sPpR58gJy1YadgeF1 is READY, points to exact main merge SHA f44200059790be5be98ac3eee0ce042dd72e713c, and includes alias https://motion-zync.vercel.app.
+- The earlier importer run 38070025991 passed: two-layer hash-pinned ZIP validation, 3,600 unique design IDs across 18 categories, 100 Premium + 100 Ultra Premium+ per category, theme/path validation, no unresolved JSX macro references, 3,602 JSX syntax parses, and existing-app build.
+- VITEMOTIONAPI remains a Sensitive Vercel environment variable. Its value was not read or exposed and was not used by this bundle import.
+
+### UNVERIFIED
+- Human review of the original/meaningful visual differences across all 3,600 designs; automated structural fingerprints are not proof of visual uniqueness.
+- All 3,600 designs are not yet registered as live selectable items in Explorer/Generator. The bundle is an isolated asset pack until a separate controlled catalog-integration change passes.
+- Representative visual spot checks across themes/categories, real user flows, mobile memory/scroll performance, keyboard/screen-reader/device behavior.
+- Real Gmail/Firebase admin session and Firestore policy save/reload, authenticated Premium/Ultra visibility, API-key issue/rotate/revoke/hash-only storage, Effects/CORS, live BYOK, and Cashfree entitlement remain UNVERIFIED.
+
+### MILESTONE AUDIT
+- Regression: exact main merge commit full CI succeeded; production deployment is READY.
+- Functionality: source bundle/manifest/components passed automated checks; Explorer/Generator live registration remains separate and unimplemented.
+- Accessibility: automated browser/responsive checks passed on existing routes; real screen-reader/device review remains UNVERIFIED.
+- Privacy/security: no API value, Firebase ID token or service-account key committed; import validates path/symlink/collision/archive integrity and adds no remote API calls to the static components.
+- Performance: app build and deployment succeeded; 10,820 added files increase repository source size, so production clone/build and client-side loading must be observed as catalog wiring proceeds.
+- Data quality: 3,600 unique IDs, required category/tier minimums, and manifest paths verified; all undefined JSX macro names were repaired with shared static parts.
+- Documentation: this main-branch checkpoint supersedes the earlier statement that main merge was still future work.
+
+### STATUS
+- ZIP import into main: IMPLEMENTED and VERIFIED by workflow, full CI and READY deployment.
+- Live Explorer/Generator catalog registration: PLANNED / FUTURE.
+- Human visual originality and all-design manual review: UNVERIFIED.
+- Genuine Firebase/API and physical device checks: UNVERIFIED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Add a separate, scoped catalog adapter that loads bundle metadata into the existing canonical Design Intelligence catalog/selector, reusing the existing server-authoritative visibility/entitlement boundary. Do not create another database and do not let a manifest tier label grant paid/API entitlement.
+2. Add tests for category/domain/tier filters, sample preview/loading failures, theme switching and correct server-enforced Premium vs Ultra access before exposing the bundle in Explorer/Generator.
+3. Visually spot-check a representative spread of categories and light/dark/colorful themes at phone/tablet/desktop sizes; record the sampling and results instead of claiming all 3,600 are visually reviewed.
+4. Keep actual Firebase admin, real Firestore write/read, authorized API-key lifecycle, Effects/CORS/BYOK and physical keyboard/screen-reader/Android checks last. Never paste or log VITEMOTIONAPI or Firebase credentials.
+
+
 ## 2026-10-10 — Imported UI bundle connected to the application
 
 ### IMPLEMENTED
