@@ -4558,3 +4558,51 @@ FIRST UNFINISHED TASK remains:
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm 0.1.0 publication + clean registry install/import VERIFIED; the hardened feature-branch source needs a separate versioned release; authenticated runtime gates remain**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-10 — Malformed entitlement-expiry fail-closed regression
+
+### IMPLEMENTED
+- Hardened `api/_lib/billing.js` so a configured, non-empty but malformed `entitlementExpiresAt` value cannot be interpreted as “no expiry” and keep a stored Premium/Ultra entitlement active.
+- A malformed configured expiry now falls back to the existing authenticated Premium web-access contract; it does not grant Ultra developer API access.
+- An absent, null or empty expiry remains supported as the existing permanent-entitlement representation.
+- Added a regression assertion in `scripts/di-entitlement-contract.mjs` for malformed Ultra expiry.
+- No changes to `src/App.jsx`, `src/components/Navbar/Navbar.jsx`, Cashfree/payment UI, catalog contents, authentication architecture, API-key storage model, or unrelated MotionZync features.
+
+### VERIFIED
+- Current code/test commit: `af1d2e68d642f2594d5aafac7ac6765ef65574f9`.
+- Exact-head GitHub Actions Design Intelligence Build Check [run 38049898324](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38049898324) completed **SUCCESS**.
+- The exact-head run passed build; Cashfree order contract; BYOK model-registry guard; Firebase entitlement/protected-catalog contract, including the malformed-expiry assertion; shared plan-price contract; local npm package tarball installation/import; public npm registry installation/import; Playwright browser checks; Axe accessible-name/serious-critical gate; clipboard tests; and responsive/keyboard-focus checks.
+- The feature deployment created for this commit is `dpl_DqqQdx7VjWZzHDPtmU9CeX47dCsA`, but its latest observed state is **BUILDING**, not READY. No live runtime claim is made for this fix.
+- The branch still contains the previously verified 7 Design Intelligence routes and the same two minimum integration files; this milestone only changed billing entitlement parsing and its contract test.
+
+### UNVERIFIED
+- A genuine Firebase-authenticated Premium user and an actual server-granted/paid Ultra Premium+ user have not been exercised through the deployed feature route.
+- Actual production API-key issue/rotate/revoke, hash-only stored record inspection, revoked-key rejection, and authenticated Ultra-only knowledge/effects calls remain unverified.
+- Production CORS with a real configured origin, real BYOK provider/model execution, and manual Android/device/screen-reader review remain unverified.
+- Latest feature deployment has not yet reached READY. The public production alias currently points to the main-branch deployment, not this feature commit; preview SSO also prevents treating an unauthenticated preview-fetch restriction as an application result.
+- Public npm `0.1.0` does not include this later fix; do not republish `0.1.0`. A future package update needs a new version and its own registry consumer test.
+
+### MILESTONE AUDIT
+- Regression: exact-head Design Intelligence CI **VERIFIED**; live deployment regression check **UNVERIFIED** until the new feature deployment is READY and safely testable.
+- Functionality: malformed configured expiry fails closed in the resolver; the new automated contract passed.
+- Accessibility: no UI changes; existing automated browser/Axe/responsive/keyboard checks passed. Manual device/screen-reader verification remains **UNVERIFIED**.
+- Privacy/security: entitlement expiry parsing is fail-closed for malformed values; no credentials or API secrets were read, issued or exposed.
+- Performance: one bounded date-validity check in entitlement resolution; no production profiling claim.
+- Data quality: catalog unchanged; no records or entitlements were fabricated.
+- Build/test: exact-head run 38049898324 **SUCCESS**. Matching Vercel feature deployment was **BUILDING** at last inspection.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**. Do not increase the percentage based on this single contract-hardening milestone.
+- Phase B — Publish: public npm `0.1.0` publication and registry install/import remain **VERIFIED**; the hardened source needs a future versioned release; credentialed production gates remain.
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**. Large content expansion remains deferred.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Exercise guest Free, real Firebase-authenticated Premium, genuine Ultra Premium+ entitlement, expiry fallback and server-authoritative tier behavior using genuine sessions. Never paste ID tokens or secrets into chat.
+2. Exercise Ultra API-key issue/rotate/revoke, confirm only hash is stored, verify revoked/inactive keys are rejected, and verify Premium cannot issue or use developer keys.
+3. Verify deployed `/api/di-knowledge` and `/api/di-effects` using genuine authorized credentials; test approved/unapproved CORS origins, payload limit, CSS-only output and reduced-motion fallbacks after the feature deployment is READY.
+4. Verify real BYOK selected-provider/model generation and provider-specific CORS/model compatibility through the existing provider/vault.
+5. Complete manual production Android/mobile keyboard, visible-focus, clipboard and screen-reader audit.
+6. Plan a new npm package version for the hardened source; publish only as an explicit release milestone and verify a clean public consumer install.
+7. Keep public Cashfree checkout/payment launch UI pending unless explicitly authorized; do not start 1,000+/10,000+ dataset expansion before the core gates are closed.
