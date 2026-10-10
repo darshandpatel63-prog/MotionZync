@@ -1,5 +1,5 @@
 import { requireAuthenticatedUser } from './_lib/firebase-admin.js'
-import { authenticateMotionZyncApiKey, getServerEntitlement, getDesignIntelligenceAccessPolicy, getDesignIntelligenceAccessState } from './_lib/billing.js'
+import { authenticateMotionZyncApiKey, getServerEntitlement, getDesignIntelligenceAccessPolicy, getDesignIntelligenceAccessState, resolveDesignIntelligenceContentAccess } from './_lib/billing.js'
 import {
   ALL_DI_PROTECTED_RECORDS,
   DI_PROTECTED_STYLES,
@@ -77,10 +77,10 @@ export default async function handler(req, res) {
   }
 
   let tier = 'free'
-  let contentTier = 'free'
   let authenticated = false
-  let contentAccessReason = 'public-free'
+  let apiKeyAuthenticated = false
   let accessState = null
+  let policyUnavailable = false
 
   const bearerToken = hasBearerToken(req)
   if (bearerToken) {
@@ -89,37 +89,39 @@ export default async function handler(req, res) {
         const apiAccess = await authenticateMotionZyncApiKey(bearerToken)
         tier = apiAccess.entitlement.tier
         authenticated = true
-        contentAccessReason = 'ultra-api-key'
+        apiKeyAuthenticated = true
       } else {
         const user = await requireAuthenticatedUser(req)
         const entitlement = await getServerEntitlement(user.uid)
         tier = entitlement.active ? entitlement.tier : 'free'
         authenticated = true
-        contentAccessReason = 'authenticated-entitlement'
       }
     } catch (error) {
       return res.status(error.status || 401).json({ error: error.message || 'Authentication failed' })
     }
   }
 
-  contentTier = tier
   // This policy controls visibility of Ultra design records only. It never
   // changes the account entitlement and can never grant developer API access.
-  if (authenticated && !String(bearerToken).startsWith('mz_live_') && tier === 'premium') {
+  if (authenticated && !apiKeyAuthenticated && tier === 'premium') {
     try {
       const policy = await getDesignIntelligenceAccessPolicy()
       accessState = getDesignIntelligenceAccessState(policy)
-      if (accessState.premiumCanAccessUltraContent) {
-        contentTier = 'ultra-premium'
-        contentAccessReason = accessState.festivalOfferActive ? 'scheduled-festival-offer' : 'admin-shared-ultra-content'
-      }
     } catch {
       // A policy read failure must not disclose Ultra records.
-      contentTier = tier
-      contentAccessReason = 'policy-unavailable-fail-closed'
+      policyUnavailable = true
     }
   }
 
+  const visibility = resolveDesignIntelligenceContentAccess({
+    entitlementTier: tier,
+    authenticated,
+    apiKeyAuthenticated,
+    accessState,
+    policyUnavailable,
+  })
+  const contentTier = visibility.contentTier
+  const contentAccessReason = visibility.reason
   const catalog = combineCatalogs(contentTier)
   const protectedIncludedRecords = ALL_DI_PROTECTED_RECORDS.filter(record => isTierAccessible(record, contentTier))
   const report = validateCatalog(catalog)
