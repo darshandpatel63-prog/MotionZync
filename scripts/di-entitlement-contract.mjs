@@ -107,6 +107,47 @@ assert.deepEqual(
   'Malformed expiry must fail closed to authenticated Premium web access',
 )
 
+const explicitlyInactiveUltra = resolveServerEntitlement({
+  entitlement: 'ultra-premium',
+  entitlementSource: 'payment',
+  entitlementActive: false,
+}, NOW)
+assert.deepEqual(
+  explicitlyInactiveUltra,
+  freeFromAuthentication,
+  'Explicitly inactive Ultra entitlement must fall back to authenticated Premium web access',
+)
+
+const revokedUltra = resolveServerEntitlement({
+  entitlement: 'ultra-premium',
+  entitlementSource: 'payment',
+  entitlementStatus: 'revoked',
+}, NOW)
+assert.deepEqual(
+  revokedUltra,
+  freeFromAuthentication,
+  'Revoked Ultra entitlement must fall back to authenticated Premium web access',
+)
+
+const pendingUltra = resolveServerEntitlement({
+  entitlement: 'ultra-premium',
+  entitlementSource: 'payment',
+  entitlementStatus: 'pending',
+}, NOW)
+assert.deepEqual(
+  pendingUltra,
+  freeFromAuthentication,
+  'Unknown/non-active entitlement status must fail closed',
+)
+
+const activeUltra = resolveServerEntitlement({
+  entitlement: 'ultra-premium',
+  entitlementSource: 'payment',
+  entitlementStatus: 'active',
+}, NOW)
+assert.equal(activeUltra.tier, 'ultra-premium', 'Explicit active Ultra entitlement should remain eligible')
+assert.equal(activeUltra.active, true)
+
 const tiers = ['free', 'premium', 'ultra-premium']
 const catalogs = Object.fromEntries(tiers.map(tier => [tier, combineCatalogs(tier)]))
 
