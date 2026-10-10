@@ -1,0 +1,58 @@
+name: Design Intelligence Bundle ZIP Audit
+
+on:
+  push:
+    branches:
+      - feature/design-intelligence
+    paths:
+      - "zip-upload-folder/**"
+      - "scripts/di-design-bundle-audit.py"
+      - ".github/workflows/design-intelligence-bundle-audit.yml"
+  workflow_dispatch:
+    inputs:
+      archive_path:
+        description: "Path to the incoming ZIP in this repository"
+        required: true
+        default: "zip-upload-folder/Kimi_Agent_Direct Zip Download.zip"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: di-design-bundle-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Inspect ZIP without importing application files
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Inspect and safely extract to temporary storage
+        env:
+          INPUT_ARCHIVE_PATH: ${{ inputs.archive_path }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARCHIVE_PATH="${INPUT_ARCHIVE_PATH:-zip-upload-folder/Kimi_Agent_Direct Zip Download.zip}"
+          python scripts/di-design-bundle-audit.py "$ARCHIVE_PATH" bundle-audit-output
+
+      - name: Publish ZIP audit report and complete inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motionzync-design-bundle-audit
+          path: bundle-audit-output/
+          if-no-files-found: warn
+          retention-days: 14
