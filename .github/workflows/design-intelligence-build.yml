@@ -180,19 +180,32 @@ jobs:
             await route.continue()
           })
           await page.addInitScript(() => {
+            window.__motionzyncAccessPolicySaves = []
             const originalFetch = window.fetch.bind(window)
             window.fetch = async (input, init) => {
               const url = typeof input === 'string' ? input : input.url
               if (url.endsWith('/api/admin-billing')) {
                 const method = init?.method || (typeof input !== 'string' ? input.method : 'GET')
-                const payload = method === 'POST'
-                  ? {result:{email:'ci-admin@example.invalid',tier:'premium'}}
-                  : {
+                const requestBody = method === 'POST' ? JSON.parse(init?.body || '{}') : {}
+                const payload = method === 'POST' && requestBody.action === 'saveDesignIntelligenceAccessPolicy'
+                  ? {
+                      ok:true,
+                      accessPolicy:requestBody.accessPolicy,
+                      accessPolicyState:{policy:requestBody.accessPolicy,festivalOfferActive:false,premiumCanAccessUltraContent:requestBody.accessPolicy.shareUltraWithPremium || requestBody.accessPolicy.festivalOffer?.enabled === true,timezone:'Asia/Kolkata'},
+                    }
+                  : method === 'POST'
+                    ? {result:{email:'ci-admin@example.invalid',tier:'premium'}}
+                    : {
                       summary:{uniquePayers:0,successfulPayments:0,grossRevenue:0,refundedAmount:0,activeEntitlements:0,activeApiKeys:0,manualGrants:0,totalPaymentRecords:0},
                       paymentStatus:[],planDistribution:[],entitlementSources:[],apiKeyStatus:[],monthly:[],recentTransactions:[],
                       generatedAt:new Date().toISOString(),
                       limits:{collectionsReadLimit:10000,recentTransactions:100},
+                      accessPolicy:{shareUltraWithPremium:true,festivalOffer:{enabled:false,startDate:'',startTime:'',endDate:'',endTime:'',timezone:'Asia/Kolkata'}},
+                      accessPolicyState:{festivalOfferActive:false,premiumCanAccessUltraContent:true,timezone:'Asia/Kolkata'},
                     }
+                if(method==='POST' && requestBody.action==='saveDesignIntelligenceAccessPolicy'){
+                  window.__motionzyncAccessPolicySaves.push(requestBody.accessPolicy)
+                }
                 return new Response(JSON.stringify(payload), {status:200,headers:{'Content-Type':'application/json'}})
               }
               if (url.endsWith('/api/cashfree-create-order')) {
@@ -365,6 +378,27 @@ jobs:
           assert((await page.getByRole('combobox', {name:'Entitlement tier'}).count()) === 1, 'Admin entitlement tier field is missing')
           assert((await page.getByText('No payment records exist yet. This is not seeded/fake data.').count()) === 1, 'Admin billing empty-state is missing')
           await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-billing.png',fullPage:true})
+
+          await page.getByRole('button', {name:/Settings/}).click()
+          await page.getByRole('heading', {name:'Premium / Ultra Premium+ content settings'}).waitFor()
+          const shareUltra = page.getByRole('checkbox', {name:/Allow logged-in Premium accounts to view Ultra Premium\+ designs/})
+          assert(await shareUltra.isChecked(), 'Ultra design sharing should default to ON')
+          const festivalOffer = page.getByRole('checkbox', {name:/Schedule a time-limited festival offer for Ultra designs/})
+          assert(!(await festivalOffer.isChecked()), 'Festival offer should default to OFF')
+          await page.locator('#di-offer-start-date').fill('2026-10-31')
+          await page.locator('#di-offer-start-time').fill('10:00')
+          await page.locator('#di-offer-end-date').fill('2026-11-01')
+          await page.locator('#di-offer-end-time').fill('20:00')
+          await festivalOffer.check()
+          await page.getByRole('button', {name:'Save access settings'}).click()
+          await page.getByText('Settings saved on the server. Access changes apply to new knowledge requests.', {exact:true}).waitFor()
+          const savedPolicies = await page.evaluate(() => window.__motionzyncAccessPolicySaves)
+          assert(savedPolicies.length === 1, 'Admin access policy did not call the protected server save action')
+          assert(savedPolicies[0].shareUltraWithPremium === true, 'Admin access policy save unexpectedly disabled Ultra sharing')
+          assert(savedPolicies[0].festivalOffer.enabled === true, 'Admin festival offer toggle was not persisted')
+          assert(savedPolicies[0].festivalOffer.startDate === '2026-10-31' && savedPolicies[0].festivalOffer.endDate === '2026-11-01', 'Admin offer date window was not persisted')
+          assert(savedPolicies[0].festivalOffer.startTime === '10:00' && savedPolicies[0].festivalOffer.endTime === '20:00', 'Admin offer time window was not persisted')
+          await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-access-settings.png',fullPage:true})
 
           for (const viewport of [
             {width:390,height:844,name:'mobile'},
