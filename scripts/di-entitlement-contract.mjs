@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { resolveServerEntitlement, resolveAdminEntitlement, DEFAULT_DI_ACCESS_POLICY, normalizeDesignIntelligenceAccessPolicy, getDesignIntelligenceAccessState } from '../api/_lib/billing.js'
+import { resolveServerEntitlement, resolveAdminEntitlement, DEFAULT_DI_ACCESS_POLICY, normalizeDesignIntelligenceAccessPolicy, getDesignIntelligenceAccessState, resolveDesignIntelligenceContentAccess } from '../api/_lib/billing.js'
 import {
   ALL_DI_PROTECTED_RECORDS,
 } from '../api/_lib/di-protected-catalog.js'
@@ -60,6 +60,49 @@ assert.equal(hasEntitlement('unrecognized-tier', 'ultra-premium'), false, 'Unkno
 assert.equal(hasEntitlement('premium', 'unrecognized-tier'), false, 'Unknown current tiers must fall back to Free')
 
 const NOW = Date.parse('2026-10-02T12:00:00.000Z')
+
+const premiumSharedContent = resolveDesignIntelligenceContentAccess({
+  entitlementTier: 'premium',
+  authenticated: true,
+  accessState: { premiumCanAccessUltraContent: true, festivalOfferActive: false },
+})
+assert.deepEqual(premiumSharedContent, { contentTier: 'ultra-premium', reason: 'admin-shared-ultra-content' })
+assert.equal(premiumSharedContent.entitlementTier, undefined, 'Content sharing must not mint an Ultra subscription entitlement')
+
+const premiumFestivalContent = resolveDesignIntelligenceContentAccess({
+  entitlementTier: 'premium',
+  authenticated: true,
+  accessState: { premiumCanAccessUltraContent: true, festivalOfferActive: true },
+})
+assert.deepEqual(premiumFestivalContent, { contentTier: 'ultra-premium', reason: 'scheduled-festival-offer' })
+
+const premiumRestrictedContent = resolveDesignIntelligenceContentAccess({
+  entitlementTier: 'premium',
+  authenticated: true,
+  accessState: { premiumCanAccessUltraContent: false, festivalOfferActive: false },
+})
+assert.deepEqual(premiumRestrictedContent, { contentTier: 'premium', reason: 'premium-ultra-restricted' })
+
+const policyReadFailClosed = resolveDesignIntelligenceContentAccess({
+  entitlementTier: 'premium',
+  authenticated: true,
+  policyUnavailable: true,
+})
+assert.deepEqual(policyReadFailClosed, { contentTier: 'premium', reason: 'policy-unavailable-fail-closed' })
+
+const guestCannotUseContentOffer = resolveDesignIntelligenceContentAccess({
+  entitlementTier: 'free',
+  authenticated: false,
+  accessState: { premiumCanAccessUltraContent: true, festivalOfferActive: true },
+})
+assert.deepEqual(guestCannotUseContentOffer, { contentTier: 'free', reason: 'public-free' })
+
+const ultraSubscriptionContent = resolveDesignIntelligenceContentAccess({
+  entitlementTier: 'ultra-premium',
+  authenticated: true,
+  accessState: { premiumCanAccessUltraContent: false, festivalOfferActive: false },
+})
+assert.deepEqual(ultraSubscriptionContent, { contentTier: 'ultra-premium', reason: 'ultra-subscription' })
 
 const defaultAccessPolicy = normalizeDesignIntelligenceAccessPolicy(DEFAULT_DI_ACCESS_POLICY)
 assert.equal(defaultAccessPolicy.shareUltraWithPremium, true, 'Ultra design sharing must default ON')
