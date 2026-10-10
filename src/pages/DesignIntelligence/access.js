@@ -13,7 +13,7 @@ export const PLAN_OFFERS=[
     name:'Premium (Google login)',
     price:'₹0',
     cadence:'with login',
-    access:'Premium protected web knowledge and generation at no payment; Firebase identity is verified server-side.',
+    access:'Premium protected web knowledge and generation at no payment; Ultra design records may be shared by an admin setting or scheduled festival offer. Developer API and API-only effects remain Ultra Premium+ restricted.',
     npmAccess:'Premium npm usage is supported by the same canonical core; protected remote knowledge requires authenticated access.'
   },
   {
@@ -21,7 +21,7 @@ export const PLAN_OFFERS=[
     name:'Ultra Premium+ API',
     price:'₹200',
     cadence:'one-time',
-    access:'All web-accessible Design Intelligence knowledge plus the server-authorized developer API.',
+    access:'All web-accessible Design Intelligence knowledge plus server-authorized developer API access when the payment launch is enabled. API-only special effects remain Ultra Premium+ only.',
     npmAccess:'Ultra npm/API integrations can use the same canonical core with server-authorized API access.',
     specialAccess:'Special animation and effects are API-only and require Ultra Premium+.'
   },
