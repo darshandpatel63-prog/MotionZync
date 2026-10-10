@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - feature/design-intelligence
+      - main
   pull_request:
     branches:
       - feature/design-intelligence
+      - main
     paths:
       - "src/pages/DesignIntelligence/**"
       - "src/App.jsx"

@@ -33,6 +33,8 @@ import {
 } from '@motionzync/design-intelligence'
 ```
 
+The npm package uses the same canonical Design Intelligence core as MotionZync Web. It never fabricates catalog entries or creates a second Design Intelligence database.
+
 ## What npm users can do
 
 The package currently gives developers a deterministic design-intelligence toolkit. You can:

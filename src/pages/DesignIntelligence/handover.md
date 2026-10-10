@@ -4785,8 +4785,24 @@ FIRST UNFINISHED TASK remains:
 - Payment launch UI remains intentionally pending.
 
 ### CURRENT FIRST UNFINISHED TASK
-1. Run and verify the combined docs/test synchronization commit and matching feature preview; current latest-main divergence must also be reviewed before promoting code.
-2. Safely incorporate the six newer main-branch commits (notably DesignIntelligenceDocs.jsx, DesignIntelligence/README.md and the npm-publish workflow), preserve both sides' intended changes and rerun CI before merging the complete verified feature to main.
+1. Verify the pending merge-sync CI on the commit that incorporates latest main as a merge parent, including full build, contract, browser and accessibility checks.
+2. Confirm the feature PR is mergeable, its final checks pass, and merge to main; then verify main's GitHub Actions and Vercel production deployment.
 3. After the main-domain deployment is ready, test the genuine admin Gmail/Firebase session and real Firestore policy write/read through the main URL. Never paste an ID token or secret into chat.
 4. Then complete authorized API-key, effects/CORS, BYOK and physical-device tests. Keep these last, as requested.
 5. When Claude returns the ZIP, validate counts, diversity, light/dark/colorful themes, build/security/accessibility and manifest paths before integrating any templates.
+
+
+## 2026-10-10 — Main-history reconciliation before promotion
+
+### IMPLEMENTED
+- The latest main history is being incorporated as the second parent of a feature-branch merge commit, without rewriting unrelated files.
+- The expanded feature README and the Docs page's Copy controls/payment-pending status are retained. Main's bounded-effects request limit note is merged into the Docs page.
+- Main's npm publish workflow is retained as manual-only to avoid publishing a package merely because code is promoted.
+- The Design Intelligence build workflow now checks pushes to both feature/design-intelligence and main, and PRs targeting either branch.
+
+### VERIFIED
+- The pre-reconciliation feature commit e3e8e8252568db535a6efa44c76f7ed0fc552c8a passed exact-head CI run 38053437404 and matching Vercel preview dpl_3XPv3aVhMppYaZVpr7MXnhtEAzLD was READY.
+- The reconciled merge commit still needs its own exact-head CI and preview verification.
+
+### UNVERIFIED
+- Main deployment and real Firebase/authenticated/physical tests remain pending.

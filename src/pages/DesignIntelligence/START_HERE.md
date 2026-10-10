@@ -1068,3 +1068,16 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 2. Review and incorporate the six newer main-branch commits, keeping existing main work intact, then merge only after tests pass.
 3. Complete real Firebase/API and physical-device tests against the main-domain deployment at the end.
 4. Review the ZIP Claude returns before integrating any design components.
+
+
+## 2026-10-10 — Main history reconciled on feature before promotion
+
+### IMPLEMENTED
+- Main's existing npm usage documentation and guarded publish workflow are being preserved alongside the newer feature UI/access-policy work.
+- Main is added to the DI build workflow's push and pull-request checks so promotion will trigger the same regression/accessibility suite.
+
+### VERIFIED
+- Before the history-reconciliation merge commit, feature CI run 38053437404 passed and feature preview dpl_3XPv3aVhMppYaZVpr7MXnhtEAzLD was READY.
+
+### UNVERIFIED
+- Current reconciled merge commit CI/preview, main deployment, real Firebase admin login/API-key lifecycle and physical-device checks are still pending.

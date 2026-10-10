@@ -86,7 +86,7 @@ console.log(css)`}</CopyCommand>
   <section className="di-surface">
     <span className="di-kicker">SPECIAL ANIMATION + EFFECTS API</span>
     <h2>Ultra Premium+ developer capability</h2>
-    <p>The API exposes a bounded, server-authorized special-effects capability. An authorized Ultra Premium+ API key can list supported effects and request a safe CSS implementation. The service returns CSS only and does not execute arbitrary JavaScript.</p>
+    <p>The API exposes a bounded, server-authorized special-effects capability. An authorized Ultra Premium+ API key can list supported effects and request a safe CSS implementation. The service returns CSS only and does not execute arbitrary JavaScript. POST request bodies are capped at 16 KB before generation.</p>
     <p className="di-muted">Current bounded effects: Shimmer, Float, Glow Pulse, Gradient Shift and Spin. Each includes a reduced-motion fallback. Cross-origin browser use is deny-by-default until an allowed origin is configured on the server.</p>
   </section>
 
