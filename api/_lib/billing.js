@@ -108,7 +108,7 @@ export function resolveDesignIntelligenceContentAccess({
   if (policyUnavailable && entitlementTier === 'premium') {
     return { contentTier: 'premium', reason: 'policy-unavailable-fail-closed' }
   }
-  return { contentTier: entitlementTier, reason: 'authenticated-entitlement' }
+  return { contentTier: entitlementTier, reason: entitlementTier === 'premium' ? 'premium-ultra-restricted' : 'authenticated-entitlement' }
 }
 
 export async function getDesignIntelligenceAccessPolicy() {
