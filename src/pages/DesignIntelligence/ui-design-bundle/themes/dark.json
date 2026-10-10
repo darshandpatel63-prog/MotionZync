@@ -1,0 +1,25 @@
+{
+  "id": "dark",
+  "description": "dark theme semantic tokens",
+  "tokens": {
+    "--mz-surface": "#12141a",
+    "--mz-surface-alt": "#1a1d25",
+    "--mz-surface-raised": "#1e222c",
+    "--mz-text": "#eef1f6",
+    "--mz-text-muted": "#9aa3b2",
+    "--mz-border": "#2c313d",
+    "--mz-accent": "#7aa2ff",
+    "--mz-accent-soft": "#263356",
+    "--mz-on-accent": "#0c1220",
+    "--mz-focus": "#9db8ff",
+    "--mz-success": "#4ade80",
+    "--mz-warning": "#fbbf24",
+    "--mz-warning-soft": "#3a2f12",
+    "--mz-info": "#67e8f9",
+    "--mz-gridline": "#242936",
+    "--mz-font": "system-ui, sans-serif",
+    "--mz-fs-h2": "1.375rem",
+    "--mz-fs-metric": "1.5rem",
+    "--mz-fs-sm": "0.8125rem"
+  }
+}

@@ -1,0 +1,34 @@
+/**
+ * premium-games-hud-menus-010 — Main menu scene — Narrative Single
+ * Category: games-hud-menus | Tier: Premium | Layout: editorial-column
+ * Sample data is fictional. Themes: light, dark, colorful (semantic tokens).
+ */
+import React from "react";
+import "./design.css";
+import {PARAGRAPHS} from "../../../../shared/parts/GeneratedParts.jsx";
+
+export default function Design() {
+  return (
+    <div className="mz-root mz-premium-games-hud-menus-010 mz-density--roomy" data-motion="none">
+      <header className="mz-nav mz-nav--minimal">
+        <div className="mz-brand"><span aria-hidden="true">◆</span> MotionZync</div>
+        <button type="button" className="mz-btn mz-btn--ghost">Menu</button>
+      </header>
+      <main className="mz-main">
+        <article className="mz-article">
+          <header><p className="mz-kicker">Feature</p><h2>Main menu scene — Narrative Single</h2></header>
+          <p className="mz-lede">A considered take on the topic, written for readers first.</p>
+          <PARAGRAPHS seed="premium-games-hud-menus-010" />
+        </article>
+        <section className="mz-story">
+          <h3>The thinking behind it</h3>
+          <p>A supporting narrative block that adds editorial depth without overwhelming the primary content. Sample copy only.</p>
+        </section>
+        <blockquote className="mz-quote">
+          <p>This finally made the workflow click for our whole team.</p>
+          <cite>— Sample customer (fictional)</cite>
+        </blockquote>
+      </main>
+    </div>
+  );
+}

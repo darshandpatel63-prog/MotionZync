@@ -1,0 +1,25 @@
+{
+  "id": "colorful",
+  "description": "colorful theme semantic tokens",
+  "tokens": {
+    "--mz-surface": "#fffaf3",
+    "--mz-surface-alt": "#fdeee0",
+    "--mz-surface-raised": "#ffffff",
+    "--mz-text": "#2d1b3d",
+    "--mz-text-muted": "#6f5c80",
+    "--mz-border": "#ecd9c8",
+    "--mz-accent": "#c2255c",
+    "--mz-accent-soft": "#fbdfeb",
+    "--mz-on-accent": "#ffffff",
+    "--mz-focus": "#a61e4d",
+    "--mz-success": "#2f9e44",
+    "--mz-warning": "#e8590c",
+    "--mz-warning-soft": "#ffe8d9",
+    "--mz-info": "#1971c2",
+    "--mz-gridline": "#f3e6da",
+    "--mz-font": "system-ui, sans-serif",
+    "--mz-fs-h2": "1.375rem",
+    "--mz-fs-metric": "1.5rem",
+    "--mz-fs-sm": "0.8125rem"
+  }
+}
