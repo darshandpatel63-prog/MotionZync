@@ -3,3 +3,20 @@
 .di-checkout-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin-top:14px}.di-checkout-row .di-btn{min-width:170px}.di-checkout-row .di-input{min-height:44px}@media(max-width:620px){.di-checkout-row{grid-template-columns:1fr}.di-checkout-row .di-btn{width:100%}}
 
 .di-code-wrap{position:relative;margin-top:12px}.di-code-wrap .di-code{margin:0;padding-right:86px}.di-copy-btn{position:absolute;top:10px;right:10px;min-height:38px;padding:7px 11px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:rgba(255,255,255,.07);color:#e2e8f0;font:inherit;font-size:.75rem;font-weight:700;cursor:pointer}.di-copy-btn:hover{background:rgba(124,58,237,.22);border-color:rgba(167,139,250,.38)}.di-copy-btn:focus-visible{outline:3px solid #67e8f9;outline-offset:3px}.di-copy-status{display:block;margin-top:8px;color:#94a3b8;font-size:.75rem;line-height:1.5}
+
+/* Responsive viewport controls for the deterministic recipe preview. */
+.di-preview-stage{min-width:0}
+.di-preview-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.di-preview-controls{display:flex;gap:6px;flex-wrap:wrap}
+.di-preview-caption{margin:0 0 10px!important;font-size:.78rem;color:#94a3b8;line-height:1.5}
+.di-preview-viewport-desktop{width:100%;max-width:none;margin:0}
+.di-preview-viewport-tablet{width:100%;max-width:700px;margin:0 auto}
+.di-preview-viewport-mobile{width:100%;max-width:390px;margin:0 auto}
+.di-preview-viewport-mobile .di-preview-body{grid-template-columns:minmax(0,1fr)}
+.di-preview-viewport-mobile .di-preview-cards{grid-template-columns:minmax(0,1fr)}
+.di-preview-viewport-mobile .di-preview-editorial-grid{grid-template-columns:minmax(0,1fr)}
+.di-preview-viewport-mobile .di-preview-workspace{grid-template-columns:minmax(0,1fr)}
+.di-preview-viewport-mobile .di-preview-workspace aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.di-preview-viewport-mobile .di-preview-editorial h3,.di-preview-viewport-mobile .di-preview-commerce h3{font-size:clamp(1.5rem,7vw,2rem)}
+.di-preview-controls .di-chip{min-height:44px}
+@media(max-width:620px){.di-preview-toolbar{align-items:flex-start;flex-direction:column}.di-preview-controls{width:100%}.di-preview-controls .di-chip{flex:1}}
