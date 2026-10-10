@@ -39,8 +39,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install existing app dependencies
-        run: npm ci --no-audit --no-fund
+      - name: Install existing app dependencies without rewriting the known-stale lock file
+        run: npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund
 
       - name: Safely unpack, repair and validate the UI design asset pack
         run: python scripts/di-design-bundle-import.py
