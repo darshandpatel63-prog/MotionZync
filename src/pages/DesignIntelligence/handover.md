@@ -4806,3 +4806,24 @@ FIRST UNFINISHED TASK remains:
 
 ### UNVERIFIED
 - Main deployment and real Firebase/authenticated/physical tests remain pending.
+
+## 2026-10-10 — Main-history merge CI passed; preview retry required
+
+### IMPLEMENTED
+- Integrated main SHA 203f293197044ca5ed6ebef18c11e5ae7686fd9b as the second parent of the feature merge commit ecb378362046948b959033a15bd97b4fd6b686f0.
+- Retained the richer feature README and Docs copy controls; retained the main branch's manual-only npm publication workflow. The DI build workflow now tests both main and feature branch pushes and PRs to either branch.
+- Added the bounded 16 KB special-effects POST payload note to the in-product Docs page.
+
+### VERIFIED
+- Merge-history commit push CI [run 38053701619](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38053701619) completed SUCCESS.
+- The same merge-history commit PR CI [run 38053705493](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38053705493) completed SUCCESS. Build, Firebase/content-access contracts, npm local/public-registry installation, Playwright interactions, accessibility and responsive checks passed.
+- Pull request #3 compares against main with no commits behind and is mergeable once Vercel preview issue is resolved.
+
+### UNVERIFIED
+- Vercel deployment dpl_EAaGkSonVfcwqri4jjDoyqW6jmfy for merge commit ecb378362046948b959033a15bd97b4fd6b686f0 returned state ERROR with code git_info_fail before any application build/runtime verification. No application failure is inferred; matching READY preview has not yet been obtained for this merge commit.
+- Real main-domain Firebase admin login, Firestore policy save/read, authenticated API-key lifecycle, Effects/CORS, BYOK and physical-device verification remain intentionally deferred.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Create a normal follow-up commit after the two-parent merge commit and verify Vercel can resolve Git metadata/build a READY preview. Do not merge PR #3 into main while the feature preview remains unresolved.
+2. After the follow-up preview is READY, merge PR #3 only if CI/preview checks remain green; then verify main CI + production deployment.
+3. Perform real Firebase/main-domain and physical-device/API tests at the end, as requested.
