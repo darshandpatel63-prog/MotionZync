@@ -150,6 +150,7 @@ jobs:
           const routes = [
             '/design-intelligence',
             '/design-intelligence/explorer',
+            '/design-intelligence/ui-gallery',
             '/design-intelligence/generator',
             '/design-intelligence/knowledge',
             '/design-intelligence/stacks',
@@ -190,6 +191,23 @@ jobs:
             const originalFetch = window.fetch.bind(window)
             window.fetch = async (input, init) => {
               const url = typeof input === 'string' ? input : input.url
+              if (url.endsWith('/api/di-knowledge')) {
+                // Deterministic CI-only fixture: this is not real Firebase or production entitlement verification.
+                return new Response(JSON.stringify({
+                  ok:true,
+                  entitlement:{
+                    tier:'premium',
+                    contentTier:'premium',
+                    authenticated:true,
+                    protectedIncluded:true,
+                    ultraContentIncluded:false,
+                    contentAccessReason:'ci-premium-fixture',
+                    festivalOfferActive:false,
+                  },
+                  records:[],
+                  counts:{},
+                }), {status:200,headers:{'Content-Type':'application/json'}})
+              }
               if (url.endsWith('/api/admin-billing')) {
                 const method = init?.method || (typeof input !== 'string' ? input.method : 'GET')
                 const requestBody = method === 'POST' ? JSON.parse(init?.body || '{}') : {}
@@ -307,6 +325,38 @@ jobs:
               path:'/tmp/di-browser-artifacts/'+route.split('/').filter(Boolean).join('-')+'.png',
               fullPage:true,
             })
+
+            if (route.endsWith('/ui-gallery')) {
+              assert(text.includes('Browse 3,600 UI designs'), 'UI Gallery headline is missing')
+              assert(text.includes('3,600 manifest entries across 18 categories'), 'UI Gallery manifest totals are not shown')
+              assert((await page.locator('.dib-design-card').count()) === 120, 'UI Gallery should initially render at most 120 cards')
+
+              const categorySelect = page.locator('.dib-filter-row select').nth(0)
+              const tierSelect = page.locator('.dib-filter-row select').nth(1)
+              assert((await categorySelect.locator('option').count()) === 19, 'UI Gallery should expose 18 categories plus All categories')
+              await categorySelect.selectOption({index:1})
+              await tierSelect.selectOption('premium')
+              await page.getByText('100 matching designs', {exact:false}).waitFor()
+              assert((await page.locator('.dib-design-card').count()) === 100, 'Category + Premium filters should expose the 100 matching design records')
+
+              const searchableName = await page.locator('.dib-design-card strong').first().innerText()
+              await page.locator('#dib-search').fill(searchableName)
+              assert((await page.locator('.dib-design-card').count()) >= 1, 'UI Gallery name search returned no matching design')
+
+              await page.locator('.dib-preview-placeholder button').click()
+              await page.locator('.dib-rendered-preview').waitFor({state:'visible',timeout:30000})
+              assert((await page.locator('.dib-rendered-preview').getAttribute('data-theme')) === 'light', 'UI Gallery initial theme is not light')
+              for (const theme of ['Dark','Colorful','High contrast']) {
+                await page.getByRole('button', {name:theme, exact:true}).click()
+                const expected = theme === 'High contrast' ? 'high-contrast' : theme.toLowerCase()
+                assert((await page.locator('.dib-rendered-preview').getAttribute('data-theme')) === expected, 'UI Gallery theme did not apply: '+expected)
+              }
+
+              await page.locator('#dib-search').fill('')
+              await tierSelect.selectOption('ultra-premium')
+              await page.getByText('Preview locked', {exact:true}).waitFor()
+              assert((await page.locator('.dib-preview-placeholder button').count()) === 0, 'Premium CI fixture unexpectedly unlocked an Ultra Premium+ preview')
+            }
 
             if (route.endsWith('/explorer')) {
               await page.locator('#di-search').fill('healthcare')
@@ -429,6 +479,13 @@ jobs:
               path:'/tmp/di-browser-artifacts/generator-'+viewport.name+'.png',
               fullPage:true,
             })
+            await page.goto(base+'/design-intelligence/ui-gallery', {waitUntil:'domcontentloaded'})
+            await page.locator('.dib-page').waitFor({state:'visible'})
+            const galleryOverflow = await page.evaluate(() => ({
+              width: document.documentElement.scrollWidth,
+              viewport: document.documentElement.clientWidth,
+            }))
+            assert(galleryOverflow.width <= galleryOverflow.viewport + 1, viewport.name+' UI Gallery horizontal overflow: '+JSON.stringify(galleryOverflow))
           }
 
           await page.setViewportSize({width:1440,height:900})
