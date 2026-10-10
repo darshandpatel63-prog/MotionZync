@@ -125,6 +125,7 @@ export async function getServerEntitlement(userId) {
   // Keep the configured admin at Ultra Premium+ independently of editable
   // Firestore entitlement fields. Resolve the email from Firebase Admin, never
   // from a browser-provided email or tier claim.
+  const db = getAdminDb()
   const configuredAdminEmail = str(process.env.ADMIN_EMAIL).toLowerCase()
   if (configuredAdminEmail) {
     const firebaseUser = await getAuth().getUser(cleanUserId)
@@ -132,7 +133,7 @@ export async function getServerEntitlement(userId) {
     if (adminEntitlement) return adminEntitlement
   }
 
-  const snapshot = await getAdminDb().collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
+  const snapshot = await db.collection(BILLING_COLLECTIONS.users).doc(cleanUserId).get()
   const data = snapshot.exists ? (snapshot.data() || {}) : {}
   return resolveServerEntitlement(data)
 }
