@@ -5111,3 +5111,40 @@ FIRST UNFINISHED TASK remains:
 4. Merge only after required CI and preview checks pass, then verify main's new commit and READY production deployment before expecting the Gallery link on the production site.
 5. Treat Premium/Ultra labels on this public-repository bundle as non-confidential metadata until a genuinely server-protected delivery architecture is designed. Do not create a second database or claim client-side preview locks are secure.
 6. Continue real Firebase/API/BYOK/Cashfree and manual Android/keyboard/screen-reader checks only with an authorized session; never copy secrets or tokens to chat.
+
+
+## 2026-10-10 — Gallery preview build READY checkpoint
+
+### IMPLEMENTED
+- Gallery-specific theme styles are scoped to `.dib-rendered-preview[data-theme]`; the gallery imports the scoped theme stylesheet.
+- The exact branch code commit `150ab26e323d2bb25381b24f24ec811a2457418e` has a READY Vercel preview: `dpl_GRPBGycyCcTShUdW6mg1XUpQieM9`.
+- The preview route `/design-intelligence/ui-gallery` responded with HTTP 200 and the MotionZync SPA HTML shell.
+
+### VERIFIED
+- Vercel reported success for the preview deployment on commit `150ab26`.
+- Build logs report 7,328 modules transformed and Vite build completion in 1m 21s.
+- The emitted main `index` chunk was approximately 4.20 MB uncompressed / 329.81 KB gzip; this is recorded as a performance observation, not a claim of good real-device performance.
+- The automated import workflow's 3,600-entry / 18-category validation remains the evidence for bundle inventory.
+
+### UNVERIFIED
+- HTTP 200 confirms SPA route delivery only; it does not prove React mounted, all filters worked, a sample component rendered, or themes changed visually.
+- Exact-head GitHub Actions browser/a11y workflow result was not independently retrieved. The Vercel status is not a substitute for the entire Playwright/accessibility suite.
+- Current PR #5 remains open and unmerged; GitHub reports `mergeable=false`. Do not merge until the branch/base conflict/mergeability state and exact-head checks are resolved.
+- Latest main/production remains on the non-Gallery version; the production Overview still shows the original seed counts.
+- Manual phone/tablet/desktop, keyboard/screen-reader and real-account tier checks remain UNVERIFIED.
+
+### MILESTONE AUDIT
+- Regression: no direct changes to `main`; feature preview built successfully, but the full exact-head regression suite remains unverified.
+- Functionality: Gallery route is present on feature code and SPA responds; actual React interaction remains unverified.
+- Accessibility: CI assertion code covers Gallery route and axe/accessibility names; actual latest workflow result and manual audit remain unverified.
+- Privacy/security: no API key value was accessed. The bundle is committed in a public repository, so Premium/Ultra preview locks are not a server-side confidentiality boundary.
+- Performance: module transformation and build completed; large main index payload and thousands of lazy chunks need further mobile loading/performance review.
+- Data quality: no new design records or second database were created.
+- Build/test: Vercel preview deployment READY; full exact-head GitHub Actions result UNVERIFIED.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Resolve PR #5's `mergeable=false` state without editing `main` and confirm PR head/feature branch SHA are in sync.
+2. Retrieve and pass the exact-head Design Intelligence Build Check including UI Gallery Playwright assertions for 3,600 count/18 categories, filter/search, loading one real component, computed theme tokens and mobile/tablet/desktop overflow.
+3. Only then consider merge through PR #5; verify new `main` SHA and a READY production deployment before expecting Gallery in the live website.
+4. Keep the imported designs classified as a separate public template gallery, not as canonical `/api/di-knowledge` records. Public bundle assets cannot be protected by frontend-only Premium/Ultra locks.
