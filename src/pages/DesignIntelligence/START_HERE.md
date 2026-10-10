@@ -1181,3 +1181,26 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 3. Perform representative browser/theme/responsive/accessibility spot checks. Do not claim all 3,600 designs visually reviewed.
 4. Plan a separate, controlled Explorer/Generator catalog registration that uses the existing canonical Design Intelligence and server-authoritative entitlement boundary—no second database, no client-only premium unlock.
 5. Finish real Firebase/API and physical-device tests last, as requested.
+
+
+## 2026-10-10 — Imported UI bundle connected to the application
+
+### IMPLEMENTED
+- Imported the reviewed nested ZIP through the dedicated workflow into `src/pages/DesignIntelligence/ui-design-bundle/`; the workflow verified archive hashes, manifest paths/counts/themes, resolved the generated JSX macro references, parsed 3,602 JSX files and built the existing app before committing only the bundle folder.
+- Added `/design-intelligence/ui-gallery` and a visible UI Gallery navigation item. The gallery reads the real 3,600-entry manifest, searches names/tags, filters category and tier, supports four theme choices, and lazy-loads the selected React design instead of loading all previews immediately.
+- Scoped theme tokens to the preview container so light/dark/colorful/high-contrast switching applies inside the gallery.
+- The existing Explorer remains the separate canonical knowledge catalog. The UI bundle is a separate design-template collection and is not automatically counted as canonical styles/palettes/typography/charts/stacks/recipes.
+
+### VERIFIED
+- Bundle import workflow run 38070025991 passed, including `ALL GATES PASSED`, `JSX_PARSE_PASS files=3602`, 3,600 manifest designs, 18 categories, 10,820 files prepared, and existing MotionZync CI build success. Import commit: 78a8235.
+
+### UNVERIFIED
+- New Gallery route/browser interaction, theme rendering, preview loading, complete app regression and deployment are not yet verified; exact-head CI is required after this UI wiring commit.
+- Bundle entries live in the public repository, so the UI tier lock is not a security boundary for someone who can fetch repository source/assets. Do not describe the public asset files as confidential or protected server-side content. API entitlements remain server-authoritative for the existing API.
+- Human review of actual visual originality and real-device accessibility remains UNVERIFIED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Run exact-head full Design Intelligence CI for the Gallery wiring, fix any build/test failures, and obtain a READY matching Vercel preview.
+2. Browser-test `/design-intelligence/ui-gallery`: count 3,600; 18 categories; category/tier/search filters; preview load; all four themes; responsive/mobile/keyboard/accessibility; and confirm Explorer's original canonical knowledge flow is unchanged.
+3. Update the deployment/main only after exact-head tests and preview pass. Do not claim 3,600 are in the canonical knowledge API; the Gallery is the template-bundle UI.
+4. Real Firebase/API credentialed and physical-device tests remain UNVERIFIED and must be completed by an authorized human at the end.
