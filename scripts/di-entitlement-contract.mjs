@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { resolveServerEntitlement, resolveAdminEntitlement } from '../api/_lib/billing.js'
+import { resolveServerEntitlement, resolveAdminEntitlement, DEFAULT_DI_ACCESS_POLICY, normalizeDesignIntelligenceAccessPolicy, getDesignIntelligenceAccessState } from '../api/_lib/billing.js'
 import {
   ALL_DI_PROTECTED_RECORDS,
 } from '../api/_lib/di-protected-catalog.js'
@@ -60,6 +60,36 @@ assert.equal(hasEntitlement('unrecognized-tier', 'ultra-premium'), false, 'Unkno
 assert.equal(hasEntitlement('premium', 'unrecognized-tier'), false, 'Unknown current tiers must fall back to Free')
 
 const NOW = Date.parse('2026-10-02T12:00:00.000Z')
+
+const defaultAccessPolicy = normalizeDesignIntelligenceAccessPolicy(DEFAULT_DI_ACCESS_POLICY)
+assert.equal(defaultAccessPolicy.shareUltraWithPremium, true, 'Ultra design sharing must default ON')
+assert.equal(defaultAccessPolicy.festivalOffer.enabled, false, 'Festival offer must default OFF')
+assert.equal(getDesignIntelligenceAccessState(defaultAccessPolicy, NOW).premiumCanAccessUltraContent, true)
+
+const scheduledOfferPolicy = normalizeDesignIntelligenceAccessPolicy({
+  shareUltraWithPremium: false,
+  festivalOffer: {
+    enabled: true,
+    startDate: '2026-10-02',
+    startTime: '10:00',
+    endDate: '2026-10-02',
+    endTime: '20:00',
+  },
+})
+const activeOfferState = getDesignIntelligenceAccessState(scheduledOfferPolicy, NOW)
+assert.equal(activeOfferState.festivalOfferActive, true, 'Festival offer should be active inside its IST window')
+assert.equal(activeOfferState.premiumCanAccessUltraContent, true, 'Active scheduled offer should temporarily share Ultra design records')
+assert.equal(getDesignIntelligenceAccessState(scheduledOfferPolicy, Date.parse('2026-10-02T03:00:00.000Z')).festivalOfferActive, false, 'Offer should remain off before its start')
+assert.equal(getDesignIntelligenceAccessState(scheduledOfferPolicy, Date.parse('2026-10-02T14:30:00.000Z')).festivalOfferActive, false, 'Offer end is exclusive and should close at the exact end time')
+assert.equal(getDesignIntelligenceAccessState({ shareUltraWithPremium: false, festivalOffer: { enabled: false } }, NOW).premiumCanAccessUltraContent, false, 'When the main sharing switch and timed offer are off, Premium cannot browse Ultra records')
+assert.throws(() => normalizeDesignIntelligenceAccessPolicy({
+  shareUltraWithPremium: false,
+  festivalOffer: { enabled: true, startDate: '2026-10-02', startTime: '20:00', endDate: '2026-10-02', endTime: '10:00' },
+}), /end must be later than its start/i)
+assert.throws(() => normalizeDesignIntelligenceAccessPolicy({
+  shareUltraWithPremium: false,
+  festivalOffer: { enabled: false, startDate: '2026-02-31', startTime: '10:00', endDate: '2026-03-01', endTime: '10:00' },
+}), /date or time is invalid/i)
 
 // The configured server admin receives a permanent Ultra Premium+ override.
 // Email matching is case-insensitive; an absent config or a different account
