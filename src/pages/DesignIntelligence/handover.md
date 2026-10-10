@@ -4606,3 +4606,52 @@ FIRST UNFINISHED TASK remains:
 5. Complete manual production Android/mobile keyboard, visible-focus, clipboard and screen-reader audit.
 6. Plan a new npm package version for the hardened source; publish only as an explicit release milestone and verify a clean public consumer install.
 7. Keep public Cashfree checkout/payment launch UI pending unless explicitly authorized; do not start 1,000+/10,000+ dataset expansion before the core gates are closed.
+
+
+## 2026-10-10 — Firebase entitlement fail-closed + live guest-boundary continuation
+
+### IMPLEMENTED
+- Hardened `resolveServerEntitlement()` in `api/_lib/billing.js` so explicit `entitlementActive: false` cannot retain an elevated tier.
+- When `entitlementStatus` is present, only `active` or `granted` is considered active; values such as `revoked`, `inactive`, `pending`, and unknown statuses fail closed to the existing authenticated Premium web tier.
+- Previously added malformed `entitlementExpiresAt` handling remains fail-closed.
+- Extended `scripts/di-entitlement-contract.mjs` to cover malformed expiry, explicit inactive/revoked/pending entitlement states, active status, and caller-supplied tier/entitlement claims against unauthenticated knowledge and API-key routes.
+- This uses the existing Firebase Admin/Firestore entitlement source and existing `users` / `apiKeys` collections. No second database, dummy API key, fabricated user, secret, or production entitlement was created.
+
+### VERIFIED
+- Latest branch HEAD at the end of this milestone's code/test changes: `41853b3ffb2294a0c71e535a357242e70e4f1a19`.
+- Exact-head Design Intelligence Build Check [run 38050405963](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38050405963) completed **SUCCESS**. Build, Cashfree order contract, BYOK model registry, Firebase entitlement/protected-catalog contract, shared price contract, local/public npm install/import, Playwright route/interaction checks, clipboard assertions, Axe gate and responsive/keyboard-focus checks all passed.
+- The code commit containing inactive-status handling, `6c913eb9284386f900c77e21adf0cef713c5bbc5`, has a READY feature Vercel deployment `dpl_DXUhfayWUH6VqmunenHB51uq6qiw`.
+- Live guest check on that READY feature deployment: `GET /api/di-knowledge` returned HTTP 200, `tier: free`, `authenticated: false`, `protectedIncluded: false`, `protectedRecordCount: 0`, 35 records with tier `free` only, `Cache-Control: private, no-store, max-age=0`, and `Vary: Authorization`.
+- Live caller-claim test against the same deployment: adding `tier=ultra-premium&entitlement=ultra-premium` still returned HTTP 200 with Free-only data and no protected records.
+- Live invalid-domain request returned HTTP 400 `Unknown Design Intelligence domain`.
+- The newest test-only HEAD's Vercel deployment was still BUILDING at the last deployment-list read; server runtime verification above is against the matching READY code commit, not a claim that the latest test-only artifact is READY.
+
+### UNVERIFIED
+- Real Firebase ID-token authentication for a genuine signed-in user has **not** been exercised from the available environment. No real ID token/session is available through this tool path.
+- Real authenticated Premium and genuine Ultra entitlement responses, including reading a real entitled user's Firestore state, remain unverified.
+- Real API-key issue/rotate/revoke, hash-only Firestore record inspection, revoked-key rejection, and Premium key-denial through a genuine Firebase user remain unverified.
+- The Vercel preview-auth share path blocked direct fetches to `/api/di-api-key` and `/api/di-effects` before an application response was observed. This is a Vercel Deployment Protection restriction, not proof of an application-level 401/403 or failure.
+- Real Ultra Effects API calls, production allowlisted/unapproved Origin calls, real BYOK provider execution and manual Android/device/screen-reader audit remain unverified.
+
+### MILESTONE AUDIT
+- Regression: exact-head CI **VERIFIED**; live public guest boundary and caller-supplied tier rejection **VERIFIED** on READY feature runtime; genuine credentialed behavior **UNVERIFIED**.
+- Functionality: explicit inactive/unknown status and malformed expiry fallbacks have automated resolver assertions; live guest API does not expose protected records.
+- Accessibility: current automated Axe, route, keyboard-focus and responsive suites passed; manual device/screen-reader checks remain **UNVERIFIED**.
+- Privacy/security: no user tokens or API secrets were collected; server entitlement remains Firebase/Firestore-authoritative; unknown/inactive status fails closed.
+- Performance: resolver adds bounded status checks; production profiling remains **UNVERIFIED**.
+- Data quality: no catalog records, users, entitlements or API keys were fabricated.
+- Build/test: run 38050405963 **SUCCESS**; code deployment dpl_DXUhfayWUH6VqmunenHB51uq6qiw **READY**; newest test-only deployment's state remained in progress when last checked.
+- Documentation: UPDATED.
+
+### PHASE STATUS
+- Phase A — Engine / System: **98% — IN PROGRESS**; do not raise it until genuine credentialed API gates close.
+- Phase B — Publish: public npm `0.1.0` publication and clean registry install/import remain **VERIFIED**; hardened source requires a future versioned package release.
+- Phase C — Continuous Content Expansion: **0% — NOT STARTED**.
+- Payment launch UI remains intentionally pending.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Complete a real Firebase-authenticated Premium and genuine Ultra entitlement test using a genuine session, without pasting ID tokens/secrets into chat. If the real session is not available to the tester, keep this explicitly **UNVERIFIED**.
+2. With that authenticated session, issue/rotate/revoke a genuine Ultra MotionZync API key; confirm its stored record contains only the hash/prefix/metadata, that Premium cannot issue/use keys, and that old/inactive keys fail.
+3. Test deployed `/api/di-knowledge` and `/api/di-effects` with authorized credentials, including CORS allow/deny, effects payload limit, CSS-only generation and reduced-motion fallback.
+4. Verify the actual Design Intelligence Generator → existing BYOK provider/model → output flow using real configured provider credentials.
+5. Finish manual Android/mobile keyboard/screen-reader review. Do not change the payment launch state or begin large content expansion before these gates close.
