@@ -944,3 +944,28 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 - Phase A — Engine / System: **98% — IN PROGRESS**
 - Phase B — Publish: **npm 0.1.0 installation/import VERIFIED; hardened source needs a new versioned release; credentialed gates pending**
 - Phase C — Continuous Content Expansion: **0% — NOT STARTED**
+
+
+## 2026-10-10 — Current access-boundary continuation checkpoint
+
+### VERIFIED
+- Exact-head Design Intelligence Build Check [run 38049898324](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38049898324) succeeded on code/test commit `af1d2e68d642f2594d5aafac7ac6765ef65574f9`.
+- Build, Cashfree order contract, BYOK model-registry contract, Firebase entitlement/protected-catalog contract (including malformed expiry), plan-price contract, local/public npm installation, browser/Axe/clipboard/responsive/keyboard checks passed.
+- Malformed configured entitlement expiry now fails closed to authenticated Premium web access instead of being treated as a permanent Ultra grant.
+- Current feature deployment is still BUILDING; production runtime for this fix is not claimed.
+
+### IMPLEMENTED
+- Server-side entitlement expiry hardening and regression contract are committed on `feature/design-intelligence`.
+- Existing route/navigation integration, canonical catalog, payment-pending UI and BYOK provider/vault architecture remain unchanged.
+
+### UNVERIFIED
+- Real Firebase Premium/Ultra sessions, real API-key lifecycle and deployed Ultra effects/CORS remain unverified.
+- Real BYOK execution and manual production device/screen-reader checks remain unverified.
+- The production alias remains attached to a main-branch deployment; this feature fix is not claimed live until the matching feature deployment is READY and verified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify real authenticated Firebase Free/Premium/Ultra entitlement boundaries using genuine sessions, without sharing ID tokens or API secrets.
+2. Verify genuine Ultra API-key issue/rotate/revoke/revoked-key rejection and deployed Ultra Effects API/CORS.
+3. Verify real BYOK provider execution, model compatibility and provider-specific CORS.
+4. Complete manual Android/mobile, keyboard, clipboard and screen-reader audit.
+5. Keep Phase A at **98% — IN PROGRESS** until concrete remaining gates close. Phase B package hardening needs a future versioned npm release; Phase C large data expansion remains deferred. Keep Cashfree launch UI pending.
