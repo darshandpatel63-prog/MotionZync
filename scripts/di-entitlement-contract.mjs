@@ -96,6 +96,17 @@ const expiredUltra = resolveServerEntitlement({
 }, NOW)
 assert.deepEqual(expiredUltra, freeFromAuthentication)
 
+const malformedExpiryUltra = resolveServerEntitlement({
+  entitlement: 'ultra-premium',
+  entitlementSource: 'payment',
+  entitlementExpiresAt: 'not-a-real-date',
+}, NOW)
+assert.deepEqual(
+  malformedExpiryUltra,
+  freeFromAuthentication,
+  'Malformed expiry must fail closed to authenticated Premium web access',
+)
+
 const tiers = ['free', 'premium', 'ultra-premium']
 const catalogs = Object.fromEntries(tiers.map(tier => [tier, combineCatalogs(tier)]))
 
