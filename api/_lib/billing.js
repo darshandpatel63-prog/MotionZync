@@ -75,7 +75,7 @@ export function normalizeDesignIntelligenceAccessPolicy(input = {}) {
     if (startMs === null || endMs === null) throw new Error('Festival offer date or time is invalid.')
     if (endMs <= startMs) throw new Error('Festival offer end must be later than its start.')
   }
-  return { shareUltraWithPremium: source.shareUltraWithPremium !== false, festivalOffer }
+  return { shareUltraWithPremium: source.shareUltraWithPremium === true, festivalOffer }
 }
 
 export function getDesignIntelligenceAccessState(input = DEFAULT_DI_ACCESS_POLICY, nowMs = Date.now()) {
