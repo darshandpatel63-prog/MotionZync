@@ -1022,3 +1022,23 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 2. Confirm permanent Ultra access with the real admin Firebase session in the deployed app.
 3. Continue genuine authenticated API-key/Effects/BYOK verification if an approved authenticated test path is available.
 4. Continue expanding the UI-generation workflow while preserving the one canonical Design Intelligence core.
+
+## 2026-10-10 — Recipe customization continuation
+
+### IMPLEMENTED
+- Generator now offers validated choices for visual style, colour palette, font pairing, and technology stack, plus a reset-to-generated-choice action.
+- Desktop / Tablet / Mobile preview switching and accessible selected-state controls remain implemented.
+- Browser automation was extended to test manual style and palette selection, reset, and responsive preview switching.
+
+### VERIFIED
+- A prior preview with responsive preview only is READY and passed static asset/live guest-boundary checks. It does not include the newest manual customization UI.
+- Recheck the new exact-head preview/build before declaring manual customization VERIFIED.
+
+### UNVERIFIED
+- Genuine Firebase login and server-side ADMIN_EMAIL entitlement are not verified end-to-end because no authorized live session is available to this tool path.
+- API-key lifecycle, Effects/CORS, real BYOK generation and manual device/screen-reader checks remain unverified.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify current-head preview/build and any available exact-head browser CI.
+2. Verify the real admin Gmail account through a genuine Firebase session; do not share ID tokens or keys in chat.
+3. Continue the UI-generation workflow from the one canonical core; do not claim a full live application renderer exists yet.
