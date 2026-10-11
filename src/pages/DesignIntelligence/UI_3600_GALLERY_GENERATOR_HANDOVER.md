@@ -78,3 +78,15 @@ The existing canonical catalog contains complementary ingredients:
 ## Rules for the next assistant
 
 Work only in `darshandpatel63-prog/MotionZync` and start on `feature/design-intelligence`. Do not rebuild the app, do not fabricate records, do not create a second catalog/database, do not edit unrelated features, do not expose `VITEMOTIONAPI` or any Firebase/provider secret, and do not report CI/mock authentication as real production authentication. Label every milestone IMPLEMENTED, VERIFIED, UNVERIFIED, ARCHITECTURALLY SUPPORTED or PLANNED / FUTURE. Update this handover after meaningful milestones.
+
+## 2026-10-11 — Gallery CI verification update
+
+**IMPLEMENTED:** Explicitly associated Category, Tier and Preview theme labels with their select controls in DesignBundleGallery.jsx; commit bf687bebdc39a9e66f8f67a8e933141db6de7487, on feature/design-intelligence.
+
+**VERIFIED:** Exact-head GitHub Actions run [#38109381879](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38109381879) passed on this commit, including the browser interaction/accessibility/responsive suite and configured manifest/category/search/filter/sample-preview/four-theme checks. Its entitlement response is a CI-only fixture, not real Firebase authentication.
+
+**VERIFIED:** main currently includes the Gallery route/navigation at commit 97df688be00c74d85667d2135c0a02091bb45489, and its Vercel production deployment is READY. The production route returned HTTP 200 SPA HTML shell only; actual production React render/selection remains UNVERIFIED.
+
+**UNVERIFIED:** The Vercel preview for bf687be was BUILDING at the last check. PR #5 is still open and mergeable=false because feature and main diverged (current compare: feature 28 ahead / 4 behind). Do not merge yet; reconcile only on the feature branch, then rerun exact-head CI and preview.
+
+**FIRST UNFINISHED TASK:** Confirm the bf687be preview reaches READY, safely synchronize the advanced main history into feature/design-intelligence while preserving the feature's newer workflow/docs/fix, then repeat CI + preview on the synchronized head before final PR merge decision. Do not claim API access for the 3,600 bundle; public source assets and UI-only tier locks are not confidential/protected delivery.
