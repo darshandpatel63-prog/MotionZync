@@ -5161,3 +5161,38 @@ FIRST UNFINISHED TASK remains:
 **PLANNED / FUTURE:** Make the Gallery the primary discovery UI, connect it to the Generator with real template selection and full meaningful customization, use the Overview's primary Explore CTA to open the Gallery, and consolidate old Explorer functions only after preserving its canonical knowledge/search/compatibility functionality. Keep Free/Premium/Ultra selection subordinate to authoritative entitlement; client-side choice must never grant access. The public bundle's source files cannot be secured by a frontend lock.
 
 **CURRENT FIRST UNFINISHED TASK:** Start with `UI_3600_GALLERY_GENERATOR_HANDOVER.md`; verify PR #5 head/base, exact-head CI and Vercel preview, fix only the proven blocker on `feature/design-intelligence`, then promote the 3,600 Gallery through the PR process. Do not claim API accessibility for the 3,600 templates until an actual supported route/client contract is implemented and tested. This milestone changed Markdown only; no code, workflow or deployment was changed by this documentation update.
+
+## 2026-10-11 — Gallery filter accessibility fix and exact-head CI pass
+
+### IMPLEMENTED
+- Added explicit, unique label/input relationships for Gallery Category, Tier and Preview theme controls in DesignBundleGallery.jsx (htmlFor + matching id).
+- Fix commit: bf687bebdc39a9e66f8f67a8e933141db6de7487, pushed only to feature/design-intelligence.
+
+### VERIFIED
+- Exact-head Design Intelligence Build Check [run #38109381879](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38109381879) completed with conclusion success on bf687be.
+- Successful job steps include app build, canonical/security/package checks, Playwright Chromium setup, and “Browser route, interaction and responsive smoke test”.
+- The Gallery-specific smoke suite passed its manifest headline/count and 18-category checks, initial bounded card rendering, category/tier/search assertions, sample lazy-loaded preview, all four computed theme-token checks, Premium CI-fixture lock behavior, accessibility-name/axe checks, and responsive overflow assertions at configured phone/tablet/desktop viewports. Authentication is still a CI fixture, not a real Firebase verification.
+- GitHub main is currently at 97df688be00c74d85667d2135c0a02091bb45489; its Vercel production deployment dpl_2yWRHdFFvszeEfP5eMnqZpcdPB2Z is READY and includes the Gallery route/navigation. The public Gallery URL returned HTTP 200 with the SPA HTML shell; that response alone is not proof of production React interaction.
+
+### UNVERIFIED
+- The matching Vercel preview for bf687be was still BUILDING at the last check; it must reach READY and be checked before promotion.
+- PR #5 remains open and GitHub reports mergeable=false / dirty. Current comparison showed the feature branch diverged from the newly advanced main (feature 28 commits ahead, 4 behind). No merge was performed in this checkpoint.
+- Production visual React mount, selected preview interaction on the production alias, genuine Firebase/tier behavior, human visual review and physical Android/keyboard/screen-reader audit remain unverified.
+- Template assets remain public repository files; browser tier locks are not source confidentiality controls. The 3,600 template bundle is not yet proven to be served by /api/di-knowledge.
+
+### MILESTONE AUDIT
+- Regression: feature-branch change only; three label associations were added. No direct main edit.
+- Functionality: exact-head automated Gallery/browser suite passed; production runtime interaction remains unverified.
+- Accessibility: explicit labels resolved the recorded failure; automated route/axe/name/keyboard checks passed in this CI run; manual assistive-device review remains unverified.
+- Privacy/security: CI entitlement is mock-only; public bundle limitations retained; no credentials accessed.
+- Performance: bounded 120 initial cards and lazy component import are checked; real-device memory/performance remains unverified.
+- Data quality: no new designs/database; imported 3,600/18 inventory remains a separately validated bundle.
+- Build/test: exact-head CI VERIFIED; matching Vercel preview readiness pending.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Re-check the bf687be Vercel preview until READY; verify route delivery and correlate the deployment SHA.
+2. Reconcile the 4-commit main divergence on feature/design-intelligence only, preserving newer feature docs/workflow and the verified Gallery fix. Never edit main directly.
+3. After branch sync, rerun exact-head CI and Vercel preview. Keep PR #5 unmerged until the synced PR head's required checks and preview pass.
+4. If merge is then appropriate under the repository PR process, verify actual post-merge main SHA, production deployment SHA/state, and live route. HTTP 200 alone is not proof of React interaction.
+5. Keep real Firebase, API-entitlement, provider/BYOK and physical-device checks marked UNVERIFIED until actually exercised with authorized accounts.
