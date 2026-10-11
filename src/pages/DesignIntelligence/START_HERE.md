@@ -1306,3 +1306,11 @@ Read `UI_3600_GALLERY_GENERATOR_HANDOVER.md` after this file and `handover.md`. 
 **UNVERIFIED:** Fresh exact-head CI for 35d3c03 is pending in run #38109599722; the matching Vercel preview is queued. The production main Gallery URL currently returns HTTP 200 SPA shell from READY deployment 97df688, but that is not independent proof of React/component interaction or selected design preview in production.
 
 **CURRENT FIRST UNFINISHED TASK:** Check the synchronized-head CI and Vercel preview; fix any proven failure on feature/design-intelligence only. Do not merge PR #5 until exact-head CI passes and the matching preview reaches READY. After merge, verify the actual main and production deployment commit. Real Firebase, true paid entitlement, physical Android, keyboard and screen-reader checks remain UNVERIFIED; the public bundle is not confidential and is not established as /api/di-knowledge content.
+
+## 2026-10-11 — Production Gallery browser checkpoint
+
+**VERIFIED:** In Chromium against the current main production deployment (commit 97df688), /design-intelligence/ui-gallery mounted the React Gallery; the 3,600/18 summary, 120 first-view cards, 18 category filter options plus All, one category+Premium filter returning 100 records, name search, selection panel, explicit guest “Preview locked” state and 390px no-overflow check passed. No browser page errors were observed.
+
+**UNVERIFIED:** This production smoke test predates the feature branch’s label fix; it was a guest session, not a paid account. Actual Premium/Ultra preview under real Firebase authorization, physical Android, keyboard and screen-reader checks remain UNVERIFIED. The CI mock-fixture preview test is not a real Firebase test.
+
+**CURRENT FIRST UNFINISHED TASK:** Re-run exact-head CI and wait for the corresponding Vercel preview READY on the newest feature/design-intelligence commit after this documentation update; merge PR #5 only when both are successful. Post-merge verify the actual production deployment commit and interactive route. Do not describe the public bundle as server-protected or as served by /api/di-knowledge.

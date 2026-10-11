@@ -5229,3 +5229,32 @@ FIRST UNFINISHED TASK remains:
 3. Do not merge PR #5 until the synced exact-head checks and preview are successful.
 4. After merge through PR #5, verify the final main SHA, READY production deployment SHA/state and public Gallery URL; distinguish that from real-account/device verification.
 5. Keep API exposure for the 3,600 components, protected delivery of public assets, real Firebase/API/BYOK entitlement checks and physical-device/screen-reader review UNVERIFIED until actually tested.
+
+## 2026-10-11 — Production browser smoke test
+
+### VERIFIED
+- A real Chromium browser opened the current production URL https://motion-zync.vercel.app/design-intelligence/ui-gallery at the READY main deployment for commit 97df688be00c74d85667d2135c0a02091bb45489. HTTP status was 200 and the React Gallery mounted with the heading “Browse 3,600 UI designs”.
+- Production browser assertions passed for the 3,600-entry / 18-category summary, 120 initially rendered cards, 19 category choices (All + 18), Dashboards/Analytics + Premium filter yielding 100 designs, name search yielding a match, and 390px mobile width without horizontal overflow (viewport 390px, scroll width 390px). No browser page errors were observed.
+- Clicking a design while unauthenticated showed the explicit “Preview locked” message, as expected because no server-authorized Premium/Ultra entitlement was present in this browser session. That is evidence of the guest lock UI, not proof of a real-account entitlement.
+- Exact-head GitHub Actions run #38109631322 passed on synchronized feature commit 770c3408e175bd5b9e16bbb62d1fac82b012e6d8. The earlier Gallery-specific run #38109381879 passed the lazy-loaded component/theme assertions using a CI entitlement fixture.
+
+### UNVERIFIED
+- Production browser testing above targeted current main deployment 97df688, before the feature-only explicit-label fix was merged. Do not treat it as testing the final synced feature head.
+- A selected Premium/Ultra component has not been previewed in production using a genuine authorized Firebase account. The pre-sync automated template preview used a CI fixture only.
+- At last inspection the matching feature preview for commit 770c340 was still BUILDING. After this documentation update, rerun CI and confirm the exact new head's Vercel preview reaches READY before considering PR #5 merge.
+- Real Firebase identity/entitlement, live API protection, real-device and assistive-technology checks remain unverified. The public 3,600 component source files are not confidential and /api/di-knowledge is not verified to serve them.
+
+### MILESTONE AUDIT
+- Regression: production was inspected read-only; test scripts and installed browser dependencies stayed in a temporary Vercel sandbox and were not committed to the repository.
+- Functionality: production anonymous Gallery mount, counts, filtering, search, selection and expected lock state VERIFIED; authorized production preview UNVERIFIED.
+- Accessibility: previous exact-head automated labels/axe checks passed on bf687be; production main still serves the pre-fix label markup until PR integration. Physical-device/screen-reader review UNVERIFIED.
+- Privacy/security: no credentials used or disclosed; no attempt was made to bypass server entitlement.
+- Performance: 120-card initial rendering and 390px overflow behavior checked in browser; physical-device profile UNVERIFIED.
+- Data quality: the UI accurately reports 3,600 manifest entries and 18 categories; import-validation record remains the separate evidence for all unique IDs.
+- Build/test: run #38109631322 passed for 770c; a new exact-head check is required after this documentation commit.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Verify the new exact-head Design Intelligence Build Check and matching Vercel preview on the current feature branch tip. The preview must be READY and its commit SHA must match the branch head.
+2. Keep PR #5 open until these gates pass; main is 97df688 and current branch is ahead with no main divergence.
+3. Only then merge through PR #5, and verify the post-merge main SHA, READY production deployment SHA/state, and production route again. Use real authorized-account testing later; never count CI mock auth as Firebase verification.

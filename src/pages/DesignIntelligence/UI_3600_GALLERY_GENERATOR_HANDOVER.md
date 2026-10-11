@@ -102,3 +102,11 @@ Work only in `darshandpatel63-prog/MotionZync` and start on `feature/design-inte
 **Production evidence:** main commit 97df688 has a READY production deployment, and /design-intelligence/ui-gallery returned HTTP 200 for the SPA shell; a successful HTTP response does not itself establish React preview interaction. The 3,600 component files are public repository assets and are not confidential or protected by client-side tier locks. /api/di-knowledge is not verified to serve the full 3,600 template bundle.
 
 **FIRST UNFINISHED TASK:** Pass exact-head CI and READY matching preview for the synchronized commit; then merge through PR #5 only after both gates pass, and verify the post-merge production commit/deployment separately.
+
+## 2026-10-11 — Production browser smoke test
+
+**VERIFIED:** Chromium opened the currently deployed production Gallery and confirmed React mount, the 3,600-entry / 18-category summary, 120 initial cards, All + 18 category options, category+Premium filtering to 100 results, name search, and no horizontal overflow at 390px. Selecting a card as an unauthenticated guest showed the expected “Preview locked” state. No browser page errors were observed.
+
+**IMPORTANT LIMIT:** This read-only production test hit main commit 97df688, which predates the feature-only label fix. It does not verify the final synchronized feature-head deployment. The actual lazy-loaded component preview and theme assertions passed in the earlier CI fixture run, but a genuine authorized Firebase account has not been used for a production Premium/Ultra preview.
+
+**UNVERIFIED / NEXT:** CI for feature commit 770c340 passed, but its Vercel preview was BUILDING at last inspection. This documentation commit will create a new head, so require a fresh exact-head CI success and matching Vercel preview READY before PR #5 merge. No secrets or entitlement bypasses were used; the public bundle is not confidential and /api/di-knowledge is not verified to expose the 3,600 bundle.
