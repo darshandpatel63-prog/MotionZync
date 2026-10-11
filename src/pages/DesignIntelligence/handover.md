@@ -5196,3 +5196,36 @@ FIRST UNFINISHED TASK remains:
 3. After branch sync, rerun exact-head CI and Vercel preview. Keep PR #5 unmerged until the synced PR head's required checks and preview pass.
 4. If merge is then appropriate under the repository PR process, verify actual post-merge main SHA, production deployment SHA/state, and live route. HTTP 200 alone is not proof of React interaction.
 5. Keep real Firebase, API-entitlement, provider/BYOK and physical-device checks marked UNVERIFIED until actually exercised with authorized accounts.
+
+## 2026-10-11 — Feature branch synchronized to current main
+
+### IMPLEMENTED
+- Reconciled the newly advanced main history into feature/design-intelligence using merge commit 35d3c0302f9e1fcc9a7b3e778bddfaead36cc7ba. Its parents are the previous feature head b1b2e55fcc718ad52b203fb6eeeabb7826e586c3 and main 97df688be00c74d85667d2135c0a02091bb45489.
+- The merge tree was based on main's tree and retained the feature's additive CI assertions, explicit Gallery labels, and newer Design Intelligence documentation/handover. The main branch ref was not modified by this synchronization.
+
+### VERIFIED
+- Commit comparison main...feature reports status ahead, 32 ahead / 0 behind; merge base is the current main commit 97df688be00c74d85667d2135c0a02091bb45489.
+- PR #5 is still open/unmerged but GitHub now reports mergeable=true; its base SHA is 97df688... and current head is 35d3c0302f9e1fcc9a7b3e778bddfaead36cc7ba.
+- The previous pre-sync exact-head CI run #38109381879 passed on bf687be, including the Gallery accessibility/filter/theme/browser checks. This older run is supporting evidence only; it does not replace the required run on the synchronized head.
+
+### UNVERIFIED
+- Exact-head CI for synchronized commit 35d3c03 is pending at [run #38109599722](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38109599722).
+- Matching Vercel feature preview deployment dpl_DNLi6w3Q1jdabyqQqLTtvXFEY4eA was QUEUED at the last check. It must be READY for the synchronized commit before final PR merge.
+- Current main production at 97df688 is READY and the Gallery URL responds HTTP 200 with the SPA shell; production React rendering/selected preview interaction is not yet independently verified.
+
+### MILESTONE AUDIT
+- Regression: sync was performed on feature/design-intelligence only; no source edit or ref update to main.
+- Functionality: previous head's browser suite passed; synchronized-head verification pending.
+- Accessibility: explicit Gallery filter labels are retained; synchronized-head automation pending and physical-device/screen-reader audit remains unverified.
+- Privacy/security: no secrets accessed; public asset-source limitations remain explicit; CI fixture is not real Firebase auth.
+- Performance: Gallery remains bounded to 120 initial cards with lazy preview imports; the fresh CI and physical-device profile remain pending.
+- Data quality: no catalog/database created and no records added by branch sync.
+- Build/test: previous exact-head run VERIFIED; current synced-head run pending.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Confirm run #38109599722 on 35d3c03 finishes SUCCESS; inspect any failure logs and fix only on feature/design-intelligence.
+2. Confirm Vercel preview for deployment dpl_DNLi6w3Q1jdabyqQqLTtvXFEY4eA reaches READY and matches commit 35d3c03. Check route delivery; keep HTTP 200 as SPA-shell evidence only.
+3. Do not merge PR #5 until the synced exact-head checks and preview are successful.
+4. After merge through PR #5, verify the final main SHA, READY production deployment SHA/state and public Gallery URL; distinguish that from real-account/device verification.
+5. Keep API exposure for the 3,600 components, protected delivery of public assets, real Firebase/API/BYOK entitlement checks and physical-device/screen-reader review UNVERIFIED until actually tested.
