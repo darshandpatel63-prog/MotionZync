@@ -131,3 +131,14 @@ Work only in `darshandpatel63-prog/MotionZync` and start on `feature/design-inte
 **UNVERIFIED:** Exact new-head CI and matching READY Vercel preview are pending. Shared class/token overrides may not alter every unique composition structure; chart recommendations do not automatically replace embedded chart implementation. Firebase paid access and manual Android/screen-reader checks remain unverified.
 
 **CURRENT FIRST UNFINISHED TASK:** Verify build/browser/axe checks and preview SHA match, exercise palette/font/density/corner/chart/stack/responsive changes and fix any failures before considering a PR merge.
+
+
+## 2026-10-11 — Prompt-matched Generator and expanded ingredient catalog
+
+**VERIFIED ON PREVIOUS SHA `901641f`:** CI build/browser/accessibility pass and matching READY Vercel preview. This included prompt-matched composition selection and actual selected-template customizer checks.
+
+**IMPLEMENTED IN CURRENT FOLLOW-UP:** canonical ingredients expanded to 20 styles, 14 palettes, 16 typography pairings, 18 chart patterns, 20 stack/visualization options and 8 recipes. The actual-template customizer has scoped CSS adapters for more styles; the workflow asserts the expanded controls appear.
+
+**UNVERIFIED:** the new catalog-expansion source commit still needs its own successful CI and matching READY preview. Simple/Free currently uses deterministic recipe/tokens instead of an inaccessible complete Premium/Ultra template. Embedded charts are not automatically rewritten just because chart guidance changes.
+
+**NEXT:** validate the new catalog and CI, inspect latest READY preview, then continue only with template adapters backed by reproducible compatibility gaps.

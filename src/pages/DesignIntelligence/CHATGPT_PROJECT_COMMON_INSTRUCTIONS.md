@@ -124,3 +124,15 @@ Next task: re-check PR #5, exact-head CI, mergeability and Vercel preview; then 
 - Explorer's canonical catalog records now pass IDs and domain to Generator. Chart and stack fields are part of generation/specification/export.
 - **UNVERIFIED:** latest exact-head CI/build/browser/axe run and matching Vercel preview have not yet been confirmed. Production Firebase/paid entitlement and physical-device/assistive-technology checks remain UNVERIFIED.
 - First unfinished task: run current feature-head CI/preview, verify selected-template changes and deep-link behavior, fix failures, then keep the usual PR gate before any main promotion.
+
+
+## 2026-10-11 — Workstream status after prompt matching
+
+- Gallery 3,600 UI bundle remains a separate set of complete React/CSS compositions. Do not count palette/font/chart/stack/recipe ingredients as more UI templates.
+- On code SHA `901641f`, feature build/browser CI and the matching Vercel preview were successful. The newest follow-up expands canonical ingredient catalog and scoped styles; that follow-up still needs its own successful exact-head CI/preview.
+- Canonical curated counts targeted by the follow-up: 20 styles, 14 palettes, 16 font pairings, 18 charts, 20 stack/visualization options, 8 recipes (96 total ingredients/recipes).
+- Generator matches user prompts to Gallery templates by metadata and filters matches using server-returned design access. Do not use a client-selected tier or BYOK key as entitlement proof.
+- Simple/Free has deterministic recipe/tokens and must not receive a Premium/Ultra full template unless the server-derived tier allows it.
+- Do not claim every one of the 3,600 UI markup families supports every CSS adapter; do not claim chart selection replaces embedded chart code.
+- Physical device, real Firebase paid accounts, public asset confidentiality and screen-reader checks are UNVERIFIED.
+- First unfinished task: validate latest catalog-expansion commit with CI and a matching READY Vercel preview; record failures and fixes here/handover.

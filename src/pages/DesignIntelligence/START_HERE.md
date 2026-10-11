@@ -1335,3 +1335,16 @@ Read `UI_3600_GALLERY_GENERATOR_HANDOVER.md` after this file and `handover.md`. 
 **UNVERIFIED:** Exact-head build, browser and axe CI plus the matching Vercel preview for this code are still pending. Overrides are scoped to supported shared template classes and do not guarantee structural rewrite of every one of 3,600 designs. Chart/stack selections are guidance, not a promise to replace every embedded chart. Production Firebase/paid tiers and physical-device checks remain unverified.
 
 **CURRENT FIRST UNFINISHED TASK:** Complete exact-head CI/preview verification, fix any failures, and prove real selected-template colour/font/layout changes plus canonical Explorer-to-Generator handoff. Do not promote unverified code.
+
+
+## 2026-10-11 — Current prompt-matched UI generation checkpoint
+
+**VERIFIED (previous code head `901641f`):** exact-head build/browser/accessibility workflow passed and matching Vercel preview was READY. Prompt matching, template customization controls and cross-page links are part of this feature branch, not yet main.
+
+**IMPLEMENTED (new follow-up, verification pending):** canonical design-ingredient catalog now contains 20 styles, 14 palettes, 16 typography pairs, 18 chart patterns, 20 stack/visualization options and 8 recipes. This is a curated ingredient catalog, separate from the 3,600 UI template bundle. New scoped style adapters and CI count checks are included.
+
+**Tier behavior:** prompt matching filters by server-returned `designAccessTier`. The imported bundle has no complete Simple/Free template tier, so the free path must truthfully fall back to deterministic recipe/tokens; it must not unlock Premium or Ultra assets.
+
+**UNVERIFIED:** new catalog/CSS/CI commit until exact-head workflow and matching READY preview pass; live Firebase/paid entitlement, external font loading, full coverage of bespoke template markup, Android and screen-reader manual checks.
+
+**CURRENT FIRST UNFINISHED TASK:** validate the new curated catalog and selected-template customizer on the latest feature commit. Preserve Explorer ingredient IDs, Gallery selection, prompt matching and server-authoritative access.

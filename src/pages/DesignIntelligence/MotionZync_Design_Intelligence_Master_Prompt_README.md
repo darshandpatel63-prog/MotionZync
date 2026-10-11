@@ -1105,3 +1105,14 @@ Explorer records pass their exact canonical domain/ID to Generator. The Generato
 **UNVERIFIED:** exact-head CI/axe and matching Vercel preview still need to pass. Shared CSS adapters cannot guarantee that every template-specific layout or existing chart is structurally rewritten. Public-repository asset source is not confidential; Firebase paid-account and physical-device accessibility have not been verified.
 
 **NEXT:** execute and inspect the current feature-head CI and READY preview; fix test failures and continue per-template compatibility only where necessary.
+
+
+## 2026-10-11 — Current verified Generator integration and catalog-expansion status
+
+The Gallery was already merged to production earlier. On feature commit `901641fda383228831bc129455aa9d1e4bed6bbb`, both build/browser workflows passed (`38143865918`, `38143869809`) and the matching preview `dpl_4oapUAQ4oAzo72c9odc8RHpfqvbc` was READY. Those results cover prompt-to-composition matching, actual-template customization controls and route/browser/accessibility checks using CI fixtures.
+
+The current follow-up adds curated catalog records: 20 styles, 14 palettes, 16 type pairings, 18 chart patterns, 20 stack/visualization options and 8 recipes; new style-specific scoped CSS; and CI checks for actual customizer option counts.
+
+**UNVERIFIED:** this catalog-expansion commit awaits its own exact-head CI and matching READY Vercel preview. A label/tier state in the browser is not a confidentiality boundary for public repository assets. Real Firebase paid entitlement, font hosting, all template-specific visual adapters and physical-device/accessibility checks remain unverified.
+
+**NEXT:** pass exact-head verification; preserve one canonical catalog source and keep Explore → ingredient ID → Generate, Gallery → selected template → Generate, and prompt → tier-authorized template match interconnected.

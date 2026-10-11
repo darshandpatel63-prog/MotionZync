@@ -5364,3 +5364,41 @@ FIRST UNFINISHED TASK remains:
 3. Verify Explorer record IDs carry to Generator and remain filtered by the server-authorized design access tier.
 4. Continue template-family compatibility only where automated/browser checks demonstrate gaps. A chart ID is design guidance unless a template-specific replacement adapter is implemented.
 5. Keep genuine Firebase/paid account, Ultra API/payment, public asset confidentiality, physical Android, keyboard and screen-reader status marked UNVERIFIED until actually tested.
+
+
+## 2026-10-11 — Prompt-matched, tier-aware UI generation + curated catalog expansion
+
+### VERIFIED BEFORE THIS CATALOG-EXPANSION COMMIT
+- Feature source head `901641fda383228831bc129455aa9d1e4bed6bbb` passed both Design Intelligence build/browser workflow runs `38143865918` and `38143869809`.
+- Matching Vercel deployment `dpl_4oapUAQ4oAzo72c9odc8RHpfqvbc` was READY on the same source SHA.
+- Passing browser coverage exercised the app's route flows, prompt-to-composition match, selected-template palette/font/style/spacing/density/corners/chart/stack/responsive controls, readable text, keyboard and accessible-name checks. This verifies the automated CI fixture, not a real Firebase login or a physical Android session.
+
+### IMPLEMENTED IN THIS FOLLOW-UP
+- Expanded the existing canonical catalog with original, use-case-described records. Counts are now 20 styles, 14 palettes, 16 typography pairings, 18 chart patterns, 20 implementation/visualization stacks, and 8 design recipes (96 curated ingredient/recipe records total).
+- Added scoped CSS adapters for additional visual styles, while leaving imported UI template records and the 3,600-entry manifest untouched.
+- Added CI assertions ensuring the expanded style, typography, chart and stack options are present in the actual selected-template customizer.
+- Existing prompt matcher scores the brief against template category, ID, name, description and tags after filtering candidates by the server-returned `designAccessTier`. It does not deliberately unlock a higher tier or use random selection.
+- Simple/Free design access currently has no complete template tier in this imported 3,600 bundle; it retains deterministic recipe/token generation and reports that a full-template match is unavailable rather than pretending to grant Premium/Ultra access. Premium/Ultra templates are only candidates when the server-derived access level permits them.
+
+### UNVERIFIED
+- The new catalog/CSS/CI additions in this follow-up have not yet passed CI. A new exact-head successful build/browser/axe run and a matching READY preview are required.
+- External display fonts are named in the typography catalog but are not bundled/hosted by this catalog file; availability depends on the app's font-loading strategy and browser fallback.
+- Style adapters target shared template classes. Not every custom markup variation across 3,600 templates is guaranteed to respond identically.
+- Chart and stack picks are generation/specification guidance; they do not transform arbitrary embedded chart or app source in place.
+- Real Firebase user authentication, production paid-entitlement behavior, public asset confidentiality, physical-device and manual screen-reader checks remain UNVERIFIED.
+
+### MILESTONE AUDIT
+- Regression: changes are limited to Design Intelligence catalog, scoped customizer CSS, DI browser workflow and DI handover documents.
+- Functionality: prior composition customizer prompt-matching implementation VERIFIED; new catalog expansion pending exact-head CI.
+- Accessibility: newly added CSS is scoped; automated accessibility workflow pending on the new head; full WCAG/manual assistive-tech review remains UNVERIFIED.
+- Privacy/security: no secrets, second database or fabricated bulk UI records; template matching consumes server-returned design tier. Public UI source assets remain public.
+- Performance: no added eager import of the 3,600 React components; each selected template remains lazy-loaded; bundle performance after added catalog is pending CI.
+- Data quality: canonical IDs are unique within this source catalog; additions are curated original choices, not extra template IDs/count inflation.
+- Build/test: pending on the new follow-up head.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Run latest exact-head build/browser/accessible-name workflow and verify all 96 ingredient/recipe records are unique and available.
+2. Confirm matching Vercel preview is READY on that exact SHA and exercise the actual template's palette/font/style/spacing controls.
+3. Continue composition-family adapters only where a reproducible browser test shows a shared-token/class mapping is insufficient.
+4. Keep Simple/Free, Premium and Ultra matching constrained to verified server-derived access; real account/payment and physical-device checks stay UNVERIFIED until actually tested.
