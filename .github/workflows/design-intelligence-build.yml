@@ -463,7 +463,7 @@ jobs:
               assert((await page.locator('.di-template-spec').innerText()).includes(chartLabel), 'Selected chart guidance was not included in the generated specification')
               const stackControl = page.locator('#di-template-stack')
               const stackId = await stackControl.locator('option').nth(2).getAttribute('value')
-              const stackLabel = (await stackControl.locator('option').nth(2).innerText()).trim()
+              const stackLabel = (await stackControl.locator('option').nth(2).innerText()).trim().split(' — ')[0]
               await stackControl.selectOption(stackId)
               assert((await page.locator('.di-template-spec').innerText()).includes(stackLabel), 'Selected stack was not included in the generated specification')
               await mobilePreview.click()
