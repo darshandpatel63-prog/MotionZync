@@ -409,7 +409,7 @@ jobs:
               await page.locator('#di-choice-style').selectOption({label:'Bento'})
               assert((await page.locator('.di-recipe-grid > .di-surface h2').innerText()).includes('Bento'), 'Manual style override did not update the validated recipe')
               await page.locator('#di-choice-palette').selectOption({label:'Violet + Indigo'})
-              assert((await page.locator('.di-recipe-grid h2').innerText()).includes('Violet + Indigo'), 'Manual palette override did not update the validated recipe')
+              assert((await page.locator('.di-recipe-grid > .di-surface h2').innerText()).includes('Violet + Indigo'), 'Manual palette override did not update the validated recipe')
               await page.getByRole('button', {name:'Reset recipe choices'}).click()
               assert((await page.locator('#di-choice-style').inputValue()) === '', 'Reset did not restore generated style choice')
               assert((await page.locator('#di-choice-palette').inputValue()) === '', 'Reset did not restore generated palette choice')
