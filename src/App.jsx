@@ -24,6 +24,7 @@ import DesignIntelligenceKnowledge from './pages/DesignIntelligence/DesignIntell
 import DesignIntelligenceStacks from './pages/DesignIntelligence/DesignIntelligenceStacks.jsx'
 import DesignIntelligenceDocs from './pages/DesignIntelligence/DesignIntelligenceDocs.jsx'
 import DesignIntelligencePricing from './pages/DesignIntelligence/DesignIntelligencePricing.jsx'
+import DesignBundleGallery from './pages/DesignIntelligence/DesignBundleGallery.jsx'
 
 const FULLSCREEN = ['/admin']
 const BG = { '/': 'home', '/gallery': 'gallery', '/playground': 'playground', '/course': 'course', '/compare': 'gallery', '/favorites': 'gallery' }
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="/design-intelligence" element={<DesignIntelligenceLayout/>}>
             <Route index element={<DesignIntelligenceHome/>}/>
             <Route path="explorer" element={<DesignIntelligenceExplorer/>}/>
+            <Route path="ui-gallery" element={<DesignBundleGallery/>}/>
             <Route path="generator" element={<DesignIntelligenceGenerator/>}/>
             <Route path="knowledge" element={<DesignIntelligenceKnowledge/>}/>
             <Route path="stacks" element={<DesignIntelligenceStacks/>}/>
