@@ -419,7 +419,7 @@ jobs:
               await mobilePreview.click()
               assert((await mobilePreview.getAttribute('aria-pressed')) === 'true', 'Mobile preview button did not expose selected state')
               assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-mobile'), 'Mobile preview did not update the preview layout')
-              assert((await page.locator('.di-preview-caption').last().innerText()).includes('recipe preview'), 'Generator recipe/selected-template distinction caption is missing')
+              assert((await page.locator('.di-preview-caption').filter({hasText:'actual selected Gallery component'}).count()) === 1, 'Generator selected-template distinction caption is missing')
               const tabletPreview = previewControls.getByRole('button', {name:'Tablet', exact:true})
               await tabletPreview.click()
               assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-tablet'), 'Tablet preview did not update the preview layout')
