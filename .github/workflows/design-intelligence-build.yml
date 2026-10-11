@@ -430,7 +430,12 @@ jobs:
               await aiToggle.click()
               assert((await aiToggle.getAttribute('aria-pressed')) === 'true', 'AI toggle did not expose pressed state')
 
-              await page.goto(base + '/design-intelligence/generator?template=premium-3d-configurator-immersive-001&theme=dark', {waitUntil:'domcontentloaded'})
+              await page.goto(base + '/design-intelligence/ui-gallery', {waitUntil:'domcontentloaded'})
+              await page.locator('.dib-page').waitFor({state:'visible'})
+              await page.locator('.dib-filter-row select').nth(1).selectOption('premium')
+              await page.getByRole('button', {name:'Dark', exact:true}).click()
+              await page.getByRole('link', {name:'Customize this design in Generator →'}).click()
+              await page.waitForURL(/\/design-intelligence\/generator\?template=/)
               const actualTemplate = page.locator('[data-testid="di-actual-generated-template"]')
               await actualTemplate.waitFor({state:'visible',timeout:30000})
               assert((await actualTemplate.getAttribute('data-theme')) === 'dark', 'Generator did not carry Gallery preview theme')
