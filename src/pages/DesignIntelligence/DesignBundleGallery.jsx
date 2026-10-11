@@ -76,7 +76,7 @@ export default function DesignBundleGallery() {
     <section className="di-page-intro">
       <span className="di-kicker">UI DESIGN BUNDLE</span>
       <h1>Browse 3,600 UI designs</h1>
-      <p>The imported bundle contains {manifest.designs.length.toLocaleString()} manifest entries across {manifest.categories.length} categories. Choose a design to lazy-load its React preview and switch themes.</p>
+      <p>The imported bundle contains {manifest.designs.length.toLocaleString()} manifest entries across {manifest.categories.length} categories. Choose a design, customize the actual composition in Generator, or start from canonical design ingredients. Palette, typography, chart and stack knowledge remains a separate reusable catalog.</p><div className="di-actions dib-cross-links"><Link className="di-btn di-btn-secondary" to="/design-intelligence/explorer">Explore design ingredients →</Link><Link className="di-btn di-btn-secondary" to="/design-intelligence/generator">Generate from your own brief →</Link></div>
     </section>
     <section className="di-surface dib-controls" aria-label="Design filters">
       <label className="di-label" htmlFor="dib-search">Search designs</label>
