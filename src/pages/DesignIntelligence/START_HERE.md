@@ -1291,3 +1291,8 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 4. Merge only after required CI and preview checks pass, then verify main's new commit and READY production deployment before expecting the Gallery link on the production site.
 5. Treat Premium/Ultra labels on this public-repository bundle as non-confidential metadata until a genuinely server-protected delivery architecture is designed. Do not create a second database or claim client-side preview locks are secure.
 6. Continue real Firebase/API/BYOK/Cashfree and manual Android/keyboard/screen-reader checks only with an authorized session; never copy secrets or tokens to chat.
+
+
+## 2026-10-11 — Current 3,600 Gallery + Generator direction
+
+Read `UI_3600_GALLERY_GENERATOR_HANDOVER.md` after this file and `handover.md`. It is the latest focused note for the 3,600 bundle, current API boundary, existing palette/typography/chart/stack catalog, Gallery/Explorer/Generator integration requirements and next unfinished task. The next milestone is to verify/resolve PR #5 and its exact-head CI before promoting the Gallery to main; do not treat imported assets as already live or as `/api/di-knowledge` records. Existing seed knowledge is complementary and must not be discarded or counted as 3,600 full UI templates.
