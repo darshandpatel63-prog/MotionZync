@@ -248,12 +248,12 @@ jobs:
           const failures = []
 
           page.on('pageerror', error => {
-  const stack = String(error.stack || '')
-  // Google AdSense RUM can emit transient uncaught errors even when its network requests are blocked.
-  // Ignore only exceptions originating from that external script; first-party page errors still fail CI.
-  if (stack.includes('pagead2.googlesyndication.com')) return
-  failures.push('pageerror: '+error.message+' | url='+page.url()+' | stack='+stack.slice(0,1200))
-})
+            const stack = String(error.stack || '')
+            // Google AdSense RUM can emit transient uncaught errors even when its network requests are blocked.
+            // Ignore only exceptions originating from that external script; first-party page errors still fail CI.
+            if (stack.includes('pagead2.googlesyndication.com')) return
+            failures.push('pageerror: '+error.message+' | url='+page.url()+' | stack='+stack.slice(0,1200))
+          })
           page.on('console', message => {
             if (message.type() !== 'error') return
             const text = message.text()
