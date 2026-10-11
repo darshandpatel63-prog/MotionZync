@@ -399,8 +399,11 @@ jobs:
             }
 
             if (route.endsWith('/generator')) {
-              await page.getByRole('button', {name:/Generate deterministic recipe/}).click()
-              assert((await page.locator('.di-preview').count()) === 1, 'Generator preview did not render')
+              await page.getByRole('button', {name:/Generate recipe and match UI composition/}).click()
+              assert((await page.locator('.di-preview').count()) === 1, 'Generator recipe preview did not render')
+              await page.locator('[data-testid="di-actual-generated-template"]').waitFor({state:'visible',timeout:30000})
+              assert((await page.locator('.di-template-rendered').getAttribute('data-testid')) === 'di-actual-generated-template', 'Prompt matching did not produce an actual permitted UI composition')
+              assert((await page.getByText(/Matched “.*” from .* using your request and server-authorized Premium design access/).count()) === 1, 'Prompt matcher did not explain its tier-aware composition match')
               const customize = page.locator('.di-customize')
               await customize.locator('summary').click()
               await page.locator('#di-choice-style').selectOption({label:'Bento'})
@@ -416,7 +419,7 @@ jobs:
               await mobilePreview.click()
               assert((await mobilePreview.getAttribute('aria-pressed')) === 'true', 'Mobile preview button did not expose selected state')
               assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-mobile'), 'Mobile preview did not update the preview layout')
-              assert((await page.locator('.di-preview-caption').innerText()).includes('recipe preview'), 'Generator recipe/selected-template distinction caption is missing')
+              assert((await page.locator('.di-preview-caption').last().innerText()).includes('recipe preview'), 'Generator recipe/selected-template distinction caption is missing')
               const tabletPreview = previewControls.getByRole('button', {name:'Tablet', exact:true})
               await tabletPreview.click()
               assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-tablet'), 'Tablet preview did not update the preview layout')
