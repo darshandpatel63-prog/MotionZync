@@ -1296,3 +1296,13 @@ Phase 1 foundation is implemented; current Phase A engine/system progress is 98%
 ## 2026-10-11 — Current 3,600 Gallery + Generator direction
 
 Read `UI_3600_GALLERY_GENERATOR_HANDOVER.md` after this file and `handover.md`. It is the latest focused note for the 3,600 bundle, current API boundary, existing palette/typography/chart/stack catalog, Gallery/Explorer/Generator integration requirements and next unfinished task. The next milestone is to verify/resolve PR #5 and its exact-head CI before promoting the Gallery to main; do not treat imported assets as already live or as `/api/di-knowledge` records. Existing seed knowledge is complementary and must not be discarded or counted as 3,600 full UI templates.
+
+## 2026-10-11 — Current Gallery verification state after branch sync
+
+**IMPLEMENTED:** Gallery filter labels fixed on feature/design-intelligence; main history reconciled onto that branch via merge commit 35d3c0302f9e1fcc9a7b3e778bddfaead36cc7ba. No direct main change was made by this synchronization.
+
+**VERIFIED:** Previous exact-head Gallery CI run #38109381879 passed, including browser/accessibility/responsive assertions. Feature is now 32 commits ahead / 0 behind main; PR #5 is open/unmerged and currently mergeable=true.
+
+**UNVERIFIED:** Fresh exact-head CI for 35d3c03 is pending in run #38109599722; the matching Vercel preview is queued. The production main Gallery URL currently returns HTTP 200 SPA shell from READY deployment 97df688, but that is not independent proof of React/component interaction or selected design preview in production.
+
+**CURRENT FIRST UNFINISHED TASK:** Check the synchronized-head CI and Vercel preview; fix any proven failure on feature/design-intelligence only. Do not merge PR #5 until exact-head CI passes and the matching preview reaches READY. After merge, verify the actual main and production deployment commit. Real Firebase, true paid entitlement, physical Android, keyboard and screen-reader checks remain UNVERIFIED; the public bundle is not confidential and is not established as /api/di-knowledge content.
