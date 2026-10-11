@@ -81,9 +81,9 @@ export default function DesignBundleGallery() {
       <label className="di-label" htmlFor="dib-search">Search designs</label>
       <input id="dib-search" className="di-search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search name, category, or tags"/>
       <div className="dib-filter-row">
-        <label className="dib-filter"><span>Category</span><select value={category} onChange={event => setCategory(event.target.value)}>{CATEGORIES.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-        <label className="dib-filter"><span>Tier</span><select value={tier} onChange={event => setTier(event.target.value)}>{TIERS.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-        <label className="dib-filter"><span>Preview theme</span><select value={theme} onChange={event => setTheme(event.target.value)}>{THEMES.map(item => <option key={item} value={item}>{item === 'high-contrast' ? 'High contrast' : item[0].toUpperCase() + item.slice(1)}</option>)}</select></label>
+        <label className="dib-filter" htmlFor="dib-category"><span>Category</span><select id="dib-category" value={category} onChange={event => setCategory(event.target.value)}>{CATEGORIES.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+        <label className="dib-filter" htmlFor="dib-tier"><span>Tier</span><select id="dib-tier" value={tier} onChange={event => setTier(event.target.value)}>{TIERS.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+        <label className="dib-filter" htmlFor="dib-theme"><span>Preview theme</span><select id="dib-theme" value={theme} onChange={event => setTheme(event.target.value)}>{THEMES.map(item => <option key={item} value={item}>{item === 'high-contrast' ? 'High contrast' : item[0].toUpperCase() + item.slice(1)}</option>)}</select></label>
       </div>
       <p className="di-note" role="status">{accessState} · Account tier: {entitlementTier} · {filtered.length.toLocaleString()} matching designs</p>
     </section>
