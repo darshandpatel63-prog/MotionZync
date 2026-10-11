@@ -110,3 +110,15 @@ Work only in `darshandpatel63-prog/MotionZync` and start on `feature/design-inte
 **IMPORTANT LIMIT:** This read-only production test hit main commit 97df688, which predates the feature-only label fix. It does not verify the final synchronized feature-head deployment. The actual lazy-loaded component preview and theme assertions passed in the earlier CI fixture run, but a genuine authorized Firebase account has not been used for a production Premium/Ultra preview.
 
 **UNVERIFIED / NEXT:** CI for feature commit 770c340 passed, but its Vercel preview was BUILDING at last inspection. This documentation commit will create a new head, so require a fresh exact-head CI success and matching Vercel preview READY before PR #5 merge. No secrets or entitlement bypasses were used; the public bundle is not confidential and /api/di-knowledge is not verified to expose the 3,600 bundle.
+
+## 2026-10-11 — FINAL MILESTONE: Gallery live on main
+
+**IMPLEMENTED:** PR #5 merged into main at `df13aad67595759b2fcf633a2fe704006d587bd4`. The three Gallery filter labels have explicit htmlFor/id associations. CI no longer treats the known third-party AdSense RUM exception as a first-party UI error; service-worker blocking was not retained.
+
+**VERIFIED:** Exact-head CI passed on `dacb6b9` in both PR run [#38110321614](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38110321614) and push run [#38110318512](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38110318512). Post-merge main CI [#38140711850](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38140711850) finished SUCCESS on merge commit `df13aad`, including the full browser route/interactions/responsive suite. Matching Vercel production deployment is READY with the same SHA. Live Gallery route returns HTTP 200.
+
+**VERIFIED:** Manual Chromium on the exact-head READY preview passed React mount, 3,600/18 summary, 120 initial cards, 18 categories + All, category/Premium filtering to 100 records, name search, explicit labels, expected guest lock UI, and no 390px mobile overflow. Manifest/files also validated: 3,600 unique IDs and entry paths, 18 categories, 1,800 records in each paid tier, and no missing JSX/CSS/NOTES entries or exact JSX/CSS hash duplicates.
+
+**UNVERIFIED:** Manual real-account Firebase entitlement and Premium/Ultra production preview are not verified; CI auth is a fixture. Physical Android, screen-reader review and semantic visual diversity of all designs remain unverified. Public repository component assets are not confidential, and `/api/di-knowledge` is not proven to serve the 3,600 bundle.
+
+**FIRST UNFINISHED TASK:** Resume Explorer consolidation and tier-aware Generator integration without deleting canonical knowledge, recipes, routes, or using fake entitlement values. Keep API/npm interfaces on the same canonical catalog, and record protected-asset delivery as future work until implemented and audited.
