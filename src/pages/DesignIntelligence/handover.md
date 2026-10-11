@@ -5148,3 +5148,16 @@ FIRST UNFINISHED TASK remains:
 2. Retrieve and pass the exact-head Design Intelligence Build Check including UI Gallery Playwright assertions for 3,600 count/18 categories, filter/search, loading one real component, computed theme tokens and mobile/tablet/desktop overflow.
 3. Only then consider merge through PR #5; verify new `main` SHA and a READY production deployment before expecting Gallery in the live website.
 4. Keep the imported designs classified as a separate public template gallery, not as canonical `/api/di-knowledge` records. Public bundle assets cannot be protected by frontend-only Premium/Ultra locks.
+
+
+## 2026-10-11 — User direction: one connected Gallery + customizable Generator (documentation checkpoint)
+
+**IMPLEMENTED (documentation only):** Added `UI_3600_GALLERY_GENERATOR_HANDOVER.md` with the verified root cause, current known production/API boundary, desired Overview/Gallery/Generator workflow, palette/typography/chart/stack reuse, deduplication and tier-aware generation requirements.
+
+**VERIFIED by source inspection:** the imported 3,600 templates are not currently served by the existing `/api/di-knowledge` contract. They are a public-repository asset pack consumed by the feature-branch Gallery code. The canonical seed catalog (styles, palettes, typography, charts, stacks and recipes) is complementary knowledge and should be integrated as selectable/customizable ingredients, not dropped or blindly counted as whole UI designs.
+
+**UNVERIFIED:** current exact-head CI, PR #5 current mergeability/preview, main promotion, live Gallery rendering, authenticated entitlement behavior and physical-device accessibility. Latest prior GitHub inspection had PR #5 open with `mergeable=false`; re-check live status before acting.
+
+**PLANNED / FUTURE:** Make the Gallery the primary discovery UI, connect it to the Generator with real template selection and full meaningful customization, use the Overview's primary Explore CTA to open the Gallery, and consolidate old Explorer functions only after preserving its canonical knowledge/search/compatibility functionality. Keep Free/Premium/Ultra selection subordinate to authoritative entitlement; client-side choice must never grant access. The public bundle's source files cannot be secured by a frontend lock.
+
+**CURRENT FIRST UNFINISHED TASK:** Start with `UI_3600_GALLERY_GENERATOR_HANDOVER.md`; verify PR #5 head/base, exact-head CI and Vercel preview, fix only the proven blocker on `feature/design-intelligence`, then promote the 3,600 Gallery through the PR process. Do not claim API accessibility for the 3,600 templates until an actual supported route/client contract is implemented and tested. This milestone changed Markdown only; no code, workflow or deployment was changed by this documentation update.
