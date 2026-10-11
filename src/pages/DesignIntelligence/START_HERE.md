@@ -1314,3 +1314,15 @@ Read `UI_3600_GALLERY_GENERATOR_HANDOVER.md` after this file and `handover.md`. 
 **UNVERIFIED:** This production smoke test predates the feature branch’s label fix; it was a guest session, not a paid account. Actual Premium/Ultra preview under real Firebase authorization, physical Android, keyboard and screen-reader checks remain UNVERIFIED. The CI mock-fixture preview test is not a real Firebase test.
 
 **CURRENT FIRST UNFINISHED TASK:** Re-run exact-head CI and wait for the corresponding Vercel preview READY on the newest feature/design-intelligence commit after this documentation update; merge PR #5 only when both are successful. Post-merge verify the actual production deployment commit and interactive route. Do not describe the public bundle as server-protected or as served by /api/di-knowledge.
+
+## 2026-10-11 — Gallery launch verified on main
+
+**IMPLEMENTED:** PR #5 has been merged into main at `df13aad67595759b2fcf633a2fe704006d587bd4`.
+
+**VERIFIED:** Post-merge GitHub Actions run [#38140711850](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38140711850) completed SUCCESS on the same main SHA, including build and browser route/interaction/responsive smoke checks. Vercel production deployment `dpl_A8bic8zzvzqLuHwgGQPUAc2Lnvcs` is READY on the same SHA; `https://motion-zync.vercel.app/design-intelligence/ui-gallery` responds HTTP 200.
+
+**VERIFIED:** Exact-head preview browser checks confirmed 3,600 entries / 18 categories, 120 first-view cards, category + Premium filters, name search, explicit filter labels, guest “Preview locked” UI, and no horizontal overflow at 390px. Full manifest file validation found 3,600 unique IDs and entry paths, 18 categories, no missing listed design assets, and no exact duplicate JSX/CSS hashes.
+
+**UNVERIFIED:** Real Firebase/paid entitlement, authorized Premium/Ultra preview on production, physical Android, screen-reader audit and semantic composition diversity remain unverified. Public source files are not protected by front-end tier locks; `/api/di-knowledge` is not verified to serve the imported template bundle.
+
+**CURRENT FIRST UNFINISHED TASK:** Continue Explorer consolidation and Generator integration while preserving canonical knowledge/catalog records, recipes and compatibility; make every customization control affect actual output; keep entitlement server-authoritative and distinguish mock-auth tests from genuine Firebase account tests.

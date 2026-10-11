@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { fetchDesignIntelligenceKnowledge } from './knowledgeClient.js'
 import manifest from './ui-design-bundle/manifest.json'
@@ -105,6 +106,7 @@ export default function DesignBundleGallery() {
       <aside className="dib-preview-panel" aria-label="Selected design preview">
         <div className="dib-preview-heading"><div><span className="di-kicker">SELECTED DESIGN</span><h2>{selected?.name || 'Choose a design'}</h2></div><span className="dib-index">{selected ? String(selectedIndex + 1) + ' / ' + manifest.designs.length : '—'}</span></div>
         {selected && <p className="dib-description">{selected.description}</p>}
+        {selected && <Link className="di-btn di-btn-primary dib-generate-link" to={`/design-intelligence/generator?template=${encodeURIComponent(selected.id)}&theme=${encodeURIComponent(theme)}`}>Customize this design in Generator →</Link>}
         {selected && <div className="dib-theme-row">{THEMES.map(value => <button key={value} type="button" className={'di-chip ' + (theme === value ? 'active' : '')} onClick={() => setTheme(value)} aria-pressed={theme === value}>{value === 'high-contrast' ? 'High contrast' : value[0].toUpperCase() + value.slice(1)}</button>)}</div>}
         {selected && !canPreview && <div className="di-empty" role="status"><strong>Preview locked</strong><p>This {selected.tier === 'ultra-premium' ? 'Ultra Premium+' : 'Premium'} preview is not available for the current server-authorized design access tier ({designAccessTier}). Sign in or check your plan/access policy.</p></div>}
         {selected && canPreview && !PreviewComponent && <div className="dib-preview-placeholder"><span>✦</span><strong>Ready to preview</strong><p>Load this design only when you select it, keeping the initial page lighter.</p><button type="button" className="di-btn di-btn-primary" onClick={loadSelected}>Load design preview</button>{preview.error && <p role="alert">{preview.error}</p>}</div>}
