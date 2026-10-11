@@ -1083,3 +1083,14 @@ The user's external provider API key is **not** the same thing as MotionZync Pre
 - Provider capability-aware generation and stronger provider-specific handling.
 - Safe preview/export adapters.
 - Server-authoritative entitlement enforcement for protected capabilities.
+
+
+## 2026-10-11 — Imported 3,600 UI templates: connected Gallery + customizable Generator requirement
+
+The focused status and next-task plan are recorded in `UI_3600_GALLERY_GENERATOR_HANDOVER.md`. Treat it as the newest requirement checkpoint for this workstream.
+
+The 3,600 imported items are UI compositions/components, not replacements for the canonical style/palette/typography/chart/stack/recipe knowledge. Reuse those records as typed design ingredients; do not drop them, duplicate them, or count them as full UI templates. The planned user flow is Overview → Gallery/Discovery → Customize → Generate → actual selected-design preview → validate/export, using one canonical core.
+
+The existing `/api/di-knowledge` is not yet verified to provide the 3,600 template assets. A new API claim requires actual implementation, a reviewed schema/source mapping and authoritative server entitlement checks. Because the bundle currently resides in a public repository, frontend tier locks are not confidentiality controls for source files.
+
+The next milestone is to resolve/verify PR #5, exact-head CI and the Vercel preview before promoting the Gallery to production. Afterward, consolidate the old Explorer only after its search, canonical knowledge, recipe and compatibility functions have an equivalent home. Generation mode must reflect server-confirmed Free/Premium/Ultra Premium+ entitlement; a user-selected label or external BYOK key must never grant a MotionZync tier. Deterministic generation must remain usable without AI, and AI-assisted mode must reuse the existing provider infrastructure.

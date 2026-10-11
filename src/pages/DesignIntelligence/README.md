@@ -370,3 +370,12 @@ npm install @motionzync/design-intelligence
 Repository: https://github.com/darshandpatel63-prog/MotionZync
 
 Web: https://motion-zync.vercel.app/design-intelligence
+
+
+## 3,600 UI Template Gallery and future Generator integration
+
+The Kimi-generated 3,600-template pack lives under `ui-design-bundle/` and is a separate asset collection from the published `@motionzync/design-intelligence` seed catalog. The current canonical catalog includes useful independent ingredients such as styles, palettes, typography, charts, technology stacks and recipes; these must remain available for customization and compatibility. Do not confuse an ingredient count (for example, palettes) with a full UI-template count.
+
+**API status:** source inspection shows the current `/api/di-knowledge` contract serves the canonical knowledge domains and does not yet expose all 3,600 template components as an API resource. Do not claim that npm/API users can query the imported 3,600 designs until that path is implemented and verified. The bundle is in a public repository, so its frontend tier labels/preview locks do not make the source confidential.
+
+See `UI_3600_GALLERY_GENERATOR_HANDOVER.md` for verified status and the next implementation requirements for Gallery discovery, Explorer consolidation without data loss, full customization, deterministic/optional AI generation, and authoritative tier rules.
