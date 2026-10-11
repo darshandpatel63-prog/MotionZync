@@ -30,7 +30,7 @@ const TEMPLATE_SYNONYMS={
   mobile:['phone','ios','android','app'],
   finance:['fintech','banking','payment','wallet','accounting'],
   saas:['dashboard','workspace','analytics','admin'],
-  3d:['configurator','immersive','three','model'],
+  '3d':['configurator','immersive','three','model'],
   ai:['artificial','intelligence','assistant','agent'],
 }
 function findMatchingTemplate(query,accessTier){
@@ -86,6 +86,7 @@ export default function DesignIntelligenceGenerator(){
   const {user}=useAuth()
   const [searchParams]=useSearchParams()
   const requestedTemplateId=searchParams.get('template')||''
+  const requestedTemplate=manifest.designs.find(item=>item.id===requestedTemplateId)||null
   const requestedTemplateTheme=TEMPLATE_THEMES.includes(searchParams.get('theme'))?searchParams.get('theme'):'light'
   const [selectedTemplatePreview,setSelectedTemplatePreview]=useState(null)
   const [selectedTemplateState,setSelectedTemplateState]=useState('')
@@ -93,7 +94,7 @@ export default function DesignIntelligenceGenerator(){
   const [generatedTemplateId,setGeneratedTemplateId]=useState(requestedTemplateId)
   const [templateMatchStatus,setTemplateMatchStatus]=useState('')
   const selectedTemplate=manifest.designs.find(item=>item.id===generatedTemplateId)||null
-  const templatePrompt=selectedTemplate?'Customize the '+selectedTemplate.name+' UI composition in the '+selectedTemplate.category.replace(/-/g,' ')+' category. Preserve its main composition and tailor the content, visual direction, responsive behaviour and accessibility to my product brief.':EXAMPLES[0]
+  const templatePrompt=requestedTemplate?'Customize the '+requestedTemplate.name+' UI composition in the '+requestedTemplate.category.replace(/-/g,' ')+' category. Preserve its main composition and tailor the content, visual direction, responsive behaviour and accessibility to my product brief.':EXAMPLES[0]
   const SelectedTemplatePreview=selectedTemplatePreview
   const [catalog,setCatalog]=useState(PUBLIC_CATALOG)
   const [entitlementTier,setEntitlementTier]=useState('free');const [designAccessTier,setDesignAccessTier]=useState('free');const [contentAccessReason,setContentAccessReason]=useState('public-free')
