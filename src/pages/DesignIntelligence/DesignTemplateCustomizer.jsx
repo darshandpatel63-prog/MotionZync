@@ -85,8 +85,8 @@ export default function DesignTemplateCustomizer({catalog,designAccessTier,confi
       </Choice>
     </div>
     <div className="di-template-toggle-row">
-      <label><input type="checkbox" checked={config.reduceMotion} onChange={event=>update('reduceMotion',event.target.checked)}/> Respect reduced-motion preference</label>
-      <label><input type="checkbox" checked={config.readable} onChange={event=>update('readable',event.target.checked)}/> Increase text size for readability</label>
+      <label htmlFor="di-template-reduce-motion"><input id="di-template-reduce-motion" type="checkbox" checked={config.reduceMotion} onChange={event=>update('reduceMotion',event.target.checked)}/> Respect reduced-motion preference</label>
+      <label htmlFor="di-template-readable"><input id="di-template-readable" type="checkbox" checked={config.readable} onChange={event=>update('readable',event.target.checked)}/> Increase text size for readability</label>
     </div>
     <p className="di-template-help">Style, spacing and responsive settings use scoped CSS overrides where the selected template exposes compatible shared UI classes. Chart/stack choices are also included in the generation specification and export.</p>
   </section>
