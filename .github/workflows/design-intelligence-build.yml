@@ -159,7 +159,7 @@ jobs:
           ]
 
           const browser = await chromium.launch({headless:true})
-          const context = await browser.newContext({viewport:{width:1440,height:900},permissions:['clipboard-read','clipboard-write'],serviceWorkers:'block'})
+          const context = await browser.newContext({viewport:{width:1440,height:900},permissions:['clipboard-read','clipboard-write']})
           const page = await context.newPage()
           await page.addInitScript(() => {
             window.__motionzyncCashfreeCalls = []
