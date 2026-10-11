@@ -90,3 +90,15 @@ Work only in `darshandpatel63-prog/MotionZync` and start on `feature/design-inte
 **UNVERIFIED:** The Vercel preview for bf687be was BUILDING at the last check. PR #5 is still open and mergeable=false because feature and main diverged (current compare: feature 28 ahead / 4 behind). Do not merge yet; reconcile only on the feature branch, then rerun exact-head CI and preview.
 
 **FIRST UNFINISHED TASK:** Confirm the bf687be preview reaches READY, safely synchronize the advanced main history into feature/design-intelligence while preserving the feature's newer workflow/docs/fix, then repeat CI + preview on the synchronized head before final PR merge decision. Do not claim API access for the 3,600 bundle; public source assets and UI-only tier locks are not confidential/protected delivery.
+
+## 2026-10-11 — Feature branch sync checkpoint
+
+**IMPLEMENTED:** Reconciled current main into feature/design-intelligence via merge commit 35d3c0302f9e1fcc9a7b3e778bddfaead36cc7ba, keeping the verified Gallery-label fix and feature workflow/docs. This changed only the feature branch ref; main was not modified by the reconciliation.
+
+**VERIFIED:** Current compare is main 97df688be00c74d85667d2135c0a02091bb45489 → feature 35d3c0302f9e1fcc9a7b3e778bddfaead36cc7ba, status ahead 32 / behind 0. PR #5 remains open/unmerged and is now reported mergeable=true.
+
+**UNVERIFIED:** Exact-head run [#38109599722](https://github.com/darshandpatel63-prog/MotionZync/actions/runs/38109599722) is pending for 35d3c03. Matching Vercel preview deployment dpl_DNLi6w3Q1jdabyqQqLTtvXFEY4eA was queued. Wait for successful CI and a READY preview before merging PR #5.
+
+**Production evidence:** main commit 97df688 has a READY production deployment, and /design-intelligence/ui-gallery returned HTTP 200 for the SPA shell; a successful HTTP response does not itself establish React preview interaction. The 3,600 component files are public repository assets and are not confidential or protected by client-side tier locks. /api/di-knowledge is not verified to serve the full 3,600 template bundle.
+
+**FIRST UNFINISHED TASK:** Pass exact-head CI and READY matching preview for the synchronized commit; then merge through PR #5 only after both gates pass, and verify the post-merge production commit/deployment separately.
