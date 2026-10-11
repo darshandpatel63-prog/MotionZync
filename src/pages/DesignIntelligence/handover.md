@@ -5258,3 +5258,44 @@ FIRST UNFINISHED TASK remains:
 1. Verify the new exact-head Design Intelligence Build Check and matching Vercel preview on the current feature branch tip. The preview must be READY and its commit SHA must match the branch head.
 2. Keep PR #5 open until these gates pass; main is 97df688 and current branch is ahead with no main divergence.
 3. Only then merge through PR #5, and verify the post-merge main SHA, READY production deployment SHA/state, and production route again. Use real authorized-account testing later; never count CI mock auth as Firebase verification.
+
+## 2026-10-11 FINAL CHECKPOINT — 3,600 UI GALLERY MERGED AND LIVE
+
+### IMPLEMENTED
+- PR #5 merged into main: https://github.com/darshandpatel63-prog/MotionZync/pull/5
+- Merge commit: df13aad67595759b2fcf633a2fe704006d587bd4 (message: feat(di): ship 3,600-design UI Gallery).
+- Gallery filter accessibility labels were explicitly associated with Category, Tier and Preview theme controls (htmlFor + matching id).
+- CI was made deterministic around the unrelated third-party AdSense RUM script: external AdSense requests are blocked in browser tests; exceptions whose stack originates from that third-party script are ignored, while first-party application errors continue to fail CI. The unnecessary disabled-service-worker browser setting was removed.
+
+### VERIFIED
+- GitHub main points to df13aad67595759b2fcf633a2fe704006d587bd4.
+- PR #5 is CLOSED/MERGED at 2026-10-11T12:49:00Z.
+- Exact-head PR and push CI both passed on feature head dacb6b91cbb618712b8fcf45250edcacd87409a8: runs #38110321614 and #38110318512. Both included the browser route/interactions/responsive smoke suite.
+- Post-merge main CI passed on merge commit df13aad67595759b2fcf633a2fe704006d587bd4: run #38140711850 (build + Browser route, interaction and responsive smoke test + artifact upload).
+- Vercel production deployment dpl_A8bic8zzvzqLuHwgGQPUAc2Lnvcs is READY and has Git SHA df13aad67595759b2fcf633a2fe704006d587bd4. Its aliases include https://motion-zync.vercel.app and https://motion-zync-git-main-vaidyaguru-projects.vercel.app.
+- Production route https://motion-zync.vercel.app/design-intelligence/ui-gallery returns HTTP 200. This response is shell/HTML evidence, not independently a full visual production-browser proof.
+- Manual Chromium testing of the exact-head READY feature preview dacb6b9 passed: React Gallery mounted; 3,600 / 18 summary; 120 initial cards; All + 18 category options; category + Premium filter yielded 100 designs; name search worked; all three filter label/ID pairs were present; selected guest design showed explicit “Preview locked” state; 390px mobile viewport had no horizontal overflow; no first-party browser errors.
+- Independent filesystem/manifest validation on that source tree found 3,600 unique IDs and entry paths, 18 categories, 1,800 Premium + 1,800 Ultra Premium+ records, no missing JSX/CSS/NOTES assets, and no exact duplicate JSX/CSS content hashes (this does not prove semantic composition uniqueness).
+- Bundle contains 3,600 JSX + 3,600 CSS + 3,600 NOTES files. Imported assets are public repository files.
+
+### UNVERIFIED / LIMITATIONS
+- Real Firebase account identity and server-confirmed paid Premium/Ultra entitlement have not been exercised in a genuine production login. CI uses deterministic fixtures and is not Firebase identity/payment verification.
+- Actual production Premium/Ultra preview with an authorized account and physical Android / screen-reader audit remain UNVERIFIED.
+- The public 3,600 template assets are not confidential; client-side tier locks do not provide asset secrecy. The /api/di-knowledge endpoint is not verified to serve the 3,600-template bundle.
+- Semantic similarity and human visual diversity across all 3,600 compositions has not been exhaustively reviewed; unique file hashes alone are insufficient proof.
+
+### MILESTONE AUDIT
+- Regression: PR #5 merged through GitHub; no unrelated code was intentionally changed for this Gallery milestone.
+- Functionality: exact-head CI and post-merge main browser smoke suite VERIFIED. Manual exact-head preview interactions VERIFIED.
+- Accessibility: filter label relationships and automated axe/accessible-name checks passed in the successful exact-head CI. Manual physical-device and screen-reader review remains UNVERIFIED.
+- Privacy/security: no secrets were accessed or published. Public asset access limitations are documented.
+- Performance: 120 initially rendered Gallery cards and lazy preview loading are covered by browser tests; physical-device profiling is UNVERIFIED.
+- Data quality: 3,600 IDs/paths and 18-category tier distribution validated; semantic duplication remains a separate future review.
+- Build/test: post-merge main run #38140711850 SUCCESS; matching production deployment READY at df13aad.
+- Documentation: this checkpoint is recorded.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Continue with Explorer consolidation and Generator integration; preserve canonical Explorer search/recipes/compatibility while connecting Gallery-selected templates to the actual Generator flow.
+2. Add real customization only where controls affect generated output; cover palette/theme tokens, typography, layout, charts, stack/platform, responsive density/accessibility, and motion with compatibility validation.
+3. Maintain server-authoritative entitlement logic. Do not claim public bundle asset confidentiality or that /api/di-knowledge serves all 3,600 templates without implementation and proof.
+4. Keep real Firebase/paid-account, physical Android, keyboard and screen-reader checks explicitly UNVERIFIED until actually exercised.
