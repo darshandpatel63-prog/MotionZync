@@ -1094,3 +1094,14 @@ The 3,600 imported items are UI compositions/components, not replacements for th
 The existing `/api/di-knowledge` is not yet verified to provide the 3,600 template assets. A new API claim requires actual implementation, a reviewed schema/source mapping and authoritative server entitlement checks. Because the bundle currently resides in a public repository, frontend tier locks are not confidentiality controls for source files.
 
 The next milestone is to resolve/verify PR #5, exact-head CI and the Vercel preview before promoting the Gallery to production. Afterward, consolidate the old Explorer only after its search, canonical knowledge, recipe and compatibility functions have an equivalent home. Generation mode must reflect server-confirmed Free/Premium/Ultra Premium+ entitlement; a user-selected label or external BYOK key must never grant a MotionZync tier. Deterministic generation must remain usable without AI, and AI-assisted mode must reuse the existing provider infrastructure.
+
+
+## 2026-10-11 — Palette and actual-template customization status
+
+The Gallery is already live; do not restart the import/verification work. The current feature branch adds 10 original canonical palettes (catalog total 14), actual selected-template controls for colour, typography, visual treatment, content density, spacing, corner treatment, width, responsiveness, readability and reduced motion, plus chart/stack output guidance and selected-design metadata in export.
+
+Explorer records pass their exact canonical domain/ID to Generator. The Generator also passes the selected template and only authorized catalog IDs through the existing optional BYOK AI refinement path. Deterministic generation remains available without provider credentials. No tier is granted by a frontend selector.
+
+**UNVERIFIED:** exact-head CI/axe and matching Vercel preview still need to pass. Shared CSS adapters cannot guarantee that every template-specific layout or existing chart is structurally rewritten. Public-repository asset source is not confidential; Firebase paid-account and physical-device accessibility have not been verified.
+
+**NEXT:** execute and inspect the current feature-head CI and READY preview; fix test failures and continue per-template compatibility only where necessary.

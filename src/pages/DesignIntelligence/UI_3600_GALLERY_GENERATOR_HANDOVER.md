@@ -122,3 +122,12 @@ Work only in `darshandpatel63-prog/MotionZync` and start on `feature/design-inte
 **UNVERIFIED:** Manual real-account Firebase entitlement and Premium/Ultra production preview are not verified; CI auth is a fixture. Physical Android, screen-reader review and semantic visual diversity of all designs remain unverified. Public repository component assets are not confidential, and `/api/di-knowledge` is not proven to serve the 3,600 bundle.
 
 **FIRST UNFINISHED TASK:** Resume Explorer consolidation and tier-aware Generator integration without deleting canonical knowledge, recipes, routes, or using fake entitlement values. Keep API/npm interfaces on the same canonical catalog, and record protected-asset delivery as future work until implemented and audited.
+
+
+## 2026-10-11 — Connected customizer implementation checkpoint
+
+**IMPLEMENTED:** Ten original palette records were added (canonical total 14). Generator customizes the actual selected Gallery component with colour tokens, typography, style, density/spacing, corners, width, viewport, readability and reduced-motion settings. Chart/stack guidance is carried into the output spec; Explorer links carry exact canonical IDs into Generator; Gallery and Generator link back to Explorer.
+
+**UNVERIFIED:** Exact new-head CI and matching READY Vercel preview are pending. Shared class/token overrides may not alter every unique composition structure; chart recommendations do not automatically replace embedded chart implementation. Firebase paid access and manual Android/screen-reader checks remain unverified.
+
+**CURRENT FIRST UNFINISHED TASK:** Verify build/browser/axe checks and preview SHA match, exercise palette/font/density/corner/chart/stack/responsive changes and fix any failures before considering a PR merge.

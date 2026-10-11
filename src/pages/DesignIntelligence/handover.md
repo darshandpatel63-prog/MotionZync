@@ -5329,3 +5329,38 @@ FIRST UNFINISHED TASK remains:
 2. Extend the actual selected-template customizer so supported palette, typography, spacing/layout, chart, stack/platform, responsive and accessibility controls affect output—not just the recipe mock.
 3. Preserve old Explorer search/recipe/compatibility functions while consolidating discovery into Gallery/Generator.
 4. Keep entitlement, API access, public asset confidentiality, physical Android and screen-reader status accurately labelled.
+
+
+## 2026-10-11 — Connected palette/customizer work (implementation checkpoint)
+
+### IMPLEMENTED
+- Expanded the existing canonical palette catalog from 4 to 14 original semantic palettes. The ten additional palettes are distinct light/dark colour systems, not extra UI template records or count-filler.
+- Added a selected-template customizer for palette source, typography pairing, canonical visual style, chart guidance, implementation stack, density, spacing rhythm, corner treatment, composition width, reduced motion and larger text.
+- Palette/typography choices override selected-template semantic CSS tokens; visual-style choices use scoped treatment rules; density/spacing/corners and mobile/tablet/desktop framing change the imported React composition.
+- Chart/stack choices are carried into the generated specification and export. The UI explicitly says a chart already hard-coded in an imported component is not automatically rewritten.
+- Explorer entries deep-link their canonical record/domain into Generator. Gallery and Generator link to the other Design Intelligence discovery paths. Generator accepts canonical chart ingredients and passes only tier-allowed chart IDs to the optional existing BYOK provider.
+- JSON export records the selected template ID and customizer settings alongside the canonical recipe; CSS export includes mapped semantic tokens and customization variables. It still does not export or execute arbitrary template source.
+- CI browser coverage was extended for Explorer handoff and actual-template palette/font/density/corner/chart/stack/mobile customization.
+
+### UNVERIFIED
+- Exact-head build/browser/axe CI and the matching Vercel preview have not yet been observed to pass for this implementation.
+- Full visual coverage across all 3,600 templates is not guaranteed: scoped customization applies to shared bundle classes/tokens, and some compositions may need template-specific adapters.
+- Chart/stack selection updates generation guidance; it does not promise replacement of every hard-coded visualization.
+- Real Firebase identities, paid production access, source-asset confidentiality and Android/keyboard/screen-reader checks remain unverified.
+
+### MILESTONE AUDIT
+- Regression: changes are confined to Design Intelligence catalog/engine/Explorer/Gallery/Generator, the dedicated customizer, the DI browser workflow and DI documentation. Existing App routes, Firebase, provider vault, billing backend and database were not replaced.
+- Functionality: source implementation is present; exact-head CI pending.
+- Accessibility: new controls have explicit labels and reduced-motion control; automated/manual verification pending.
+- Privacy/security: selected record choices still use server-returned designAccessTier and the existing BYOK path; the public bundle remains public.
+- Performance: selected design components remain lazy-loaded; browser performance profiling pending.
+- Data quality: ten new original palette IDs added; no fake template IDs or database duplication.
+- Build/test: pending exact-head CI.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Check the exact-head Design Intelligence Build Check and matching Vercel preview; fix real failures before treating this milestone as verified.
+2. Verify the Gallery-selected template in Generator: palette changes update semantic colours, typography changes update font tokens, style/density/spacing/corners/readability/motion alter supported shared classes, and mobile/tablet frames affect the component.
+3. Verify Explorer record IDs carry to Generator and remain filtered by the server-authorized design access tier.
+4. Continue template-family compatibility only where automated/browser checks demonstrate gaps. A chart ID is design guidance unless a template-specific replacement adapter is implemented.
+5. Keep genuine Firebase/paid account, Ultra API/payment, public asset confidentiality, physical Android, keyboard and screen-reader status marked UNVERIFIED until actually tested.
