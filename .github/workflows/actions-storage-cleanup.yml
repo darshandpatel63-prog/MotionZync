@@ -13,6 +13,11 @@ on:
         required: true
         default: true
         type: boolean
+      delete_completed_test_runs:
+        description: "Delete completed Design Intelligence Build Check run logs on this branch"
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   actions: write
@@ -24,26 +29,24 @@ concurrency:
 
 jobs:
   cleanup:
-    name: Remove disposable test artifacts and Actions caches
+    name: Clean Actions storage (artifacts, caches and old test logs)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Allow branch CI runs to finish first
-        if: github.event_name == 'push'
-        run: sleep 480
-
-      - name: Delete disposable test artifacts and optionally all caches
+      - name: Delete disposable test artifacts, caches and completed test run logs
         uses: actions/github-script@v7
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
+            const inputs = context.payload.inputs || {};
             const artifactPattern = /(test|browser-evidence|playwright|screenshot|coverage|junit|test-results|test-report)/i;
+
+            // Remove only stored artifacts whose names indicate temporary test evidence.
             const artifacts = await github.paginate(
               github.rest.actions.listArtifactsForRepo,
               { owner, repo, per_page: 100 }
             );
-
             let deletedArtifacts = 0;
             let keptArtifacts = 0;
             for (const artifact of artifacts) {
@@ -54,16 +57,14 @@ jobs:
                 core.info(`Deleted disposable artifact: ${artifact.name} (${artifact.size_in_bytes} bytes)`);
                 deletedArtifacts++;
               } else {
-                core.info(`Kept non-test artifact: ${artifact.name}`);
+                core.info(`Preserved artifact not classified as test evidence: ${artifact.name}`);
                 keptArtifacts++;
               }
             }
 
             const clearAllCaches =
               context.eventName === 'push' ||
-              (context.payload.inputs?.clear_all_caches ?? 'true') === true ||
-              (context.payload.inputs?.clear_all_caches ?? 'true') === 'true';
-
+              String(inputs.clear_all_caches ?? 'true') === 'true';
             let deletedCaches = 0;
             let reclaimedCacheBytes = 0;
             if (clearAllCaches) {
@@ -79,12 +80,39 @@ jobs:
                 reclaimedCacheBytes += cache.size_in_bytes || 0;
                 core.info(`Deleted Actions cache: ${cache.key} (${cache.size_in_bytes || 0} bytes)`);
               }
-            } else {
-              core.info('Cache deletion skipped by workflow input.');
+            }
+
+            // Workflow files are deliberately preserved. Delete only completed run records/logs
+            // for the DI build/test workflow on this feature branch; never touch active runs or main.
+            const deleteTestRuns =
+              context.eventName === 'push' ||
+              String(inputs.delete_completed_test_runs ?? 'true') === 'true';
+            let deletedTestRuns = 0;
+            let preservedActiveTestRuns = 0;
+            if (deleteTestRuns) {
+              const runs = await github.paginate(
+                github.rest.actions.listWorkflowRunsForRepo,
+                {
+                  owner, repo,
+                  branch: 'feature/design-intelligence',
+                  per_page: 100
+                }
+              );
+              for (const run of runs) {
+                if (run.name === 'Design Intelligence Build Check' && run.status === 'completed') {
+                  await github.rest.actions.deleteWorkflowRun({
+                    owner, repo, run_id: run.id
+                  });
+                  deletedTestRuns++;
+                  core.info(`Deleted completed DI test/build run logs: ${run.id} (${run.conclusion || 'no conclusion'})`);
+                } else if (run.name === 'Design Intelligence Build Check') {
+                  preservedActiveTestRuns++;
+                }
+              }
             }
 
             core.notice(
-              `Cleanup complete: deleted ${deletedArtifacts} disposable test artifacts; kept ${keptArtifacts} other artifacts; deleted ${deletedCaches} caches (~${reclaimedCacheBytes} bytes).`
+              `Cleanup finished. Test artifacts deleted: ${deletedArtifacts}; other artifacts preserved: ${keptArtifacts}; caches deleted: ${deletedCaches}; completed DI test/build run records deleted: ${deletedTestRuns}; active DI runs preserved: ${preservedActiveTestRuns}; estimated cache bytes reclaimed: ${reclaimedCacheBytes}.`
             );
             core.summary
               .addHeading('GitHub Actions storage cleanup')
@@ -93,8 +121,10 @@ jobs:
                 ['Disposable test artifacts deleted', String(deletedArtifacts)],
                 ['Other artifacts preserved', String(keptArtifacts)],
                 ['Actions caches deleted', String(deletedCaches)],
+                ['Completed DI build/test run logs deleted (feature branch only)', String(deletedTestRuns)],
+                ['Active DI build/test runs preserved', String(preservedActiveTestRuns)],
                 ['Approximate cache bytes reclaimed', String(reclaimedCacheBytes)],
-                ['Repository source/test files', 'Not modified']
+                ['Workflow YAML and repository files', 'Preserved']
               ])
-              .addQuote('Only stored Actions artifacts matching test/evidence naming patterns are deleted. Repository files, workflow runs, logs, releases, and non-test artifacts are preserved.')
+              .addQuote('This removes stored Actions artifacts, caches, and completed test/build run records. It does not delete workflow definitions or application/test source files.')
               .write();
