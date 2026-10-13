@@ -246,9 +246,61 @@ export function searchCatalog(query='',domain='all',entitlementTier='free',catal
   return results.sort((a,b)=>b.score-a.score||a.record.name.localeCompare(b.record.name)).map(item=>item.record)
 }
 
+function cssFontFamily(value){
+  const font=String(value||'').trim()
+  if(!font)return 'system-ui, sans-serif'
+  if(font.includes(',')||/^(system-ui|sans-serif|serif|monospace|ui-sans-serif|ui-serif|ui-monospace)$/i.test(font))return font
+  return '"'+font.replace(/["\\]/g,'')+'", system-ui, sans-serif'
+}
+function rgbChannel(value){
+  const channel=value/255
+  return channel<=0.04045?channel/12.92:((channel+0.055)/1.055)**2.4
+}
+function luminanceOf(hex){
+  const match=String(hex||'').match(/^#([0-9a-f]{6})$/i)
+  if(!match)return null
+  const value=match[1]
+  const [r,g,b]=[0,2,4].map(index=>parseInt(value.slice(index,index+2),16))
+  return 0.2126*rgbChannel(r)+0.7152*rgbChannel(g)+0.0722*rgbChannel(b)
+}
+function readableOn(hex){
+  const lum=luminanceOf(hex)
+  return lum===null?'#FFFFFF':lum>0.179?'#111827':'#FFFFFF'
+}
 export function recipeToTokens(recipe){
   const color=recipe.palette
-  return{'--mz-primary':color.primary,'--mz-secondary':color.secondary,'--mz-accent':color.accent,'--mz-cta':color.cta,'--mz-background':color.background,'--mz-surface':color.surface,'--mz-text':color.text,'--mz-muted':color.muted,'--mz-radius':'16px','--mz-spacing':'8px','--mz-font-heading':recipe.typography.heading,'--mz-font-body':recipe.typography.body}
+  const semantic=color.semantic||{}
+  return{
+    '--mz-primary':color.primary,
+    '--mz-secondary':color.secondary,
+    '--mz-accent':color.accent,
+    '--mz-accent-soft':color.accent+'22',
+    '--mz-cta':color.cta,
+    '--mz-on-accent':readableOn(color.cta),
+    '--mz-background':color.background,
+    '--mz-surface':color.surface,
+    '--mz-surface-alt':color.background,
+    '--mz-surface-raised':color.surface,
+    '--mz-border':color.muted+'55',
+    '--mz-text':color.text,
+    '--mz-text-muted':color.muted,
+    '--mz-muted':color.muted,
+    '--mz-focus':color.cta,
+    '--mz-success':semantic.success||'#15803D',
+    '--mz-warning':semantic.warning||'#B45309',
+    '--mz-info':color.accent,
+    '--mz-gridline':color.accent+'24',
+    '--mz-radius':'16px',
+    '--mz-spacing':'8px',
+    '--mz-font':cssFontFamily(recipe.typography.body),
+    '--di-font-heading':cssFontFamily(recipe.typography.heading),
+    '--di-font-body':cssFontFamily(recipe.typography.body),
+    '--mz-font-heading':cssFontFamily(recipe.typography.heading),
+    '--mz-font-body':cssFontFamily(recipe.typography.body),
+    '--mz-fs-h2':'1.375rem',
+    '--mz-fs-metric':'1.5rem',
+    '--mz-fs-sm':'0.8125rem',
+  }
 }
 
 

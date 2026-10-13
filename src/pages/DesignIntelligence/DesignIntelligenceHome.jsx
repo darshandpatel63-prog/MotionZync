@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom'
 import {DI_STYLES,DI_PALETTES,DI_TYPOGRAPHY,DI_CHARTS,DI_STACKS} from './catalog.js'
+import manifest from './ui-design-bundle/manifest.json'
 import './DesignIntelligence.css'
 const Stat=({value,label})=><div className="di-stat"><strong>{value}</strong><span>{label}</span></div>
 export default function DesignIntelligenceHome(){
@@ -7,9 +8,9 @@ export default function DesignIntelligenceHome(){
     <section className="di-hero">
       <div className="di-eyebrow">DESIGN INTELLIGENCE + UI GENERATION</div>
       <h1>From a rough idea to a <span>usable interface recipe.</span></h1>
-      <p>Search design knowledge, assemble compatible choices, generate a deterministic Design Recipe, preview it, and export the structure. AI can enhance the process later; the core does not depend on an LLM.</p>
-      <div className="di-actions"><Link to="/design-intelligence/generator" className="di-btn di-btn-primary">Start generating →</Link><Link to="/design-intelligence/explorer" className="di-btn di-btn-secondary">Explore knowledge</Link></div>
-      <div className="di-stats"><Stat value={DI_STYLES.length} label="seed styles"/><Stat value={DI_PALETTES.length} label="seed palettes"/><Stat value={DI_TYPOGRAPHY.length} label="font pairings"/><Stat value={DI_CHARTS.length} label="chart patterns"/><Stat value={DI_STACKS.length} label="tech stacks"/></div>
+      <p>Explore 3,600 imported UI compositions, customize them with canonical palette, typography, chart and stack knowledge, then generate a recipe. Deterministic generation works without an AI key; optional AI refinement uses your existing provider.</p>
+      <div className="di-actions"><Link to="/design-intelligence/generator" className="di-btn di-btn-primary">Start generating →</Link><Link to="/design-intelligence/ui-gallery" className="di-btn di-btn-secondary">Explore 3,600 UI designs →</Link><Link to="/design-intelligence/explorer" className="di-btn di-btn-secondary">Design ingredients</Link></div>
+      <div className="di-stats"><Stat value={manifest.designs.length.toLocaleString()} label="UI templates · 18 categories"/><Stat value={DI_STYLES.length} label="seed styles"/><Stat value={DI_PALETTES.length} label="seed palettes"/><Stat value={DI_TYPOGRAPHY.length} label="font pairings"/><Stat value={DI_CHARTS.length} label="chart patterns"/><Stat value={DI_STACKS.length} label="tech stacks"/></div>
       <p className="di-truth">These are current seed records, not a claim of 1,000+ implemented records. The architecture is intended to scale without fake duplicates.</p>
     </section>
 

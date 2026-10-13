@@ -5299,3 +5299,113 @@ FIRST UNFINISHED TASK remains:
 2. Add real customization only where controls affect generated output; cover palette/theme tokens, typography, layout, charts, stack/platform, responsive density/accessibility, and motion with compatibility validation.
 3. Maintain server-authoritative entitlement logic. Do not claim public bundle asset confidentiality or that /api/di-knowledge serves all 3,600 templates without implementation and proof.
 4. Keep real Firebase/paid-account, physical Android, keyboard and screen-reader checks explicitly UNVERIFIED until actually exercised.
+
+
+## 2026-10-11 — Gallery-to-Generator connection (implementation in progress)
+
+### IMPLEMENTED
+- Added a Gallery action that passes the selected template ID and current theme to the existing Generator route.
+- Generator resolves the selected template from the imported manifest, lazy-loads the corresponding React component, applies the chosen Gallery theme and displays explicit loading/error/access states.
+- Generator keeps the existing deterministic recipe, palette/typography/style/stack choices, compatibility validation, exports and optional existing BYOK AI refinement; the actual imported template preview is shown separately so it is not misrepresented as the recipe mock.
+- Overview's primary Explore CTA now opens UI Gallery, the old Explorer is labelled Design ingredients, and Overview displays the manifest-backed template count separately from seed ingredient counts.
+
+### UNVERIFIED
+- Build and browser interaction tests for the new Gallery-to-Generator handoff are pending CI.
+- Imported template markup may not consume all canonical recipe tokens; full in-place palette/typography/layout customization and template-specific compatibility mapping remain future work.
+- UI tier gating cannot make public repository assets confidential. Production Firebase entitlement and authorized Premium/Ultra account checks remain unverified.
+
+### MILESTONE AUDIT
+- Regression: only Design Intelligence Gallery, Generator, Overview and this handover are changed.
+- Functionality: implementation added; CI/browser verification pending.
+- Accessibility: added labelled template theme selector; automated and manual checks pending.
+- Privacy/security: no credentials touched; public asset limitation stated; server-authorized access state reused.
+- Performance: selected template is lazy-loaded on demand; build/performance checks pending.
+- Data quality: template count comes from imported manifest; no records fabricated.
+- Build/test: pending.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Run exact-head build/browser/accessibility checks and fix reproducible failures on feature/design-intelligence.
+2. Extend the actual selected-template customizer so supported palette, typography, spacing/layout, chart, stack/platform, responsive and accessibility controls affect output—not just the recipe mock.
+3. Preserve old Explorer search/recipe/compatibility functions while consolidating discovery into Gallery/Generator.
+4. Keep entitlement, API access, public asset confidentiality, physical Android and screen-reader status accurately labelled.
+
+
+## 2026-10-11 — Connected palette/customizer work (implementation checkpoint)
+
+### IMPLEMENTED
+- Expanded the existing canonical palette catalog from 4 to 14 original semantic palettes. The ten additional palettes are distinct light/dark colour systems, not extra UI template records or count-filler.
+- Added a selected-template customizer for palette source, typography pairing, canonical visual style, chart guidance, implementation stack, density, spacing rhythm, corner treatment, composition width, reduced motion and larger text.
+- Palette/typography choices override selected-template semantic CSS tokens; visual-style choices use scoped treatment rules; density/spacing/corners and mobile/tablet/desktop framing change the imported React composition.
+- Chart/stack choices are carried into the generated specification and export. The UI explicitly says a chart already hard-coded in an imported component is not automatically rewritten.
+- Explorer entries deep-link their canonical record/domain into Generator. Gallery and Generator link to the other Design Intelligence discovery paths. Generator accepts canonical chart ingredients and passes only tier-allowed chart IDs to the optional existing BYOK provider.
+- JSON export records the selected template ID and customizer settings alongside the canonical recipe; CSS export includes mapped semantic tokens and customization variables. It still does not export or execute arbitrary template source.
+- CI browser coverage was extended for Explorer handoff and actual-template palette/font/density/corner/chart/stack/mobile customization.
+
+### UNVERIFIED
+- Exact-head build/browser/axe CI and the matching Vercel preview have not yet been observed to pass for this implementation.
+- Full visual coverage across all 3,600 templates is not guaranteed: scoped customization applies to shared bundle classes/tokens, and some compositions may need template-specific adapters.
+- Chart/stack selection updates generation guidance; it does not promise replacement of every hard-coded visualization.
+- Real Firebase identities, paid production access, source-asset confidentiality and Android/keyboard/screen-reader checks remain unverified.
+
+### MILESTONE AUDIT
+- Regression: changes are confined to Design Intelligence catalog/engine/Explorer/Gallery/Generator, the dedicated customizer, the DI browser workflow and DI documentation. Existing App routes, Firebase, provider vault, billing backend and database were not replaced.
+- Functionality: source implementation is present; exact-head CI pending.
+- Accessibility: new controls have explicit labels and reduced-motion control; automated/manual verification pending.
+- Privacy/security: selected record choices still use server-returned designAccessTier and the existing BYOK path; the public bundle remains public.
+- Performance: selected design components remain lazy-loaded; browser performance profiling pending.
+- Data quality: ten new original palette IDs added; no fake template IDs or database duplication.
+- Build/test: pending exact-head CI.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Check the exact-head Design Intelligence Build Check and matching Vercel preview; fix real failures before treating this milestone as verified.
+2. Verify the Gallery-selected template in Generator: palette changes update semantic colours, typography changes update font tokens, style/density/spacing/corners/readability/motion alter supported shared classes, and mobile/tablet frames affect the component.
+3. Verify Explorer record IDs carry to Generator and remain filtered by the server-authorized design access tier.
+4. Continue template-family compatibility only where automated/browser checks demonstrate gaps. A chart ID is design guidance unless a template-specific replacement adapter is implemented.
+5. Keep genuine Firebase/paid account, Ultra API/payment, public asset confidentiality, physical Android, keyboard and screen-reader status marked UNVERIFIED until actually tested.
+
+
+## 2026-10-11 — Prompt-matched, tier-aware UI generation + curated catalog expansion
+
+### VERIFIED BEFORE THIS CATALOG-EXPANSION COMMIT
+- Feature source head `901641fda383228831bc129455aa9d1e4bed6bbb` passed both Design Intelligence build/browser workflow runs `38143865918` and `38143869809`.
+- Matching Vercel deployment `dpl_4oapUAQ4oAzo72c9odc8RHpfqvbc` was READY on the same source SHA.
+- Passing browser coverage exercised the app's route flows, prompt-to-composition match, selected-template palette/font/style/spacing/density/corners/chart/stack/responsive controls, readable text, keyboard and accessible-name checks. This verifies the automated CI fixture, not a real Firebase login or a physical Android session.
+
+### IMPLEMENTED IN THIS FOLLOW-UP
+- Expanded the existing canonical catalog with original, use-case-described records. Counts are now 20 styles, 14 palettes, 16 typography pairings, 18 chart patterns, 20 implementation/visualization stacks, and 8 design recipes (96 curated ingredient/recipe records total).
+- Added scoped CSS adapters for additional visual styles, while leaving imported UI template records and the 3,600-entry manifest untouched.
+- Added CI assertions ensuring the expanded style, typography, chart and stack options are present in the actual selected-template customizer.
+- Existing prompt matcher scores the brief against template category, ID, name, description and tags after filtering candidates by the server-returned `designAccessTier`. It does not deliberately unlock a higher tier or use random selection.
+- Simple/Free design access currently has no complete template tier in this imported 3,600 bundle; it retains deterministic recipe/token generation and reports that a full-template match is unavailable rather than pretending to grant Premium/Ultra access. Premium/Ultra templates are only candidates when the server-derived access level permits them.
+
+### UNVERIFIED
+- The new catalog/CSS/CI additions in this follow-up have not yet passed CI. A new exact-head successful build/browser/axe run and a matching READY preview are required.
+- External display fonts are named in the typography catalog but are not bundled/hosted by this catalog file; availability depends on the app's font-loading strategy and browser fallback.
+- Style adapters target shared template classes. Not every custom markup variation across 3,600 templates is guaranteed to respond identically.
+- Chart and stack picks are generation/specification guidance; they do not transform arbitrary embedded chart or app source in place.
+- Real Firebase user authentication, production paid-entitlement behavior, public asset confidentiality, physical-device and manual screen-reader checks remain UNVERIFIED.
+
+### MILESTONE AUDIT
+- Regression: changes are limited to Design Intelligence catalog, scoped customizer CSS, DI browser workflow and DI handover documents.
+- Functionality: prior composition customizer prompt-matching implementation VERIFIED; new catalog expansion pending exact-head CI.
+- Accessibility: newly added CSS is scoped; automated accessibility workflow pending on the new head; full WCAG/manual assistive-tech review remains UNVERIFIED.
+- Privacy/security: no secrets, second database or fabricated bulk UI records; template matching consumes server-returned design tier. Public UI source assets remain public.
+- Performance: no added eager import of the 3,600 React components; each selected template remains lazy-loaded; bundle performance after added catalog is pending CI.
+- Data quality: canonical IDs are unique within this source catalog; additions are curated original choices, not extra template IDs/count inflation.
+- Build/test: pending on the new follow-up head.
+- Documentation: UPDATED.
+
+### CURRENT FIRST UNFINISHED TASK
+1. Run latest exact-head build/browser/accessible-name workflow and verify all 96 ingredient/recipe records are unique and available.
+2. Confirm matching Vercel preview is READY on that exact SHA and exercise the actual template's palette/font/style/spacing controls.
+3. Continue composition-family adapters only where a reproducible browser test shows a shared-token/class mapping is insufficient.
+4. Keep Simple/Free, Premium and Ultra matching constrained to verified server-derived access; real account/payment and physical-device checks stay UNVERIFIED until actually tested.
+
+### GitHub Actions storage cleanup milestone — 2026-10-13
+- **IMPLEMENTED:** Removed Playwright screenshot calls and the `actions/upload-artifact@v4` step from `.github/workflows/design-intelligence-build.yml`; the browser test no longer uploads screenshot files or the Vite log.
+- **VERIFIED (previous cleanup run):** One successful cleanup run reported 221 disposable browser-evidence artifacts deleted, 3 Actions caches deleted, approximately 206,690,889 cache bytes reclaimed, and 442 completed Design Intelligence Build Check run records deleted. This was before the broader cleanup change below.
+- **IMPLEMENTED:** Updated `.github/workflows/actions-storage-cleanup.yml` to delete all repository Actions artifacts, all Actions caches, and all completed workflow-run records on `feature/design-intelligence`, while preserving active runs, source files, workflow YAML definitions, GitHub Releases and `main`-branch runs. 404s caused by another cleanup run deleting the same record are handled as already deleted.
+- **UNVERIFIED:** The broader cleanup commit `12622aa81200efa473f264c85d83398c68da1ef7` has not yet been confirmed successful, and remaining run-count/storage must be rechecked after its execution.
+- **UNVERIFIED:** Latest browser CI failure includes `Manual style override did not update the validated recipe`; artifact removal does not fix that application/test failure.

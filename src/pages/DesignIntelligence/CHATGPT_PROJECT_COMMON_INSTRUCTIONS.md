@@ -115,3 +115,24 @@ Before working on the imported UI bundle, read `UI_3600_GALLERY_GENERATOR_HANDOV
 The 3,600 bundle is a template asset pack, not the same data type as palettes, typography, chart guidance, technology stacks or recipes. Preserve and reuse the canonical seed catalog as customizable ingredients. The existing `/api/di-knowledge` has not been verified to expose the bundle's 3,600 template components; never claim this API path works until implemented and tested. The bundle's public-repository source is not confidential, and UI-only tier locks cannot secure it.
 
 Next task: re-check PR #5, exact-head CI, mergeability and Vercel preview; then promote the Gallery via the PR process only after gates pass. After the Gallery is live, consolidate Explorer functionality without losing existing knowledge/search/compatibility features, point the Overview Explore CTA to the Gallery, provide meaningful template customization, and make Generator use the real selected template plus server-authorized tier-aware choices. Do not modify code during a documentation-only task; never directly edit `main` or expose secrets.
+
+
+## 2026-10-11 — Current UI-customization workstream update
+
+- Gallery launch is completed separately; do not repeat it as the next task.
+- Current feature branch adds ten original palettes (14 canonical total) and a customizer that applies selected palette/font/style plus layout density/spacing/corners/width/readability/motion to supported shared UI bundle classes.
+- Explorer's canonical catalog records now pass IDs and domain to Generator. Chart and stack fields are part of generation/specification/export.
+- **UNVERIFIED:** latest exact-head CI/build/browser/axe run and matching Vercel preview have not yet been confirmed. Production Firebase/paid entitlement and physical-device/assistive-technology checks remain UNVERIFIED.
+- First unfinished task: run current feature-head CI/preview, verify selected-template changes and deep-link behavior, fix failures, then keep the usual PR gate before any main promotion.
+
+
+## 2026-10-11 — Workstream status after prompt matching
+
+- Gallery 3,600 UI bundle remains a separate set of complete React/CSS compositions. Do not count palette/font/chart/stack/recipe ingredients as more UI templates.
+- On code SHA `901641f`, feature build/browser CI and the matching Vercel preview were successful. The newest follow-up expands canonical ingredient catalog and scoped styles; that follow-up still needs its own successful exact-head CI/preview.
+- Canonical curated counts targeted by the follow-up: 20 styles, 14 palettes, 16 font pairings, 18 charts, 20 stack/visualization options, 8 recipes (96 total ingredients/recipes).
+- Generator matches user prompts to Gallery templates by metadata and filters matches using server-returned design access. Do not use a client-selected tier or BYOK key as entitlement proof.
+- Simple/Free has deterministic recipe/tokens and must not receive a Premium/Ultra full template unless the server-derived tier allows it.
+- Do not claim every one of the 3,600 UI markup families supports every CSS adapter; do not claim chart selection replaces embedded chart code.
+- Physical device, real Firebase paid accounts, public asset confidentiality and screen-reader checks are UNVERIFIED.
+- First unfinished task: validate latest catalog-expansion commit with CI and a matching READY Vercel preview; record failures and fixes here/handover.

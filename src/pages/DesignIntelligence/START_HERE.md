@@ -1326,3 +1326,25 @@ Read `UI_3600_GALLERY_GENERATOR_HANDOVER.md` after this file and `handover.md`. 
 **UNVERIFIED:** Real Firebase/paid entitlement, authorized Premium/Ultra preview on production, physical Android, screen-reader audit and semantic composition diversity remain unverified. Public source files are not protected by front-end tier locks; `/api/di-knowledge` is not verified to serve the imported template bundle.
 
 **CURRENT FIRST UNFINISHED TASK:** Continue Explorer consolidation and Generator integration while preserving canonical knowledge/catalog records, recipes and compatibility; make every customization control affect actual output; keep entitlement server-authoritative and distinguish mock-auth tests from genuine Firebase account tests.
+
+
+## 2026-10-11 — Connected design customizer checkpoint
+
+**IMPLEMENTED:** Canonical palettes increased from 4 to 14 original choices. Gallery-selected UI compositions now have palette, typography, style, density, spacing, corner, width, readability, motion, chart and stack settings. Explorer records deep-link their canonical IDs into Generator; Gallery/Generator navigation is reciprocal. JSON export includes selected template/customization metadata and CSS export includes semantic design tokens.
+
+**UNVERIFIED:** Exact-head build, browser and axe CI plus the matching Vercel preview for this code are still pending. Overrides are scoped to supported shared template classes and do not guarantee structural rewrite of every one of 3,600 designs. Chart/stack selections are guidance, not a promise to replace every embedded chart. Production Firebase/paid tiers and physical-device checks remain unverified.
+
+**CURRENT FIRST UNFINISHED TASK:** Complete exact-head CI/preview verification, fix any failures, and prove real selected-template colour/font/layout changes plus canonical Explorer-to-Generator handoff. Do not promote unverified code.
+
+
+## 2026-10-11 — Current prompt-matched UI generation checkpoint
+
+**VERIFIED (previous code head `901641f`):** exact-head build/browser/accessibility workflow passed and matching Vercel preview was READY. Prompt matching, template customization controls and cross-page links are part of this feature branch, not yet main.
+
+**IMPLEMENTED (new follow-up, verification pending):** canonical design-ingredient catalog now contains 20 styles, 14 palettes, 16 typography pairs, 18 chart patterns, 20 stack/visualization options and 8 recipes. This is a curated ingredient catalog, separate from the 3,600 UI template bundle. New scoped style adapters and CI count checks are included.
+
+**Tier behavior:** prompt matching filters by server-returned `designAccessTier`. The imported bundle has no complete Simple/Free template tier, so the free path must truthfully fall back to deterministic recipe/tokens; it must not unlock Premium or Ultra assets.
+
+**UNVERIFIED:** new catalog/CSS/CI commit until exact-head workflow and matching READY preview pass; live Firebase/paid entitlement, external font loading, full coverage of bespoke template markup, Android and screen-reader manual checks.
+
+**CURRENT FIRST UNFINISHED TASK:** validate the new curated catalog and selected-template customizer on the latest feature commit. Preserve Explorer ingredient IDs, Gallery selection, prompt matching and server-authoritative access.

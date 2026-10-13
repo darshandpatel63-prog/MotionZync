@@ -141,7 +141,6 @@ jobs:
       - name: Browser route, interaction and responsive smoke test
         shell: bash
         run: |
-          mkdir -p /tmp/di-browser-artifacts
           node --input-type=module <<'EOF'
           import { chromium } from 'playwright'
           import AxeBuilder from '@axe-core/playwright'
@@ -327,11 +326,6 @@ jobs:
               route+' serious/critical axe violations: '+JSON.stringify(seriousViolations.map(({id,impact,help,nodes})=>({id,impact,help,nodes:nodes.map(node=>node.target)})))
             )
 
-            await page.screenshot({
-              path:'/tmp/di-browser-artifacts/'+route.split('/').filter(Boolean).join('-')+'.png',
-              fullPage:true,
-            })
-
             if (route.endsWith('/ui-gallery')) {
               assert(text.includes('Browse 3,600 UI designs'), 'UI Gallery headline is missing')
               assert(text.includes('3,600 manifest entries across 18 categories'), 'UI Gallery manifest totals are not shown')
@@ -383,20 +377,33 @@ jobs:
               const allTiers = page.getByRole('button', {name:'All tiers', exact:true})
               await allTiers.click()
               assert((await allTiers.getAttribute('aria-pressed')) === 'true', 'Explorer All tiers filter did not reset selected state')
+              const ingredientLink = page.getByRole('link', {name:'Use this ingredient →'}).first()
+              assert((await ingredientLink.count()) > 0, 'Explorer result does not provide a Generator handoff')
+              const ingredientUrl = new URL(await ingredientLink.getAttribute('href'), base)
+              const ingredientDomain = ingredientUrl.searchParams.get('ingredientDomain')
+              const ingredientId = ingredientUrl.searchParams.get('ingredient')
+              assert(ingredientDomain && ingredientId, 'Explorer handoff omitted the canonical record domain or ID')
+              await ingredientLink.click()
+              await page.waitForURL(/\/design-intelligence\/generator\?ingredientDomain=/)
+              assert((await page.locator('#di-prompt').count()) === 1, 'Explorer record did not open Generator')
               const stylesChip = page.getByRole('button', {name:'Styles', exact:true})
+              await page.goto(base + route, {waitUntil:'domcontentloaded'})
               await stylesChip.click()
-              assert((await stylesChip.getAttribute('aria-pressed')) === 'true', 'Explorer domain button did not expose selected state')
+              assert((await page.getByRole('button', {name:'Styles', exact:true}).getAttribute('aria-pressed')) === 'true', 'Explorer domain button did not expose selected state')
             }
 
             if (route.endsWith('/generator')) {
-              await page.getByRole('button', {name:/Generate deterministic recipe/}).click()
-              assert((await page.locator('.di-preview').count()) === 1, 'Generator preview did not render')
+              await page.getByRole('button', {name:/Generate recipe and match UI composition/}).click()
+              assert((await page.locator('.di-preview').count()) === 1, 'Generator recipe preview did not render')
+              await page.locator('[data-testid="di-actual-generated-template"]').waitFor({state:'visible',timeout:30000})
+              assert((await page.locator('.di-template-rendered').getAttribute('data-testid')) === 'di-actual-generated-template', 'Prompt matching did not produce an actual permitted UI composition')
+              assert((await page.getByText(/Matched “.*” from .* using your request and server-authorized Premium design access/).count()) === 1, 'Prompt matcher did not explain its tier-aware composition match')
               const customize = page.locator('.di-customize')
               await customize.locator('summary').click()
               await page.locator('#di-choice-style').selectOption({label:'Bento'})
-              assert((await page.locator('.di-recipe-grid h2').innerText()).includes('Bento'), 'Manual style override did not update the validated recipe')
+              assert((await page.locator('.di-recipe-grid > .di-surface h2').innerText()).includes('Bento'), 'Manual style override did not update the validated recipe')
               await page.locator('#di-choice-palette').selectOption({label:'Violet + Indigo'})
-              assert((await page.locator('.di-recipe-grid h2').innerText()).includes('Violet + Indigo'), 'Manual palette override did not update the validated recipe')
+              assert((await page.locator('.di-recipe-grid > .di-surface h2').innerText()).includes('Violet + Indigo'), 'Manual palette override did not update the validated recipe')
               await page.getByRole('button', {name:'Reset recipe choices'}).click()
               assert((await page.locator('#di-choice-style').inputValue()) === '', 'Reset did not restore generated style choice')
               assert((await page.locator('#di-choice-palette').inputValue()) === '', 'Reset did not restore generated palette choice')
@@ -406,7 +413,7 @@ jobs:
               await mobilePreview.click()
               assert((await mobilePreview.getAttribute('aria-pressed')) === 'true', 'Mobile preview button did not expose selected state')
               assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-mobile'), 'Mobile preview did not update the preview layout')
-              assert((await page.locator('.di-preview-caption').innerText()).includes('Mobile layout simulation'), 'Mobile preview state caption is missing')
+              assert((await page.locator('.di-preview-caption').filter({hasText:'actual selected Gallery component'}).count()) === 1, 'Generator selected-template distinction caption is missing')
               const tabletPreview = previewControls.getByRole('button', {name:'Tablet', exact:true})
               await tabletPreview.click()
               assert((await page.locator('.di-preview').getAttribute('class')).includes('di-preview-viewport-tablet'), 'Tablet preview did not update the preview layout')
@@ -419,6 +426,50 @@ jobs:
               assert((await aiToggle.getAttribute('aria-pressed')) === 'false', 'AI toggle initial state was not exposed')
               await aiToggle.click()
               assert((await aiToggle.getAttribute('aria-pressed')) === 'true', 'AI toggle did not expose pressed state')
+
+              await page.goto(base + '/design-intelligence/ui-gallery', {waitUntil:'domcontentloaded'})
+              await page.locator('.dib-page').waitFor({state:'visible'})
+              await page.locator('.dib-filter-row select').nth(1).selectOption('premium')
+              await page.getByRole('button', {name:'Dark', exact:true}).click()
+              await page.getByRole('link', {name:'Customize this design in Generator →'}).click()
+              await page.waitForURL(/\/design-intelligence\/generator\?template=/)
+              const actualTemplate = page.locator('[data-testid="di-actual-generated-template"]')
+              await actualTemplate.waitFor({state:'visible',timeout:30000})
+              assert((await actualTemplate.getAttribute('data-theme')) === 'dark', 'Generator did not carry Gallery preview theme')
+              assert((await page.locator('#di-template-palette option').count()) >= 15, 'Template customizer did not expose the expanded canonical palettes')
+              assert((await page.locator('#di-template-style option').count()) >= 22, 'Expanded curated style catalog is missing from the customizer')
+              assert((await page.locator('#di-template-typography option').count()) >= 18, 'Expanded curated typography catalog is missing from the customizer')
+              assert((await page.locator('#di-template-chart option').count()) >= 20, 'Expanded curated chart catalog is missing from the customizer')
+              assert((await page.locator('#di-template-stack option').count()) >= 22, 'Expanded curated stack catalog is missing from the customizer')
+              await page.locator('#di-template-palette').selectOption('palette-ocean-blue')
+              const appliedAccent = await actualTemplate.evaluate(element => getComputedStyle(element).getPropertyValue('--mz-accent').trim().toLowerCase())
+              assert(appliedAccent === '#0ea5e9', 'Palette choice did not update the actual UI template token: '+appliedAccent)
+              await page.locator('#di-template-typography').selectOption('__recipe__')
+              assert((await actualTemplate.evaluate(element => getComputedStyle(element).getPropertyValue('--di-font-heading').trim())).length > 0, 'Typography choice did not apply a template font token')
+              await page.locator('#di-template-style').selectOption('style-brutalism')
+              assert((await actualTemplate.getAttribute('data-style')) === 'style-brutalism', 'Visual style choice did not reach the actual template')
+              await page.locator('#di-template-corners').selectOption('sharp')
+              assert((await actualTemplate.getAttribute('data-corners')) === 'sharp', 'Corner treatment did not update actual template settings')
+              await page.locator('#di-template-density').selectOption('compact')
+              const mainPadding = await actualTemplate.locator('.mz-main').evaluate(element => getComputedStyle(element).paddingTop)
+              assert(mainPadding === '8px', 'Compact density did not affect the actual template layout: '+mainPadding)
+              await page.locator('#di-template-spacing').selectOption('airy')
+              const airyPadding = await actualTemplate.locator('.mz-main').evaluate(element => getComputedStyle(element).paddingTop)
+              assert(airyPadding === '24px', 'Airy spacing did not affect the actual template layout: '+airyPadding)
+              await page.getByRole('checkbox', {name:'Increase text size for readability'}).check()
+              const chartControl = page.locator('#di-template-chart')
+              const chartId = await chartControl.locator('option').nth(2).getAttribute('value')
+              const chartLabel = (await chartControl.locator('option').nth(2).innerText()).trim()
+              await chartControl.selectOption(chartId)
+              assert((await page.locator('.di-template-spec').innerText()).includes(chartLabel), 'Selected chart guidance was not included in the generated specification')
+              const stackControl = page.locator('#di-template-stack')
+              const stackId = await stackControl.locator('option').nth(2).getAttribute('value')
+              const stackLabel = (await stackControl.locator('option').nth(2).innerText()).trim().split(' — ')[0]
+              await stackControl.selectOption(stackId)
+              assert((await page.locator('.di-template-spec').innerText()).includes(stackLabel), 'Selected stack was not included in the generated specification')
+              await mobilePreview.click()
+              assert((await actualTemplate.getAttribute('data-viewport')) === 'mobile', 'Mobile preview button did not change the actual template frame')
+              assert((await actualTemplate.evaluate(element => getComputedStyle(element).maxWidth)) === '390px', 'Mobile selected-template frame is not constrained to 390px')
             }
 
             if (route === '/design-intelligence/pricing') {
@@ -455,7 +506,6 @@ jobs:
           assert((await page.getByRole('textbox', {name:'Google account email'}).count()) === 1, 'Admin entitlement email field is missing')
           assert((await page.getByRole('combobox', {name:'Entitlement tier'}).count()) === 1, 'Admin entitlement tier field is missing')
           assert((await page.getByText('No payment records exist yet. This is not seeded/fake data.').count()) === 1, 'Admin billing empty-state is missing')
-          await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-billing.png',fullPage:true})
 
           await page.getByRole('button', {name:/Settings/}).click()
           await page.getByRole('heading', {name:'Premium / Ultra Premium+ content settings'}).waitFor()
@@ -476,7 +526,6 @@ jobs:
           assert(savedPolicies[0].festivalOffer.enabled === true, 'Admin festival offer toggle was not persisted')
           assert(savedPolicies[0].festivalOffer.startDate === '2026-10-31' && savedPolicies[0].festivalOffer.endDate === '2026-11-01', 'Admin offer date window was not persisted')
           assert(savedPolicies[0].festivalOffer.startTime === '10:00' && savedPolicies[0].festivalOffer.endTime === '20:00', 'Admin offer time window was not persisted')
-          await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-access-settings.png',fullPage:true})
 
           for (const viewport of [
             {width:390,height:844,name:'mobile'},
@@ -490,10 +539,6 @@ jobs:
               viewport: document.documentElement.clientWidth,
             }))
             assert(overflow.width <= overflow.viewport + 1, viewport.name+' horizontal overflow: '+JSON.stringify(overflow))
-            await page.screenshot({
-              path:'/tmp/di-browser-artifacts/generator-'+viewport.name+'.png',
-              fullPage:true,
-            })
             await page.goto(base+'/design-intelligence/ui-gallery', {waitUntil:'domcontentloaded'})
             await page.locator('.dib-page').waitFor({state:'visible'})
             const galleryOverflow = await page.evaluate(() => ({
@@ -523,12 +568,3 @@ jobs:
           await browser.close()
           EOF
 
-      - name: Upload browser screenshots and Vite log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: design-intelligence-browser-evidence
-          path: |
-            /tmp/di-browser-artifacts/
-            /tmp/motionzync-di-vite.log
-          if-no-files-found: ignore
