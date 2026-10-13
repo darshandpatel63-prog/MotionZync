@@ -6,6 +6,7 @@ on:
       - feature/design-intelligence
     paths:
       - ".github/workflows/actions-storage-cleanup.yml"
+      - ".github/workflows/design-intelligence-build.yml"
   workflow_dispatch:
     inputs:
       clear_all_caches:
@@ -24,7 +25,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: actions-storage-cleanup-${{ github.ref }}
+  group: actions-storage-cleanup-v2-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
