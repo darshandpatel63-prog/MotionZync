@@ -141,7 +141,6 @@ jobs:
       - name: Browser route, interaction and responsive smoke test
         shell: bash
         run: |
-          mkdir -p /tmp/di-browser-artifacts
           node --input-type=module <<'EOF'
           import { chromium } from 'playwright'
           import AxeBuilder from '@axe-core/playwright'
@@ -327,11 +326,6 @@ jobs:
               route+' serious/critical axe violations: '+JSON.stringify(seriousViolations.map(({id,impact,help,nodes})=>({id,impact,help,nodes:nodes.map(node=>node.target)})))
             )
 
-            await page.screenshot({
-              path:'/tmp/di-browser-artifacts/'+route.split('/').filter(Boolean).join('-')+'.png',
-              fullPage:true,
-            })
-
             if (route.endsWith('/ui-gallery')) {
               assert(text.includes('Browse 3,600 UI designs'), 'UI Gallery headline is missing')
               assert(text.includes('3,600 manifest entries across 18 categories'), 'UI Gallery manifest totals are not shown')
@@ -512,7 +506,6 @@ jobs:
           assert((await page.getByRole('textbox', {name:'Google account email'}).count()) === 1, 'Admin entitlement email field is missing')
           assert((await page.getByRole('combobox', {name:'Entitlement tier'}).count()) === 1, 'Admin entitlement tier field is missing')
           assert((await page.getByText('No payment records exist yet. This is not seeded/fake data.').count()) === 1, 'Admin billing empty-state is missing')
-          await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-billing.png',fullPage:true})
 
           await page.getByRole('button', {name:/Settings/}).click()
           await page.getByRole('heading', {name:'Premium / Ultra Premium+ content settings'}).waitFor()
@@ -533,7 +526,6 @@ jobs:
           assert(savedPolicies[0].festivalOffer.enabled === true, 'Admin festival offer toggle was not persisted')
           assert(savedPolicies[0].festivalOffer.startDate === '2026-10-31' && savedPolicies[0].festivalOffer.endDate === '2026-11-01', 'Admin offer date window was not persisted')
           assert(savedPolicies[0].festivalOffer.startTime === '10:00' && savedPolicies[0].festivalOffer.endTime === '20:00', 'Admin offer time window was not persisted')
-          await page.screenshot({path:'/tmp/di-browser-artifacts/admin-di-access-settings.png',fullPage:true})
 
           for (const viewport of [
             {width:390,height:844,name:'mobile'},
@@ -547,10 +539,6 @@ jobs:
               viewport: document.documentElement.clientWidth,
             }))
             assert(overflow.width <= overflow.viewport + 1, viewport.name+' horizontal overflow: '+JSON.stringify(overflow))
-            await page.screenshot({
-              path:'/tmp/di-browser-artifacts/generator-'+viewport.name+'.png',
-              fullPage:true,
-            })
             await page.goto(base+'/design-intelligence/ui-gallery', {waitUntil:'domcontentloaded'})
             await page.locator('.dib-page').waitFor({state:'visible'})
             const galleryOverflow = await page.evaluate(() => ({
@@ -580,12 +568,3 @@ jobs:
           await browser.close()
           EOF
 
-      - name: Upload browser screenshots and Vite log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: design-intelligence-browser-evidence
-          path: |
-            /tmp/di-browser-artifacts/
-            /tmp/motionzync-di-vite.log
-          if-no-files-found: ignore
