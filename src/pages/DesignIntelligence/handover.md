@@ -5402,3 +5402,10 @@ FIRST UNFINISHED TASK remains:
 2. Confirm matching Vercel preview is READY on that exact SHA and exercise the actual template's palette/font/style/spacing controls.
 3. Continue composition-family adapters only where a reproducible browser test shows a shared-token/class mapping is insufficient.
 4. Keep Simple/Free, Premium and Ultra matching constrained to verified server-derived access; real account/payment and physical-device checks stay UNVERIFIED until actually tested.
+
+### GitHub Actions storage cleanup milestone — 2026-10-13
+- **IMPLEMENTED:** Removed Playwright screenshot calls and the `actions/upload-artifact@v4` step from `.github/workflows/design-intelligence-build.yml`; the browser test no longer uploads screenshot files or the Vite log.
+- **VERIFIED (previous cleanup run):** One successful cleanup run reported 221 disposable browser-evidence artifacts deleted, 3 Actions caches deleted, approximately 206,690,889 cache bytes reclaimed, and 442 completed Design Intelligence Build Check run records deleted. This was before the broader cleanup change below.
+- **IMPLEMENTED:** Updated `.github/workflows/actions-storage-cleanup.yml` to delete all repository Actions artifacts, all Actions caches, and all completed workflow-run records on `feature/design-intelligence`, while preserving active runs, source files, workflow YAML definitions, GitHub Releases and `main`-branch runs. 404s caused by another cleanup run deleting the same record are handled as already deleted.
+- **UNVERIFIED:** The broader cleanup commit `12622aa81200efa473f264c85d83398c68da1ef7` has not yet been confirmed successful, and remaining run-count/storage must be rechecked after its execution.
+- **UNVERIFIED:** Latest browser CI failure includes `Manual style override did not update the validated recipe`; artifact removal does not fix that application/test failure.
